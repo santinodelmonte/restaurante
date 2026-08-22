@@ -65,9 +65,23 @@ concretas para citar.
 Se cambian sólo dos constantes al principio del `<script>`: `MENU` (con
 `CATEGORIAS`) y `PREGUNTAS`. El motor no sabe nada de Bo Fomento.
 
+## Identidad
+
+La dirección visual sale de la carta impresa, no de una idea propia: azul
+marino sobre blanco, la trama de olas de fondo, el sello circular
+«BO • FOMENTO / ESTAMOS EN LA PLAYA» y los zigzags que separan las
+subsecciones. Tres roles tipográficos, los mismos tres que usa el papel:
+brush en mayúscula para las secciones, script para los remates, y una sans
+limpia para los platos y los precios.
+
+El Chef es la misma carta de noche: el mismo azul, invertido.
+
+El único color que no está en la carta impresa es el arena del acento, que
+existe porque un monocromo no puede dar jerarquía a un botón. Va donde hace
+falta y en ningún otro lado.
+
 ## Pendiente
 
-⚠ Los platos y precios de `MENU` son un armado de referencia sobre las
-categorías reales de la carta. **Hay que reemplazarlos por la transcripción
-de los cinco JPGs de bofomento.uy.** La estructura, los ejes y el motor no
-se tocan al hacerlo.
+Estas secciones de la carta todavía no están cargadas porque no vinieron en
+las imágenes: **vinos** y **milanesas / burgers**. Se agregan al array
+`MENU` con la misma forma que el resto; no hay que tocar nada más.
