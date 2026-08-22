@@ -1,0 +1,2369 @@
+<!doctype html>
+<html lang="es-UY">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>BO | Fomento — Carta</title>
+<meta name="description" content="La carta de BO | Fomento, Playa Fomento, Colonia. Entradas, milanesas y burgers, cervezas, vinos y postres. Y si no sabés qué pedir, que elija el Chef.">
+<meta name="theme-color" content="#16292F">
+<meta property="og:title" content="BO | Fomento — Carta">
+<meta property="og:description" content="Carta digital del parador. Y un chef que adivina qué querés comer.">
+<meta property="og:type" content="restaurant.menu">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700&family=Archivo+Black&family=Caveat:wght@600;700&display=swap" rel="stylesheet">
+<style>
+/* ═══════════════════════════════════════════════════════════════════
+   BO | FOMENTO — carta digital + chef recomendador
+   Concepto: el parador. Toldo rayado, sombra dura, arena en el piso.
+   ═══════════════════════════════════════════════════════════════════ */
+
+:root{
+  /* paleta — cada color es un objeto real del parador */
+  --lona:      #F2EADA;  /* la lona del toldo, decolorada por el sol */
+  --espuma:    #FFFDF7;  /* espuma en la orilla — superficie de tarjetas */
+  --sombra:    #16292F;  /* la sombra fría debajo del toldo */
+  --sombra-2:  #1F3941;  /* la misma sombra, un poco más cerca del borde */
+  --sol:       #FFC53D;  /* el sol de las tres de la tarde */
+  --toldo:     #D8442F;  /* la raya roja del toldo, ya descolorida */
+  --toldo-ink: #B32E1C;  /* la misma raya, para texto (contraste AA) */
+  --rio:       #8A7B5C;  /* Río de la Plata, color de león */
+
+  --tinta:       var(--sombra);
+  --tinta-suave: #4A5A5F;
+  --tinta-clara: #A9BCC1;
+
+  --linea: 1px solid color-mix(in srgb, var(--rio) 45%, transparent);
+
+  --f-display: "Archivo Black", "Archivo", "Helvetica Neue", Arial, sans-serif;
+  --f-texto:   "Archivo", "Helvetica Neue", Arial, sans-serif;
+  --f-tiza:    "Caveat", "Segoe Script", cursive;
+
+  --r-sm: 6px;
+  --r-md: 14px;
+  --r-lg: 22px;
+
+  --sombra-caja: 0 1px 0 color-mix(in srgb, var(--rio) 35%, transparent),
+                 0 8px 22px -14px rgba(22,41,47,.55);
+
+  --raya: 26px;              /* ancho de raya del toldo */
+  --ancho: 720px;
+  --gutter: clamp(16px, 4.5vw, 28px);
+  --dur: 1;                  /* multiplicador global de animación */
+}
+
+@media (prefers-reduced-motion: reduce){
+  :root{ --dur: 0; }
+  *, *::before, *::after{
+    animation-duration: .001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: .001ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+*, *::before, *::after{ box-sizing: border-box; }
+html{ -webkit-text-size-adjust: 100%; }
+body{
+  margin:0;
+  font-family: var(--f-texto);
+  font-size: 16px;
+  line-height: 1.5;
+  color: var(--tinta);
+  background: var(--lona);
+  /* arena en el piso del local */
+  background-image:
+    radial-gradient(circle at 20% 12%, rgba(138,123,92,.10) 0 1px, transparent 1.4px),
+    radial-gradient(circle at 68% 46%, rgba(138,123,92,.09) 0 1px, transparent 1.4px),
+    radial-gradient(circle at 42% 82%, rgba(138,123,92,.08) 0 1px, transparent 1.4px);
+  background-size: 190px 190px, 137px 137px, 223px 223px;
+  overflow-x: hidden;
+}
+img{ max-width:100%; display:block; }
+button{ font: inherit; color: inherit; }
+
+/* foco visible, siempre, en todo */
+:focus-visible{
+  outline: 3px solid var(--sol);
+  outline-offset: 3px;
+  border-radius: var(--r-sm);
+}
+/* foco movido por código (título de vista, ficha del veredicto): se lleva
+   el foco para lectores de pantalla, pero sin dibujar el anillo — a estos
+   elementos no se llega nunca con Tab */
+[tabindex="-1"]:focus, [tabindex="-1"]:focus-visible{ outline: none; }
+.sombra-vista :focus-visible{ outline-color: var(--sol); }
+
+.solo-lectores{
+  position:absolute; width:1px; height:1px; padding:0; margin:-1px;
+  overflow:hidden; clip:rect(0 0 0 0); white-space:nowrap; border:0;
+}
+.saltar{
+  position:absolute; left:8px; top:-60px; z-index:99;
+  background: var(--sol); color: var(--sombra);
+  padding:10px 16px; border-radius: var(--r-sm); font-weight:700;
+  transition: top .18s ease;
+}
+.saltar:focus{ top:8px; }
+
+/* ── EL TOLDO ───────────────────────────────────────────────────────
+   Elemento signature. Lona a rayas con festón recortado abajo,
+   y su sombra de canto duro proyectada sobre el contenido.        */
+.toldo{
+  position: relative;
+  height: 72px;
+  --raya-clara: var(--lona);
+  background: repeating-linear-gradient(90deg,
+              var(--toldo) 0 var(--raya),
+              var(--raya-clara) var(--raya) calc(var(--raya) * 2));
+  /* costuras de la lona */
+  background-image:
+    repeating-linear-gradient(90deg,
+      rgba(0,0,0,.10) 0 1px, transparent 1px calc(var(--raya) * 2)),
+    repeating-linear-gradient(90deg,
+      var(--toldo) 0 var(--raya),
+      var(--raya-clara) var(--raya) calc(var(--raya) * 2));
+  --festivo: calc(var(--raya) / 2);
+  -webkit-mask:
+    linear-gradient(#000 0 0) 0 0 / 100% calc(100% - var(--festivo)) no-repeat,
+    radial-gradient(circle at var(--festivo) var(--festivo),
+      #000 calc(var(--festivo) - .5px), transparent var(--festivo))
+      0 100% / var(--raya) var(--raya) repeat-x;
+  mask:
+    linear-gradient(#000 0 0) 0 0 / 100% calc(100% - var(--festivo)) no-repeat,
+    radial-gradient(circle at var(--festivo) var(--festivo),
+      #000 calc(var(--festivo) - .5px), transparent var(--festivo))
+      0 100% / var(--raya) var(--raya) repeat-x;
+  flex: none;
+}
+.toldo--fino{
+  height: 30px; --raya: 20px;
+  --raya-clara: var(--espuma);            /* para que se despegue del fondo crema */
+  filter: drop-shadow(0 2px 2px rgba(22,41,47,.20));
+}
+
+/* la sombra dura que tira el toldo */
+.sombra-dura{
+  height: 46px;
+  margin-top: -2px;
+  background: linear-gradient(180deg,
+              rgba(22,41,47,.22) 0,
+              rgba(22,41,47,.06) 55%,
+              rgba(22,41,47,0) 100%);
+  pointer-events:none;
+  flex: none;
+}
+
+/* ── APP ────────────────────────────────────────────────────────── */
+.app{ min-height:100dvh; display:flex; flex-direction:column; }
+.vista{ display:none; }
+.vista.activa{ display:block; }
+.envoltura{
+  width:100%; max-width: var(--ancho);
+  margin-inline:auto; padding-inline: var(--gutter);
+}
+
+/* ── BOTONES ────────────────────────────────────────────────────── */
+.btn{
+  -webkit-appearance:none; appearance:none;
+  border:0; cursor:pointer;
+  display:inline-flex; align-items:center; justify-content:center; gap:.55em;
+  padding: 15px 22px;
+  border-radius: 999px;
+  font-weight: 700; font-size: 1rem; letter-spacing:.005em;
+  text-decoration:none;
+  transition: transform .14s cubic-bezier(.2,.8,.3,1), box-shadow .18s ease, background-color .18s ease;
+  min-height: 48px;
+}
+.btn:active{ transform: translateY(1px) scale(.995); }
+.btn--sol{
+  background: var(--sol); color: var(--sombra);
+  box-shadow: 0 3px 0 #C9922A, 0 12px 24px -14px rgba(22,41,47,.9);
+}
+.btn--sol:hover{ background:#FFD062; }
+.btn--sol:active{ box-shadow: 0 1px 0 #C9922A; }
+.btn--linea{
+  background: transparent; color: var(--lona);
+  box-shadow: inset 0 0 0 2px color-mix(in srgb, var(--lona) 55%, transparent);
+}
+.btn--linea:hover{ background: rgba(242,234,218,.10); }
+.vista--clara .btn--linea{
+  color: var(--sombra);
+  box-shadow: inset 0 0 0 2px color-mix(in srgb, var(--sombra) 40%, transparent);
+}
+.vista--clara .btn--linea:hover{ background: rgba(22,41,47,.06); }
+/* …salvo sobre el hero, que es oscuro aunque la vista sea clara */
+.hero .btn--linea{
+  color: var(--lona);
+  box-shadow: inset 0 0 0 2px color-mix(in srgb, var(--lona) 55%, transparent);
+}
+.hero .btn--linea:hover{ background: rgba(242,234,218,.12); }
+.btn--bloque{ width:100%; }
+.btn--chico{ padding:10px 16px; min-height:42px; font-size:.9rem; }
+
+/* ── LANDING ────────────────────────────────────────────────────── */
+.hero{
+  background: var(--sombra);
+  color: var(--lona);
+  position: relative;
+  overflow: hidden;
+}
+.hero__sol{
+  position:absolute; top:96px; right:-130px;
+  width: 300px; height:300px; border-radius:50%;
+  background: radial-gradient(circle, rgba(255,197,61,.17) 0 34%, rgba(255,197,61,.05) 60%, transparent 72%);
+  pointer-events:none; z-index:0;
+}
+.hero > .toldo{ position:relative; z-index:2; }   /* el sol nunca por encima del toldo */
+.hero__cuerpo{ z-index:1; }
+.hero__cuerpo{ padding-block: 40px 46px; position:relative; }
+.marca{
+  font-family: var(--f-display);
+  font-size: clamp(3.1rem, 17vw, 5.4rem);
+  line-height: .84;
+  letter-spacing: -.035em;
+  text-transform: uppercase;
+  margin: 0;
+}
+.marca em{
+  font-style: normal;
+  display:block;
+  color: var(--sol);
+}
+.marca .barra{
+  display:inline-block; width:.16em; height:.78em;
+  background: var(--toldo); vertical-align:-.03em;
+  margin-inline:.1em .12em;
+}
+.ubic{
+  margin: 18px 0 0;
+  font-size: .82rem; font-weight:600;
+  letter-spacing:.16em; text-transform:uppercase;
+  color: var(--tinta-clara);
+}
+.bajada{
+  margin: 20px 0 0; max-width: 30ch;
+  font-size: clamp(1.05rem, 4.2vw, 1.22rem);
+  color: color-mix(in srgb, var(--lona) 88%, transparent);
+}
+.hero__acciones{ display:grid; gap:12px; margin-top: 30px; }
+@media (min-width: 560px){
+  .hero__acciones{ grid-template-columns: 1fr 1fr; }
+}
+.hero__pie{
+  margin-top: 26px; padding-top: 18px;
+  border-top: 1px solid rgba(242,234,218,.18);
+  display:flex; flex-wrap:wrap; gap: 6px 18px;
+  font-size:.85rem; color: var(--tinta-clara);
+}
+
+/* ── CABECERA DE VISTA ──────────────────────────────────────────── */
+.barra-top{
+  position: sticky; top:0; z-index: 30;
+  background: color-mix(in srgb, var(--lona) 94%, transparent);
+  -webkit-backdrop-filter: blur(10px); backdrop-filter: blur(10px);
+  border-bottom: var(--linea);
+}
+.barra-top__fila{
+  display:flex; align-items:center; gap: 12px;
+  padding: 10px 0;
+}
+.volver{
+  -webkit-appearance:none; appearance:none; border:0; background:transparent;
+  cursor:pointer; display:inline-flex; align-items:center; gap:6px;
+  font-weight:700; font-size:.92rem; padding:8px 10px 8px 4px;
+  border-radius: var(--r-sm); color: var(--tinta);
+}
+.volver:hover{ background: rgba(22,41,47,.06); }
+.barra-top__titulo{
+  font-family: var(--f-display); text-transform:uppercase;
+  font-size: 1rem; letter-spacing:-.01em; margin:0 auto 0 0;
+}
+
+/* ── BUSCADOR + FILTROS ─────────────────────────────────────────── */
+.buscador{ position:relative; margin: 14px 0 12px; }
+.buscador input{
+  width:100%; font: inherit; font-size:1rem;
+  padding: 13px 42px 13px 42px;
+  border-radius: 999px;
+  border: 2px solid color-mix(in srgb, var(--rio) 50%, transparent);
+  background: var(--espuma); color: var(--tinta);
+  min-height:48px;
+}
+.buscador input::placeholder{ color: var(--tinta-suave); opacity:.85; }
+.buscador input:focus{ border-color: var(--sombra); outline-offset:1px; }
+.buscador__lupa{
+  position:absolute; left:15px; top:50%; transform:translateY(-50%);
+  color: var(--tinta-suave); pointer-events:none; font-size:1.05rem;
+}
+.buscador__limpiar{
+  position:absolute; right:8px; top:50%; transform:translateY(-50%);
+  border:0; background:transparent; cursor:pointer; padding:8px;
+  border-radius:50%; color: var(--tinta-suave); line-height:1;
+  min-width:36px; min-height:36px;
+}
+.buscador__limpiar:hover{ background: rgba(22,41,47,.08); }
+.buscador__limpiar[hidden]{ display:none; }
+
+.riel{
+  display:flex; gap:8px; overflow-x:auto; padding: 2px 0 12px;
+  scrollbar-width:none; -ms-overflow-style:none;
+  margin-inline: calc(var(--gutter) * -1);
+  padding-inline: var(--gutter);
+  scroll-padding-inline: var(--gutter);
+}
+.riel::-webkit-scrollbar{ display:none; }
+.chip{
+  -webkit-appearance:none; appearance:none; cursor:pointer;
+  flex:none;
+  padding: 9px 15px; border-radius:999px;
+  border: 2px solid color-mix(in srgb, var(--rio) 45%, transparent);
+  background: transparent; color: var(--tinta);
+  font-size:.88rem; font-weight:600; white-space:nowrap;
+  min-height:40px;
+  transition: background-color .15s ease, border-color .15s ease, color .15s ease;
+}
+.chip:hover{ background: rgba(22,41,47,.05); }
+.chip[aria-pressed="true"], .chip.activo{
+  background: var(--sombra); border-color: var(--sombra); color: var(--lona);
+}
+.chip--filtro[aria-pressed="true"]{
+  background: var(--sol); border-color: #C9922A; color: var(--sombra);
+}
+.riel--filtros{ padding-bottom: 14px; }
+
+.conteo{
+  font-size:.82rem; color: var(--tinta-suave);
+  padding-bottom: 10px; font-weight:500;
+}
+
+/* ── CARTA ──────────────────────────────────────────────────────── */
+.categoria{ margin: 6px 0 34px; scroll-margin-top: 128px; }
+.categoria__titulo{
+  font-family: var(--f-display);
+  text-transform:uppercase; letter-spacing:-.015em;
+  font-size: clamp(1.35rem, 6vw, 1.75rem);
+  margin: 0 0 4px;
+  display:flex; align-items:baseline; gap:10px;
+}
+.categoria__n{
+  font-family: var(--f-texto); font-size:.72rem; font-weight:700;
+  color: var(--tinta-suave); letter-spacing:.1em;
+}
+.categoria__raya{
+  height: 7px; margin: 0 0 16px;
+  background: repeating-linear-gradient(90deg,
+              var(--toldo) 0 14px, transparent 14px 28px);
+  border-radius: 2px;
+}
+
+.plato{
+  background: var(--espuma);
+  border: var(--linea);
+  border-radius: var(--r-md);
+  padding: 15px 16px;
+  margin-bottom: 10px;
+  box-shadow: var(--sombra-caja);
+}
+.plato__fila{ display:flex; gap: 14px; align-items: baseline; }
+.plato__nombre{
+  margin:0; font-size: 1.03rem; font-weight:700; line-height:1.25;
+  flex:1;
+}
+.plato__precio{
+  font-family: var(--f-tiza);
+  font-size: 1.5rem; line-height:1; font-weight:700;
+  color: var(--toldo-ink);
+  white-space:nowrap; margin:0;
+}
+.plato__desc{
+  margin: 7px 0 0; font-size:.93rem; color: var(--tinta-suave);
+  max-width: 56ch;
+}
+.plato__tags{ display:flex; flex-wrap:wrap; gap:6px; margin-top:11px; }
+.tag{
+  font-size:.7rem; font-weight:700; letter-spacing:.06em; text-transform:uppercase;
+  padding: 4px 9px; border-radius: 999px;
+  background: color-mix(in srgb, var(--rio) 20%, transparent);
+  color: #3E4A34;
+}
+.tag--veg{ background:#DCEBD3; color:#2F5124; }
+.tag--stacc{ background:#E4E2F3; color:#3B3670; }
+.tag--comp{ background:#FBE3CF; color:#7A421A; }
+
+/* estado vacío — invitación, no disculpa */
+.vacio{
+  text-align:center; padding: 44px 18px 54px;
+  border: 2px dashed color-mix(in srgb, var(--rio) 55%, transparent);
+  border-radius: var(--r-lg);
+  background: color-mix(in srgb, var(--espuma) 70%, transparent);
+}
+.vacio__cara{ font-size: 2.4rem; line-height:1; }
+.vacio h3{
+  font-family: var(--f-display); text-transform:uppercase;
+  font-size:1.15rem; margin:14px 0 6px;
+}
+.vacio p{ margin:0 auto 18px; max-width: 34ch; color: var(--tinta-suave); }
+
+.pie{
+  background: var(--sombra); color: var(--tinta-clara);
+  padding-block: 30px 40px; margin-top: 20px;
+}
+.pie__marca{
+  font-family: var(--f-display); color: var(--lona);
+  text-transform:uppercase; font-size:1.1rem; margin:0 0 8px;
+}
+.pie p{ margin:4px 0; font-size:.88rem; }
+.pie a{ color: var(--sol); }
+
+/* ══ CHEF ═══════════════════════════════════════════════════════ */
+.sombra-vista{
+  background: var(--sombra);
+  color: var(--lona);
+  min-height:100dvh;
+  display:flex; flex-direction:column;
+}
+.sombra-vista .barra-top{
+  background: color-mix(in srgb, var(--sombra) 92%, transparent);
+  border-bottom-color: rgba(242,234,218,.16);
+}
+.sombra-vista .volver{ color: var(--lona); }
+.sombra-vista .volver:hover{ background: rgba(242,234,218,.12); }
+.sombra-vista .barra-top__titulo{ color: var(--lona); }
+
+/* elegir modo */
+.modo{ padding: 26px 0 40px; }
+.modo__sobre{
+  font-size:.8rem; font-weight:700; letter-spacing:.18em;
+  text-transform:uppercase; color: var(--sol); margin:0 0 10px;
+}
+.modo__titulo{
+  font-family: var(--f-display); text-transform:uppercase;
+  font-size: clamp(1.9rem, 8.5vw, 2.7rem); line-height:.95;
+  letter-spacing:-.025em; margin:0 0 12px;
+}
+.modo__texto{ color: color-mix(in srgb, var(--lona) 82%, transparent); margin:0 0 26px; max-width:34ch; }
+.tarjeta-modo{
+  width:100%; text-align:left; cursor:pointer;
+  background: var(--sombra-2);
+  border: 2px solid rgba(242,234,218,.16);
+  border-radius: var(--r-lg);
+  padding: 20px; margin-bottom: 12px; color: var(--lona);
+  transition: border-color .18s ease, transform .18s cubic-bezier(.2,.8,.3,1), background-color .18s ease;
+}
+.tarjeta-modo:hover{ border-color: var(--sol); background:#24424B; }
+.tarjeta-modo:active{ transform: scale(.99); }
+.tarjeta-modo__top{ display:flex; align-items:center; gap:10px; }
+.tarjeta-modo h3{
+  font-family: var(--f-display); text-transform:uppercase;
+  font-size:1.22rem; margin:0; letter-spacing:-.01em;
+}
+.tarjeta-modo__meta{
+  margin-left:auto; font-size:.74rem; font-weight:700; letter-spacing:.08em;
+  text-transform:uppercase; color: var(--sombra); background: var(--sol);
+  padding:4px 10px; border-radius:999px; white-space:nowrap;
+}
+.tarjeta-modo p{ margin:9px 0 0; font-size:.93rem; color: var(--tinta-clara); }
+
+/* progreso — el toldo que se corre */
+.progreso{ padding: 12px 0 4px; }
+.progreso__pista{
+  height: 10px; border-radius: 999px; overflow:hidden;
+  background: rgba(242,234,218,.14);
+}
+.progreso__lleno{
+  height:100%; width:0;
+  background: repeating-linear-gradient(90deg,
+              var(--sol) 0 13px, var(--toldo) 13px 26px);
+  border-radius:999px;
+  transition: width .45s cubic-bezier(.2,.8,.3,1);
+}
+.progreso__texto{
+  margin-top:7px; font-size:.76rem; font-weight:700;
+  letter-spacing:.1em; text-transform:uppercase; color: var(--tinta-clara);
+}
+
+/* chat */
+.chat{ flex:1; padding: 16px 0 26px; }
+.burbuja{
+  max-width: 30ch;
+  background: var(--sombra-2);
+  border-radius: 20px 20px 20px 5px;
+  padding: 15px 18px;
+  font-family: var(--f-tiza);
+  font-size: 1.42rem; line-height:1.28;
+  color: var(--lona);
+  margin-bottom: 14px;
+  animation: entra-burbuja calc(.34s * var(--dur)) cubic-bezier(.2,.9,.3,1) both;
+}
+.burbuja--yo{
+  margin-left:auto; text-align:right;
+  border-radius: 20px 20px 5px 20px;
+  background: var(--sol); color: var(--sombra);
+  font-family: var(--f-texto); font-size:.95rem; font-weight:600;
+  max-width: 26ch;
+}
+@keyframes entra-burbuja{
+  from{ opacity:0; transform: translateY(10px) scale(.97); }
+  to{ opacity:1; transform:none; }
+}
+
+.puntitos{ display:flex; align-items:center; gap:12px; margin-bottom:14px; }
+.puntitos__caja{
+  background: var(--sombra-2); border-radius: 20px 20px 20px 5px;
+  padding: 16px 18px; display:flex; gap:6px;
+}
+.puntitos__caja i{
+  width:9px; height:9px; border-radius:50%; background: var(--tinta-clara);
+  animation: rebote calc(1.05s * var(--dur)) infinite ease-in-out;
+}
+.puntitos__caja i:nth-child(2){ animation-delay:.16s; }
+.puntitos__caja i:nth-child(3){ animation-delay:.32s; }
+@keyframes rebote{
+  0%,60%,100%{ transform:none; opacity:.45; }
+  30%{ transform: translateY(-6px); opacity:1; }
+}
+.puntitos__frase{
+  font-family: var(--f-tiza); font-size:1.15rem; color: var(--tinta-clara);
+}
+
+.pregunta{
+  font-family: var(--f-display);
+  text-transform: uppercase; letter-spacing:-.02em;
+  font-size: clamp(1.5rem, 7vw, 2rem); line-height:1.02;
+  margin: 10px 0 6px;
+}
+.pregunta__nota{
+  font-size:.86rem; color: var(--tinta-clara); margin:0 0 18px;
+}
+.opciones{ display:grid; gap:9px; }
+.opcion{
+  -webkit-appearance:none; appearance:none; cursor:pointer;
+  width:100%; text-align:left;
+  background: transparent; color: var(--lona);
+  border: 2px solid rgba(242,234,218,.26);
+  border-radius: var(--r-md);
+  padding: 15px 16px; min-height:52px;
+  font-size:1rem; font-weight:600; line-height:1.3;
+  display:flex; align-items:center; gap:12px;
+  transition: border-color .15s ease, background-color .15s ease, transform .15s cubic-bezier(.2,.8,.3,1);
+}
+.opcion:hover{ border-color: var(--sol); background: rgba(255,197,61,.10); }
+.opcion:active{ transform: scale(.99); }
+.opcion__marca{
+  flex:none; width:22px; height:22px; border-radius:6px;
+  border:2px solid rgba(242,234,218,.4);
+  display:grid; place-items:center; font-size:.8rem;
+  color: var(--sombra); font-weight:900;
+}
+.opcion[aria-pressed="true"]{
+  border-color: var(--sol); background: rgba(255,197,61,.16);
+}
+.opcion[aria-pressed="true"] .opcion__marca{
+  background: var(--sol); border-color: var(--sol);
+}
+.opcion__emo{ flex:none; font-size:1.25rem; line-height:1; }
+
+.acciones-chat{
+  display:flex; gap:10px; margin-top:18px; align-items:center;
+  flex-wrap: wrap;
+}
+.acciones-chat .btn{ flex:1; min-width: 140px; }
+.link-atras{
+  background:none; border:0; cursor:pointer; color: var(--tinta-clara);
+  font-weight:700; font-size:.9rem; padding:10px 12px; border-radius:var(--r-sm);
+  text-decoration: underline; text-underline-offset:3px;
+}
+.link-atras:hover{ color: var(--lona); }
+.link-atras[disabled]{ opacity:.35; cursor:not-allowed; text-decoration:none; }
+
+/* ── VEREDICTO ──────────────────────────────────────────────────── */
+.veredicto{ padding: 4px 0 44px; }
+
+/* el momento: la sombra barre y el plato queda al sol */
+.reveal{
+  position: relative;
+  animation: reveal-sube calc(.6s * var(--dur)) cubic-bezier(.16,.9,.24,1) both;
+}
+@keyframes reveal-sube{
+  from{ opacity:0; transform: translateY(26px); }
+  to{ opacity:1; transform:none; }
+}
+.barrido{
+  position: fixed; inset:0; z-index:60; pointer-events:none;
+  background: var(--sombra);
+  animation: barrer calc(.85s * var(--dur)) cubic-bezier(.62,.02,.2,1) forwards;
+}
+.barrido::after{
+  content:''; position:absolute; inset:0;
+  background: linear-gradient(100deg, transparent 42%, rgba(255,197,61,.55) 50%, transparent 58%);
+}
+@keyframes barrer{
+  0%{ transform: translateX(0); }
+  100%{ transform: translateX(-108%); }
+}
+
+.chapa{
+  display:inline-flex; align-items:center; gap:8px;
+  font-size:.74rem; font-weight:700; letter-spacing:.16em; text-transform:uppercase;
+  background: var(--sol); color: var(--sombra);
+  padding:6px 13px; border-radius:999px; margin-bottom:14px;
+}
+.ficha{
+  background: var(--espuma); color: var(--tinta);
+  border-radius: var(--r-lg);
+  overflow:hidden;
+  box-shadow: 0 24px 46px -28px rgba(0,0,0,.75);
+}
+.ficha__toldo{
+  height: 16px;
+  background: repeating-linear-gradient(90deg,
+              var(--toldo) 0 var(--raya), var(--lona) var(--raya) calc(var(--raya)*2));
+}
+.ficha__cuerpo{ padding: 20px 20px 22px; }
+.ficha__cat{
+  font-size:.72rem; font-weight:700; letter-spacing:.14em;
+  text-transform:uppercase; color: var(--tinta-suave); margin:0 0 6px;
+}
+.ficha__nombre{
+  font-family: var(--f-display); text-transform:uppercase;
+  font-size: clamp(1.55rem, 7.4vw, 2.15rem); line-height:.98;
+  letter-spacing:-.028em; margin:0 0 10px;
+}
+.ficha__precio{
+  font-family: var(--f-tiza); font-size:2rem; color: var(--toldo-ink);
+  line-height:1; font-weight:700;
+}
+.ficha__desc{ margin:10px 0 0; color: var(--tinta-suave); font-size:.95rem; }
+.ficha__voz{
+  margin: 16px 0 0; padding: 15px 16px;
+  background: color-mix(in srgb, var(--sol) 22%, transparent);
+  border-left: 5px solid var(--sol);
+  border-radius: 0 var(--r-md) var(--r-md) 0;
+  font-family: var(--f-tiza); font-size:1.32rem; line-height:1.3;
+  color: var(--sombra);
+}
+
+.bloque{ margin-top: 28px; }
+.bloque__titulo{
+  font-size:.76rem; font-weight:700; letter-spacing:.16em;
+  text-transform:uppercase; color: var(--sol);
+  margin:0 0 12px; display:flex; align-items:center; gap:10px;
+}
+.bloque__titulo::after{
+  content:''; flex:1; height:2px;
+  background: repeating-linear-gradient(90deg, rgba(242,234,218,.35) 0 8px, transparent 8px 16px);
+}
+.mini{
+  display:flex; gap:14px; align-items:flex-start;
+  background: rgba(242,234,218,.07);
+  border: 1px solid rgba(242,234,218,.16);
+  border-radius: var(--r-md);
+  padding: 14px 15px; margin-bottom:9px;
+}
+.mini__txt{ flex:1; min-width:0; }
+.mini__nombre{ margin:0; font-weight:700; font-size:.98rem; line-height:1.25; }
+.mini__linea{ margin:5px 0 0; font-size:.88rem; color: var(--tinta-clara); }
+.mini__precio{
+  font-family: var(--f-tiza); font-size:1.3rem; color: var(--sol);
+  white-space:nowrap; font-weight:700; line-height:1.2;
+}
+.dupla{ display:grid; gap:9px; }
+@media (min-width: 620px){ .dupla{ grid-template-columns:1fr 1fr; } .dupla .mini{ margin-bottom:0; } }
+
+.ticket{
+  margin-top: 22px; padding: 15px 17px;
+  border: 2px dashed rgba(242,234,218,.3);
+  border-radius: var(--r-md);
+  display:flex; align-items:center; gap:12px; flex-wrap:wrap;
+}
+.ticket__txt{ flex:1; min-width:140px; font-size:.88rem; color: var(--tinta-clara); }
+.ticket__monto{ font-family: var(--f-display); font-size:1.5rem; color: var(--sol); }
+
+.veredicto__acciones{ display:grid; gap:10px; margin-top: 28px; }
+@media (min-width: 560px){ .veredicto__acciones{ grid-template-columns:1fr 1fr; } }
+
+@media (min-width: 760px){
+  .hero__cuerpo{ padding-block: 62px 66px; }
+  /* con lugar de sobra los chips se acomodan en filas: en el escritorio
+     un riel que se corta en el borde parece roto, no deslizable */
+  .riel{
+    flex-wrap: wrap; overflow-x: visible;
+    margin-inline: 0; padding-inline: 0;
+  }
+  .burbuja{ max-width: 42ch; }
+  .opciones{ grid-template-columns: 1fr 1fr; }
+  .opciones--largas{ grid-template-columns: 1fr; }
+}
+</style>
+</head>
+<body>
+<a class="saltar" href="#principal">Ir al contenido</a>
+
+<div class="app" id="app">
+
+  <!-- ═══ VISTA: LANDING ═══════════════════════════════════════ -->
+  <section class="vista activa vista--clara" id="v-landing" aria-labelledby="h-landing">
+    <div class="hero">
+      <div class="toldo" aria-hidden="true"></div>
+      <div class="hero__sol" aria-hidden="true"></div>
+      <div class="envoltura hero__cuerpo" id="principal">
+        <h1 class="marca" id="h-landing">
+          BO<span class="barra" aria-hidden="true"></span><em>Fomento</em>
+        </h1>
+        <p class="ubic">Playa Fomento &middot; Colonia &middot; Uruguay</p>
+        <p class="bajada">La carta del parador. Con arena en el piso y el toldo puesto.</p>
+
+        <div class="hero__acciones">
+          <button class="btn btn--sol" data-ir="carta">Ver la carta</button>
+          <button class="btn btn--linea" data-ir="chef">Que elija el Chef</button>
+        </div>
+
+        <div class="hero__pie">
+          <span>Cocina de 12 a 16 y de 20 a 00</span>
+          <span>Mesas afuera hasta que baje el sol</span>
+        </div>
+      </div>
+    </div>
+    <div class="sombra-dura" aria-hidden="true"></div>
+
+    <div class="envoltura" style="padding-block: 26px 44px">
+      <p style="margin:0 0 14px;font-size:.76rem;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:var(--tinta-suave)">Lo que hay</p>
+      <div class="riel" id="riel-landing"></div>
+    </div>
+
+    <footer class="pie">
+      <div class="envoltura">
+        <p class="pie__marca">BO | Fomento</p>
+        <p>Playa Fomento, Colonia. Sobre la barranca, donde termina el camino.</p>
+        <p>Instagram: <a href="https://instagram.com/bofomento.uy" rel="noopener">@bofomento.uy</a></p>
+        <p style="margin-top:12px;opacity:.65;font-size:.8rem">Precios en pesos uruguayos. Pueden cambiar sin aviso, como el viento.</p>
+      </div>
+    </footer>
+  </section>
+
+  <!-- ═══ VISTA: CARTA ═════════════════════════════════════════ -->
+  <section class="vista vista--clara" id="v-carta" aria-labelledby="h-carta">
+    <div class="barra-top">
+      <div class="envoltura">
+        <div class="barra-top__fila">
+          <button class="volver" data-ir="landing" aria-label="Volver al inicio">&larr; Inicio</button>
+          <h2 class="barra-top__titulo" id="h-carta">La carta</h2>
+          <button class="btn btn--sol btn--chico" data-ir="chef">Que elija el Chef</button>
+        </div>
+      </div>
+      <div class="toldo toldo--fino" aria-hidden="true"></div>
+    </div>
+
+    <div class="envoltura">
+      <div class="buscador">
+        <span class="buscador__lupa" aria-hidden="true">&#9906;</span>
+        <label class="solo-lectores" for="q">Buscar en la carta</label>
+        <input id="q" type="search" autocomplete="off" placeholder="Buscar: milanesa, tannat, chajá…">
+        <button class="buscador__limpiar" id="q-limpiar" hidden aria-label="Limpiar búsqueda">&#10005;</button>
+      </div>
+
+      <div class="riel riel--filtros" id="riel-filtros" role="group" aria-label="Filtros rápidos"></div>
+      <div class="riel" id="riel-cats" role="group" aria-label="Categorías"></div>
+      <p class="conteo" id="conteo" role="status" aria-live="polite"></p>
+    </div>
+
+    <main class="envoltura" id="lista-carta" style="padding-bottom:30px"></main>
+
+    <footer class="pie">
+      <div class="envoltura">
+        <p class="pie__marca">¿Y si no sabés qué pedir?</p>
+        <p style="margin-bottom:16px">El Chef te hace cinco preguntas y te lo dice él.</p>
+        <button class="btn btn--sol" data-ir="chef">Que elija el Chef</button>
+      </div>
+    </footer>
+  </section>
+
+  <!-- ═══ VISTA: CHEF ══════════════════════════════════════════ -->
+  <section class="vista sombra-vista" id="v-chef" aria-labelledby="h-chef">
+    <div class="barra-top">
+      <div class="envoltura">
+        <div class="barra-top__fila">
+          <button class="volver" id="chef-volver" aria-label="Volver">&larr; Volver</button>
+          <h2 class="barra-top__titulo" id="h-chef">El Chef</h2>
+          <button class="btn btn--chico btn--linea" data-ir="carta">Ver carta</button>
+        </div>
+        <div class="progreso" id="progreso" hidden>
+          <div class="progreso__pista">
+            <div class="progreso__lleno" id="progreso-lleno"></div>
+          </div>
+          <p class="progreso__texto" id="progreso-texto"></p>
+        </div>
+      </div>
+    </div>
+
+    <div class="envoltura" style="flex:1;display:flex;flex-direction:column">
+      <div id="chef-panel" style="flex:1"></div>
+    </div>
+    <p class="solo-lectores" id="chef-live" role="status" aria-live="polite"></p>
+  </section>
+
+</div>
+
+<script>
+"use strict";
+
+/* ╔══════════════════════════════════════════════════════════════════╗
+   ║  BLOQUE 1 DE 2 — CONTENIDO DEL RESTAURANTE                       ║
+   ║  Para clonar este producto a otro local: cambiar SOLO este       ║
+   ║  bloque y el de PREGUNTAS. El motor no sabe nada de Bo Fomento.  ║
+   ╠══════════════════════════════════════════════════════════════════╣
+   ║  ⚠ PENDIENTE: los platos y precios de abajo son un armado de     ║
+   ║    referencia sobre las categorías reales de la carta. Hay que   ║
+   ║    reemplazarlos por la transcripción de los JPGs de bofomento.uy║
+   ║    Estructura, ejes y motor no se tocan al hacerlo.              ║
+   ╚══════════════════════════════════════════════════════════════════╝
+
+   EJES (0 a 10) — el mismo vocabulario para platos, respuestas y persona:
+     contundencia  0 picoteo          → 10 salgo rodando
+     aventura      0 lo de siempre    → 10 sorprendeme
+     social        0 mi plato es mío  → 10 al medio de la mesa
+     frescura      0 caliente         → 10 frío y refrescante
+     dulce         0 salado           → 10 postre sí o sí
+
+   contiene[]: carne · cerdo · pollo · pescado · mariscos · lacteos ·
+               gluten · huevo · frutos-secos · alcohol
+*/
+
+const CATEGORIAS = [
+  { id: "entradas",           nombre: "Entradas y más",      tipo: "entrada"   },
+  { id: "milanesas-burgers",  nombre: "Milanesas y burgers", tipo: "principal" },
+  { id: "refrescos-cervezas", nombre: "Refrescos y cervezas", tipo: "bebida" },
+  { id: "vinos",              nombre: "Vinos",               tipo: "bebida" },
+  { id: "cafe-postres",       nombre: "Café y postres",      tipo: "postre" }
+];
+
+const MENU = [
+  /* ── ENTRADAS Y MÁS ─────────────────────────────────────────── */
+  { id:"tabla-bo", nombre:"Tabla Bo", precio:1290, categoria:"entradas",
+    descripcion:"Fiambres, quesos, aceitunas y pan tostado. Para arrancar sin apuro.",
+    tags:["clásico","para la mesa"],
+    apto:{ vegetariano:false, singluten:false, compartir:true },
+    contiene:["carne","cerdo","lacteos","gluten"],
+    ejes:{ contundencia:6, aventura:3, social:10, frescura:4, dulce:0 } },
+
+  { id:"rabas", nombre:"Rabas a la romana", precio:890, categoria:"entradas",
+    descripcion:"Con limón y alioli. Se comen con la mano y nadie mira.",
+    tags:["de mar","frito"],
+    apto:{ vegetariano:false, singluten:false, compartir:true },
+    contiene:["mariscos","gluten","huevo"],
+    ejes:{ contundencia:6, aventura:4, social:8, frescura:3, dulce:0 } },
+
+  { id:"bunuelos-algas", nombre:"Buñuelos de algas", precio:620, categoria:"entradas",
+    descripcion:"Los de siempre en la costa, con alioli de limón.",
+    tags:["de la costa","para la mesa"],
+    apto:{ vegetariano:true, singluten:false, compartir:true },
+    contiene:["gluten","huevo"],
+    ejes:{ contundencia:4, aventura:6, social:8, frescura:4, dulce:0 } },
+
+  { id:"provoleta", nombre:"Provoleta a la parrilla", precio:690, categoria:"entradas",
+    descripcion:"Orégano, aceite de oliva y una cuchara para rascar el fondo.",
+    tags:["a la parrilla","clásico"],
+    apto:{ vegetariano:true, singluten:true, compartir:true },
+    contiene:["lacteos"],
+    ejes:{ contundencia:7, aventura:3, social:8, frescura:1, dulce:0 } },
+
+  { id:"papas-cheddar", nombre:"Papas con cheddar y panceta", precio:760, categoria:"entradas",
+    descripcion:"No hace falta que te explique nada.",
+    tags:["contundente","para la mesa"],
+    apto:{ vegetariano:false, singluten:false, compartir:true },
+    contiene:["cerdo","lacteos"],
+    ejes:{ contundencia:8, aventura:1, social:9, frescura:1, dulce:0 } },
+
+  { id:"boniato-alioli", nombre:"Boniatos fritos con alioli de ajo asado", precio:590, categoria:"entradas",
+    descripcion:"Dulces por dentro, crocantes por fuera. Peligrosos.",
+    tags:["sin TACC","para la mesa"],
+    apto:{ vegetariano:true, singluten:true, compartir:true },
+    contiene:["huevo"],
+    ejes:{ contundencia:5, aventura:4, social:8, frescura:2, dulce:2 } },
+
+  { id:"ensalada-barranca", nombre:"Ensalada de la barranca", precio:720, categoria:"entradas",
+    descripcion:"Hojas, tomate, palta, semillas tostadas y cítrico. Liviana en serio.",
+    tags:["fresco","liviano"],
+    apto:{ vegetariano:true, singluten:true, compartir:false },
+    contiene:["frutos-secos"],
+    ejes:{ contundencia:1, aventura:4, social:2, frescura:10, dulce:1 } },
+
+  { id:"ceviche-corvina", nombre:"Ceviche de corvina", precio:980, categoria:"entradas",
+    descripcion:"Leche de tigre, boniato y cebolla morada. Fría, ácida, despierta.",
+    tags:["de mar","fresco"],
+    apto:{ vegetariano:false, singluten:true, compartir:false },
+    contiene:["pescado"],
+    ejes:{ contundencia:2, aventura:8, social:4, frescura:10, dulce:1 } },
+
+  { id:"tortilla-papa", nombre:"Tortilla de papa", precio:640, categoria:"entradas",
+    descripcion:"Jugosa en el medio. Como corresponde.",
+    tags:["clásico","sin TACC"],
+    apto:{ vegetariano:true, singluten:true, compartir:true },
+    contiene:["huevo"],
+    ejes:{ contundencia:6, aventura:1, social:7, frescura:2, dulce:0 } },
+
+  { id:"langostinos-ajillo", nombre:"Langostinos al ajillo", precio:1150, categoria:"entradas",
+    descripcion:"En la cazuelita, con ajo, morrón y una copa de blanco al lado.",
+    tags:["de mar","para la mesa"],
+    apto:{ vegetariano:false, singluten:true, compartir:true },
+    contiene:["mariscos"],
+    ejes:{ contundencia:5, aventura:6, social:6, frescura:4, dulce:0 } },
+
+  { id:"berenjenas-escabeche", nombre:"Berenjenas en escabeche con menta", precio:580, categoria:"entradas",
+    descripcion:"Ácidas, frías, con pan. Las que nadie pide y todos repiten.",
+    tags:["fresco","distinto"],
+    apto:{ vegetariano:true, singluten:true, compartir:true },
+    contiene:[],
+    ejes:{ contundencia:2, aventura:7, social:6, frescura:8, dulce:1 } },
+
+  { id:"croquetas-hongos", nombre:"Croquetas de hongos", precio:640, categoria:"entradas",
+    descripcion:"Cremosas adentro. Vienen seis y siempre falta una.",
+    tags:["frito","para la mesa"],
+    apto:{ vegetariano:true, singluten:false, compartir:true },
+    contiene:["lacteos","gluten","huevo"],
+    ejes:{ contundencia:5, aventura:5, social:8, frescura:2, dulce:0 } },
+
+  /* ── MILANESAS Y BURGERS ────────────────────────────────────── */
+  { id:"mila-napo", nombre:"Milanesa napolitana", precio:890, categoria:"milanesas-burgers",
+    descripcion:"Con jamón, queso y salsa. Papas fritas abajo.",
+    tags:["contundente","clásico"],
+    apto:{ vegetariano:false, singluten:false, compartir:false },
+    contiene:["carne","cerdo","lacteos","gluten","huevo"],
+    ejes:{ contundencia:9, aventura:2, social:3, frescura:1, dulce:0 } },
+
+  { id:"mila-completa", nombre:"Milanesa completa Bo", precio:1090, categoria:"milanesas-burgers",
+    descripcion:"A caballo, con jamón, queso, dos huevos fritos y papas. Se sale rodando.",
+    tags:["demoledor","clásico"],
+    apto:{ vegetariano:false, singluten:false, compartir:false },
+    contiene:["carne","cerdo","lacteos","gluten","huevo"],
+    ejes:{ contundencia:10, aventura:3, social:4, frescura:0, dulce:0 } },
+
+  { id:"mila-napo-sintacc", nombre:"Milanesa napolitana sin TACC", precio:950, categoria:"milanesas-burgers",
+    descripcion:"Rebozada con harina de arroz. La misma milanesa, sin drama.",
+    tags:["sin TACC","contundente"],
+    apto:{ vegetariano:false, singluten:true, compartir:false },
+    contiene:["carne","cerdo","lacteos","huevo"],
+    ejes:{ contundencia:9, aventura:2, social:3, frescura:1, dulce:0 } },
+
+  { id:"mila-berenjena", nombre:"Milanesa de berenjena napolitana", precio:790, categoria:"milanesas-burgers",
+    descripcion:"Vegetariana y con la misma cantidad de queso. Que quede claro.",
+    tags:["vegetariano","contundente"],
+    apto:{ vegetariano:true, singluten:false, compartir:false },
+    contiene:["lacteos","gluten","huevo"],
+    ejes:{ contundencia:7, aventura:4, social:3, frescura:2, dulce:0 } },
+
+  { id:"mila-pollo-ensalada", nombre:"Milanesa de pollo con ensalada", precio:820, categoria:"milanesas-burgers",
+    descripcion:"Para el que quiere milanesa pero después quiere entrar al agua.",
+    tags:["liviano","clásico"],
+    apto:{ vegetariano:false, singluten:false, compartir:false },
+    contiene:["pollo","gluten","huevo"],
+    ejes:{ contundencia:5, aventura:1, social:2, frescura:6, dulce:0 } },
+
+  { id:"burger-fomento", nombre:"Burger Fomento", precio:990, categoria:"milanesas-burgers",
+    descripcion:"Doble carne, cheddar, panceta y cebolla quemada. Servilletas aparte.",
+    tags:["demoledor","de la casa"],
+    apto:{ vegetariano:false, singluten:false, compartir:false },
+    contiene:["carne","cerdo","lacteos","gluten"],
+    ejes:{ contundencia:10, aventura:4, social:3, frescura:1, dulce:1 } },
+
+  { id:"burger-clasica", nombre:"Burger clásica", precio:790, categoria:"milanesas-burgers",
+    descripcion:"Carne, cheddar, pepinos y nada más. La que nunca falla.",
+    tags:["clásico"],
+    apto:{ vegetariano:false, singluten:false, compartir:false },
+    contiene:["carne","lacteos","gluten"],
+    ejes:{ contundencia:8, aventura:1, social:3, frescura:2, dulce:1 } },
+
+  { id:"burger-garbanzos", nombre:"Burger de garbanzos y remolacha", precio:850, categoria:"milanesas-burgers",
+    descripcion:"Con tahini y pepinos encurtidos. No es un premio consuelo.",
+    tags:["vegetariano","distinto"],
+    apto:{ vegetariano:true, singluten:false, compartir:false },
+    contiene:["gluten","frutos-secos"],
+    ejes:{ contundencia:6, aventura:6, social:3, frescura:4, dulce:1 } },
+
+  { id:"burger-corvina", nombre:"Burger de corvina rebozada", precio:920, categoria:"milanesas-burgers",
+    descripcion:"Pescado de acá, alioli de limón y repollo crocante.",
+    tags:["de mar","distinto"],
+    apto:{ vegetariano:false, singluten:false, compartir:false },
+    contiene:["pescado","gluten","huevo"],
+    ejes:{ contundencia:7, aventura:6, social:3, frescura:5, dulce:0 } },
+
+  { id:"chivito-canadiense", nombre:"Chivito canadiense", precio:1150, categoria:"milanesas-burgers",
+    descripcion:"Lomo, jamón, queso, panceta, huevo y todo lo demás. Es un chivito.",
+    tags:["demoledor","clásico"],
+    apto:{ vegetariano:false, singluten:false, compartir:false },
+    contiene:["carne","cerdo","lacteos","gluten","huevo"],
+    ejes:{ contundencia:10, aventura:3, social:4, frescura:2, dulce:0 } },
+
+  { id:"bondiola-pan", nombre:"Bondiola al pan con chimichurri", precio:950, categoria:"milanesas-burgers",
+    descripcion:"Ocho horas de horno. Se deshace sola.",
+    tags:["contundente","de la casa"],
+    apto:{ vegetariano:false, singluten:false, compartir:false },
+    contiene:["cerdo","gluten"],
+    ejes:{ contundencia:9, aventura:4, social:5, frescura:1, dulce:0 } },
+
+  { id:"wrap-verduras", nombre:"Wrap de verduras grilladas", precio:740, categoria:"milanesas-burgers",
+    descripcion:"Zucchini, morrón, rúcula y hummus. Se come caminando hasta la orilla.",
+    tags:["vegetariano","liviano"],
+    apto:{ vegetariano:true, singluten:false, compartir:false },
+    contiene:["gluten","frutos-secos"],
+    ejes:{ contundencia:4, aventura:5, social:2, frescura:7, dulce:0 } },
+
+  /* ── REFRESCOS Y CERVEZAS ───────────────────────────────────── */
+  { id:"limonada-menta", nombre:"Limonada con menta y jengibre", precio:320, categoria:"refrescos-cervezas",
+    descripcion:"En jarra sudada. La primera dura dos minutos.",
+    tags:["fresco","sin alcohol"],
+    apto:{ vegetariano:true, singluten:true, compartir:true },
+    contiene:[],
+    ejes:{ contundencia:0, aventura:4, social:8, frescura:10, dulce:3 } },
+
+  { id:"rubia-tirada", nombre:"Rubia tirada, pinta", precio:340, categoria:"refrescos-cervezas",
+    descripcion:"Bien fría. Es lo que hay que tomar y vos lo sabés.",
+    tags:["clásico"],
+    apto:{ vegetariano:true, singluten:false, compartir:false },
+    contiene:["alcohol","gluten"],
+    ejes:{ contundencia:2, aventura:1, social:4, frescura:9, dulce:0 } },
+
+  { id:"ipa-colonia", nombre:"IPA de Colonia, pinta", precio:390, categoria:"refrescos-cervezas",
+    descripcion:"Artesanal, amarga, de acá nomás.",
+    tags:["distinto"],
+    apto:{ vegetariano:true, singluten:false, compartir:false },
+    contiene:["alcohol","gluten"],
+    ejes:{ contundencia:3, aventura:7, social:4, frescura:8, dulce:0 } },
+
+  { id:"clerico", nombre:"Clericó de la casa, jarra", precio:780, categoria:"refrescos-cervezas",
+    descripcion:"Vino blanco, fruta y hielo. Se pide de a uno y se toma de a cuatro.",
+    tags:["para la mesa","fresco"],
+    apto:{ vegetariano:true, singluten:true, compartir:true },
+    contiene:["alcohol"],
+    ejes:{ contundencia:2, aventura:5, social:10, frescura:10, dulce:5 } },
+
+  { id:"fernet-coca", nombre:"Fernet con coca", precio:420, categoria:"refrescos-cervezas",
+    descripcion:"Con mucho hielo. No preguntamos la proporción, la sabemos.",
+    tags:["clásico"],
+    apto:{ vegetariano:true, singluten:true, compartir:false },
+    contiene:["alcohol"],
+    ejes:{ contundencia:3, aventura:6, social:5, frescura:7, dulce:2 } },
+
+  { id:"grapamiel", nombre:"Grapamiel", precio:300, categoria:"refrescos-cervezas",
+    descripcion:"Para el frío, para el después, o porque sí.",
+    tags:["distinto"],
+    apto:{ vegetariano:true, singluten:true, compartir:false },
+    contiene:["alcohol"],
+    ejes:{ contundencia:2, aventura:7, social:3, frescura:2, dulce:6 } },
+
+  { id:"refresco-lata", nombre:"Refresco en lata", precio:210, categoria:"refrescos-cervezas",
+    descripcion:"Línea completa. Fría de verdad, no del estante.",
+    tags:["sin alcohol"],
+    apto:{ vegetariano:true, singluten:true, compartir:false },
+    contiene:[],
+    ejes:{ contundencia:1, aventura:0, social:3, frescura:8, dulce:5 } },
+
+  { id:"jugo-naranja", nombre:"Jugo de naranja exprimido", precio:290, categoria:"refrescos-cervezas",
+    descripcion:"Exprimido cuando lo pedís, no antes.",
+    tags:["fresco","sin alcohol"],
+    apto:{ vegetariano:true, singluten:true, compartir:false },
+    contiene:[],
+    ejes:{ contundencia:1, aventura:1, social:2, frescura:9, dulce:4 } },
+
+  { id:"agua-gas", nombre:"Agua con o sin gas", precio:160, categoria:"refrescos-cervezas",
+    descripcion:"Grande. Con el sol que hace, tomá agua.",
+    tags:["sin alcohol"],
+    apto:{ vegetariano:true, singluten:true, compartir:true },
+    contiene:[],
+    ejes:{ contundencia:0, aventura:0, social:5, frescura:9, dulce:0 } },
+
+  /* ── VINOS ──────────────────────────────────────────────────── */
+  { id:"tannat-copa", nombre:"Tannat de la casa, copa", precio:380, categoria:"vinos",
+    descripcion:"Tinto, uruguayo, sin vueltas.",
+    tags:["clásico"],
+    apto:{ vegetariano:true, singluten:true, compartir:false },
+    contiene:["alcohol"],
+    ejes:{ contundencia:6, aventura:3, social:3, frescura:2, dulce:1 } },
+
+  { id:"tannat-botella", nombre:"Tannat de la casa, botella", precio:1450, categoria:"vinos",
+    descripcion:"Para la mesa larga y la sobremesa que se va de las manos.",
+    tags:["para la mesa"],
+    apto:{ vegetariano:true, singluten:true, compartir:true },
+    contiene:["alcohol"],
+    ejes:{ contundencia:7, aventura:3, social:9, frescura:2, dulce:1 } },
+
+  { id:"albarino", nombre:"Albariño, botella", precio:1890, categoria:"vinos",
+    descripcion:"Blanco atlántico, salino. Con pescado es otra cosa.",
+    tags:["distinto","fresco"],
+    apto:{ vegetariano:true, singluten:true, compartir:true },
+    contiene:["alcohol"],
+    ejes:{ contundencia:2, aventura:6, social:8, frescura:9, dulce:0 } },
+
+  { id:"rosado-tannat", nombre:"Rosado de Tannat bien frío, botella", precio:1590, categoria:"vinos",
+    descripcion:"El que se toma mirando cómo baja el sol.",
+    tags:["fresco","para la mesa"],
+    apto:{ vegetariano:true, singluten:true, compartir:true },
+    contiene:["alcohol"],
+    ejes:{ contundencia:2, aventura:5, social:9, frescura:10, dulce:2 } },
+
+  { id:"espumante-brut", nombre:"Espumante brut, botella", precio:1750, categoria:"vinos",
+    descripcion:"No hace falta que sea un cumpleaños.",
+    tags:["para la mesa","distinto"],
+    apto:{ vegetariano:true, singluten:true, compartir:true },
+    contiene:["alcohol"],
+    ejes:{ contundencia:2, aventura:6, social:10, frescura:9, dulce:3 } },
+
+  /* ── CAFÉ Y POSTRES ─────────────────────────────────────────── */
+  { id:"chaja", nombre:"Chajá", precio:480, categoria:"cafe-postres",
+    descripcion:"Merengue, durazno, crema y bizcochuelo. El postre nacional.",
+    tags:["clásico","dulce"],
+    apto:{ vegetariano:true, singluten:false, compartir:true },
+    contiene:["lacteos","gluten","huevo"],
+    ejes:{ contundencia:5, aventura:2, social:4, frescura:5, dulce:10 } },
+
+  { id:"flan-ddl", nombre:"Flan con dulce de leche", precio:420, categoria:"cafe-postres",
+    descripcion:"Con crema si querés, pero el dulce de leche no se negocia.",
+    tags:["clásico","sin TACC"],
+    apto:{ vegetariano:true, singluten:true, compartir:false },
+    contiene:["lacteos","huevo"],
+    ejes:{ contundencia:5, aventura:1, social:2, frescura:3, dulce:10 } },
+
+  { id:"panqueque-ddl", nombre:"Panqueque de dulce de leche", precio:440, categoria:"cafe-postres",
+    descripcion:"Quemadito arriba. Dos por porción y no alcanzan.",
+    tags:["clásico","dulce"],
+    apto:{ vegetariano:true, singluten:false, compartir:false },
+    contiene:["lacteos","gluten","huevo"],
+    ejes:{ contundencia:6, aventura:1, social:3, frescura:2, dulce:10 } },
+
+  { id:"brownie-helado", nombre:"Brownie con helado", precio:520, categoria:"cafe-postres",
+    descripcion:"Caliente y frío al mismo tiempo. Con nueces.",
+    tags:["contundente","dulce"],
+    apto:{ vegetariano:true, singluten:false, compartir:true },
+    contiene:["lacteos","gluten","huevo","frutos-secos"],
+    ejes:{ contundencia:8, aventura:3, social:5, frescura:5, dulce:10 } },
+
+  { id:"helado-casa", nombre:"Helado de la casa, dos bochas", precio:390, categoria:"cafe-postres",
+    descripcion:"Preguntá los gustos del día. Cambian.",
+    tags:["fresco","sin TACC"],
+    apto:{ vegetariano:true, singluten:true, compartir:false },
+    contiene:["lacteos"],
+    ejes:{ contundencia:3, aventura:3, social:4, frescura:10, dulce:9 } },
+
+  { id:"frutas-estacion", nombre:"Ensalada de frutas de estación", precio:360, categoria:"cafe-postres",
+    descripcion:"Fría, cítrica, honesta. El postre del que no quería postre.",
+    tags:["fresco","liviano"],
+    apto:{ vegetariano:true, singluten:true, compartir:false },
+    contiene:[],
+    ejes:{ contundencia:1, aventura:2, social:2, frescura:10, dulce:7 } },
+
+  { id:"cafe-bizcochos", nombre:"Café con bizcochos", precio:340, categoria:"cafe-postres",
+    descripcion:"Tres bizcochos, uno se cae al piso. Es la tradición.",
+    tags:["clásico","para la mesa"],
+    apto:{ vegetariano:true, singluten:false, compartir:true },
+    contiene:["lacteos","gluten"],
+    ejes:{ contundencia:2, aventura:1, social:6, frescura:1, dulce:4 } },
+
+  { id:"cortado", nombre:"Cortado", precio:180, categoria:"cafe-postres",
+    descripcion:"Para cerrar y quedarse un rato más.",
+    tags:["clásico"],
+    apto:{ vegetariano:true, singluten:true, compartir:false },
+    contiene:["lacteos"],
+    ejes:{ contundencia:1, aventura:0, social:2, frescura:1, dulce:2 } }
+];
+
+/* ╔══════════════════════════════════════════════════════════════════╗
+   ║  BLOQUE 2 DE 2 — LAS PREGUNTAS DEL CHEF                          ║
+   ╠══════════════════════════════════════════════════════════════════╣
+   ║  tipo "sabor"  → mueve ejes. Nunca elimina platos.               ║
+   ║  tipo "filtro" → elimina platos (duro) o los penaliza (blando).  ║
+   ║                  Nunca mueve ejes. Un filtro no se negocia.      ║
+   ║                                                                  ║
+   ║  Cada opción lleva un "eco": cómo el chef repite tu respuesta    ║
+   ║  en el veredicto. Sin eco no hay veredicto concreto.             ║
+   ║                                                                  ║
+   ║  peso máximo ±3 en preguntas de sabor;  ±1 en las de puro        ║
+   ║  chamuyo (signo, música): el signo condimenta, no decide.        ║
+   ║                                                                  ║
+   ║  Los pesos de los filtros blandos están calibrados contra el     ║
+   ║  puntaje base, que se mueve entre 0,30 y 0,75. Un castigo de     ║
+   ║  0,5 da vuelta el ranking sin borrar el resto del motor: si      ║
+   ║  fuera 0,9 el hambre decidiría sola y las otras ocho preguntas   ║
+   ║  no pintarían nada.                                              ║
+   ╚══════════════════════════════════════════════════════════════════╝ */
+
+const PREGUNTAS = [
+
+  /* ── FILTRO DURO ─────────────────────────────────────────────── */
+  { id:"restricciones", tipo:"filtro", modos:["express","completo"], multiple:true,
+    texto:"¿Hay algo que no comés?",
+    nota:"Podés marcar más de una. Esto no se negocia después.",
+    opciones:[
+      { texto:"Soy vegetariano", emo:"🥬",
+        excluye:{ requiere:"vegetariano" }, eco:"que sos vegetariano" },
+      { texto:"Sin gluten", emo:"🌾",
+        excluye:{ requiere:"singluten" }, eco:"que no podés con el gluten" },
+      { texto:"Pescado y mariscos ni loco", emo:"🐟",
+        excluye:{ contiene:["pescado","mariscos"] }, eco:"que odiás el pescado" },
+      { texto:"Hoy no tomo alcohol", emo:"🚫",
+        excluye:{ contiene:["alcohol"] }, eco:"que hoy no tomás" },
+      { texto:"Como de todo", emo:"😎", exclusiva:true,
+        excluye:null, eco:"que comés de todo" }
+    ] },
+
+  /* ── FILTRO BLANDO: penaliza fuerte, no elimina ──────────────── */
+  { id:"hambre", tipo:"filtro", modos:["express","completo"],
+    texto:"¿Cuánta hambre traés?",
+    opciones:[
+      { texto:"Picoteo y nada más", emo:"🫒",
+        blando:{ eje:"contundencia", objetivo:2, peso:0.50 },
+        eco:"que venís a picotear" },
+      { texto:"Hambre normal, de gente normal", emo:"🍽️",
+        blando:{ eje:"contundencia", objetivo:5, peso:0.22 },
+        eco:"que tenés un hambre normal" },
+      { texto:"Vengo de la playa, me como una vaca", emo:"🐄",
+        blando:{ eje:"contundencia", objetivo:9, peso:0.50 },
+        eco:"que venís de la playa con un hambre bárbaro" }
+    ] },
+
+  { id:"presupuesto", tipo:"filtro", modos:["express","completo"],
+    texto:"¿Cómo venimos de plata?",
+    nota:"Nadie te va a juzgar. Yo tampoco.",
+    opciones:[
+      { texto:"Justo, sin vueltas", emo:"🪙",
+        blandoPrecio:{ techo:800, peso:0.55 }, eco:"que venís justo de plata" },
+      { texto:"Ni tanto ni tan poco", emo:"💵",
+        blandoPrecio:{ techo:1050, peso:0.20 }, eco:"que no querés irte al techo" },
+      { texto:"Hoy no miro la cuenta", emo:"🔥",
+        blandoPrecio:null, eco:"que hoy no mirás la cuenta" }
+    ] },
+
+  /* ── SABOR ───────────────────────────────────────────────────── */
+  { id:"domingo", tipo:"sabor", modos:["express","completo"],
+    texto:"Domingo, tres de la tarde. ¿Dónde estás?",
+    opciones:[
+      { texto:"Durmiendo la siesta en la reposera", emo:"😴",
+        pesos:{ contundencia:+3, frescura:-2, social:-1, aventura:-1 },
+        eco:"que a las tres de la tarde estás durmiendo" },
+      { texto:"En el agua, todavía no comí", emo:"🌊",
+        pesos:{ frescura:+3, contundencia:-2, aventura:+1, dulce:-1 },
+        eco:"que venís del agua sin haber comido" },
+      { texto:"En una mesa larga con doce personas", emo:"🍻",
+        pesos:{ social:+3, contundencia:+2, dulce:+1 },
+        eco:"que tu domingo es una mesa de doce" },
+      { texto:"Recién me levanto y no sé qué día es", emo:"🥴",
+        pesos:{ aventura:+2, contundencia:+1, dulce:+1 },
+        eco:"que ni sabés qué día es" }
+    ] },
+
+  { id:"mesa", tipo:"sabor", modos:["express","completo"],
+    texto:"En la mesa, ¿qué pasa con la comida?",
+    opciones:[
+      { texto:"Cada uno lo suyo y sin tocar", emo:"🙅",
+        pesos:{ social:-3, contundencia:+1, aventura:-2, dulce:-1 },
+        eco:"que tu plato no se toca" },
+      { texto:"Todo al medio, manotazo libre", emo:"🤝",
+        pesos:{ social:+3, aventura:+1, dulce:+1 },
+        eco:"que ponés todo al medio" },
+      { texto:"Pido lo mío y pico del plato ajeno", emo:"👀",
+        pesos:{ social:+2, aventura:+2, contundencia:-1 },
+        eco:"que picás del plato del otro" },
+      { texto:"Vine solo y estoy perfecto", emo:"🧘",
+        pesos:{ social:-2, frescura:+1, aventura:-1 },
+        eco:"que viniste solo y estás bárbaro así" }
+    ] },
+
+  { id:"siesta", tipo:"sabor", modos:["completo"],
+    texto:"¿Sos de siesta o de after?",
+    opciones:[
+      { texto:"Siesta. Sagrada.", emo:"🛏️",
+        pesos:{ contundencia:+3, frescura:-2, aventura:-1, dulce:+1 },
+        eco:"que la siesta te la respetás" },
+      { texto:"After. Esto recién empieza.", emo:"🌙",
+        pesos:{ aventura:+2, social:+2, frescura:+1, dulce:-1 },
+        eco:"que sos de after" },
+      { texto:"Las dos, en ese orden", emo:"🔁",
+        pesos:{ contundencia:+2, social:+1, dulce:+1 },
+        eco:"que dormís la siesta y después salís igual" },
+      { texto:"Ninguna, yo salgo a caminar", emo:"🚶",
+        pesos:{ frescura:+2, contundencia:-2, social:-1, dulce:-1 },
+        eco:"que después de comer te vas a caminar" }
+    ] },
+
+  { id:"verano", tipo:"sabor", modos:["completo"],
+    texto:"El mejor plan de verano posible",
+    opciones:[
+      { texto:"Carpa, mate y no moverme de ahí", emo:"⛱️",
+        pesos:{ contundencia:+2, social:+1, frescura:-1, aventura:-2 },
+        eco:"que tu plan es la carpa y el mate" },
+      { texto:"Ruta, sin destino", emo:"🛣️",
+        pesos:{ aventura:+3, social:-1, dulce:-1 },
+        eco:"que agarrás la ruta sin destino" },
+      { texto:"Asado hasta que se haga de noche", emo:"🔥",
+        pesos:{ contundencia:+3, social:+3, aventura:-1 },
+        eco:"que tu verano es un asado largo" },
+      { texto:"Mar hasta que se me arrugue todo", emo:"🏊",
+        pesos:{ frescura:+3, contundencia:-2, dulce:+1 },
+        eco:"que no salís del agua" }
+    ] },
+
+  /* ── SABOR DE PURO CHAMUYO: peso ±1, alimentan el copy ───────── */
+  { id:"musica", tipo:"sabor", modos:["completo"],
+    texto:"Venías en el auto. ¿Qué sonaba?",
+    opciones:[
+      { texto:"Cumbia, fuerte, ventanilla baja", emo:"📻",
+        pesos:{ social:+1, aventura:+1 },
+        eco:"que venías con cumbia a todo lo que da" },
+      { texto:"Rock nacional del bueno", emo:"🎸",
+        pesos:{ contundencia:+1, aventura:-1, dulce:-1 },
+        eco:"que venías con rock nacional" },
+      { texto:"Algo tranqui, casi dormido", emo:"🎧",
+        pesos:{ frescura:+1, contundencia:-1, social:-1 },
+        eco:"que venías escuchando algo tranquilo" },
+      { texto:"Nada. El viento por la ventana.", emo:"🌬️",
+        pesos:{ aventura:+1, frescura:+1, social:-1 },
+        eco:"que venías escuchando el viento" }
+    ] },
+
+  { id:"signo", tipo:"sabor", modos:["completo"], compacta:true,
+    texto:"Última, y no me preguntes por qué: ¿de qué signo sos?",
+    nota:"No decide nada. Pero explica bastante.",
+    opciones:[
+      { texto:"Aries",       pesos:{ aventura:+1, contundencia:+1 }, eco:"que sos de Aries",       remate:"Aries: ibas a terminar en el plato más grande sí o sí." },
+      { texto:"Tauro",       pesos:{ contundencia:+1, dulce:+1 },    eco:"que sos de Tauro",       remate:"Tauro. Ni disimulás las ganas de comer bien." },
+      { texto:"Géminis",     pesos:{ aventura:+1, social:+1 },       eco:"que sos de Géminis",     remate:"Géminis: capaz cambiás de idea antes de que salga. Ya sé." },
+      { texto:"Cáncer",      pesos:{ dulce:+1, contundencia:+1 },    eco:"que sos de Cáncer",      remate:"Cáncer, comida que abraza. Era eso." },
+      { texto:"Leo",         pesos:{ social:+1, contundencia:+1 },   eco:"que sos de Leo",         remate:"Leo: querés el plato que se mire desde la otra mesa." },
+      { texto:"Virgo",       pesos:{ aventura:-1, frescura:+1 },     eco:"que sos de Virgo",       remate:"Virgo. Ya estás calculando si te va a caer bien. Te va a caer bien." },
+      { texto:"Libra",       pesos:{ social:+1, dulce:+1 },          eco:"que sos de Libra",       remate:"Libra: ibas a tardar veinte minutos en decidir. Por eso estoy yo." },
+      { texto:"Escorpio",    pesos:{ aventura:+1, frescura:-1, dulce:-1 }, eco:"que sos de Escorpio",    remate:"Escorpio, obvio que te iba a tocar lo más intenso." },
+      { texto:"Sagitario",   pesos:{ aventura:+1, social:+1 },       eco:"que sos de Sagitario",   remate:"Sagitario: si te doy algo clásico te ofendés." },
+      { texto:"Capricornio", pesos:{ aventura:-1, contundencia:+1, dulce:-1 }, eco:"que sos de Capricornio", remate:"Capricornio. Lo probado, bien hecho, sin experimentos." },
+      { texto:"Acuario",     pesos:{ aventura:+1, frescura:+1 },     eco:"que sos de Acuario",     remate:"Acuario: te doy lo raro porque lo raro te lo comés." },
+      { texto:"Piscis",      pesos:{ frescura:+1, dulce:+1 },        eco:"que sos de Piscis",      remate:"Piscis. Andabas mirando el mar, no me mientas." }
+    ] }
+];
+
+/* Voz del chef: frases de espera y remates. También reemplazable. */
+const VOZ = {
+  esperas:[
+    "Dejame pensar…",
+    "Ajá.",
+    "Mirá vos.",
+    "Ya sé por dónde va la cosa.",
+    "Esperá que lo veo con la cocina.",
+    "Uh. Interesante.",
+    "Eso me cambia todo.",
+    "Tá."
+  ],
+  cierres:[
+    "Confiá.",
+    "No preguntes más y pedilo.",
+    "Después me contás.",
+    "Yo ya lo sabía cuando entraste.",
+    "Es eso. No hay vuelta."
+  ]
+};
+
+/* ═══════════════════════════════════════════════════════════════════
+   MOTOR — 100% local y determinístico. Sin IA, sin API, sin backend.
+   Costo cero por usuario, latencia cero, anda con mala señal, y
+   siempre se puede testear porque nunca improvisa.
+   ═══════════════════════════════════════════════════════════════════ */
+
+const EJES = ["contundencia","aventura","social","frescura","dulce"];
+const DIST_MAX = Math.sqrt(EJES.length * 100);
+
+const clamp = (n,a,b) => Math.min(b, Math.max(a, n));
+const catDe  = id => CATEGORIAS.find(c => c.id === id) || { nombre:id, tipo:"comida" };
+const tipoDe = p  => catDe(p.categoria).tipo;
+
+const fmtPrecio = (() => {
+  let f;
+  try {
+    f = new Intl.NumberFormat("es-UY", {
+      style:"currency", currency:"UYU", maximumFractionDigits:0
+    });
+    return n => f.format(n).replace(/\s/g, " ");
+  } catch (e) {
+    return n => "$ " + String(n).replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+  }
+})();
+
+/* ── aleatorio con semilla: mismo set de respuestas, mismo desempate ── */
+function mulberry32(a){
+  return function(){
+    a |= 0; a = a + 0x6D2B79F5 | 0;
+    let t = Math.imul(a ^ a >>> 15, 1 | a);
+    t = t + Math.imul(t ^ t >>> 7, 61 | t) ^ t;
+    return ((t ^ t >>> 14) >>> 0) / 4294967296;
+  };
+}
+function semillaDe(respuestas){
+  const s = JSON.stringify(respuestas);
+  let h = 2166136261;
+  for (let i = 0; i < s.length; i++){ h ^= s.charCodeAt(i); h = Math.imul(h, 16777619); }
+  return h >>> 0;
+}
+
+/* ── memoria de apariciones: para que no gane siempre el mismo plato ── */
+const Memoria = {
+  clave: "bofomento.apariciones.v1",
+  cache: null,
+  leer(){
+    if (this.cache) return this.cache;
+    try { this.cache = JSON.parse(localStorage.getItem(this.clave)) || {}; }
+    catch (e) { this.cache = {}; }
+    return this.cache;
+  },
+  sumar(ids){
+    const m = this.leer();
+    ids.forEach(id => { m[id] = (m[id] || 0) + 1; });
+    try { localStorage.setItem(this.clave, JSON.stringify(m)); } catch (e) {}
+  },
+  veces(id){ return this.leer()[id] || 0; }
+};
+
+/* ── 1. FILTROS ──────────────────────────────────────────────────────
+   Duros: sacan platos del pool y no se discuten con ningún puntaje.
+   Blandos: no sacan a nadie, penalizan fuerte.                       */
+function leerFiltros(respuestas, preguntas){
+  const f = { requiere: [], excluyeContiene: [], blandos: [], blandoPrecio: null, ecos: [] };
+
+  preguntas.filter(p => p.tipo === "filtro").forEach(p => {
+    const el = respuestas[p.id];
+    if (el === undefined || el === null) return;
+    const idxs = Array.isArray(el) ? el : [el];
+    idxs.forEach(i => {
+      const o = p.opciones[i];
+      if (!o) return;
+      if (o.eco) f.ecos.push({ pregunta: p.id, eco: o.eco });
+      if (o.excluye){
+        if (o.excluye.requiere) f.requiere.push(o.excluye.requiere);
+        if (o.excluye.contiene) f.excluyeContiene.push(...o.excluye.contiene);
+      }
+      if (o.blando) f.blandos.push(o.blando);
+      if (o.blandoPrecio) f.blandoPrecio = o.blandoPrecio;
+    });
+  });
+  return f;
+}
+
+function pasaFiltrosDuros(plato, f){
+  for (const req of f.requiere) if (!plato.apto[req]) return false;
+  for (const ing of f.excluyeContiene) if (plato.contiene.includes(ing)) return false;
+  return true;
+}
+
+/* ── 2. VECTOR DEL USUARIO ───────────────────────────────────────────
+   Base neutra en 5 y se corre según los pesos acumulados, normalizado
+   contra el máximo que esas preguntas podían mover. Así el modo
+   express y el completo dan vectores en la misma escala.            */
+function vectorUsuario(respuestas, preguntas){
+  const suma = {}, tope = {}, medio = {};
+  EJES.forEach(e => { suma[e] = 0; tope[e] = 0; medio[e] = 0; });
+
+  preguntas.filter(p => p.tipo === "sabor").forEach(p => {
+    const el = respuestas[p.id];
+    if (el === undefined || el === null) return;
+
+    // El 5 no está en el cero de la escala: está en el promedio de lo que
+    // ofrece la pregunta. Si tres de cuatro opciones suben "frescura", el
+    // que contesta cualquier cosa ya sale fresco, y entonces sólo ganan
+    // los platos fríos. Se corrige contra el promedio real de los datos,
+    // así que sigue andando si el restaurante reescribe las preguntas.
+    const n = p.opciones.length;
+    EJES.forEach(e => {
+      const vals = p.opciones.map(o => (o.pesos && o.pesos[e]) || 0);
+      const media = vals.reduce((a,x) => a + x, 0) / n;
+      if (vals.every(x => x === 0)) return;
+      medio[e] += media;
+      tope[e]  += Math.max.apply(null, vals.map(x => Math.abs(x - media)));
+    });
+
+    const idxs = Array.isArray(el) ? el : [el];
+    idxs.forEach(i => {
+      const o = p.opciones[i];
+      if (!o) return;
+      Object.keys(o.pesos || {}).forEach(e => { suma[e] += o.pesos[e]; });
+    });
+  });
+
+  // Un eje que casi no se preguntó no puede irse a los extremos: si el
+  // único dato de "dulce" es un +1 suelto, no sos un fanático del postre.
+  // Por debajo de TOPE_PLENO el eje se queda cerca del 5 (neutro).
+  const TOPE_PLENO = 4;
+
+  // GANANCIA existe por una razón concreta: "tope" es la suma de los
+  // máximos de cada pregunta, y para alcanzarlo habría que elegir la
+  // opción más extrema en TODAS. Nadie hace eso. Sin ganancia el vector
+  // vive pegado al 5, y como los platos fuertes de la carta viven en los
+  // extremos (una milanesa completa es un 10 de contundencia), ganaban
+  // siempre los platos tibios del medio. Con ganancia 2, responder de
+  // forma decidida te lleva de verdad hasta la punta del eje.
+  const GANANCIA = 2;
+  const v = {};
+  EJES.forEach(e => {
+    if (tope[e] <= 0){ v[e] = 5; return; }
+    const confianza = Math.min(1, tope[e] / TOPE_PLENO);
+    v[e] = clamp(5 + 5 * GANANCIA * ((suma[e] - medio[e]) / tope[e]) * confianza, 0, 10);
+  });
+  return v;
+}
+
+/* ── 3. PUNTAJE: distancia euclidiana invertida + castigos blandos ── */
+function puntuar(plato, v, f, opts){
+  opts = opts || {};
+  const w = opts.pesosEje || null;
+  let d2 = 0;
+  EJES.forEach(e => {
+    const dd = (plato.ejes[e] - v[e]) * (w ? (w[e] === undefined ? 1 : w[e]) : 1);
+    d2 += dd * dd;
+  });
+  let s = 1 - Math.sqrt(d2) / DIST_MAX;
+
+  // El hambre habla del plato, no de lo que tomás: no tiene sentido
+  // castigar una cerveza por no llenarte. El presupuesto sí cuenta para
+  // la bebida — es plata igual — pero no para el postre, que es la
+  // sugerencia que levanta el ticket y se ofrece siempre.
+  if (!opts.sinHambre){
+    f.blandos.forEach(b => {
+      s -= b.peso * Math.abs(plato.ejes[b.eje] - b.objetivo) / 10;
+    });
+  }
+  if (!opts.sinPrecio && f.blandoPrecio && plato.precio > f.blandoPrecio.techo){
+    const exceso = (plato.precio - f.blandoPrecio.techo) / f.blandoPrecio.techo;
+    s -= f.blandoPrecio.peso * Math.min(1, exceso);
+  }
+  return s;
+}
+
+/* ── 4. ORDEN + DESEMPATE ────────────────────────────────────────────
+   Empate → gana el que menos veces salió recomendado. Si sigue
+   empatado, aleatorio con semilla (mismas respuestas, mismo plato). */
+/* Un eje en el que todos los candidatos valen lo mismo no sirve para
+   elegir entre ellos: si todas las milanesas son 0 de dulce, "dulce" no
+   distingue nada y sólo agrega distancia muerta. Se pesa cada eje por lo
+   que ese pool realmente varía. Sale de los datos, así que se reacomoda
+   solo cuando cambia la carta.                                         */
+function pesosPorVarianza(pool){
+  if (pool.length < 2) return null;
+  const w = {}; let suma = 0;
+  EJES.forEach(e => {
+    const m = pool.reduce((a,p) => a + p.ejes[e], 0) / pool.length;
+    const dv = Math.sqrt(pool.reduce((a,p) => a + Math.pow(p.ejes[e] - m, 2), 0) / pool.length);
+    w[e] = dv; suma += dv;
+  });
+  if (suma <= 0) return null;
+  const media = suma / EJES.length;
+  EJES.forEach(e => { w[e] = w[e] / media; });   // media 1: la escala del puntaje no se mueve
+  return w;
+}
+
+function ordenar(platos, v, f, rnd, opts){
+  const ruido = {};
+  platos.slice()
+    .sort((a,b) => a.id < b.id ? -1 : 1)
+    .forEach(p => { ruido[p.id] = rnd(); });
+
+  const wVar = pesosPorVarianza(platos);
+  const opts2 = Object.assign({}, opts);
+  if (wVar){
+    const base = (opts && opts.pesosEje) || null;
+    const mezcla = {};
+    EJES.forEach(e => { mezcla[e] = wVar[e] * (base && base[e] !== undefined ? base[e] : 1); });
+    opts2.pesosEje = mezcla;
+  }
+
+  return platos
+    .map(p => ({ plato: p, score: puntuar(p, v, f, opts2) }))
+    .sort((a,b) => {
+      if (Math.abs(a.score - b.score) > 0.0015) return b.score - a.score;
+      const va = Memoria.veces(a.plato.id), vb = Memoria.veces(b.plato.id);
+      if (va !== vb) return va - vb;
+      return ruido[a.plato.id] - ruido[b.plato.id];
+    });
+}
+
+/* ── 5. RECOMENDACIÓN COMPLETA ───────────────────────────────────────
+   Siempre devuelve: 1 principal + 2 alternativas + 1 bebida + 1 postre.
+   Ese combo es el que sube el ticket. No es opcional.               */
+function recomendar(respuestas, preguntas){
+  const f    = leerFiltros(respuestas, preguntas);
+  const v    = vectorUsuario(respuestas, preguntas);
+  const rnd  = mulberry32(semillaDe(respuestas));
+
+  const permitidos = MENU.filter(p => pasaFiltrosDuros(p, f));
+  const porTipo = t => permitidos.filter(p => tipoDe(p) === t);
+
+  const principales = porTipo("principal");
+  const entradas    = porTipo("entrada");
+
+  // El plato fuerte sale de los principales. Si los filtros duros los
+  // barrieron a todos, el chef lo dice con gracia y baja a las entradas:
+  // nunca devuelve pantalla vacía, y nunca negocia un filtro.
+  let poolPrincipal = principales, aviso = null;
+  if (poolPrincipal.length === 0){
+    poolPrincipal = entradas;
+    aviso = "De la plancha no te sirve nada de lo que me pediste. Te armo desde las entradas, que salen igual de bien.";
+  }
+  if (poolPrincipal.length === 0){
+    poolPrincipal = permitidos;
+    aviso = "Me dejaste sin cocina con tantas condiciones. Te doy lo poco que sí puedo, y el resto lo arreglamos hablando.";
+  }
+  if (poolPrincipal.length === 0) return null;   // la vista lo maneja con una invitación
+
+  const rankPrincipal = ordenar(poolPrincipal, v, f, rnd);
+  const principal     = rankPrincipal[0].plato;
+
+  // Alternativas: entre principales y entradas, empujando a que una sea
+  // de otra categoría para que el combo no sean tres milanesas seguidas.
+  const resto = ordenar(
+    poolPrincipal.concat(entradas).filter((p,i,a) => a.indexOf(p) === i && p !== principal),
+    v, f, rnd);
+  const alternativas = [];
+  if (resto[0]) alternativas.push(resto[0].plato);
+  const distinta = resto.find(r =>
+    !alternativas.includes(r.plato) && r.plato.categoria !== principal.categoria);
+  const siguiente = resto.find(r => !alternativas.includes(r.plato));
+  if (distinta && distinta.plato !== alternativas[0]) alternativas.push(distinta.plato);
+  else if (siguiente) alternativas.push(siguiente.plato);
+
+  // Bebida: pesa poco la contundencia, mucho la frescura y lo social.
+  let poolBebida = permitidos.filter(p => tipoDe(p) === "bebida");
+  if (poolBebida.length === 0) poolBebida = MENU.filter(p => tipoDe(p) === "bebida" && pasaFiltrosDuros(p, { requiere: f.requiere, excluyeContiene: f.excluyeContiene }));
+  if (poolBebida.length === 0) poolBebida = MENU.filter(p => tipoDe(p) === "bebida");
+  // La bebida no se mide contra vos, se mide contra el plato: cuanto más
+  // pesado lo que vas a comer, más fría tiene que ser la que lo baja.
+  const objBebida = Object.assign({}, v, {
+    frescura: clamp(Math.max(v.frescura, 4 + principal.ejes.contundencia * 0.5), 0, 10)
+  });
+  const bebida = ordenar(poolBebida, objBebida, f, rnd,
+    { pesosEje:{ contundencia:0.05, dulce:0.15, aventura:1, social:1.1, frescura:1.3 }, sinHambre:true })[0].plato;
+
+  // Postre: manda el eje dulce. Si el dulce es bajo igual se ofrece,
+  // pero el chef se lo hace notar.
+  let poolPostre = permitidos.filter(p => tipoDe(p) === "postre");
+  if (poolPostre.length === 0) poolPostre = MENU.filter(p => tipoDe(p) === "postre" && pasaFiltrosDuros(p, { requiere: f.requiere, excluyeContiene: f.excluyeContiene }));
+  if (poolPostre.length === 0) poolPostre = MENU.filter(p => tipoDe(p) === "postre");
+  // Un postre no se juzga por parecerse a vos en lo dulce: se juzga por
+  // ser lo bastante dulce. Si sos poco de postre te toca el liviano,
+  // pero postre igual — ese combo es el que levanta el ticket.
+  const objPostre = Object.assign({}, v, {
+    dulce: clamp(5.5 + 0.45 * v.dulce, 0, 10),
+    contundencia: clamp(v.contundencia * 0.6, 0, 10)   // algo ya comiste
+  });
+  const postre = ordenar(poolPostre, objPostre, f, rnd,
+    { pesosEje:{ contundencia:0.5, aventura:0.6, social:0.4, frescura:0.9, dulce:1.6 }, sinHambre:true, sinPrecio:true })[0].plato;
+
+  return {
+    principal, alternativas, bebida, postre,
+    vector: v, filtros: f, aviso,
+    ecos: recolectarEcos(respuestas, preguntas),
+    remate: remateSigno(respuestas, preguntas),
+    total: principal.precio + bebida.precio + postre.precio
+  };
+}
+
+/* Los ecos son lo que hace que el veredicto sea concreto y no genérico. */
+function recolectarEcos(respuestas, preguntas){
+  const out = [];
+  preguntas.forEach(p => {
+    const el = respuestas[p.id];
+    if (el === undefined || el === null) return;
+    const idxs = Array.isArray(el) ? el : [el];
+    idxs.forEach(i => {
+      const o = p.opciones[i];
+      if (o && o.eco) out.push({ id: p.id, tipo: p.tipo, eco: o.eco });
+    });
+  });
+  return out;
+}
+function remateSigno(respuestas, preguntas){
+  const p = preguntas.find(q => q.id === "signo");
+  if (!p) return null;
+  const i = respuestas[p.id];
+  if (i === undefined || i === null) return null;
+  const o = p.opciones[Array.isArray(i) ? i[0] : i];
+  return o && o.remate ? o.remate : null;
+}
+
+/* ═══════════════════════════════════════════════════════════════════
+   LA VOZ DEL CHEF — el veredicto tiene que sonar a que te escuchó.
+   Nunca es genérico: siempre repite 2 o 3 respuestas concretas.
+   ═══════════════════════════════════════════════════════════════════ */
+
+const PRIORIDAD_ECO = ["restricciones","hambre","domingo","mesa","verano","siesta","presupuesto","musica","signo"];
+
+function elegirEcos(ecos, n){
+  const vistos = new Set();
+  const limpios = ecos.filter(e => {
+    if (e.eco === "que comés de todo") return false;     // eso no es un dato
+    if (vistos.has(e.eco)) return false;
+    vistos.add(e.eco); return true;
+  });
+  const porPrioridad = (a,b) => PRIORIDAD_ECO.indexOf(a.id) - PRIORIDAD_ECO.indexOf(b.id);
+  const deFiltro = limpios.filter(e => e.tipo === "filtro").sort(porPrioridad);
+  const deSabor  = limpios.filter(e => e.tipo === "sabor").sort(porPrioridad);
+
+  // Se alternan: la gracia del veredicto es mezclar lo que no comés con
+  // lo que hacés un domingo. Si son todos filtros, suena a formulario.
+  const out = []; let fi = 0, si = 0;
+  while (out.length < n && (fi < deFiltro.length || si < deSabor.length)){
+    const cupoFiltro = out.filter(e => e.tipo === "filtro").length < 2;
+    if (fi < deFiltro.length && cupoFiltro && (out.length % 2 === 0 || si >= deSabor.length)){
+      out.push(deFiltro[fi++]);
+    } else if (si < deSabor.length){
+      out.push(deSabor[si++]);
+    } else if (fi < deFiltro.length && cupoFiltro){
+      out.push(deFiltro[fi++]);
+    } else break;
+  }
+  return out.map(e => e.eco);
+}
+
+function lineaDeEje(v){
+  const orden = EJES
+    .map(e => ({ e, dist: Math.abs(v[e] - 5) }))
+    .sort((a,b) => b.dist - a.dist);
+  const eje = orden[0].e, alto = v[eje] >= 5;
+  const lineas = {
+    contundencia: [ "Liviano, así después entrás al agua sin arrepentirte.",
+                    "Vas a salir rodando de acá. Es lo que viniste a buscar." ],
+    aventura:     [ "Nada raro. Lo que funciona, funciona.",
+                    "Nadie lo pide y todos vuelven preguntando por eso." ],
+    social:       [ "Y no lo compartas con nadie. Estás en tu derecho.",
+                    "Lo ponés en el medio de la mesa y que se arreglen." ],
+    frescura:     [ "Caliente y sin apuro, que es lo que pide el cuerpo.",
+                    "Frío y ácido. Con este sol es lo único que tiene sentido." ],
+    dulce:        [ "Salado hasta el final, como corresponde.",
+                    "Ya sé que después vas a querer algo dulce. Lo tengo." ]
+  };
+  return lineas[eje][alto ? 1 : 0];
+}
+
+function vozPrincipal(r, rnd){
+  const ecos = elegirEcos(r.ecos, 3);
+  const nombre = r.principal.nombre;
+  let apertura;
+  if (ecos.length >= 3){
+    apertura = `Me dijiste ${ecos[0]}, ${ecos[1]} y ${ecos[2]}.`;
+  } else if (ecos.length === 2){
+    apertura = `Vos me venís con ${ecos[0]} y encima ${ecos[1]}.`;
+  } else if (ecos.length === 1){
+    apertura = `Con eso de ${ecos[0]} ya me alcanza.`;
+  } else {
+    apertura = "No me diste mucho, pero con esa cara ya sé.";
+  }
+  const cierres = [
+    `Así que ${nombre}, y no lo discuto.`,
+    `Con eso te va ${nombre}. Fin.`,
+    `Te toca ${nombre}. Era cantado.`,
+    `${nombre}. Ni lo pienses.`
+  ];
+  const cierre = cierres[Math.floor(rnd() * cierres.length)];
+  const partes = [apertura, cierre, lineaDeEje(r.vector)];
+  if (r.remate) partes.push(r.remate);
+  return partes.join(" ");
+}
+
+function vozBebida(r){
+  if (r.bebida.contiene.includes("alcohol")) return "Para bajarlo.";
+  if (r.vector.frescura >= 6.5) return "Bien fría, que si no no sirve.";
+  return "Va con eso. Confiá.";
+}
+function vozPostre(r){
+  // Se burla si el eje dulce quedó bajo, o si dijiste que venías a picotear.
+  const pocasGanas = r.vector.dulce < 4.6 ||
+    r.filtros.blandos.some(b => b.eje === "contundencia" && b.objetivo <= 2);
+  if (pocasGanas){
+    const burlas = [
+      "Ya sé que dijiste que no querés postre. Te lo dejo anotado igual, después no digas que no te avisé.",
+      "Vos no sos de postre, ya me quedó claro. Pero lo vas a pedir. Siempre pasa.",
+      "No lo ibas a pedir. Pedilo."
+    ];
+    return burlas[Math.floor(r.total % burlas.length)];
+  }
+  return "Esto ya lo tenías decidido antes de entrar.";
+}
+
+/* ═══════════════════════════════════════════════════════════════════
+   INTERFAZ
+   ═══════════════════════════════════════════════════════════════════ */
+
+const $  = (s, c) => (c || document).querySelector(s);
+const $$ = (s, c) => Array.prototype.slice.call((c || document).querySelectorAll(s));
+const esc = s => String(s).replace(/[&<>"']/g, m =>
+  ({ "&":"&amp;", "<":"&lt;", ">":"&gt;", '"':"&quot;", "'":"&#39;" }[m]));
+const reducido = () => window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+const S = {
+  vista: "landing",
+  modo: null, i: 0, respuestas: {}, preguntas: [],
+  cat: "todas", filtros: new Set(), q: "", ultimo: null
+};
+
+function ir(vista){
+  S.vista = vista;
+  $$(".vista").forEach(v => v.classList.toggle("activa", v.id === "v-" + vista));
+  document.documentElement.style.background = vista === "chef" ? "#16292F" : "#F2EADA";
+  window.scrollTo(0, 0);
+  if (vista === "carta") pintarCarta();
+  if (vista === "chef" && !S.modo) pantallaModo();
+  const foco = $("#v-" + vista + " h1, #v-" + vista + " h2");
+  if (foco){ foco.setAttribute("tabindex","-1"); foco.focus({ preventScroll:true }); }
+}
+
+/* ── CARTA ─────────────────────────────────────────────────────── */
+const FILTROS_CARTA = [
+  { id:"vegetariano", nombre:"Vegetariano",     test: p => p.apto.vegetariano },
+  { id:"singluten",   nombre:"Sin TACC",        test: p => p.apto.singluten },
+  { id:"compartir",   nombre:"Para compartir",  test: p => p.apto.compartir }
+];
+
+function chipsCarta(){
+  $("#riel-filtros").innerHTML = FILTROS_CARTA.map(f =>
+    `<button class="chip chip--filtro" data-filtro="${f.id}" aria-pressed="false">${esc(f.nombre)}</button>`
+  ).join("");
+  $("#riel-cats").innerHTML =
+    `<button class="chip activo" data-cat="todas" aria-pressed="true">Todo</button>` +
+    CATEGORIAS.map(c =>
+      `<button class="chip" data-cat="${c.id}" aria-pressed="false">${esc(c.nombre)}</button>`
+    ).join("");
+
+  $("#riel-landing").innerHTML = CATEGORIAS.map(c =>
+    `<button class="chip" data-cat-ir="${c.id}">${esc(c.nombre)}</button>`).join("");
+}
+
+function platosVisibles(){
+  const q = S.q.trim().toLowerCase();
+  return MENU.filter(p => {
+    if (S.cat !== "todas" && p.categoria !== S.cat) return false;
+    for (const id of S.filtros){
+      const f = FILTROS_CARTA.find(x => x.id === id);
+      if (f && !f.test(p)) return false;
+    }
+    if (!q) return true;
+    const heno = (p.nombre + " " + p.descripcion + " " + p.tags.join(" ") + " " + catDe(p.categoria).nombre).toLowerCase();
+    return q.split(/\s+/).every(t => heno.includes(t));
+  });
+}
+
+function tarjetaPlato(p){
+  const chips = [];
+  if (p.apto.vegetariano) chips.push('<span class="tag tag--veg">Vegetariano</span>');
+  if (p.apto.singluten)   chips.push('<span class="tag tag--stacc">Sin TACC</span>');
+  if (p.apto.compartir)   chips.push('<span class="tag tag--comp">Para compartir</span>');
+  p.tags.forEach(t => chips.push(`<span class="tag">${esc(t)}</span>`));
+  return `<article class="plato">
+    <div class="plato__fila">
+      <h3 class="plato__nombre">${esc(p.nombre)}</h3>
+      <p class="plato__precio">${esc(fmtPrecio(p.precio))}</p>
+    </div>
+    ${p.descripcion ? `<p class="plato__desc">${esc(p.descripcion)}</p>` : ""}
+    ${chips.length ? `<div class="plato__tags">${chips.join("")}</div>` : ""}
+  </article>`;
+}
+
+function pintarCarta(){
+  const vis = platosVisibles();
+  const cont = $("#lista-carta");
+
+  $("#conteo").textContent = vis.length === 1
+    ? "1 cosa para pedir"
+    : vis.length + " cosas para pedir";
+  $("#q-limpiar").hidden = !S.q;
+
+  if (vis.length === 0){
+    cont.innerHTML = `<div class="vacio">
+      <p class="vacio__cara" aria-hidden="true">🍋</p>
+      <h3>Por acá no hay nada</h3>
+      <p>Probá con otra palabra, o sacá un filtro y mirá la carta entera. Está buena.</p>
+      <button class="btn btn--sol" id="reset-carta">Ver todo de nuevo</button>
+    </div>`;
+    $("#reset-carta").addEventListener("click", () => {
+      S.q = ""; S.cat = "todas"; S.filtros.clear();
+      $("#q").value = "";
+      $$("#riel-filtros .chip").forEach(c => c.setAttribute("aria-pressed","false"));
+      $$("#riel-cats .chip").forEach(c => {
+        const on = c.dataset.cat === "todas";
+        c.classList.toggle("activo", on); c.setAttribute("aria-pressed", String(on));
+      });
+      pintarCarta();
+    });
+    return;
+  }
+
+  const orden = S.cat === "todas" ? CATEGORIAS : CATEGORIAS.filter(c => c.id === S.cat);
+  cont.innerHTML = orden.map(c => {
+    const items = vis.filter(p => p.categoria === c.id);
+    if (!items.length) return "";
+    return `<section class="categoria" id="cat-${c.id}">
+      <h2 class="categoria__titulo">${esc(c.nombre)}
+        <span class="categoria__n">${items.length}</span></h2>
+      <div class="categoria__raya" aria-hidden="true"></div>
+      ${items.map(tarjetaPlato).join("")}
+    </section>`;
+  }).join("");
+}
+
+/* ── CHEF ──────────────────────────────────────────────────────── */
+const panel = () => $("#chef-panel");
+const decir = t => { $("#chef-live").textContent = t; };
+
+function preguntasDe(modo){ return PREGUNTAS.filter(p => p.modos.indexOf(modo) !== -1); }
+
+function pantallaModo(){
+  S.modo = null; S.i = 0; S.respuestas = {}; S.preguntas = [];
+  $("#progreso").hidden = true;
+  $("#chef-volver").onclick = () => ir("landing");
+
+  panel().innerHTML = `<div class="modo">
+    <p class="modo__sobre">Che, sentate</p>
+    <h2 class="modo__titulo">Vos no sabés<br>qué pedir.</h2>
+    <p class="modo__texto">Te hago unas preguntas. Casi ninguna es sobre comida. Después te digo qué comés.</p>
+
+    <button class="tarjeta-modo" data-modo="express">
+      <span class="tarjeta-modo__top">
+        <h3>Express</h3>
+        <span class="tarjeta-modo__meta">${preguntasDe("express").length} preguntas</span>
+      </span>
+      <p>Tenés hambre y no querés jugar. Menos de un minuto.</p>
+    </button>
+
+    <button class="tarjeta-modo" data-modo="completo">
+      <span class="tarjeta-modo__top">
+        <h3>Completo</h3>
+        <span class="tarjeta-modo__meta">${preguntasDe("completo").length} preguntas</span>
+      </span>
+      <p>Todavía no llegó nadie a la mesa. Acá te pregunto el signo y todo.</p>
+    </button>
+  </div>`;
+
+  $$("[data-modo]").forEach(b => b.addEventListener("click", () => arrancar(b.dataset.modo)));
+  decir("Elegí el modo del chef.");
+}
+
+function arrancar(modo){
+  S.modo = modo;
+  S.preguntas = preguntasDe(modo);
+  S.i = 0; S.respuestas = {};
+  $("#progreso").hidden = false;
+  $("#chef-volver").onclick = () => atras();
+  pintarPregunta();
+}
+
+function pintarProgreso(){
+  const total = S.preguntas.length;
+  // media pregunta de adelanto: en la primera, una barra en cero se lee
+  // como que algo se rompió
+  $("#progreso-lleno").style.width = ((S.i + 0.5) / total) * 100 + "%";
+  $("#progreso-texto").textContent = `Pregunta ${Math.min(S.i + 1, total)} de ${total}`;
+}
+
+function esperar(ms){
+  return new Promise(res => setTimeout(res, reducido() ? 0 : ms));
+}
+
+async function pensando(){
+  const frase = VOZ.esperas[Math.floor(Math.random() * VOZ.esperas.length)];
+  const div = document.createElement("div");
+  div.className = "puntitos";
+  div.innerHTML = `<div class="puntitos__caja"><i></i><i></i><i></i></div>
+                   <span class="puntitos__frase">${esc(frase)}</span>`;
+  panel().appendChild(div);
+  await esperar(560 + Math.random() * 340);
+  div.remove();
+}
+
+function pintarPregunta(){
+  const p = S.preguntas[S.i];
+  pintarProgreso();
+
+  const yaMult = Array.isArray(S.respuestas[p.id]) ? S.respuestas[p.id] : [];
+  const ya = S.respuestas[p.id];
+
+  panel().innerHTML = `
+    <div class="chat">
+      <div class="burbuja">${esc(p.texto)}</div>
+      <h3 class="solo-lectores">${esc(p.texto)}</h3>
+      ${p.nota ? `<p class="pregunta__nota">${esc(p.nota)}</p>` : ""}
+      <div class="opciones ${p.compacta ? "" : "opciones--largas"}" role="group" aria-label="${esc(p.texto)}">
+        ${p.opciones.map((o, i) => {
+          const on = p.multiple ? yaMult.indexOf(i) !== -1 : ya === i;
+          return `<button class="opcion" data-i="${i}" aria-pressed="${on}">
+            ${p.multiple ? `<span class="opcion__marca" aria-hidden="true">${on ? "✓" : ""}</span>` : ""}
+            ${o.emo ? `<span class="opcion__emo" aria-hidden="true">${o.emo}</span>` : ""}
+            <span>${esc(o.texto)}</span>
+          </button>`;
+        }).join("")}
+      </div>
+      <div class="acciones-chat">
+        <button class="link-atras" id="b-atras" ${S.i === 0 ? "disabled" : ""}>← Anterior</button>
+        ${p.multiple ? `<button class="btn btn--sol" id="b-seguir">Seguir</button>` : ""}
+      </div>
+    </div>`;
+
+  decir(p.texto + " " + p.opciones.length + " opciones.");
+
+  $$(".opcion", panel()).forEach(b => {
+    b.addEventListener("click", () => elegir(p, parseInt(b.dataset.i, 10)));
+    b.addEventListener("keydown", ev => moverFoco(ev, b));
+  });
+  $("#b-atras").addEventListener("click", atras);
+  if (p.multiple) $("#b-seguir").addEventListener("click", () => avanzar(p));
+  const primera = $(".opcion", panel());
+  if (primera && S.i > 0) primera.focus({ preventScroll:true });
+}
+
+/* navegación por teclado dentro del grupo de opciones */
+function moverFoco(ev, btn){
+  const dirs = { ArrowDown:1, ArrowRight:1, ArrowUp:-1, ArrowLeft:-1 };
+  const d = dirs[ev.key];
+  if (!d) return;
+  ev.preventDefault();
+  const todas = $$(".opcion", panel());
+  const i = todas.indexOf(btn);
+  todas[(i + d + todas.length) % todas.length].focus();
+}
+
+function elegir(p, i){
+  if (p.multiple){
+    const o = p.opciones[i];
+    let sel = Array.isArray(S.respuestas[p.id]) ? S.respuestas[p.id].slice() : [];
+    if (o.exclusiva){
+      sel = sel.indexOf(i) !== -1 ? [] : [i];
+    } else {
+      const excl = p.opciones.map((x, j) => x.exclusiva ? j : -1).filter(j => j >= 0);
+      sel = sel.filter(j => excl.indexOf(j) === -1);
+      sel = sel.indexOf(i) !== -1 ? sel.filter(j => j !== i) : sel.concat(i);
+    }
+    S.respuestas[p.id] = sel;
+    $$(".opcion", panel()).forEach((b, j) => {
+      const on = sel.indexOf(j) !== -1;
+      b.setAttribute("aria-pressed", String(on));
+      const m = $(".opcion__marca", b);
+      if (m) m.textContent = on ? "✓" : "";
+    });
+    return;
+  }
+  S.respuestas[p.id] = i;
+  avanzar(p);
+}
+
+async function avanzar(p){
+  if (p.multiple && (!S.respuestas[p.id] || S.respuestas[p.id].length === 0)){
+    const i = p.opciones.findIndex(o => o.exclusiva);
+    S.respuestas[p.id] = i >= 0 ? [i] : [];
+  }
+  const idxs = Array.isArray(S.respuestas[p.id]) ? S.respuestas[p.id] : [S.respuestas[p.id]];
+  const dicho = idxs.map(i => p.opciones[i] && p.opciones[i].texto).filter(Boolean).join(" · ");
+
+  const chat = $(".chat", panel());
+  if (chat && dicho){
+    $$(".opcion", panel()).forEach(b => b.disabled = true);
+    const eco = document.createElement("div");
+    eco.className = "burbuja burbuja--yo";
+    eco.textContent = dicho;
+    chat.appendChild(eco);
+    await esperar(240);
+  }
+
+  S.i++;
+  if (S.i >= S.preguntas.length){ await pintarVeredicto(); return; }
+  panel().innerHTML = `<div class="chat"></div>`;
+  pintarProgreso();
+  await pensando();
+  pintarPregunta();
+}
+
+function atras(){
+  if (S.i === 0){ pantallaModo(); return; }
+  S.i--;
+  pintarPregunta();
+}
+
+/* ── EL VEREDICTO ──────────────────────────────────────────────── */
+async function pintarVeredicto(){
+  $("#progreso-lleno").style.width = "100%";
+  $("#progreso-texto").textContent = "Listo";
+  panel().innerHTML = `<div class="chat"></div>`;
+  await pensando();
+
+  const r = recomendar(S.respuestas, S.preguntas);
+  if (!r){ pintarSinSalida(); return; }
+  S.ultimo = r;
+  Memoria.sumar([r.principal.id, r.bebida.id, r.postre.id]);
+
+  const rnd = mulberry32(semillaDe(S.respuestas) ^ 0x9E3779B9);
+  const voz = vozPrincipal(r, rnd);
+  const cierre = VOZ.cierres[Math.floor(rnd() * VOZ.cierres.length)];
+
+  // el momento: la sombra barre y el plato queda al sol
+  if (!reducido()){
+    const b = document.createElement("div");
+    b.className = "barrido";
+    document.body.appendChild(b);
+    setTimeout(() => b.remove(), 900);
+  }
+
+  const mini = (p, linea) => `<div class="mini">
+      <div class="mini__txt">
+        <p class="mini__nombre">${esc(p.nombre)}</p>
+        <p class="mini__linea">${esc(linea)}</p>
+      </div>
+      <p class="mini__precio">${esc(fmtPrecio(p.precio))}</p>
+    </div>`;
+
+  const alt = r.alternativas;
+  panel().innerHTML = `<div class="veredicto reveal">
+    ${r.aviso ? `<p class="pregunta__nota" style="color:var(--sol)">${esc(r.aviso)}</p>` : ""}
+    <span class="chapa">Lo tuyo es esto</span>
+
+    <article class="ficha">
+      <div class="ficha__toldo" aria-hidden="true"></div>
+      <div class="ficha__cuerpo">
+        <p class="ficha__cat">${esc(catDe(r.principal.categoria).nombre)}</p>
+        <h2 class="ficha__nombre">${esc(r.principal.nombre)}</h2>
+        <p class="ficha__precio">${esc(fmtPrecio(r.principal.precio))}</p>
+        ${r.principal.descripcion ? `<p class="ficha__desc">${esc(r.principal.descripcion)}</p>` : ""}
+        <p class="ficha__voz">${esc(voz)}</p>
+      </div>
+    </article>
+
+    ${alt.length ? `<div class="bloque">
+      <p class="bloque__titulo">Si te ponés difícil</p>
+      <div class="dupla">
+        ${(() => { const usadas = new Set();
+                   return alt.map(p => mini(p, lineaAlternativa(p, r, usadas))).join(""); })()}
+      </div>
+    </div>` : ""}
+
+    <div class="bloque">
+      <p class="bloque__titulo">Y esto va con eso</p>
+      ${mini(r.bebida, vozBebida(r))}
+      ${mini(r.postre, vozPostre(r))}
+    </div>
+
+    <div class="ticket">
+      <p class="ticket__txt">Los tres juntos, para que sepas dónde estás parado</p>
+      <p class="ticket__monto">${esc(fmtPrecio(r.total))}</p>
+    </div>
+
+    <p class="burbuja" style="margin-top:26px">${esc(cierre)}</p>
+
+    <div class="veredicto__acciones">
+      <button class="btn btn--sol" id="b-rehacer">Rehacer el test</button>
+      <button class="btn btn--linea" data-ir="carta">Ver la carta completa</button>
+    </div>
+  </div>`;
+
+  $("#chef-volver").onclick = () => pantallaModo();
+  $("#b-rehacer").addEventListener("click", pantallaModo);
+  $$("[data-ir]", panel()).forEach(b => b.addEventListener("click", () => ir(b.dataset.ir)));
+  decir("Listo. Te toca " + r.principal.nombre + ". " + voz);
+  const h = $(".ficha__nombre", panel());
+  if (h){ h.setAttribute("tabindex","-1"); h.focus({ preventScroll:true }); }
+}
+
+/* Último recurso: ni una sola cosa de la carta pasa los filtros duros.
+   No se rompe ni se muestra vacío: se invita a hacer algo.            */
+function pintarSinSalida(){
+  panel().innerHTML = `<div class="veredicto reveal">
+    <div class="vacio" style="background:transparent;border-color:rgba(242,234,218,.35)">
+      <p class="vacio__cara" aria-hidden="true">🧑‍🍳</p>
+      <h3 style="color:var(--lona)">Acá me ganaste</h3>
+      <p style="color:var(--tinta-clara)">Con todo lo que no comés no me queda nada en la carta.
+         Vení, hablá con la cocina y te armamos algo que no está escrito.</p>
+      <button class="btn btn--sol" id="b-rehacer">Probar de nuevo</button>
+    </div>
+  </div>`;
+  $("#b-rehacer").addEventListener("click", pantallaModo);
+  decir("No hay plato posible con esos filtros. Hablá con la cocina.");
+}
+
+/* Cada alternativa dice algo distinto: si las dos repiten la misma
+   frase se nota al toque que atrás hay una plantilla y no un tipo. */
+function lineaAlternativa(p, r, usadas){
+  const razones = [];
+  if (p.precio < r.principal.precio) razones.push("Lo mismo pero más barato. No se lo digas a nadie.");
+  if (p.ejes.contundencia >= 8)      razones.push("Si traés más hambre de la que me dijiste.");
+  if (p.ejes.frescura >= 8)          razones.push("Si el sol te pegó más de lo que pensabas.");
+  if (p.ejes.aventura >= 7)          razones.push("Este te lo doy si te la querés jugar.");
+  if (p.apto.compartir)              razones.push("Este va al medio de la mesa.");
+  if (p.categoria !== r.principal.categoria) razones.push("Por si querés ir para otro lado.");
+  razones.push("La segunda opción, que acá también es buena.");
+  // La primera razón que todavía no usó la otra alternativa: si las dos
+  // dicen lo mismo se ve la plantilla y se cae el personaje.
+  const libre = razones.find(t => !usadas.has(t)) || razones[razones.length - 1];
+  usadas.add(libre);
+  return libre;
+}
+
+/* ── EVENTOS GLOBALES ──────────────────────────────────────────── */
+function conectar(){
+  chipsCarta();
+
+  $$("[data-ir]").forEach(b => b.addEventListener("click", () => ir(b.dataset.ir)));
+
+  $("#riel-landing").addEventListener("click", e => {
+    const b = e.target.closest("[data-cat-ir]");
+    if (!b) return;
+    S.cat = b.dataset.catIr; S.q = ""; S.filtros.clear();
+    $("#q").value = "";
+    $$("#riel-filtros .chip").forEach(c => c.setAttribute("aria-pressed","false"));
+    $$("#riel-cats .chip").forEach(c => {
+      const on = c.dataset.cat === S.cat;
+      c.classList.toggle("activo", on); c.setAttribute("aria-pressed", String(on));
+    });
+    ir("carta");
+  });
+
+  $("#riel-filtros").addEventListener("click", e => {
+    const b = e.target.closest("[data-filtro]");
+    if (!b) return;
+    const on = b.getAttribute("aria-pressed") !== "true";
+    b.setAttribute("aria-pressed", String(on));
+    if (on) S.filtros.add(b.dataset.filtro); else S.filtros.delete(b.dataset.filtro);
+    pintarCarta();
+  });
+
+  $("#riel-cats").addEventListener("click", e => {
+    const b = e.target.closest("[data-cat]");
+    if (!b) return;
+    S.cat = b.dataset.cat;
+    $$("#riel-cats .chip").forEach(c => {
+      const on = c === b;
+      c.classList.toggle("activo", on); c.setAttribute("aria-pressed", String(on));
+    });
+    pintarCarta();
+  });
+
+  let t;
+  $("#q").addEventListener("input", e => {
+    S.q = e.target.value;
+    clearTimeout(t); t = setTimeout(pintarCarta, 110);
+  });
+  $("#q-limpiar").addEventListener("click", () => {
+    S.q = ""; $("#q").value = ""; $("#q").focus(); pintarCarta();
+  });
+
+  document.addEventListener("keydown", e => {
+    if (e.key === "Escape" && S.vista !== "landing") ir("landing");
+  });
+
+  pintarCarta();
+}
+
+/* ═══════════════════════════════════════════════════════════════════
+   AUTOTEST — el motor es determinístico, así que se puede demostrar.
+   Abrir con ?test=1 en la URL, o llamar bofoTest() desde la consola.
+   Verifica los criterios de aceptación sobre miles de combinaciones.
+   ═══════════════════════════════════════════════════════════════════ */
+function bofoTest(){
+  const R = { ok:0, fallas:[] };
+  const chequear = (cond, msg) => { if (cond) R.ok++; else R.fallas.push(msg); };
+
+  const pReq   = PREGUNTAS.find(p => p.id === "restricciones");
+  const noExcl = pReq.opciones.map((o,i) => o.exclusiva ? -1 : i).filter(i => i >= 0);
+  const iExcl  = pReq.opciones.findIndex(o => o.exclusiva);
+
+  // todos los subconjuntos posibles de restricciones + "como de todo"
+  const setsRestriccion = [[iExcl]];
+  for (let m = 0; m < (1 << noExcl.length); m++){
+    const s = noExcl.filter((_, b) => m & (1 << b));
+    if (s.length) setsRestriccion.push(s);
+  }
+
+  function correr(modo, muestrasSabor){
+    const preguntas = preguntasDe(modo);
+    const sabor  = preguntas.filter(p => p.tipo === "sabor");
+    const filtro = preguntas.filter(p => p.tipo === "filtro" && p.id !== "restricciones");
+    const rnd = mulberry32(4242);
+
+    // combinaciones de sabor: exhaustivas si son pocas, muestreadas si no
+    let combosSabor = [[]];
+    const total = sabor.reduce((a,p) => a * p.opciones.length, 1);
+    if (total <= 600){
+      sabor.forEach(p => {
+        const next = [];
+        combosSabor.forEach(c => p.opciones.forEach((_, i) => next.push(c.concat(i))));
+        combosSabor = next;
+      });
+    } else {
+      combosSabor = [];
+      for (let n = 0; n < muestrasSabor; n++)
+        combosSabor.push(sabor.map(p => Math.floor(rnd() * p.opciones.length)));
+    }
+
+    // combinaciones de los filtros blandos, exhaustivas
+    let combosFiltro = [[]];
+    filtro.forEach(p => {
+      const next = [];
+      combosFiltro.forEach(c => p.opciones.forEach((_, i) => next.push(c.concat(i))));
+      combosFiltro = next;
+    });
+
+    let corridas = 0;
+    const principales = new Set();
+
+    setsRestriccion.forEach(sr => {
+      combosFiltro.forEach(cf => {
+        combosSabor.forEach(cs => {
+          const resp = { [pReq.id]: sr };
+          filtro.forEach((p,k) => resp[p.id] = cf[k]);
+          sabor.forEach((p,k)  => resp[p.id] = cs[k]);
+
+          const r = recomendar(resp, preguntas);
+          corridas++;
+          principales.add(r.principal.id);
+
+          const todos = [r.principal, r.bebida, r.postre].concat(r.alternativas);
+
+          chequear(!!r.principal && !!r.bebida && !!r.postre,
+            `[${modo}] veredicto incompleto con ${JSON.stringify(resp)}`);
+          chequear(r.alternativas.length === 2,
+            `[${modo}] faltan alternativas con ${JSON.stringify(resp)}`);
+          chequear(r.ecos.filter(e => e.eco !== "que comés de todo").length >= 2,
+            `[${modo}] veredicto sin respuestas concretas que citar`);
+
+          sr.forEach(i => {
+            const ex = pReq.opciones[i].excluye;
+            if (!ex) return;
+            if (ex.requiere) todos.forEach(p => chequear(p.apto[ex.requiere],
+              `[${modo}] "${p.nombre}" no cumple ${ex.requiere} — ${JSON.stringify(resp)}`));
+            if (ex.contiene) todos.forEach(p => ex.contiene.forEach(ing =>
+              chequear(!p.contiene.includes(ing),
+                `[${modo}] "${p.nombre}" contiene ${ing} — ${JSON.stringify(resp)}`)));
+          });
+        });
+      });
+    });
+    return { corridas, distintos: principales.size };
+  }
+
+  const ex = correr("express", 0);
+  const co = correr("completo", 90);
+
+  // dos personas muy distintas tienen que comer distinto
+  const pe = preguntasDe("express");
+  const A = recomendar({ restricciones:[4], hambre:2, presupuesto:2, domingo:0, mesa:0 }, pe);
+  const B = recomendar({ restricciones:[4], hambre:0, presupuesto:0, domingo:1, mesa:1 }, pe);
+  chequear(A.principal.id !== B.principal.id,
+    "dos usuarios opuestos recibieron el mismo plato");
+
+  const linea = [
+    `express:  ${ex.corridas} combinaciones, ${ex.distintos} platos distintos`,
+    `completo: ${co.corridas} combinaciones, ${co.distintos} platos distintos`,
+    `checks OK: ${R.ok}`,
+    R.fallas.length ? `FALLAS: ${R.fallas.length}` : "FALLAS: 0 — todo verde"
+  ].join("\n");
+
+  console.log("%c BO | Fomento — autotest ", "background:#16292F;color:#FFC53D;font-weight:bold");
+  console.log(linea);
+  R.fallas.slice(0, 12).forEach(f => console.error(f));
+  return { ok: R.ok, fallas: R.fallas, resumen: linea };
+}
+window.bofoTest = bofoTest;
+
+/* ── ARRANQUE ──────────────────────────────────────────────────── */
+conectar();
+if (/[?&]test=1/.test(location.search)) bofoTest();
+</script>
+</body>
+</html>
