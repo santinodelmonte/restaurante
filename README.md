@@ -11,9 +11,28 @@ el sitio se ve igual de bien con las tipografías de sistema.
 rápidos (vegetariano, sin TACC, para compartir). Cada plato con nombre,
 descripción, precio en pesos uruguayos y sus etiquetas a la vista.
 
-**El Chef.** Un chat que hace preguntas —casi ninguna sobre comida— y
-termina recomendando un plato principal, dos alternativas, una bebida y un
-postre. Ese combo es el que sube el ticket promedio.
+**El Chef.** Una experiencia de chat que termina recomendando un plato
+principal, dos alternativas, una bebida y un postre. Ese combo es el que
+sube el ticket promedio.
+
+No es un test que se hace una vez. El banco tiene 35 preguntas y cada
+corrida arma su propia tanda con las que la persona vio menos veces, así
+que dos corridas seguidas sólo comparten los tres filtros: las otras nueve
+son distintas. La rotación se guarda en el celular.
+
+Hay seis formatos de pregunta: botones, grilla de emojis, deslizador con
+el chef comentando mientras arrastrás, "elegí rápido" con tres segundos de
+reloj, ráfagas de esto-o-aquello, y campos para escribir. Siempre entra al
+menos un juego por tanda.
+
+Casi ninguna pregunta es sobre comida: son situaciones absurdas en la
+arena, vivencias, y cosas que no le contás a cualquiera. Varias no puntúan
+nada —están para que la persona se abra y para que el chef tenga qué
+citarle— y eso es a propósito.
+
+El nombre es opcional, se pide una sola vez y no sale del celular. Lo que
+la persona escribe el chef se lo devuelve textual en el veredicto, sin
+interpretarlo: es lo que más impacto tiene y lo que menos puede fallar.
 
 ## El motor
 
@@ -31,6 +50,11 @@ Cinco ejes de 0 a 10 —`contundencia`, `aventura`, `social`, `frescura`,
 4. Cada plato se puntúa por distancia euclidiana invertida contra ese vector.
 5. Empate → gana el plato que menos veces salió recomendado; si sigue
    empatado, aleatorio con semilla.
+
+Las preguntas de tipo `chamuyo` no puntúan nada. Como la tanda cambia en
+cada corrida, el vector se calcula contra el promedio y el tope de las
+preguntas que efectivamente se hicieron, así que tandas distintas siguen
+dando vectores comparables.
 
 El signo, la música y el domingo ideal mueven un eje como máximo ±1 y sobre
 todo alimentan el copy. Si el signo definiera el plato, dos personas
@@ -55,10 +79,12 @@ idénticas con distinto cumpleaños comerían distinto y el truco se cae solo.
 ## Autotest
 
 Abrir `index.html?test=1`, o llamar `bofoTest()` desde la consola. Recorre
-más de 15.000 combinaciones de respuestas y verifica los criterios de
-aceptación: que un vegetariano nunca reciba carne, que ningún camino lleve a
-un veredicto incompleto, y que el veredicto siempre tenga respuestas
-concretas para citar.
+1.664 tandas reales —armadas por el mismo selector que ve la gente— con
+respuestas al azar en los seis formatos, y verifica los criterios de
+aceptación: que un vegetariano nunca reciba carne, que ningún camino lleve
+a un veredicto incompleto, que las dos alternativas nunca sean de la misma
+categoría, que el veredicto siempre tenga respuestas concretas para citar,
+y que dos corridas seguidas no repitan ni una sola pregunta rotativa.
 
 ## Clonarlo a otro restaurante
 
