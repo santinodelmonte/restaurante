@@ -34,6 +34,36 @@ El nombre es opcional, se pide una sola vez y no sale del celular. Lo que
 la persona escribe el chef se lo devuelve textual en el veredicto, sin
 interpretarlo: es lo que más impacto tiene y lo que menos puede fallar.
 
+**El Vasco.** El chef tiene cara. Es un parrillero dibujado en SVG con la
+misma línea del sello —gorra, bigote, delantal, pinzas— y seis gestos que
+cambian solos según lo que está pasando: saluda, piensa, te guiña cuando
+te carga, se sorprende, duda y remata. Respira y parpadea; con
+`prefers-reduced-motion` se queda quieto. Va inline y no con `<use>`,
+porque `<use>` arma un shadow tree y `display` no se hereda: desde afuera
+no se podrían prender y apagar las capas de gesto.
+
+Te carga con tu nombre apenas se lo decís, y en la mesa se ríe de los
+nombres repetidos.
+
+**Armá la mesa.** Decís cuántos son y el celular da la vuelta: cada uno
+pone su nombre y contesta tres cosas. Al final El Vasco arma el pedido de
+todos —qué va al medio, un plato para cada uno, qué tomar y el postre— con
+el total y cuánto sale por cabeza. Lo que va al medio se filtra contra la
+intersección de las restricciones de la mesa entera: si hay un celíaco,
+nadie comparte algo con gluten. En una mesa de tres o más la bebida es
+para compartir, porque nadie pide cuatro vasos sueltos.
+
+**La tarjeta.** El veredicto termina en una tarjeta pensada para que le
+saquen captura: sello, nombre, plato y una frase corta del Vasco. El botón
+de compartir usa el menú del propio celular y, si no hay, copia al
+portapapeles.
+
+**Modo sol y carta hablada.** Un botón sube el contraste a tope y agranda
+el texto para leer con el sol de frente —el problema número uno de una
+carta digital en un parador— y otro hace que el navegador lea la carta en
+voz alta, para el que se olvidó los lentes de cerca. Los dos son locales:
+sin backend y sin costo.
+
 ## El motor
 
 No hay IA, no hay API, no hay backend. Es scoring local: costo cero por
