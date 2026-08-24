@@ -98,7 +98,7 @@ button{ font:inherit; color:inherit; }
 
 /* el zigzag que la carta usa entre subsecciones */
 .zigzag{
-  height:9px; flex:1; min-width:40px;
+  height:9px; flex:1 1 0; min-width:14px;
   background-image:
     url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='9' viewBox='0 0 24 9'%3E%3Cpath d='M0 7 L6 2 L12 7 L18 2 L24 7' fill='none' stroke='%231B3A57' stroke-width='1.6' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
   background-repeat:repeat-x; background-size:24px 9px; background-position:center;
@@ -220,6 +220,15 @@ button{ font:inherit; color:inherit; }
 .chip:hover{ background:#EAF1F6; }
 .chip[aria-pressed="true"], .chip.activo{ background:var(--marino); border-color:var(--marino); color:var(--papel); }
 .chip--filtro[aria-pressed="true"]{ background:var(--arena); border-color:#B9863A; color:var(--marino); }
+/* a 320px no entran volver + título + dos herramientas + el botón del
+   Chef. El título es lo único que sobra: ya se ve dónde estás. */
+@media (max-width:400px){
+  .barra-top__titulo{ display:none; }
+  .barra-top__fila > .volver{ margin-inline-end:auto; }
+  .icono{ width:36px; height:36px; }
+  .barra-top__fila{ gap:6px; }
+}
+
 .conteo{ font-size:.82rem; color:var(--tinta-suave); padding-bottom:10px; font-weight:500; }
 
 /* ── CARTA ──────────────────────────────────────────────────────── */
@@ -365,6 +374,84 @@ button{ font:inherit; color:inherit; }
 .link-atras:hover{ color:var(--papel); }
 .link-atras[disabled]{ opacity:.35; cursor:not-allowed; text-decoration:none; }
 
+/* botoncitos de herramienta en la barra de la carta */
+.icono{
+  -webkit-appearance:none; appearance:none; cursor:pointer; flex:none;
+  width:40px; height:40px; border-radius:50%; font-size:1.1rem; line-height:1;
+  border:2px solid var(--onda); background:var(--papel); color:var(--tinta);
+  display:grid; place-items:center;
+  transition:background-color .15s ease, border-color .15s ease, color .15s ease;
+}
+.icono:hover{ background:#EAF1F6; }
+.icono[aria-pressed="true"]{ background:var(--arena); border-color:#B9863A; color:var(--marino); }
+.icono[hidden]{ display:none; }
+
+/* ── MODO SOL ─────────────────────────────────────────────────────────
+   El problema número uno de una carta digital en un parador: el sol de
+   frente lava la pantalla. Contraste al máximo, líneas más gruesas y
+   todo un punto más grande.                                          */
+:root[data-sol="1"]{
+  --espuma:#FFFFFF; --papel:#FFFFFF;
+  --onda:#7C93A5; --tinta-suave:#20313D; --marino:#000B14;
+}
+:root[data-sol="1"] body{ font-size:17.5px; }
+:root[data-sol="1"] .olas{ background-image:none; }
+:root[data-sol="1"] .plato{ border-width:2px; border-color:var(--marino); }
+:root[data-sol="1"] .plato__desc{ color:#20313D; }
+:root[data-sol="1"] .chip{ border-width:2px; border-color:var(--marino); }
+:root[data-sol="1"] .tag{ background:#DDE6EC; color:#0C1F2C; }
+:root[data-sol="1"] .buscador input{ border-color:var(--marino); }
+:root[data-sol="1"] .barra-top{ background:#FFFFFF; border-bottom-width:2px; border-bottom-color:var(--marino); }
+
+/* ── LA TARJETA PARA COMPARTIR ───────────────────────────────────── */
+.tarjeta{
+  margin-top:26px; border-radius:var(--r-lg); overflow:hidden; position:relative;
+  background:var(--papel); color:var(--marino);
+  box-shadow:0 20px 44px -26px rgba(0,0,0,.8);
+}
+.tarjeta__olas{ position:absolute; inset:0; opacity:.55; }
+.tarjeta__cuerpo{ position:relative; padding:22px 20px 18px; text-align:center; }
+.tarjeta__cuerpo .sello{ margin:0 auto 10px; }
+.tarjeta__sobre{
+  margin:0 0 6px; font-size:.72rem; font-weight:700; letter-spacing:.16em;
+  text-transform:uppercase; color:var(--tinta-suave);
+}
+.tarjeta__plato{
+  font-family:var(--f-brush); text-transform:uppercase;
+  font-size:clamp(1.4rem,6.4vw,1.9rem); line-height:1.06; margin:0 0 10px;
+}
+.tarjeta__frase{
+  margin:0 auto; max-width:30ch; font-family:var(--f-script);
+  font-size:1.16rem; line-height:1.34; color:var(--marino);
+}
+.tarjeta__pie{
+  margin:14px 0 0; font-size:.68rem; font-weight:700; letter-spacing:.18em;
+  text-transform:uppercase; color:var(--tinta-suave);
+}
+.tarjeta__acciones{ display:flex; align-items:center; gap:12px; margin-top:12px; flex-wrap:wrap; }
+.tarjeta__tip{ font-size:.82rem; color:var(--tinta-clara); }
+
+/* ── ARMÁ LA MESA ─────────────────────────────────────────────────── */
+.cuantos{ display:grid; grid-template-columns:repeat(4,1fr); gap:9px; margin-top:4px; }
+@media (min-width:480px){ .cuantos{ grid-template-columns:repeat(6,1fr); } }
+.cuantos__n{
+  -webkit-appearance:none; appearance:none; cursor:pointer;
+  background:rgba(255,255,255,.06); color:var(--papel);
+  border:2px solid rgba(255,255,255,.22); border-radius:var(--r-md);
+  padding:16px 0; font-family:var(--f-brush); font-size:1.35rem; line-height:1;
+  transition:border-color .15s ease, background-color .15s ease, transform .15s cubic-bezier(.2,.8,.3,1);
+}
+.cuantos__n:hover{ border-color:var(--arena); background:rgba(224,169,74,.16); }
+.cuantos__n:active{ transform:scale(.94); }
+.mesa__paso{
+  margin:0 0 10px; font-size:.74rem; font-weight:700; letter-spacing:.14em;
+  text-transform:uppercase; color:var(--arena);
+}
+.mesa__puntos{ display:flex; gap:7px; flex-wrap:wrap; margin:0 0 22px; }
+.mesa__punto{ width:10px; height:10px; border-radius:50%; background:rgba(255,255,255,.2); }
+.mesa__punto.hecho{ background:rgba(255,255,255,.6); }
+.mesa__punto.activo{ background:var(--arena); transform:scale(1.25); }
+
 /* ── VEREDICTO ──────────────────────────────────────────────────────
    El momento: la marea sube, tapa todo, y cuando baja el plato ya está
    servido. Una sola animación orquestada, no quince microefectos.   */
@@ -420,6 +507,83 @@ button{ font:inherit; color:inherit; }
 .ticket__monto{ font-weight:700; font-size:1.4rem; color:var(--arena); margin:0; }
 .veredicto__acciones{ display:grid; gap:10px; margin-top:26px; }
 @media (min-width:560px){ .veredicto__acciones{ grid-template-columns:1fr 1fr; } }
+
+/* ── EL VASCO ─────────────────────────────────────────────────────────
+   Lo que hace que un dibujo sea un personaje no es el dibujo: es que
+   actúe. Respira, parpadea, y cambia de cara según lo que está pasando.
+   Sin eso queda un sticker pegado en la pantalla.                    */
+/* el <svg> de afuera no lleva viewBox propio, así que sin relación de
+   aspecto explícita height:auto colapsa a cero y no se ve nada */
+.vasco{ color:var(--papel); display:block; flex:none; aspect-ratio:210/240; }
+.vasco--grande{ width:min(150px, 36vw); height:auto; }
+.vasco--chico{ width:52px; height:auto; }
+
+/* por defecto no se ve ninguna capa; cada gesto prende las suyas */
+.v-g{ display:none; }
+[data-gesto="saludo"]    :is(.v-ojos-abiertos,      .v-cejas-normal,   .v-boca-suave),
+[data-gesto="pensando"]  :is(.v-ojos-abiertos,      .v-cejas-una,      .v-boca-suave),
+[data-gesto="chicana"]   :is(.v-ojos-guino,         .v-cejas-alta,     .v-boca-torcida),
+[data-gesto="sorpresa"]  :is(.v-ojos-grandes,       .v-cejas-arriba,   .v-boca-o),
+[data-gesto="duda"]      :is(.v-ojos-entrecerrados, .v-cejas-caidas,   .v-boca-ondulada),
+[data-gesto="veredicto"] :is(.v-ojos-felices,       .v-cejas-contento, .v-boca-risa){ display:block; }
+
+/* respiración: sube y baja como quien está parado esperando */
+.vasco{ animation:v-respira calc(4.2s * var(--dur)) ease-in-out infinite; transform-origin:50% 90%; }
+@keyframes v-respira{
+  0%,100%{ transform:translateY(0) rotate(0deg); }
+  50%    { transform:translateY(-5px) rotate(-.6deg); }
+}
+/* parpadeo cada tanto, no en loop constante: si parpadea seguido asusta */
+.v-parpadeo{ animation:v-parpadea calc(6.5s * var(--dur)) infinite; transform-origin:center; }
+@keyframes v-parpadea{
+  0%,95.5%,100%{ transform:scaleY(1); }
+  97%          { transform:scaleY(.08); }
+}
+/* cuando piensa se inclina y mueve la pinza */
+[data-gesto="pensando"] .v-cabeza{ animation:v-piensa calc(2.4s * var(--dur)) ease-in-out infinite; transform-origin:105px 150px; }
+@keyframes v-piensa{ 0%,100%{ transform:rotate(0deg); } 50%{ transform:rotate(3.5deg); } }
+.v-brazo{ transform-origin:52px 196px; animation:v-pinza calc(3.6s * var(--dur)) ease-in-out infinite; }
+@keyframes v-pinza{ 0%,100%{ transform:rotate(0deg); } 50%{ transform:rotate(-7deg); } }
+/* en el veredicto pega un saltito y se queda */
+[data-gesto="veredicto"] .vasco,
+.vasco--remata{ animation:v-remata calc(.7s * var(--dur)) cubic-bezier(.2,1.5,.4,1) both; }
+@keyframes v-remata{
+  0%  { transform:translateY(0) scale(1); }
+  40% { transform:translateY(-16px) scale(1.06); }
+  100%{ transform:translateY(0) scale(1); }
+}
+
+/* el Vasco presentándose, arriba de la pantalla de modo */
+.presenta{ display:flex; align-items:flex-end; gap:14px; margin:0 0 6px; }
+.presenta__globo{
+  flex:1; min-width:0; background:rgba(255,255,255,.07); border:1px solid rgba(255,255,255,.16);
+  border-radius:20px 20px 20px 5px; padding:13px 15px;
+  font-family:var(--f-script); font-size:1.16rem; line-height:1.32; color:var(--papel);
+  text-wrap:pretty;
+}
+@media (min-width:520px){ .presenta__globo{ font-size:1.34rem; } }
+.presenta__nombre{
+  font-family:var(--f-brush); text-transform:uppercase; font-size:.78rem;
+  letter-spacing:.14em; color:var(--arena); margin:0 0 4px; display:block;
+}
+
+/* el saludo al que vuelve */
+.recuerdo{
+  margin:0 0 20px; padding:13px 15px;
+  border:1px dashed rgba(224,169,74,.55); border-radius:var(--r-md);
+  background:rgba(224,169,74,.08);
+}
+.recuerdo__txt{ margin:0; font-size:.92rem; color:var(--tinta-clara); }
+.recuerdo__txt b{ color:var(--arena); }
+
+/* durante el chat va chiquito, al lado de lo que dice */
+.dice{ display:flex; align-items:flex-end; gap:10px; margin-bottom:14px; }
+.dice .burbuja{ margin-bottom:0; }
+.dice__vasco{ flex:none; align-self:flex-end; }
+
+@media (prefers-reduced-motion: reduce){
+  .vasco, .v-parpadeo, .v-brazo, [data-gesto="pensando"] .v-cabeza{ animation:none !important; }
+}
 
 /* ── FORMATOS DE PREGUNTA ────────────────────────────────────────── */
 
@@ -580,6 +744,8 @@ button{ font:inherit; color:inherit; }
   </defs>
 </svg>
 
+
+
 <div class="app" id="app">
 
   <!-- ═══ LANDING ═══ -->
@@ -628,6 +794,11 @@ button{ font:inherit; color:inherit; }
         <div class="barra-top__fila">
           <button class="volver" data-ir="landing" aria-label="Volver al inicio">&larr; Inicio</button>
           <h2 class="barra-top__titulo" id="h-carta">La carta</h2>
+          <button class="icono" id="b-sol" aria-pressed="false"
+                  aria-label="Modo sol: subir el contraste para leer con el sol de frente"
+                  title="Modo sol">&#9728;</button>
+          <button class="icono" id="b-voz" aria-pressed="false"
+                  aria-label="Escuchar la carta en voz alta" title="Escuchar">&#9834;</button>
           <button class="btn btn--marino btn--chico" data-ir="chef">El&nbsp;Chef</button>
         </div>
       </div>
@@ -1738,7 +1909,18 @@ const Memoria = {
     ids.forEach(id => { m[id] = (m[id] || 0) + 1; });
     try { localStorage.setItem(this.clave, JSON.stringify(m)); } catch (e) {}
   },
-  veces(id){ return this.leer()[id] || 0; }
+  veces(id){ return this.leer()[id] || 0; },
+
+  /* El último plato que salió, para saludar al que vuelve. */
+  claveUlt: "bofomento.ultimo.v1",
+  guardarUltimo(plato){
+    try { localStorage.setItem(this.claveUlt,
+      JSON.stringify({ id: plato.id, nombre: plato.nombre, cuando: Date.now() })); } catch (e) {}
+  },
+  ultimoPlato(){
+    try { return JSON.parse(localStorage.getItem(this.claveUlt)) || null; }
+    catch (e) { return null; }
+  }
 };
 
 /* Cuántas veces vio la persona cada pregunta. Es lo que hace que la
@@ -2466,6 +2648,296 @@ function pintarCarta(){
   }).join("");
 }
 
+/* ═══════════════════════════════════════════════════════════════════
+   EL VASCO — el parrillero
+   Va inline y no con <use>: <use> arma un shadow tree y `display` no se
+   hereda, así que desde afuera no se pueden prender y apagar los gestos.
+   La cabeza es una sola; ojos, cejas y boca son capas que se cambian.
+   ═══════════════════════════════════════════════════════════════════ */
+const CHEF = { nombre: "El Vasco", corto: "Vasco" };
+
+const VASCO_CUERPO = `
+  <g class="v-brazo">
+    <path d="M64 210 Q38 196 42 164" fill="none" stroke="currentColor" stroke-width="7" stroke-linecap="round"/>
+    <g class="v-pinza">
+      <path d="M42 166 Q34 140 33 122" fill="none" stroke="currentColor" stroke-width="5" stroke-linecap="round"/>
+      <path d="M42 166 Q46 140 50 124" fill="none" stroke="currentColor" stroke-width="5" stroke-linecap="round"/>
+      <circle cx="42" cy="167" r="5" fill="currentColor"/>
+    </g>
+  </g>
+  <rect x="88" y="140" width="34" height="46" rx="14" fill="var(--marino-hondo)" stroke="currentColor" stroke-width="6"/>
+  <path d="M46 240 Q49 199 80 186 L130 186 Q161 199 164 240 Z" fill="var(--marino-hondo)" stroke="currentColor" stroke-width="6" stroke-linejoin="round"/>
+  <path d="M78 192 L132 192 L137 240 L73 240 Z" fill="var(--marino-hondo)" stroke="currentColor" stroke-width="5" stroke-linejoin="round"/>
+  <rect x="88" y="208" width="34" height="22" rx="3" fill="var(--arena)" stroke="currentColor" stroke-width="4"/>`;
+
+const VASCO_CARA = `
+  <ellipse cx="55" cy="102" rx="9" ry="12" fill="var(--marino-hondo)" stroke="currentColor" stroke-width="5"/>
+  <ellipse cx="155" cy="102" rx="9" ry="12" fill="var(--marino-hondo)" stroke="currentColor" stroke-width="5"/>
+  <path d="M58 90 Q58 42 105 42 Q152 42 152 90 Q152 146 105 150 Q58 146 58 90 Z"
+        fill="var(--marino-hondo)" stroke="currentColor" stroke-width="6" stroke-linejoin="round"/>
+  <path d="M52 57 Q56 20 105 20 Q154 20 158 57 Z" fill="currentColor"/>
+  <path d="M46 58 Q105 48 164 58 Q105 70 46 58 Z" fill="currentColor"/>
+  <circle cx="105" cy="20" r="6" fill="currentColor"/>
+  <path d="M105 104 Q98 120 108 123" fill="none" stroke="currentColor" stroke-width="5" stroke-linecap="round"/>`;
+
+/* Cada capa lleva UNA sola clase de gesto: si una capa tuviera dos, las
+   dos reglas de display pelearían y ganaría la última siempre. */
+const VASCO_GESTOS = `
+  <g class="v-ojos">
+    <g class="v-g v-ojos-abiertos">
+      <circle class="v-parpadeo" cx="82" cy="97" r="9.5" fill="var(--marino-hondo)" stroke="currentColor" stroke-width="4.5"/>
+      <circle class="v-parpadeo" cx="128" cy="97" r="9.5" fill="var(--marino-hondo)" stroke="currentColor" stroke-width="4.5"/>
+      <circle cx="83" cy="98" r="3.8" fill="currentColor"/>
+      <circle cx="129" cy="98" r="3.8" fill="currentColor"/>
+    </g>
+    <g class="v-g v-ojos-guino">
+      <path d="M72 98 Q82 90 92 98" fill="none" stroke="currentColor" stroke-width="5.5" stroke-linecap="round"/>
+      <circle cx="128" cy="97" r="10" fill="var(--marino-hondo)" stroke="currentColor" stroke-width="4.5"/>
+      <circle cx="129" cy="98" r="4.2" fill="currentColor"/>
+    </g>
+    <g class="v-g v-ojos-grandes">
+      <circle cx="82" cy="96" r="13" fill="var(--marino-hondo)" stroke="currentColor" stroke-width="4.5"/>
+      <circle cx="128" cy="96" r="13" fill="var(--marino-hondo)" stroke="currentColor" stroke-width="4.5"/>
+      <circle cx="82" cy="96" r="4.6" fill="currentColor"/>
+      <circle cx="128" cy="96" r="4.6" fill="currentColor"/>
+    </g>
+    <g class="v-g v-ojos-entrecerrados">
+      <path d="M72 101 Q82 93 92 101" fill="none" stroke="currentColor" stroke-width="5.5" stroke-linecap="round"/>
+      <path d="M118 101 Q128 93 138 101" fill="none" stroke="currentColor" stroke-width="5.5" stroke-linecap="round"/>
+    </g>
+    <g class="v-g v-ojos-felices">
+      <path d="M71 102 Q82 89 93 102" fill="none" stroke="currentColor" stroke-width="5.5" stroke-linecap="round"/>
+      <path d="M117 102 Q128 89 139 102" fill="none" stroke="currentColor" stroke-width="5.5" stroke-linecap="round"/>
+    </g>
+  </g>
+  <g class="v-cejas">
+    <g class="v-g v-cejas-normal">
+      <path d="M69 80 Q82 74 95 79" fill="none" stroke="currentColor" stroke-width="6.5" stroke-linecap="round"/>
+      <path d="M115 79 Q128 74 141 80" fill="none" stroke="currentColor" stroke-width="6.5" stroke-linecap="round"/>
+    </g>
+    <g class="v-g v-cejas-una">
+      <path d="M69 83 Q82 78 95 82" fill="none" stroke="currentColor" stroke-width="6.5" stroke-linecap="round"/>
+      <path d="M115 74 Q128 67 141 76" fill="none" stroke="currentColor" stroke-width="6.5" stroke-linecap="round"/>
+    </g>
+    <g class="v-g v-cejas-alta">
+      <path d="M69 84 Q82 80 95 84" fill="none" stroke="currentColor" stroke-width="6.5" stroke-linecap="round"/>
+      <path d="M113 72 Q128 63 143 74" fill="none" stroke="currentColor" stroke-width="7" stroke-linecap="round"/>
+    </g>
+    <g class="v-g v-cejas-arriba">
+      <path d="M67 74 Q82 65 97 74" fill="none" stroke="currentColor" stroke-width="6.5" stroke-linecap="round"/>
+      <path d="M113 74 Q128 65 143 74" fill="none" stroke="currentColor" stroke-width="6.5" stroke-linecap="round"/>
+    </g>
+    <g class="v-g v-cejas-caidas">
+      <path d="M69 76 Q82 84 95 88" fill="none" stroke="currentColor" stroke-width="6.5" stroke-linecap="round"/>
+      <path d="M115 88 Q128 84 141 76" fill="none" stroke="currentColor" stroke-width="6.5" stroke-linecap="round"/>
+    </g>
+    <g class="v-g v-cejas-contento">
+      <path d="M69 78 Q82 71 95 77" fill="none" stroke="currentColor" stroke-width="6.5" stroke-linecap="round"/>
+      <path d="M115 77 Q128 71 141 78" fill="none" stroke="currentColor" stroke-width="6.5" stroke-linecap="round"/>
+    </g>
+  </g>
+  <g class="v-boca">
+    <g class="v-g v-boca-suave"><path d="M92 139 Q105 145 118 139" fill="none" stroke="currentColor" stroke-width="5" stroke-linecap="round"/></g>
+    <g class="v-g v-boca-torcida"><path d="M90 140 Q105 148 122 134" fill="none" stroke="currentColor" stroke-width="5" stroke-linecap="round"/></g>
+    <g class="v-g v-boca-o"><ellipse cx="105" cy="140" rx="9" ry="8" fill="currentColor"/></g>
+    <g class="v-g v-boca-ondulada"><path d="M92 141 Q98 135 105 141 Q112 147 118 141" fill="none" stroke="currentColor" stroke-width="5" stroke-linecap="round"/></g>
+    <g class="v-g v-boca-risa"><path d="M87 133 Q105 153 123 133 Z" fill="currentColor" stroke="currentColor" stroke-width="5" stroke-linejoin="round"/></g>
+  </g>
+  <path class="v-bigote"
+        d="M105 120 Q88 114 74 120 Q62 126 68 134 Q76 141 90 134 Q99 129 105 126
+           Q111 129 120 134 Q134 141 142 134 Q148 126 136 120 Q122 114 105 120 Z"
+        fill="currentColor"/>`;
+
+/* Devuelve el dibujo entero listo para meter en el DOM. */
+function vascoHTML(clase, gesto){
+  return `<svg class="vasco ${clase}" viewBox="0 0 210 240" data-gesto="${gesto || "saludo"}"
+               role="img" aria-label="${CHEF.nombre}, el parrillero">
+      <g class="v-cuerpo">${VASCO_CUERPO}</g>
+      <g class="v-cabeza">${VASCO_CARA}${VASCO_GESTOS}</g>
+    </svg>`;
+}
+/* Le cambia la cara a todos los Vascos que haya en pantalla. */
+function gesto(g){ $$(".vasco").forEach(v => v.setAttribute("data-gesto", g)); }
+
+/* ── LOS CHISTES CON EL NOMBRE ────────────────────────────────────────
+   Es lo que hace que a El Vasco le agarres cariño en vez de sólo usarlo.
+   Primero busca el nombre exacto; si no lo tiene, se agarra de la forma
+   del nombre. Nunca se queda sin decir algo.                         */
+const CHISTES_NOMBRE = {
+  "martin":"Martín. En esta playa hay cuatro Martines y ninguno paga la cuenta.",
+  "juan":"Juan. El nombre más honesto que hay. No se puede desconfiar de un Juan.",
+  "diego":"Diego. Vos de chico jugabas al fútbol con ese nombre, no me lo niegues.",
+  "santiago":"Santiago. Muy elegante para venir con arena en los pies, pero pasá.",
+  "matias":"Matías. Conozco tres y los tres llegan tarde. Vos también, seguro.",
+  "sebastian":"Sebastián. Nombre largo, hambre larga. Es matemática.",
+  "rodrigo":"Rodrigo. Sos el que organiza todo y después nadie te agradece. Lo sé.",
+  "gonzalo":"Gonzalo. En algún momento alguien te dijo Gonza y ya no hubo vuelta atrás.",
+  "federico":"Federico. O Fede. Yo te voy a decir Fede, avisame si te molesta. Igual te voy a decir Fede.",
+  "nicolas":"Nicolás. Nombre de tipo tranquilo. Después vemos si es verdad.",
+  "pablo":"Pablo. Dos sílabas, cero vueltas. Vamos bien.",
+  "fernando":"Fernando. Con ese nombre yo esperaría que pidas algo de la parrilla. Veremos.",
+  "gabriel":"Gabriel. Nombre de arcángel y estás acá comiendo. Me gusta la contradicción.",
+  "sofia":"Sofía. Nombre de las que después piden postre y dicen que no querían.",
+  "camila":"Camila. Vos sos de las que ya sabe qué va a pedir y me deja hablar igual. Gracias.",
+  "valentina":"Valentina. Nombre largo para una carta corta. Lo vamos a resolver.",
+  "lucia":"Lucía. Sos de las que se sienta mirando al mar sí o sí. Se nota.",
+  "florencia":"Florencia. O Flor. Con ese nombre y esta playa, la tenés fácil.",
+  "agustina":"Agustina. Vos venís con hambre y lo estás disimulando. Yo también lo hago.",
+  "victoria":"Victoria. Empezamos ganando, entonces.",
+  "carolina":"Carolina. Nombre de la que elige el restaurante para todo el grupo. ¿Me equivoco?",
+  "ana":"Ana. Tres letras. Sos de las que no pierde el tiempo, ya me di cuenta.",
+  "paula":"Paula. Corto, firme, sin adornos. Como debe ser.",
+  "laura":"Laura. Nombre de la que lee la carta entera y después pide lo mismo de siempre.",
+  "andres":"Andrés. Tenés cara de pedir entraña. No me hagas quedar mal.",
+  "vasco":"¿Vasco? Vasco soy yo. Uno de los dos se va a tener que cambiar el nombre."
+};
+
+const CHISTES_FORMA = [
+  { test: n => n.split(/\s+/).length > 1,
+    di: n => `${n}, nombre y apellido. Uh. Esto se puso formal de golpe.` },
+  { test: n => n.length <= 3,
+    di: n => `${n}. Corto. Me gusta, así queda más tiempo para comer.` },
+  { test: n => n.length >= 11,
+    di: n => `${n}. Ese nombre no me lo voy a acordar. Te voy a decir campeón.` },
+  { test: n => /^[aeiouáéíóú]/i.test(n),
+    di: n => `${n}. Arranca con vocal, suena bien cuando lo gritás desde la cocina.` },
+  { test: n => /(ito|ita)$/i.test(n),
+    di: n => `${n}. ¿Ese es el nombre o te lo puso tu abuela? Da igual, me gusta.` }
+];
+
+const CHISTES_GENERICOS = [
+  n => `${n}. No conozco ningún ${n} que coma mal. Empezamos bien.`,
+  n => `${n}. Mirá vos. Tenés cara de ${n}, la verdad.`,
+  n => `${n}. Ya lo anoté. Y yo no anoto a cualquiera.`,
+  n => `Bueno, ${n}. Ahora sí estamos hablando en serio.`
+];
+
+const normalizar = t => t.toLowerCase()
+  .normalize("NFD").replace(/[\u0300-\u036f]/g, "").trim();
+
+function bromaNombre(nombre){
+  if (!nombre) return "Anónimo entonces. También sirve: total, la cara te la veo igual.";
+  // el nombre compuesto se chequea antes que el exacto: si no, "Juan
+  // Pablo" cae en el chiste de Juan y se pierde el mejor de los dos
+  if (nombre.trim().split(/\s+/).length > 1) return CHISTES_FORMA[0].di(nombre);
+  const clave = normalizar(nombre).split(/\s+/)[0];
+  if (CHISTES_NOMBRE[clave]) return CHISTES_NOMBRE[clave];
+  const forma = CHISTES_FORMA.find(f => f.test(nombre));
+  if (forma) return forma.di(nombre);
+  return CHISTES_GENERICOS[nombre.length % CHISTES_GENERICOS.length](nombre);
+}
+
+/* En la mesa hay más para joder: nombres repetidos, mesas de uno, mesas
+   demasiado grandes. */
+function bromaMesa(nombres){
+  const limpios = nombres.filter(Boolean);
+  const repes = {};
+  limpios.forEach(n => { const k = normalizar(n); repes[k] = (repes[k] || 0) + 1; });
+  const repetido = Object.keys(repes).find(k => repes[k] > 1);
+  if (repetido){
+    const cual = limpios.find(n => normalizar(n) === repetido);
+    return `Dos que se llaman ${cual}, en la misma mesa. Esto termina con alguien comiendo el plato del otro.`;
+  }
+  if (limpios.length === 0) return "Nadie me dijo el nombre. Una mesa de incógnito. Me encanta.";
+  if (nombres.length >= 8) return `${nombres.length} personas. Avisá en la cocina que hoy no salgo temprano.`;
+  if (nombres.length === 2) return "De a dos. Esto o es una cita o es una discusión. Las dos comen igual.";
+  return null;
+}
+
+/* ═══════════════════════════════════════════════════════════════════
+   ARMÁ LA MESA
+   El celular da la vuelta: cada uno pone su nombre, dice qué no come y
+   contesta dos preguntas. Al final El Vasco arma el pedido de todos.
+
+   No es correr el motor N veces y listo: una mesa pide distinto que N
+   personas sueltas. Lo que va al medio tiene que servirle a TODOS, así
+   que las entradas se filtran contra la intersección de las
+   restricciones de la mesa entera. El principal sí es de cada uno.
+   ═══════════════════════════════════════════════════════════════════ */
+
+function recomendarMesa(comensales){
+  // 1. lo que va al medio tiene que pasar los filtros de todos
+  const pasaTodos = p => comensales.every(c => pasaFiltrosDuros(p, c.filtros));
+  const rnd = mulberry32(semillaDe(comensales.map(c => c.respuestas)));
+
+  const vectorMesa = {};
+  EJES.forEach(e => {
+    vectorMesa[e] = comensales.reduce((a,c) => a + c.vector[e], 0) / comensales.length;
+  });
+  const filtrosMesa = { requiere:[], excluyeContiene:[], blandos:[], blandoPrecio:null, ecos:[] };
+
+  // 3. el principal es de cada uno, con sus propios filtros
+  const platos = comensales.map(c => {
+    const r = recomendar(c.respuestas, c.preguntas);
+    return { comensal: c, plato: r ? r.principal : null };
+  });
+
+  // 2. para picar: lo que se comparte y le sirve a todos
+  const cuantasEntradas = Math.max(1, Math.min(4, Math.round(comensales.length / 2)));
+  const poolEntradas = MENU.filter(p =>
+    ["entrada","principal"].indexOf(tipoDe(p)) !== -1 && p.apto.compartir && pasaTodos(p));
+  const entradas = ordenar(poolEntradas, vectorMesa, filtrosMesa, rnd)
+    .slice(0, cuantasEntradas * 2)
+    .filter((x,i,a) => a.findIndex(y => y.plato.categoria === x.plato.categoria) === i)
+    .slice(0, cuantasEntradas)
+    .map(x => x.plato);
+
+  // 4. la bebida: si la mesa es sociable, algo de compartir para todos
+  const litros = MENU.filter(p => tipoDe(p) === "bebida" && p.apto.compartir && pasaTodos(p));
+  const sueltas = MENU.filter(p => tipoDe(p) === "bebida" && !p.apto.compartir && pasaTodos(p));
+  // En una mesa de tres o más se pide algo al medio: nadie pide cuatro
+  // vasos sueltos. De a dos sí puede ser cada uno lo suyo.
+  const compartir = litros.length > 0 &&
+    (comensales.length >= 3 || vectorMesa.social >= 4);
+  const poolBeb = compartir ? litros : (sueltas.length ? sueltas : litros);
+  const cuantasBebidas = compartir
+    ? Math.max(1, Math.ceil(comensales.length / 3))
+    : comensales.length;
+  const masPesado = platosPrevios => platosPrevios.reduce(
+    (a,x) => Math.max(a, x && x.plato ? x.plato.ejes.contundencia : 0), 0);
+  const objBebidaMesa = Object.assign({}, vectorMesa, {
+    frescura: clamp(Math.max(vectorMesa.frescura, 4 + masPesado(platos) * 0.5), 0, 10)
+  });
+  const bebidaBase = ordenar(poolBeb, objBebidaMesa, filtrosMesa, rnd,
+    { pesosEje:{ contundencia:0.05, dulce:0.15, aventura:1, social:1.1, frescura:1.3 },
+      sinHambre:true })[0];
+  const bebida = bebidaBase ? bebidaBase.plato : null;
+
+  // 5. el postre al medio, que es el que nadie pide solo y todos comen
+  const poolPostre = MENU.filter(p => tipoDe(p) === "postre" && pasaTodos(p));
+  const objPostre = Object.assign({}, vectorMesa, {
+    dulce: clamp(5.5 + 0.45 * vectorMesa.dulce, 0, 10),
+    contundencia: clamp(vectorMesa.contundencia * 0.6, 0, 10)
+  });
+  const rankPostre = ordenar(poolPostre, objPostre, filtrosMesa, rnd,
+    { pesosEje:{ contundencia:0.5, aventura:0.6, social:0.4, frescura:0.9, dulce:1.6 },
+      sinHambre:true, sinPrecio:true });
+  const cuantosPostres = Math.max(1, Math.round(comensales.length / 3));
+  const postres = rankPostre.slice(0, cuantosPostres).map(x => x.plato);
+
+  const total =
+    entradas.reduce((a,p) => a + p.precio, 0) +
+    platos.reduce((a,x) => a + (x.plato ? x.plato.precio : 0), 0) +
+    (bebida ? bebida.precio * cuantasBebidas : 0) +
+    postres.reduce((a,p) => a + p.precio, 0);
+
+  return { entradas, platos, bebida, cuantasBebidas, postres, total,
+           porCabeza: Math.round(total / comensales.length),
+           vector: vectorMesa, compartir };
+}
+
+/* Las tres preguntas que contesta cada uno cuando le toca el celular:
+   las restricciones (que no se negocian) y dos de sabor, distintas para
+   cada comensal para que no sea la misma ronda seis veces. */
+function tandaComensal(indice){
+  const restr = PREGUNTAS.find(p => p.id === "restricciones");
+  const banco = PREGUNTAS.filter(p =>
+    p.tipo === "sabor" && p.peso === "alto" && fmtDe(p) === "opciones");
+  const dos = [];
+  for (let k = 0; k < 2; k++) dos.push(banco[(indice * 2 + k) % banco.length]);
+  return [restr].concat(dos);
+}
+
 /* ── CHEF ──────────────────────────────────────────────────────── */
 const panel = () => $("#chef-panel");
 const decir = t => { $("#chef-live").textContent = t; };
@@ -2476,14 +2948,23 @@ function pantallaModo(){
   $("#progreso").hidden = true;
   $("#chef-volver").onclick = () => ir("landing");
 
-  const saludo = S.nombre
-    ? `<p class="hola">Ah, ${esc(S.nombre)}. Ya está.</p>`
-    : "";
+  // Lo primero que ve la persona es la cara del Vasco, no un título.
+  const dice = S.nombre
+    ? bromaNombre(S.nombre)
+    : (Memoria.ultimoPlato()
+        ? "Pará. Vos ya estuviste acá."
+        : "Sentate. Yo soy El Vasco y hace una vida que estoy atrás de esta parrilla.");
 
   panel().innerHTML = `<div class="modo">
-    <p class="modo__sobre">Sentate ahí</p>
-    ${saludo}
-    <h2 class="modo__titulo">${S.nombre ? "Ahora sí:<br>ya sé qué vas a comer." : "Yo ya sé<br>qué vas a comer."}</h2>
+    <div class="presenta">
+      ${vascoHTML("vasco--grande", S.nombre ? "chicana" : "saludo")}
+      <div class="presenta__globo">
+        <span class="presenta__nombre">${esc(CHEF.nombre)}</span>
+        ${esc(dice)}
+      </div>
+    </div>
+    ${recuerdoHTML()}
+    <h2 class="modo__titulo">Con solo verte<br>ya sé qué vas a pedir.</h2>
     <p class="modo__texto">Te hago unas preguntas. Casi ninguna es sobre comida, y no hace falta que entiendas por qué. Después te lo digo.</p>
 
     ${S.nombre ? "" : `<div class="nombre">
@@ -2512,6 +2993,14 @@ function pantallaModo(){
       <p>Todavía no llegó nadie a la mesa. Acá hay juegos y cosas que no le contás a cualquiera.</p>
     </button>
 
+    <button class="tarjeta-modo" data-modo="mesa">
+      <span class="tarjeta-modo__top">
+        <h3>Armá la mesa</h3>
+        <span class="tarjeta-modo__meta">Para varios</span>
+      </span>
+      <p>Se pasan el celular y cada uno contesta tres cosas. Al final armo el pedido de toda la mesa y te digo cuánto sale por cabeza.</p>
+    </button>
+
     <p class="modo__texto" style="margin:18px 0 0;font-size:.84rem;opacity:.72">
       Las preguntas cambian cada vez. Si lo hacés de nuevo no te va a tocar casi ninguna igual.</p>
   </div>`;
@@ -2536,8 +3025,19 @@ function pantallaModo(){
     });
   }
 
-  $$("[data-modo]").forEach(b => b.addEventListener("click", () => arrancar(b.dataset.modo)));
+  $$("[data-modo]").forEach(b => b.addEventListener("click", () => {
+    if (b.dataset.modo === "mesa") pantallaMesa(); else arrancar(b.dataset.modo);
+  }));
   decir("Elegí el modo del chef.");
+}
+
+/* Lo que El Vasco se acuerda de la última vez. Vive en el celular. */
+function recuerdoHTML(){
+  const u = Memoria.ultimoPlato();
+  if (!u) return "";
+  return `<div class="recuerdo">
+      <p class="recuerdo__txt">La última vez te di <b>${esc(u.nombre)}</b>. ¿Repetimos o te la jugás?</p>
+    </div>`;
 }
 
 function arrancar(modo){
@@ -2563,7 +3063,8 @@ async function pensando(forzada){
   const frase = forzada || VOZ.esperas[Math.floor(Math.random() * VOZ.esperas.length)];
   const div = document.createElement("div");
   div.className = "puntitos";
-  div.innerHTML = `<div class="puntitos__caja"><i></i><i></i><i></i></div>
+  div.innerHTML = `<div class="dice__vasco">${vascoHTML("vasco--chico", forzada ? "chicana" : "pensando")}</div>
+                   <div class="puntitos__caja"><i></i><i></i><i></i></div>
                    <span class="puntitos__frase">${esc(frase)}</span>`;
   panel().appendChild(div);
   await esperar(forzada ? 900 + Math.random() * 300 : 560 + Math.random() * 340);
@@ -2579,7 +3080,10 @@ function pintarPregunta(){
   pintarProgreso();
 
   const cabecera = `
-    <div class="burbuja">${esc(hablarme(p.texto))}</div>
+    <div class="dice">
+      <div class="dice__vasco">${vascoHTML("vasco--chico", "saludo")}</div>
+      <div class="burbuja">${esc(hablarme(p.texto))}</div>
+    </div>
     <h3 class="solo-lectores">${esc(p.texto)}</h3>
     ${p.nota ? `<p class="pregunta__nota">${esc(p.nota)}</p>` : ""}`;
   const pie = accion => `
@@ -2879,6 +3383,189 @@ function atras(){
   pintarPregunta();
 }
 
+/* ── ARMÁ LA MESA: la pantalla ─────────────────────────────────────── */
+const M = { total:0, i:0, comensales:[], paso:"cuantos" };
+
+function pantallaMesa(){
+  M.total = 0; M.i = 0; M.comensales = []; M.paso = "cuantos";
+  S.modo = "mesa";
+  $("#progreso").hidden = true;
+  $("#chef-volver").onclick = () => pantallaModo();
+
+  panel().innerHTML = `<div class="modo">
+    <div class="presenta">
+      ${vascoHTML("vasco--grande", "saludo")}
+      <div class="presenta__globo">
+        <span class="presenta__nombre">${esc(CHEF.nombre)}</span>
+        ¿Cuántos son? Y no me mientas, que después falta comida.
+      </div>
+    </div>
+    <div class="cuantos" role="group" aria-label="Cuántos son">
+      ${[2,3,4,5,6,7,8,9,10,11,12].map(n =>
+        `<button class="cuantos__n" data-n="${n}">${n}</button>`).join("")}
+    </div>
+    <p class="modo__texto" style="margin-top:20px">
+      Se van pasando el celular. Cada uno contesta tres cosas y listo.</p>
+  </div>`;
+
+  $$(".cuantos__n").forEach(b => b.addEventListener("click", () => {
+    M.total = parseInt(b.dataset.n, 10);
+    M.i = 0; M.comensales = [];
+    turnoDe(0);
+  }));
+  decir("¿Cuántos son en la mesa?");
+}
+
+/* Le toca a uno: primero el nombre, después sus tres preguntas. */
+function turnoDe(i){
+  M.i = i;
+  M.comensales[i] = M.comensales[i] || { nombre:"", respuestas:{}, preguntas: tandaComensal(i), j:0 };
+  $("#chef-volver").onclick = () => (i === 0 ? pantallaMesa() : turnoDe(i - 1));
+  pintarPasa(i);
+}
+
+/* La pantalla de "pasale el celular al de al lado". Es el corazón del
+   juego: sin este corte, seis rondas seguidas se sienten un formulario. */
+function pintarPasa(i){
+  const anterior = i > 0 ? M.comensales[i-1] : null;
+  const dice = i === 0
+    ? "Empezá vos. Después se lo pasás al de al lado."
+    : `Listo${anterior && anterior.nombre ? ", " + esc(anterior.nombre) : ""}. Pasale el celular al que sigue.`;
+
+  panel().innerHTML = `<div class="modo">
+    <div class="presenta">
+      ${vascoHTML("vasco--grande", i === 0 ? "saludo" : "chicana")}
+      <div class="presenta__globo">
+        <span class="presenta__nombre">${esc(CHEF.nombre)}</span>${esc(dice)}
+      </div>
+    </div>
+    <p class="mesa__paso">Comensal ${i + 1} de ${M.total}</p>
+    <div class="mesa__puntos" aria-hidden="true">
+      ${Array.from({length:M.total}, (_,k) =>
+        `<span class="mesa__punto ${k < i ? "hecho" : k === i ? "activo" : ""}"></span>`).join("")}
+    </div>
+    <div class="nombre">
+      <label class="nombre__label" for="mesa-nombre">¿Cómo te digo?</label>
+      <div class="campo">
+        <input id="mesa-nombre" type="text" maxlength="24" placeholder="Tu nombre" enterkeyhint="go">
+        <button class="btn btn--sol" id="b-mesa-nombre">Dale</button>
+      </div>
+      <button class="saltear" id="b-mesa-anon">Paso del nombre</button>
+    </div>
+  </div>`;
+
+  const inp = $("#mesa-nombre");
+  const seguir = () => {
+    const v = inp.value.replace(/[^\p{L}\p{M}\s'’-]/gu, "").replace(/\s+/g, " ").trim().slice(0, 24);
+    M.comensales[i].nombre = v ? v.charAt(0).toUpperCase() + v.slice(1) : "";
+    M.comensales[i].j = 0;
+    pintarPreguntaMesa();
+  };
+  $("#b-mesa-nombre").addEventListener("click", seguir);
+  inp.addEventListener("keydown", e => { if (e.key === "Enter"){ e.preventDefault(); seguir(); } });
+  $("#b-mesa-anon").addEventListener("click", () => { inp.value = ""; seguir(); });
+  inp.focus({ preventScroll:true });
+  decir(dice + " Comensal " + (i + 1) + " de " + M.total);
+}
+
+function pintarPreguntaMesa(){
+  const c = M.comensales[M.i];
+  const p = c.preguntas[c.j];
+  const quien = c.nombre ? c.nombre + ", " : "";
+
+  panel().innerHTML = `<div class="chat">
+    <p class="mesa__paso">${esc(c.nombre || "Comensal " + (M.i + 1))} · ${c.j + 1} de ${c.preguntas.length}</p>
+    <div class="dice">
+      <div class="dice__vasco">${vascoHTML("vasco--chico", "saludo")}</div>
+      <div class="burbuja">${esc(quien + (c.j === 0 ? p.texto.charAt(0).toLowerCase() + p.texto.slice(1) : p.texto))}</div>
+    </div>
+    ${p.nota ? `<p class="pregunta__nota">${esc(p.nota)}</p>` : ""}
+    <div class="opciones opciones--largas" role="group" aria-label="${esc(p.texto)}">
+      ${p.opciones.map((o, k) => {
+        const sel = Array.isArray(c.respuestas[p.id]) ? c.respuestas[p.id] : [];
+        const on = p.multiple ? sel.indexOf(k) !== -1 : c.respuestas[p.id] === k;
+        return `<button class="opcion" data-i="${k}" aria-pressed="${on}">
+          ${p.multiple ? `<span class="opcion__marca" aria-hidden="true">${on ? "✓" : ""}</span>` : ""}
+          ${o.emo ? `<span aria-hidden="true" style="flex:none;font-size:1.2rem;line-height:1">${o.emo}</span>` : ""}
+          <span>${esc(o.texto)}</span>
+        </button>`;
+      }).join("")}
+    </div>
+    <div class="acciones-chat">
+      <button class="link-atras" id="b-atras">← Anterior</button>
+      ${p.multiple ? `<button class="btn btn--sol" id="b-seguir">Seguir</button>` : ""}
+    </div>
+  </div>`;
+
+  decir(p.texto);
+  $$(".opcion", panel()).forEach(b => {
+    b.addEventListener("click", () => {
+      const k = parseInt(b.dataset.i, 10);
+      if (p.multiple){
+        elegirMultiple(c, p, k);
+        return;
+      }
+      c.respuestas[p.id] = k;
+      avanzarMesa(p, c);
+    });
+    b.addEventListener("keydown", ev => moverFoco(ev, b, ".opcion"));
+  });
+  $("#b-atras").addEventListener("click", () => {
+    if (c.j > 0){ c.j--; pintarPreguntaMesa(); }
+    else pintarPasa(M.i);
+  });
+  if (p.multiple) $("#b-seguir").addEventListener("click", () => avanzarMesa(p, c));
+}
+
+function elegirMultiple(c, p, k){
+  const o = p.opciones[k];
+  let sel = Array.isArray(c.respuestas[p.id]) ? c.respuestas[p.id].slice() : [];
+  if (o.exclusiva) sel = sel.indexOf(k) !== -1 ? [] : [k];
+  else {
+    const excl = p.opciones.map((x,j) => x.exclusiva ? j : -1).filter(j => j >= 0);
+    sel = sel.filter(j => excl.indexOf(j) === -1);
+    sel = sel.indexOf(k) !== -1 ? sel.filter(j => j !== k) : sel.concat(k);
+  }
+  c.respuestas[p.id] = sel;
+  $$(".opcion", panel()).forEach((b, j) => {
+    const on = sel.indexOf(j) !== -1;
+    b.setAttribute("aria-pressed", String(on));
+    const m = $(".opcion__marca", b);
+    if (m) m.textContent = on ? "✓" : "";
+  });
+}
+
+async function avanzarMesa(p, c){
+  if (p.multiple && (!c.respuestas[p.id] || c.respuestas[p.id].length === 0)){
+    const i = p.opciones.findIndex(o => o.exclusiva);
+    c.respuestas[p.id] = i >= 0 ? [i] : [];
+  }
+  $$("button", panel()).forEach(b => b.disabled = true);
+  const chat = $(".chat", panel());
+  const dicho = opcionesElegidas(p, c.respuestas[p.id]).map(o => o.texto).join(" · ");
+  if (chat && dicho){
+    const eco = document.createElement("div");
+    eco.className = "burbuja burbuja--yo";
+    eco.textContent = dicho;
+    chat.appendChild(eco);
+    await esperar(220);
+  }
+
+  c.j++;
+  if (c.j < c.preguntas.length){
+    panel().innerHTML = `<div class="chat"></div>`;
+    await pensando(chisteDe(p, c.respuestas[p.id]));
+    pintarPreguntaMesa();
+    return;
+  }
+
+  // este comensal terminó: se calcula lo suyo y pasa el celular
+  c.filtros = leerFiltros(c.respuestas, c.preguntas);
+  c.vector  = vectorUsuario(c.respuestas, c.preguntas);
+  if (M.i + 1 < M.total) turnoDe(M.i + 1);
+  else await pintarVeredictoMesa();
+}
+
 /* ── VEREDICTO ─────────────────────────────────────────────────── */
 async function pintarVeredicto(){
   $("#progreso-lleno").style.width = "100%";
@@ -2890,6 +3577,7 @@ async function pintarVeredicto(){
   if (!r){ pintarSinSalida(); return; }
   S.ultimo = r;
   Memoria.sumar([r.principal.id, r.bebida.id, r.postre.id]);
+  Memoria.guardarUltimo(r.principal);
 
   const rnd = mulberry32(semillaDe(S.respuestas) ^ 0x9E3779B9);
   const voz = vozPrincipal(r, rnd);
@@ -2917,7 +3605,13 @@ async function pintarVeredicto(){
   const alt = r.alternativas;
   panel().innerHTML = `<div class="veredicto reveal">
     ${r.aviso ? `<p class="pregunta__nota" style="color:var(--arena)">${esc(r.aviso)}</p>` : ""}
-    <span class="chapa">${S.nombre ? esc(S.nombre) + ", lo tuyo es esto" : "Lo tuyo es esto"}</span>
+    <div class="presenta">
+      ${vascoHTML("vasco--grande", "veredicto")}
+      <div class="presenta__globo">
+        <span class="presenta__nombre">${esc(CHEF.nombre)}</span>
+        ${esc(S.nombre ? S.nombre + ", esto es lo tuyo." : "Esto es lo tuyo.")}
+      </div>
+    </div>
 
     <article class="ficha">
       <div class="ficha__olas olas" aria-hidden="true"></div>
@@ -2948,6 +3642,8 @@ async function pintarVeredicto(){
       <p class="ticket__monto">${precio(r.total)}</p>
     </div>
 
+    ${tarjetaHTML(r)}
+
     <p class="burbuja" style="margin-top:26px">${esc(cierre)}</p>
 
     <div class="veredicto__acciones">
@@ -2958,10 +3654,108 @@ async function pintarVeredicto(){
 
   $("#chef-volver").onclick = () => pantallaModo();
   $("#b-rehacer").addEventListener("click", pantallaModo);
+  $("#b-compartir").addEventListener("click", () => compartirTarjeta(r));
   $$("[data-ir]", panel()).forEach(b => b.addEventListener("click", () => ir(b.dataset.ir)));
   decir(vocativo() + "listo. Te toca " + r.principal.nombre + ".");
   const h = $(".ficha__nombre", panel());
   if (h){ h.setAttribute("tabindex","-1"); h.focus({ preventScroll:true }); }
+}
+
+/* Para las que no traen descripción propia: una frase distinta cada vez,
+   que si repiten las dos se ve la plantilla. */
+const FRASES_MEDIO = [
+  "Va al medio y que se arreglen.",
+  "Esto se come con la mano, avisales.",
+  "Poné esto primero, que la parrilla tarda.",
+  "De esto siempre falta. Pedí dos si son muchos."
+];
+function lineaMedio(usadas){
+  const libre = FRASES_MEDIO.find(t => !usadas.has(t)) || FRASES_MEDIO[0];
+  usadas.add(libre);
+  return libre;
+}
+
+/* ── EL PEDIDO DE LA MESA ──────────────────────────────────────────── */
+async function pintarVeredictoMesa(){
+  panel().innerHTML = `<div class="chat"></div>`;
+  await pensando("Dejame ver qué pasa en esta mesa…");
+
+  const r = recomendarMesa(M.comensales);
+  const nombres = M.comensales.map(c => c.nombre);
+  const chiste = bromaMesa(nombres);
+
+  if (!reducido()){
+    const m = document.createElement("div");
+    m.className = "marea";
+    m.innerHTML = '<div class="marea__olas olas olas--noche"></div><div class="marea__borde"></div>';
+    document.body.appendChild(m);
+    setTimeout(() => m.remove(), 1100);
+  }
+
+  const precio = n => "$ " + n.toLocaleString("es-UY");
+  const fila = (nombre, linea, monto) => `<div class="mini">
+      <div class="mini__txt">
+        <p class="mini__nombre">${esc(nombre)}</p>
+        ${linea ? `<p class="mini__linea">${esc(linea)}</p>` : ""}
+      </div>
+      <p class="mini__precio">${precio(monto)}</p>
+    </div>`;
+  const titulo = t => `<p class="bloque__titulo"><span class="bloque__txt">${esc(t)}</span><span class="zigzag zigzag--claro" aria-hidden="true"></span></p>`;
+
+  panel().innerHTML = `<div class="veredicto reveal">
+    <div class="presenta">
+      ${vascoHTML("vasco--grande", "veredicto")}
+      <div class="presenta__globo">
+        <span class="presenta__nombre">${esc(CHEF.nombre)}</span>
+        ${esc(chiste || "Esta mesa ya está resuelta. Sentate y esperá.")}
+      </div>
+    </div>
+
+    <div class="bloque">
+      ${titulo("Para el medio, mientras esperan")}
+      ${(() => { const u = new Set();
+                 return r.entradas.map(p => fila(p.nombre, p.descripcion || lineaMedio(u), p.precio)).join(""); })()}
+    </div>
+
+    <div class="bloque">
+      ${titulo("Uno para cada uno")}
+      ${r.platos.map((x, k) => fila(
+          x.plato ? x.plato.nombre : "Hablalo conmigo",
+          (x.comensal.nombre || "Comensal " + (k + 1)) + (x.plato ? "" : " — no me quedó nada que le sirva"),
+          x.plato ? x.plato.precio : 0)).join("")}
+    </div>
+
+    <div class="bloque">
+      ${titulo("Para tomar")}
+      ${r.bebida ? fila(
+          r.bebida.nombre + (r.cuantasBebidas > 1 ? ` × ${r.cuantasBebidas}` : ""),
+          r.compartir ? "Al medio, que alcanza para todos." : "Uno para cada uno.",
+          r.bebida.precio * r.cuantasBebidas) : ""}
+    </div>
+
+    <div class="bloque">
+      ${titulo("Y el postre, que nadie pide y todos comen")}
+      ${r.postres.map(p => fila(p.nombre, "Con varias cucharas.", p.precio)).join("")}
+    </div>
+
+    <div class="ticket">
+      <p class="ticket__txt">Toda la mesa · ${M.total} personas<br>
+        <b style="color:var(--papel)">${precio(r.porCabeza)} por cabeza</b></p>
+      <p class="ticket__monto">${precio(r.total)}</p>
+    </div>
+
+    <p class="burbuja" style="margin-top:24px">Si alguno se queja, decile que hablé yo.</p>
+
+    <div class="veredicto__acciones">
+      <button class="btn btn--sol" id="b-otra-mesa">Armar otra mesa</button>
+      <button class="btn btn--linea" data-ir="carta">Ver la carta completa</button>
+    </div>
+  </div>`;
+
+  $("#chef-volver").onclick = () => pantallaModo();
+  $("#b-otra-mesa").addEventListener("click", pantallaMesa);
+  $$("[data-ir]", panel()).forEach(b => b.addEventListener("click", () => ir(b.dataset.ir)));
+  decir("Listo. La mesa sale " + precio(r.total) + ", " + precio(r.porCabeza) + " por cabeza.");
 }
 
 /* Último recurso: ni una sola cosa de la carta pasa los filtros duros.
@@ -2994,6 +3788,91 @@ function lineaAlternativa(p, r, usadas){
   const libre = razones.find(t => !usadas.has(t)) || razones[razones.length - 1];
   usadas.add(libre);
   return libre;
+}
+
+/* ── LA TARJETA ───────────────────────────────────────────────────────
+   Pensada para que le saquen captura. La gente sube lo que come igual;
+   esto les da algo mejor que la foto del plato, y con la marca puesta.
+   Compartir usa lo del propio celular; si no hay, copia al portapapeles. */
+function tarjetaHTML(r){
+  const quien = S.nombre ? esc(S.nombre) : "Alguien";
+  return `<section class="tarjeta" id="tarjeta">
+    <div class="tarjeta__olas olas" aria-hidden="true"></div>
+    <div class="tarjeta__cuerpo">
+      <svg class="sello sello--chico" style="color:var(--marino)" aria-hidden="true"><use href="#sello"/></svg>
+      <p class="tarjeta__sobre">${quien}, según El Vasco</p>
+      <h3 class="tarjeta__plato">${esc(r.principal.nombre)}</h3>
+      <p class="tarjeta__frase">${esc(frasePostal(r))}</p>
+      <p class="tarjeta__pie">BO · FOMENTO — Estamos en la playa</p>
+    </div>
+  </section>
+  <div class="tarjeta__acciones">
+    <button class="btn btn--sol btn--chico" id="b-compartir">Compartirlo</button>
+    <span class="tarjeta__tip" id="tarjeta-tip">o sacale una captura</span>
+  </div>`;
+}
+
+/* La frase de la tarjeta es corta a propósito: tiene que leerse en una
+   historia de Instagram a un metro de distancia. */
+function frasePostal(r){
+  if (r.remate) return r.remate;
+  const eco = elegirEcos(r.ecos, 1)[0];
+  return eco ? "Me dijiste " + eco + ". No había con qué darle." : "Lo supe cuando cruzaste la puerta.";
+}
+
+async function compartirTarjeta(r){
+  const texto = `${S.nombre ? S.nombre + ", según" : "Según"} El Vasco de Bo Fomento: `
+    + `${r.principal.nombre}. ${frasePostal(r)}`;
+  const tip = $("#tarjeta-tip");
+  try {
+    if (navigator.share){ await navigator.share({ title:"BO | Fomento", text: texto }); return; }
+    await navigator.clipboard.writeText(texto);
+    if (tip) tip.textContent = "Copiado. Pegalo donde quieras.";
+  } catch (e) {
+    // el usuario canceló el menú de compartir: no es un error que mostrar
+    if (e && e.name === "AbortError") return;
+    if (tip) tip.textContent = "No pude copiarlo. Sacale una captura, queda mejor igual.";
+  }
+}
+
+/* ── MODO SOL ─────────────────────────────────────────────────────────
+   El problema número uno de una carta digital en un parador: el sol de
+   frente en la pantalla. Sube el contraste a tope y agranda el texto.  */
+function modoSol(){
+  const on = document.documentElement.getAttribute("data-sol") === "1";
+  document.documentElement.setAttribute("data-sol", on ? "0" : "1");
+  const b = $("#b-sol");
+  b.setAttribute("aria-pressed", String(!on));
+  try { localStorage.setItem("bofomento.sol", on ? "0" : "1"); } catch (e) {}
+  decir(on ? "Modo sol apagado." : "Modo sol encendido: más contraste y letra más grande.");
+}
+
+/* ── LA CARTA QUE SE LEE SOLA ─────────────────────────────────────────
+   Para el que se olvidó los lentes de cerca, que en una playa es medio
+   mundo. Lo lee el propio navegador: sin backend y sin costo.         */
+function leerCarta(){
+  if (!("speechSynthesis" in window)){
+    $("#b-voz").hidden = true;
+    return;
+  }
+  const b = $("#b-voz");
+  if (speechSynthesis.speaking || speechSynthesis.pending){
+    speechSynthesis.cancel();
+    b.setAttribute("aria-pressed", "false");
+    return;
+  }
+  const vis = platosVisibles();
+  if (!vis.length) return;
+  const texto = vis.slice(0, 40).map(p =>
+    `${p.nombre}, ${p.precio} pesos.`).join(" ");
+  const u = new SpeechSynthesisUtterance(
+    (S.cat === "todas" ? "La carta. " : catDe(S.cat).nombre + ". ") + texto);
+  u.lang = "es-UY";
+  u.rate = 0.95;
+  u.onend = () => b.setAttribute("aria-pressed", "false");
+  u.onerror = () => b.setAttribute("aria-pressed", "false");
+  b.setAttribute("aria-pressed", "true");
+  speechSynthesis.speak(u);
 }
 
 /* ── EVENTOS ───────────────────────────────────────────────────── */
@@ -3042,8 +3921,21 @@ function conectar(){
     S.q = ""; $("#q").value = ""; $("#q").focus(); pintarCarta();
   });
 
+  $("#b-sol").addEventListener("click", modoSol);
+  $("#b-voz").addEventListener("click", leerCarta);
+  if (!("speechSynthesis" in window)) $("#b-voz").hidden = true;
+  try {
+    if (localStorage.getItem("bofomento.sol") === "1"){
+      document.documentElement.setAttribute("data-sol", "1");
+      $("#b-sol").setAttribute("aria-pressed", "true");
+    }
+  } catch (e) {}
+
   document.addEventListener("keydown", e => {
-    if (e.key === "Escape" && S.vista !== "landing") ir("landing");
+    if (e.key === "Escape" && S.vista !== "landing"){
+      if ("speechSynthesis" in window) speechSynthesis.cancel();
+      ir("landing");
+    }
   });
 
   pintarCarta();
@@ -3157,6 +4049,48 @@ function bofoTest(){
   });
   MemoriaPreg.cache = antes;
 
+  // ── LA MESA ──────────────────────────────────────────────────────
+  // Lo que va al medio tiene que servirle a TODOS, y el plato de cada
+  // uno tiene que respetar lo suyo. Una mesa mixta es donde esto se
+  // rompe: un vegetariano y un celíaco sentados juntos.
+  const sabores = PREGUNTAS.filter(q => q.tipo === "sabor" && q.peso === "alto" && fmtDe(q) === "opciones");
+  let mesasProbadas = 0;
+  setsRestriccion.forEach(sr => {
+    for (let n = 2; n <= 6; n += 2){
+      const comensales = [];
+      for (let k = 0; k < n; k++){
+        // el primero lleva las restricciones del set; el resto, al azar
+        const suyas = k === 0 ? sr : setsRestriccion[azar(setsRestriccion.length)];
+        const preguntas = tandaComensal(k);
+        const respuestas = { restricciones: suyas };
+        preguntas.filter(q => q.tipo === "sabor").forEach(q => { respuestas[q.id] = azar(q.opciones.length); });
+        comensales.push({
+          nombre: "C" + k, respuestas, preguntas,
+          filtros: leerFiltros(respuestas, preguntas),
+          vector: vectorUsuario(respuestas, preguntas)
+        });
+      }
+      const m = recomendarMesa(comensales);
+      mesasProbadas++;
+
+      chequear(m.entradas.length >= 1, `[mesa ${n}] no hay nada para el medio`);
+      chequear(!!m.bebida, `[mesa ${n}] la mesa se quedó sin bebida`);
+      chequear(m.postres.length >= 1, `[mesa ${n}] la mesa se quedó sin postre`);
+      chequear(m.platos.length === n, `[mesa ${n}] faltan platos individuales`);
+      chequear(m.porCabeza > 0 && m.total > 0, `[mesa ${n}] la cuenta dio cero`);
+
+      // lo compartido pasa los filtros de todos, sin excepción
+      const compartido = m.entradas.concat(m.postres).concat(m.bebida ? [m.bebida] : []);
+      comensales.forEach((c, k) => {
+        compartido.forEach(x => chequear(pasaFiltrosDuros(x, c.filtros),
+          `[mesa ${n}] "${x.nombre}" al medio y el comensal ${k} no lo puede comer`));
+        const mio = m.platos[k].plato;
+        if (mio) chequear(pasaFiltrosDuros(mio, c.filtros),
+          `[mesa ${n}] al comensal ${k} le tocó "${mio.nombre}", que no puede comer`);
+      });
+    }
+  });
+
   // ── dos personas muy distintas comen distinto ──
   const tandaFija = PREGUNTAS.filter(p => p.modos.indexOf("completo") !== -1);
   const A = {}, B = {};
@@ -3175,6 +4109,7 @@ function bofoTest(){
     `rápido:   ${ex.corridas} tandas, ${ex.distintos} platos distintos`,
     `completo: ${co.corridas} tandas, ${co.distintos} platos distintos`,
     `repetidas entre corridas seguidas: ${repetidas}`,
+    `mesas armadas: ${mesasProbadas}`,
     `checks OK: ${R.ok}`,
     R.fallas.length ? `FALLAS: ${R.fallas.length}` : "FALLAS: 0 — todo verde"
   ].join("\n");
