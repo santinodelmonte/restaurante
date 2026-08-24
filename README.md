@@ -141,3 +141,32 @@ falta y en ningún otro lado.
 Estas secciones de la carta todavía no están cargadas porque no vinieron en
 las imágenes: **vinos** y **milanesas / burgers**. Se agregan al array
 `MENU` con la misma forma que el resto; no hay que tocar nada más.
+
+## candela.html — segundo restaurante (Candela Express)
+
+Mismo motor, marca distinta. `candela.html` es una segunda demo, para
+Candela Express — un restaurante temático de fútbol.
+
+Cambia todo lo que la marca cambia: paleta verde césped con líneas de
+cancha, escudo circular con un balón, tipografía tipo camiseta (Bebas
+Neue) y la corbata roja del Chef como único color plano. El Vasco pasa
+a ser **El Maestro** — una caricatura respetuosa de Óscar Washington
+Tabárez, con anteojos, pelo canoso, saco, y una carpeta con la formación
+en la mano en vez de las pinzas.
+
+La voz del Chef está en su tono: pausado, con metáforas del vestuario,
+y usa sus frases célebres ("el camino es la recompensa", "somos lo que
+hacemos") cuando calzan. Las preguntas playeras se reemplazaron por
+futboleras: qué hacés en el minuto 89, cómo reaccionás cuando el árbitro
+te come un gol, quién patea el penal a los 89. La pregunta del signo
+pasa a "¿de qué cuadro sos?".
+
+**Placeholder:** el `MENU` está armado con nombres futboleros (La 4-3-3,
+El Caño, El 9 de Área, Verduras a la Parrilla) y precios inventados.
+Cuando llegue la carta real de candelaexpress.alacarta.online, se
+reemplaza sólo el array `MENU` sin tocar nada más.
+
+El motor es el mismo, ajustado en un solo lugar: la segunda alternativa
+puede no existir cuando el pool filtrado no ofrece dos categorías
+distintas. Es más honesto que forzar una repetida.
+
