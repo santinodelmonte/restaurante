@@ -2523,159 +2523,265 @@ function pintarCarta(){
 }
 
 /* ═══════════════════════════════════════════════════════════════════
-   EL MAESTRO — caricatura de Óscar Washington Tabárez
-   Busto: anteojos rectangulares, pelo canoso con calvicie parcial,
-   nariz marcada, saco oscuro con corbata roja, y una carpeta con la
-   formación en la mano — la reemplaza a las pinzas del Vasco.
-   Va inline y no con <use>: <use> arma un shadow tree y `display` no
-   se hereda, así que las capas de gesto no se podrían prender desde
-   afuera. La cabeza es una sola; ojos, cejas y boca son capas.
+   EL MAESTRO — caricatura tipo vector plano (memoji)
+   Rellenos de color, sin línea de contorno negra alrededor. Piel
+   beige, pelo blanco, saco azul marino, corbata celeste, cuaderno
+   abierto en la mano. Reconocible como Tabárez pero simplificado:
+   evocación, no retrato. La cabeza es una sola; ojos, cejas y boca
+   siguen siendo capas intercambiables que se prenden y apagan por
+   data-gesto para conservar los seis gestos.
    ═══════════════════════════════════════════════════════════════════ */
+
+/* Paleta interna del Maestro. Colores planos, sin gradientes ni sombras
+   realistas — sólo dos tonos por elemento cuando hace falta separar. */
+const P_MAESTRO = {
+  piel:      "#F1CFAF",
+  pielS:     "#DCA97F",   // sombra de piel (cuello)
+  pelo:      "#F5F5F5",   // pelo blanco muy claro
+  peloS:     "#D8D8D8",   // sombra del pelo
+  saco:      "#1E3E6D",   // saco azul marino
+  sacoS:     "#152B4C",   // solapa/sombra del saco
+  camisa:    "#FFFFFF",
+  corbata:   "#4FA3D9",   // celeste
+  corbataS:  "#3F86B3",
+  anteojos:  "#2A2A2E",   // marco casi negro
+  cejas:     "#4A4A50",   // ceja gris oscura
+  papel:     "#FCF6E4",   // hoja del cuaderno
+  papelS:    "#E8DDBB",   // borde del cuaderno
+  garabato:  "#7A867E",   // líneas garabateadas en la hoja
+  tapaLibro: "#0F864A"    // tapa verde del cuaderno
+};
 const CHEF = { nombre: "El Maestro", corto: "Maestro" };
 
 const MAESTRO_CUERPO = `
+  <!-- brazo derecho sosteniendo el cuaderno abierto -->
   <g class="m-brazo">
-    <path d="M62 210 Q40 198 42 172" fill="none" stroke="currentColor" stroke-width="7" stroke-linecap="round"/>
+    <!-- manga del saco -->
+    <path d="M68 210 Q46 200 44 176 Q46 168 56 168 Q66 172 70 190 Z"
+          fill="${P_MAESTRO.saco}"/>
+    <!-- mano -->
+    <circle cx="46" cy="170" r="9" fill="${P_MAESTRO.piel}"/>
+    <!-- cuaderno abierto: tapa verde, dos hojas y garabatos -->
     <g class="m-pinza">
-      <!-- carpeta con la formación: un rectángulo con líneas dentro -->
-      <rect x="20" y="140" width="44" height="34" rx="3" fill="var(--verde-hondo, #08351E)" stroke="currentColor" stroke-width="4"/>
-      <path d="M26 149 L58 149 M26 155 L58 155 M26 161 L58 161 M26 167 L50 167"
-            stroke="currentColor" stroke-width="1.6" stroke-linecap="round" opacity=".75"/>
-      <!-- clip metálico arriba -->
-      <rect x="34" y="135" width="16" height="7" rx="2" fill="currentColor"/>
+      <!-- tapa por atrás -->
+      <path d="M12 138 L78 138 L78 176 L12 176 Z" fill="${P_MAESTRO.tapaLibro}"/>
+      <!-- hojas: dos rectángulos apoyados uno al lado del otro, con un
+           pliegue leve al medio -->
+      <path d="M14 140 L44 140 L45 174 L14 174 Z" fill="${P_MAESTRO.papel}"/>
+      <path d="M46 140 L76 140 L76 174 L45 174 Z" fill="${P_MAESTRO.papel}"/>
+      <line x1="45" y1="140" x2="45" y2="174" stroke="${P_MAESTRO.papelS}" stroke-width="1"/>
+      <!-- garabato: la formación anotada, líneas irregulares -->
+      <g stroke="${P_MAESTRO.garabato}" stroke-width="1.4" stroke-linecap="round" fill="none">
+        <path d="M18 147 Q26 145 34 148 Q40 149 42 147"/>
+        <path d="M18 153 Q26 151 34 154 Q39 155 42 153"/>
+        <path d="M18 160 Q28 158 38 161"/>
+        <path d="M18 167 Q26 166 32 168"/>
+        <path d="M50 147 Q60 145 68 148 Q72 149 74 147"/>
+        <path d="M50 155 Q60 154 70 156"/>
+        <!-- una florcita o círculo, como si fuera un símbolo táctico -->
+        <circle cx="60" cy="164" r="3" fill="${P_MAESTRO.garabato}" fill-opacity=".55"/>
+        <path d="M50 170 L74 170"/>
+      </g>
     </g>
   </g>
-  <!-- cuello -->
-  <rect x="90" y="146" width="30" height="34" rx="3" fill="var(--verde-hondo, #08351E)" stroke="currentColor" stroke-width="6"/>
-  <!-- torso: saco oscuro con solapas -->
-  <path d="M40 240 Q44 194 82 180 L128 180 Q166 194 170 240 Z"
-        fill="var(--verde-hondo, #08351E)" stroke="currentColor" stroke-width="6" stroke-linejoin="round"/>
-  <!-- solapas del saco -->
-  <path d="M82 180 L98 220 L105 202 L112 220 L128 180"
-        fill="none" stroke="currentColor" stroke-width="5" stroke-linejoin="round"/>
-  <!-- camisa (triángulo blanco entre las solapas) -->
-  <path d="M98 220 L105 202 L112 220 L105 234 Z" fill="var(--papel)" stroke="currentColor" stroke-width="4"/>
-  <!-- corbata: en tarjeta roja, el único color plano -->
-  <path d="M100 205 L110 205 L114 240 L96 240 Z" fill="var(--tarjeta-r)" stroke="currentColor" stroke-width="3"/>
-  <path d="M100 205 L110 205 L107 213 Z" fill="var(--tarjeta-r)" stroke="currentColor" stroke-width="3"/>
-  <!-- pañuelo en el bolsillo -->
-  <path d="M64 208 L78 210 L74 220 Z" fill="var(--tarjeta)" stroke="currentColor" stroke-width="3"/>`;
+
+  <!-- cuello (piel), va detrás del saco -->
+  <path d="M92 148 L92 184 Q105 190 118 184 L118 148 Z"
+        fill="${P_MAESTRO.pielS}"/>
+
+  <!-- saco: gran forma redondeada de hombros a base -->
+  <path d="M40 240 Q42 194 82 180 L128 180 Q168 194 170 240 Z"
+        fill="${P_MAESTRO.saco}"/>
+
+  <!-- solapas del saco: dos triángulos triangulares con sombra -->
+  <path d="M82 180 L96 218 L105 202 L114 218 L128 180 Z"
+        fill="${P_MAESTRO.sacoS}"/>
+
+  <!-- camisa: rombo blanco entre solapas -->
+  <path d="M96 218 L105 202 L114 218 L105 234 Z"
+        fill="${P_MAESTRO.camisa}"/>
+
+  <!-- corbata celeste: nudo triangular + parte larga -->
+  <path d="M100 205 L110 205 L107 212 Z" fill="${P_MAESTRO.corbataS}"/>
+  <path d="M100 212 L110 212 L114 240 L96 240 Z" fill="${P_MAESTRO.corbata}"/>
+  <!-- brillo sutil en la corbata -->
+  <path d="M104 215 L106 215 L107 238 L105 238 Z"
+        fill="${P_MAESTRO.corbataS}" opacity=".55"/>
+
+`;
 
 const MAESTRO_CARA = `
-  <!-- orejas -->
-  <ellipse cx="55" cy="110" rx="9" ry="12" fill="var(--verde-hondo, #08351E)" stroke="currentColor" stroke-width="5"/>
-  <ellipse cx="155" cy="110" rx="9" ry="12" fill="var(--verde-hondo, #08351E)" stroke="currentColor" stroke-width="5"/>
-  <!-- cara: óvalo alto y mentón marcado -->
-  <path d="M60 96 Q60 46 105 40 Q150 46 150 96 Q150 156 105 160 Q60 156 60 96 Z"
-        fill="var(--verde-hondo, #08351E)" stroke="currentColor" stroke-width="6" stroke-linejoin="round"/>
-  <!-- pelo: mechones canosos a los lados, calvicie arriba. Como el pelo
-       queda del mismo color de la línea, se dibuja con un trazo más
-       grueso apoyado sobre la línea del cráneo, así se lee como cabellera -->
-  <path d="M55 88 Q52 74 62 62 M155 88 Q158 74 148 62"
-        fill="none" stroke="currentColor" stroke-width="10" stroke-linecap="round"/>
-  <!-- entradas en la frente: dos arcos internos -->
-  <path d="M74 62 Q88 56 96 66 M136 62 Q122 56 114 66"
-        fill="none" stroke="currentColor" stroke-width="3.5" stroke-linecap="round" opacity=".55"/>
-  <!-- nariz: aguileña, con caballete -->
-  <path d="M105 100 Q100 118 106 126 Q112 128 116 124"
-        fill="none" stroke="currentColor" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>
-  <!-- pómulos (una línea suave a cada lado) -->
-  <path d="M70 128 Q76 132 82 132 M140 128 Q134 132 128 132"
-        fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" opacity=".55"/>
-  <!-- ANTEOJOS: rectángulos redondeados unidos por el puente. Los aros
-       van encima de las capas de ojos, así siempre se ven al frente. -->
+  <!-- ═══ CABEZA ═══ -->
+  <!-- pelo canoso por atrás: banda que asoma detrás de la cara.
+       Es lo más lejos del centro, va primero. -->
+  <path d="M52 100 Q48 60 76 44 Q105 34 134 44 Q162 60 158 100
+           Q160 130 148 148 L62 148 Q50 130 52 100 Z"
+        fill="${P_MAESTRO.pelo}"/>
+  <!-- ombra de pelo (parte de atrás más oscura) -->
+  <path d="M52 100 Q48 60 76 44 Q90 40 100 44 L100 148 L62 148 Q50 130 52 100 Z"
+        fill="${P_MAESTRO.peloS}" opacity=".6"/>
+
+  <!-- orejas: dos óvalos de piel a los costados -->
+  <ellipse cx="58" cy="106" rx="8" ry="12" fill="${P_MAESTRO.piel}"/>
+  <ellipse cx="152" cy="106" rx="8" ry="12" fill="${P_MAESTRO.piel}"/>
+  <!-- pequeña sombra dentro de la oreja -->
+  <path d="M55 106 Q58 100 61 106 Q58 112 55 106 Z" fill="${P_MAESTRO.pielS}" opacity=".55"/>
+  <path d="M149 106 Q152 100 155 106 Q152 112 149 106 Z" fill="${P_MAESTRO.pielS}" opacity=".55"/>
+
+  <!-- CARA: forma ovalada tipo memoji, un poco más alargada abajo -->
+  <path d="M62 90 Q60 46 105 42 Q150 46 148 90 Q150 138 128 152
+           Q117 158 105 158 Q93 158 82 152 Q60 138 62 90 Z"
+        fill="${P_MAESTRO.piel}"/>
+
+  <!-- calvicie: coronilla despejada, un semicírculo de piel visible
+       arriba entre los mechones de pelo lateral -->
+  <path d="M78 62 Q105 42 132 62 Q125 54 105 52 Q85 54 78 62 Z"
+        fill="${P_MAESTRO.piel}"/>
+
+  <!-- mechones de pelo blanco arriba, a los costados de la calvicie -->
+  <path d="M62 78 Q60 54 76 44 Q80 54 78 76 Z" fill="${P_MAESTRO.pelo}"/>
+  <path d="M148 78 Q150 54 134 44 Q130 54 132 76 Z" fill="${P_MAESTRO.pelo}"/>
+
+  <!-- NARIZ: forma suave, no aguileña. Punto de sombra abajo. -->
+  <path d="M105 102 Q100 118 106 124 Q112 122 112 118 Q110 108 105 102 Z"
+        fill="${P_MAESTRO.pielS}" opacity=".65"/>
+
+  <!-- mejilla suave (un toque de rubor cálido, muy sutil) -->
+  <circle cx="76" cy="128" r="7" fill="#E89A88" opacity=".28"/>
+  <circle cx="134" cy="128" r="7" fill="#E89A88" opacity=".28"/>
+
+  <!-- ANTEOJOS: dos rectángulos redondeados con marco oscuro y vidrios
+       muy claros (blanco con transparencia sobre la piel).
+       Van encima de todas las capas de ojos, así siempre se ven al
+       frente. -->
   <g class="m-anteojos">
-    <rect x="66" y="86" width="34" height="24" rx="4"
-          fill="none" stroke="currentColor" stroke-width="4.5"/>
-    <rect x="110" y="86" width="34" height="24" rx="4"
-          fill="none" stroke="currentColor" stroke-width="4.5"/>
-    <line x1="100" y1="97" x2="110" y2="97" stroke="currentColor" stroke-width="4"/>
-    <!-- patillas: dos líneas cortas hacia las orejas -->
-    <path d="M66 92 L58 96 M144 92 L152 96"
-          fill="none" stroke="currentColor" stroke-width="3.5" stroke-linecap="round"/>
-  </g>`;
+    <!-- vidrios (fondo casi transparente) -->
+    <rect x="66" y="86" width="32" height="24" rx="5" fill="${P_MAESTRO.camisa}" opacity=".35"/>
+    <rect x="112" y="86" width="32" height="24" rx="5" fill="${P_MAESTRO.camisa}" opacity=".35"/>
+    <!-- marco -->
+    <rect x="66" y="86" width="32" height="24" rx="5"
+          fill="none" stroke="${P_MAESTRO.anteojos}" stroke-width="3.5"/>
+    <rect x="112" y="86" width="32" height="24" rx="5"
+          fill="none" stroke="${P_MAESTRO.anteojos}" stroke-width="3.5"/>
+    <!-- puente entre los dos vidrios -->
+    <line x1="98" y1="96" x2="112" y2="96"
+          stroke="${P_MAESTRO.anteojos}" stroke-width="3"/>
+    <!-- patillas hacia las orejas -->
+    <path d="M66 92 L60 94 M144 92 L150 94"
+          fill="none" stroke="${P_MAESTRO.anteojos}" stroke-width="3" stroke-linecap="round"/>
+  </g>
+`;
 
 const MAESTRO_GESTOS = `
-  <!-- OJOS: van adentro del marco de los anteojos. Los rectángulos de
-       los anteojos se dibujan después de esta capa, para que el marco
-       siempre quede visible por encima. -->
+  <!-- OJOS: van adentro del marco de los anteojos. Las capas se prenden
+       por [data-gesto]. Colores planos: iris casi negro sobre blanco. -->
   <g class="m-ojos">
     <g class="m-g m-ojos-abiertos">
-      <circle class="m-parpadeo" cx="83" cy="98" r="6" fill="var(--papel)"/>
-      <circle class="m-parpadeo" cx="127" cy="98" r="6" fill="var(--papel)"/>
-      <circle cx="83"  cy="99" r="2.8" fill="currentColor"/>
-      <circle cx="127" cy="99" r="2.8" fill="currentColor"/>
+      <ellipse class="m-parpadeo" cx="82" cy="98" rx="6" ry="6.5" fill="${P_MAESTRO.camisa}"/>
+      <ellipse class="m-parpadeo" cx="128" cy="98" rx="6" ry="6.5" fill="${P_MAESTRO.camisa}"/>
+      <circle cx="83" cy="99" r="3" fill="${P_MAESTRO.anteojos}"/>
+      <circle cx="129" cy="99" r="3" fill="${P_MAESTRO.anteojos}"/>
+      <!-- brillito -->
+      <circle cx="84" cy="97" r=".9" fill="${P_MAESTRO.camisa}"/>
+      <circle cx="130" cy="97" r=".9" fill="${P_MAESTRO.camisa}"/>
     </g>
     <g class="m-g m-ojos-guino">
-      <path d="M76 100 Q83 94 90 100" fill="none" stroke="currentColor" stroke-width="4" stroke-linecap="round"/>
-      <circle cx="127" cy="98" r="6.5" fill="var(--papel)"/>
-      <circle cx="127" cy="99" r="3"   fill="currentColor"/>
+      <!-- ojo izquierdo cerrado (línea curva) -->
+      <path d="M76 100 Q82 94 90 100" fill="none"
+            stroke="${P_MAESTRO.anteojos}" stroke-width="3.5" stroke-linecap="round"/>
+      <ellipse cx="128" cy="98" rx="6.5" ry="7" fill="${P_MAESTRO.camisa}"/>
+      <circle cx="129" cy="99" r="3.4" fill="${P_MAESTRO.anteojos}"/>
+      <circle cx="130" cy="97" r=".9" fill="${P_MAESTRO.camisa}"/>
     </g>
     <g class="m-g m-ojos-grandes">
-      <circle cx="83"  cy="98" r="8"   fill="var(--papel)"/>
-      <circle cx="127" cy="98" r="8"   fill="var(--papel)"/>
-      <circle cx="83"  cy="98" r="3.4" fill="currentColor"/>
-      <circle cx="127" cy="98" r="3.4" fill="currentColor"/>
+      <ellipse cx="82" cy="98" rx="8" ry="8.5" fill="${P_MAESTRO.camisa}"/>
+      <ellipse cx="128" cy="98" rx="8" ry="8.5" fill="${P_MAESTRO.camisa}"/>
+      <circle cx="82" cy="98" r="4" fill="${P_MAESTRO.anteojos}"/>
+      <circle cx="128" cy="98" r="4" fill="${P_MAESTRO.anteojos}"/>
+      <circle cx="84" cy="96" r="1.1" fill="${P_MAESTRO.camisa}"/>
+      <circle cx="130" cy="96" r="1.1" fill="${P_MAESTRO.camisa}"/>
     </g>
     <g class="m-g m-ojos-entrecerrados">
-      <path d="M76 100 Q83 94 90 100" fill="none" stroke="currentColor" stroke-width="4" stroke-linecap="round"/>
-      <path d="M120 100 Q127 94 134 100" fill="none" stroke="currentColor" stroke-width="4" stroke-linecap="round"/>
+      <path d="M76 100 Q82 94 90 100" fill="none"
+            stroke="${P_MAESTRO.anteojos}" stroke-width="3.5" stroke-linecap="round"/>
+      <path d="M120 100 Q128 94 136 100" fill="none"
+            stroke="${P_MAESTRO.anteojos}" stroke-width="3.5" stroke-linecap="round"/>
     </g>
     <g class="m-g m-ojos-felices">
-      <path d="M75 101 Q83 92 91 101" fill="none" stroke="currentColor" stroke-width="4.5" stroke-linecap="round"/>
-      <path d="M119 101 Q127 92 135 101" fill="none" stroke="currentColor" stroke-width="4.5" stroke-linecap="round"/>
+      <path d="M74 101 Q82 92 92 101" fill="none"
+            stroke="${P_MAESTRO.anteojos}" stroke-width="4" stroke-linecap="round"/>
+      <path d="M118 101 Q128 92 138 101" fill="none"
+            stroke="${P_MAESTRO.anteojos}" stroke-width="4" stroke-linecap="round"/>
     </g>
   </g>
 
-  <!-- CEJAS: van arriba de los anteojos, en la frente. Las canas del
-       Maestro las hacen finas y bien marcadas. -->
+  <!-- CEJAS: van arriba de los anteojos, en la frente. Gris oscuro. -->
   <g class="m-cejas">
     <g class="m-g m-cejas-normal">
-      <path d="M66 80 Q83 74 100 80" fill="none" stroke="currentColor" stroke-width="5.5" stroke-linecap="round"/>
-      <path d="M110 80 Q127 74 144 80" fill="none" stroke="currentColor" stroke-width="5.5" stroke-linecap="round"/>
+      <path d="M68 78 Q82 72 96 78" fill="none" stroke="${P_MAESTRO.cejas}"
+            stroke-width="5" stroke-linecap="round"/>
+      <path d="M114 78 Q128 72 142 78" fill="none" stroke="${P_MAESTRO.cejas}"
+            stroke-width="5" stroke-linecap="round"/>
     </g>
     <g class="m-g m-cejas-una">
-      <path d="M66 82 Q83 76 100 82" fill="none" stroke="currentColor" stroke-width="5.5" stroke-linecap="round"/>
-      <path d="M110 72 Q127 64 144 72" fill="none" stroke="currentColor" stroke-width="5.5" stroke-linecap="round"/>
+      <path d="M68 81 Q82 76 96 80" fill="none" stroke="${P_MAESTRO.cejas}"
+            stroke-width="5" stroke-linecap="round"/>
+      <path d="M114 72 Q128 65 142 72" fill="none" stroke="${P_MAESTRO.cejas}"
+            stroke-width="5" stroke-linecap="round"/>
     </g>
     <g class="m-g m-cejas-alta">
-      <path d="M66 84 Q83 78 100 84" fill="none" stroke="currentColor" stroke-width="5.5" stroke-linecap="round"/>
-      <path d="M108 68 Q127 58 146 70" fill="none" stroke="currentColor" stroke-width="6" stroke-linecap="round"/>
+      <path d="M68 82 Q82 78 96 82" fill="none" stroke="${P_MAESTRO.cejas}"
+            stroke-width="5" stroke-linecap="round"/>
+      <path d="M112 70 Q128 60 144 70" fill="none" stroke="${P_MAESTRO.cejas}"
+            stroke-width="5.5" stroke-linecap="round"/>
     </g>
     <g class="m-g m-cejas-arriba">
-      <path d="M64 68 Q83 58 102 68" fill="none" stroke="currentColor" stroke-width="5.5" stroke-linecap="round"/>
-      <path d="M108 68 Q127 58 146 68" fill="none" stroke="currentColor" stroke-width="5.5" stroke-linecap="round"/>
+      <path d="M66 72 Q82 63 98 72" fill="none" stroke="${P_MAESTRO.cejas}"
+            stroke-width="5" stroke-linecap="round"/>
+      <path d="M112 72 Q128 63 144 72" fill="none" stroke="${P_MAESTRO.cejas}"
+            stroke-width="5" stroke-linecap="round"/>
     </g>
     <g class="m-g m-cejas-caidas">
-      <path d="M66 74 Q83 84 100 88" fill="none" stroke="currentColor" stroke-width="5.5" stroke-linecap="round"/>
-      <path d="M110 88 Q127 84 144 74" fill="none" stroke="currentColor" stroke-width="5.5" stroke-linecap="round"/>
+      <path d="M68 74 Q82 82 96 86" fill="none" stroke="${P_MAESTRO.cejas}"
+            stroke-width="5" stroke-linecap="round"/>
+      <path d="M114 86 Q128 82 142 74" fill="none" stroke="${P_MAESTRO.cejas}"
+            stroke-width="5" stroke-linecap="round"/>
     </g>
     <g class="m-g m-cejas-contento">
-      <path d="M66 78 Q83 70 100 76" fill="none" stroke="currentColor" stroke-width="5.5" stroke-linecap="round"/>
-      <path d="M110 76 Q127 70 144 78" fill="none" stroke="currentColor" stroke-width="5.5" stroke-linecap="round"/>
+      <path d="M68 76 Q82 70 96 74" fill="none" stroke="${P_MAESTRO.cejas}"
+            stroke-width="5" stroke-linecap="round"/>
+      <path d="M114 74 Q128 70 142 76" fill="none" stroke="${P_MAESTRO.cejas}"
+            stroke-width="5" stroke-linecap="round"/>
     </g>
   </g>
 
-  <!-- BOCA: el Maestro no tiene bigote, la boca es la que expresa. Va
-       más chica y más contenida que la del Vasco, en línea con su tono
-       pausado. -->
+  <!-- BOCA: tono rosado oscuro. El Maestro es más contenido, la boca
+       chica y expresiva. -->
   <g class="m-boca">
     <g class="m-g m-boca-suave">
-      <path d="M96 141 Q105 145 114 141" fill="none" stroke="currentColor" stroke-width="4.5" stroke-linecap="round"/>
+      <path d="M96 141 Q105 145 114 141" fill="none"
+            stroke="#8E4A4A" stroke-width="3.5" stroke-linecap="round"/>
     </g>
     <g class="m-g m-boca-torcida">
-      <path d="M94 141 Q105 148 116 137" fill="none" stroke="currentColor" stroke-width="4.5" stroke-linecap="round"/>
+      <path d="M94 141 Q105 148 116 137" fill="none"
+            stroke="#8E4A4A" stroke-width="3.5" stroke-linecap="round"/>
     </g>
     <g class="m-g m-boca-o">
-      <ellipse cx="105" cy="141" rx="7" ry="7" fill="currentColor"/>
+      <ellipse cx="105" cy="141" rx="6" ry="7" fill="#8E4A4A"/>
+      <ellipse cx="105" cy="142" rx="4" ry="4.5" fill="#5A2A2A"/>
     </g>
     <g class="m-g m-boca-ondulada">
-      <path d="M96 142 Q100 137 105 142 Q110 147 114 142" fill="none" stroke="currentColor" stroke-width="4.5" stroke-linecap="round"/>
+      <path d="M96 142 Q100 137 105 142 Q110 147 114 142" fill="none"
+            stroke="#8E4A4A" stroke-width="3.5" stroke-linecap="round"/>
     </g>
     <g class="m-g m-boca-risa">
-      <path d="M92 138 Q105 152 118 138 Z" fill="currentColor" stroke="currentColor" stroke-width="4" stroke-linejoin="round"/>
+      <!-- boca abierta con dientes -->
+      <path d="M92 137 Q105 152 118 137 Z" fill="#8E4A4A"/>
+      <path d="M96 139 Q105 148 114 139 Z" fill="#5A2A2A"/>
+      <rect x="98" y="139" width="14" height="3" rx="1" fill="${P_MAESTRO.camisa}"/>
     </g>
-  </g>`;
+  </g>
+`;
 
 /* Devuelve el dibujo entero listo para meter en el DOM. */
 function maestroHTML(clase, gesto){
