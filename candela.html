@@ -160,7 +160,7 @@ button{ font:inherit; color:inherit; }
 
 /* ── LANDING ────────────────────────────────────────────────────── */
 .hero{ background:var(--marino-hondo); color:var(--papel); position:relative; overflow:hidden; }
-.hero__cuerpo{ padding-block:36px 44px; position:relative; z-index:1; }
+.hero__cuerpo{ padding-block:170px 44px; position:relative; z-index:2; }
 .hero__olas{ position:absolute; inset:0; z-index:0; pointer-events:none; }
 .marca{
   font-family:var(--f-brush);
@@ -358,10 +358,7 @@ button{ font:inherit; color:inherit; }
 
 .puntitos{ display:flex; align-items:center; gap:12px; margin-bottom:14px; }
 .puntitos__caja{ background:rgba(255,255,255,.07); border:1px solid rgba(255,255,255,.14); border-radius:20px 20px 20px 5px; padding:16px 18px; display:flex; gap:6px; }
-.puntitos__caja i{ width:9px; height:9px; border-radius:50%; background:var(--tinta-clara); animation:rebote calc(1.05s * var(--dur)) infinite ease-in-out; }
-.puntitos__caja i:nth-child(2){ animation-delay:.16s; }
-.puntitos__caja i:nth-child(3){ animation-delay:.32s; }
-@keyframes rebote{ 0%,60%,100%{ transform:none; opacity:.45; } 30%{ transform:translateY(-6px); opacity:1; } }
+/* ya no se usan puntitos: los reemplaza la pelota (más abajo) */
 .puntitos__frase{ font-family:var(--f-script); font-size:1.2rem; color:var(--tinta-clara); }
 
 .pregunta__nota{ font-size:.86rem; color:var(--tinta-clara); margin:0 0 18px; }
@@ -764,7 +761,60 @@ button{ font:inherit; color:inherit; }
   </defs>
 </svg>
 
+<!-- ═══════════════════════════════════════════════════════════════════
+     LA TRIBUNA — se planta arriba del hero. Siluetas de gente, banderas
+     y papelitos que caen. Es lo primero que se ve. Que se sienta la
+     hinchada antes del logo.                                           -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
+<defs>
+<symbol id="tribuna" viewBox="0 0 400 140" preserveAspectRatio="none">
+  <!-- siluetas oscuras de gente, agrupadas y superpuestas como una
+       tribuna vista de lejos. Van en negro semi para que se lean sobre
+       cualquier verde. -->
+  <g fill="#000" opacity=".55">
+    <!-- primera fila (atrás): siluetas más chicas y en línea -->
+    <path d="M0 140 L0 90
+             Q10 82 20 92 Q30 82 40 92 Q50 82 60 92 Q70 82 80 92
+             Q90 82 100 92 Q110 82 120 92 Q130 82 140 92 Q150 82 160 92
+             Q170 82 180 92 Q190 82 200 92 Q210 82 220 92 Q230 82 240 92
+             Q250 82 260 92 Q270 82 280 92 Q290 82 300 92 Q310 82 320 92
+             Q330 82 340 92 Q350 82 360 92 Q370 82 380 92 Q390 82 400 92
+             L400 140 Z"/>
+    <!-- segunda fila (adelante): cabezas más grandes y más juntas -->
+    <path d="M0 140 L0 106
+             Q8 96 16 108 Q26 96 34 108 Q44 96 52 108 Q62 96 70 108
+             Q80 96 88 108 Q98 96 106 108 Q116 96 124 108 Q134 96 142 108
+             Q152 96 160 108 Q170 96 178 108 Q188 96 196 108 Q206 96 214 108
+             Q224 96 232 108 Q242 96 250 108 Q260 96 268 108 Q278 96 286 108
+             Q296 96 304 108 Q314 96 322 108 Q332 96 340 108 Q350 96 358 108
+             Q368 96 376 108 Q386 96 394 108 L400 108 L400 140 Z"/>
+  </g>
+  <!-- banderas celestes (colores hex directos: var() en symbol es
+       inconsistente entre navegadores cuando se usa con <use>) -->
+  <g fill="#4FA3D9" stroke="#08351E" stroke-width="1.5">
+    <path d="M40 106 L40 70 L64 82 L40 92 Z"/>
+    <path d="M120 100 L120 64 L144 76 L120 86 Z"/>
+    <path d="M240 104 L240 68 L264 80 L240 90 Z"/>
+    <path d="M334 102 L334 66 L358 78 L334 88 Z"/>
+    <line x1="40"  y1="106" x2="40"  y2="60" stroke="#08351E" stroke-width="2.5"/>
+    <line x1="120" y1="100" x2="120" y2="54" stroke="#08351E" stroke-width="2.5"/>
+    <line x1="240" y1="104" x2="240" y2="58" stroke="#08351E" stroke-width="2.5"/>
+    <line x1="334" y1="102" x2="334" y2="56" stroke="#08351E" stroke-width="2.5"/>
+  </g>
+  <!-- banderas amarillas alternadas -->
+  <g fill="#F5C518" stroke="#08351E" stroke-width="1.5">
+    <path d="M180 102 L180 66 L204 78 L180 88 Z"/>
+    <path d="M290 100 L290 64 L314 76 L290 86 Z"/>
+    <line x1="180" y1="102" x2="180" y2="56" stroke="#08351E" stroke-width="2.5"/>
+    <line x1="290" y1="100" x2="290" y2="54" stroke="#08351E" stroke-width="2.5"/>
+  </g>
+</symbol>
 
+<symbol id="papelito" viewBox="0 0 8 12">
+  <rect x="0" y="0" width="8" height="12" rx="1" fill="currentColor"/>
+</symbol>
+</defs>
+</svg>
 
 <div class="app" id="app">
 
@@ -772,6 +822,19 @@ button{ font:inherit; color:inherit; }
   <section class="vista activa vista--clara" id="v-landing" aria-labelledby="h-landing">
     <div class="hero">
       <div class="hero__olas olas olas--noche" aria-hidden="true"></div>
+      <div class="hero__tribuna" aria-hidden="true">
+        <svg class="tribuna-svg" preserveAspectRatio="none" viewBox="0 0 400 140">
+          <use href="#tribuna"/>
+        </svg>
+        <span class="papel papel-1" style="color:var(--celeste)"></span>
+        <span class="papel papel-2" style="color:var(--tarjeta)"></span>
+        <span class="papel papel-3" style="color:var(--papel)"></span>
+        <span class="papel papel-4" style="color:var(--celeste)"></span>
+        <span class="papel papel-5" style="color:var(--tarjeta)"></span>
+        <span class="papel papel-6" style="color:var(--papel)"></span>
+        <span class="papel papel-7" style="color:var(--celeste)"></span>
+        <span class="papel papel-8" style="color:var(--tarjeta)"></span>
+      </div>
       <div class="envoltura hero__cuerpo" id="principal">
         <svg class="sello" aria-hidden="true"><use href="#sello"/></svg>
         <h1 class="marca" id="h-landing">Candela<em>Express</em></h1>
@@ -1598,32 +1661,68 @@ const PREGUNTAS = [
    grita. Cuando puede, usa sus frases famosas — el camino es la
    recompensa, somos lo que hacemos — y el resto lo dice en su tono.
    Nada de "excelente elección": el Maestro nunca fue de eso. */
+/* La voz del Maestro. Pausado, digno. Habla poco pero cuando habla usa
+   frases suyas. Esperas, cierres y remate del veredicto están armados
+   para que en una corrida escuches sus frases más de una vez.       */
+const FRASES_MAESTRO = [
+  "El camino es la recompensa.",
+  "Somos lo que hacemos.",
+  "Reafirmemos los valores.",
+  "Las jerarquías se ganan.",
+  "El grupo es lo más importante.",
+  "No hay que perder de vista lo importante.",
+  "Uno hace lo que puede con lo que tiene.",
+  "El trabajo es lo único que dignifica al hombre.",
+  "Todo lo que se hace por primera vez es histórico.",
+  "Yo no soy el más inteligente, pero sé escuchar.",
+  "El equipo trasciende al jugador.",
+  "En el fútbol como en la vida.",
+  "Con humildad y con trabajo.",
+  "El respeto se gana con las acciones.",
+  "Es cuestión de valores."
+];
+
 const VOZ = {
   esperas:[
     "Vamos por partes.",
     "Es cuestión de leer el partido.",
-    "Ajá. Interesante.",
-    "Tomo nota.",
+    "Uno hace lo que puede con lo que tiene.",
     "El detalle importa.",
     "Sí. Ya voy viendo.",
-    "Uno lee y decide.",
-    "Este dato lo guardo."
+    "Con humildad. Y con trabajo.",
+    "El grupo es lo más importante.",
+    "Reafirmemos los valores acá.",
+    "Yo no soy el más inteligente, pero sé escuchar.",
+    "Este dato lo guardo.",
+    "Ajá. En el fútbol como en la vida.",
+    "Somos lo que hacemos."
   ],
   cierres:[
     "El camino es la recompensa.",
     "Somos lo que hacemos.",
-    "Confiá. Las jerarquías se ganan comiendo bien.",
-    "Que el hambre no te apure: primero se piensa, después se pide.",
+    "Las jerarquías se ganan.",
+    "Reafirmemos los valores.",
+    "El grupo es lo más importante.",
     "No hay que perder de vista lo importante.",
-    "Reafirmemos los valores. Y comé tranquilo.",
-    "Después charlamos con más tiempo."
+    "Todo lo que se hace por primera vez es histórico.",
+    "En el fútbol como en la vida: primero se piensa, después se pide.",
+    "Uno hace lo que puede con lo que tiene. Y hoy podés bien.",
+    "El respeto se gana con las acciones. Empezá comiendo con respeto."
   ],
   tarde:[
-    "El que duda es porque tiene con qué comparar. Está bien.",
+    "El que duda tiene con qué comparar. Está bien.",
+    "En el fútbol y en la mesa: nunca se decide apurado.",
     "Tomarse un momento no está mal. Al contrario.",
-    "En el fútbol y en la mesa: nunca se decide apurado."
+    "El apuro es enemigo de la buena decisión."
   ]
 };
+
+/* devuelve una frase del Maestro al azar. Se usa para rematar los
+   momentos importantes (chiste, veredicto). */
+function fraseMaestro(rnd){
+  const r = rnd || Math.random;
+  return FRASES_MAESTRO[Math.floor(r() * FRASES_MAESTRO.length)];
+}
 /* ═══════════════════════════════════════════════════════════════════
    MOTOR — 100% local y determinístico. Sin IA, sin API, sin backend.
    Costo cero por usuario, latencia cero, anda con mala señal, y
@@ -2232,6 +2331,7 @@ function lineaDeEje(v){
 function vozPrincipal(r, rnd){
   const ecos = elegirEcos(r.ecos, 3).map(esc);
   const nombre = "<b>" + esc(r.principal.nombre) + "</b>";
+  const suya = esc(fraseMaestro(rnd));   // remate con frase real del Maestro
   const vos = S.nombre ? esc(S.nombre) + ", " : "";
   let apertura;
   if (ecos.length >= 3){
@@ -2251,34 +2351,35 @@ function vozPrincipal(r, rnd){
     apertura = "No me diste casi nada. Con la cara me arreglo.";
   }
   const cierres = [
-    `Así que es ${nombre}, y no lo discuto.`,
+    `Así que es ${nombre}. No hay que perder de vista lo importante.`,
     `Te toca ${nombre}. Estaba cantado.`,
-    `${nombre}. Ni lo pienses.`,
-    `Con eso te va ${nombre}. Fin.`
+    `${nombre}. Y no lo discuto.`,
+    `Con eso te va ${nombre}. Confíen en el proceso.`,
+    `${nombre}. El camino es la recompensa.`
   ];
   const partes = [apertura, cierres[Math.floor(rnd() * cierres.length)], lineaDeEje(r.vector)];
   if (r.remate) partes.push(esc(r.remate));
+  partes.push('<i style="opacity:.85">' + suya + '</i>');
   return partes.join(" ");
 }
 
 function vozBebida(r){
-  if (r.bebida.contiene.includes("alcohol")) return "Para bajarlo.";
-  if (r.vector.frescura >= 6.5) return "Bien fría, que si no no sirve.";
-  return "Va con eso. Confiá.";
+  if (r.bebida.contiene.includes("alcohol")) return "Para bajarlo. En la mesa como en el fútbol: se acompaña bien.";
+  if (r.vector.frescura >= 6.5) return "Bien fría. El detalle importa.";
+  return "Va con eso. Uno confía cuando el otro sabe.";
 }
 function vozPostre(r){
-  // Se burla si el eje dulce quedó bajo, o si dijiste que venías a picar.
   const pocasGanas = r.vector.dulce < 4.6 ||
     r.filtros.blandos.some(b => b.eje === "contundencia" && b.objetivo <= 2);
   if (pocasGanas){
     const burlas = [
-      "Ya sé que dijiste que no. Te lo dejo anotado igual.",
-      "Vos no sos de postre. Y sin embargo lo vas a pedir. Siempre pasa.",
-      "No lo ibas a pedir. Pedilo."
+      "Dijiste que no ibas a pedir postre. Uno respeta la palabra, pero también la debilidad.",
+      "Vos no sos de postre. Y sin embargo lo vas a pedir. En el fútbol como en la vida.",
+      "No lo ibas a pedir. Pedilo. Todo lo que se hace por primera vez es histórico."
     ];
     return burlas[Math.floor(r.total % burlas.length)];
   }
-  return "Esto ya lo tenías decidido antes de sentarte.";
+  return "Esto ya lo tenías decidido antes de sentarte. Reafirmá los valores y disfrutalo.";
 }
 
 /* ═══════════════════════════════════════════════════════════════════
@@ -2895,7 +2996,7 @@ async function pensando(forzada){
   const div = document.createElement("div");
   div.className = "puntitos";
   div.innerHTML = `<div class="dice__maestro">${maestroHTML("maestro--chico", forzada ? "chicana" : "pensando")}</div>
-                   <div class="puntitos__caja"><i></i><i></i><i></i></div>
+                   <div class="puntitos__caja"><div class="pelota"></div></div>
                    <span class="puntitos__frase">${esc(frase)}</span>`;
   panel().appendChild(div);
   await esperar(forzada ? 900 + Math.random() * 300 : 560 + Math.random() * 340);
@@ -3397,6 +3498,27 @@ async function avanzarMesa(p, c){
   else await pintarVeredictoMesa();
 }
 
+
+/* Papelitos que caen cuando aparece el veredicto. Concentrado, no
+   espolvoreado: 22 papelitos en 2 segundos y desaparecen. Con
+   reduced-motion, no se dispara. */
+function tirarConfeti(){
+  if (reducido()) return;
+  const cont = document.createElement("div");
+  cont.className = "confeti";
+  const colores = ["var(--celeste)", "var(--tarjeta)", "var(--papel)", "var(--tarjeta-r)"];
+  for (let k = 0; k < 22; k++){
+    const p = document.createElement("span");
+    p.style.left  = (5 + Math.random() * 90) + "%";
+    p.style.background = colores[k % colores.length];
+    p.style.animationDelay = (Math.random() * .4) + "s";
+    p.style.setProperty("--dx", ((Math.random() - .5) * 200) + "px");
+    cont.appendChild(p);
+  }
+  document.body.appendChild(cont);
+  setTimeout(() => cont.remove(), 2500);
+}
+
 /* ── VEREDICTO ─────────────────────────────────────────────────── */
 async function pintarVeredicto(){
   $("#progreso-lleno").style.width = "100%";
@@ -3414,13 +3536,15 @@ async function pintarVeredicto(){
   const voz = vozPrincipal(r, rnd);
   const cierre = VOZ.cierres[Math.floor(rnd() * VOZ.cierres.length)];
 
-  // El momento: sube la marea, tapa todo, y cuando baja ya está servido.
+  // El momento: sube la marea, tapa todo, cuando baja está el plato,
+  // y le tira una lluvia corta de papelitos como si fuera un gol.
   if (!reducido()){
     const m = document.createElement("div");
     m.className = "marea";
     m.innerHTML = '<div class="marea__olas olas olas--noche"></div><div class="marea__borde"></div>';
     document.body.appendChild(m);
     setTimeout(() => m.remove(), 1100);
+    setTimeout(tirarConfeti, 900);
   }
 
   const precio = n => "$ " + n.toLocaleString("es-UY");
