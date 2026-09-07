@@ -123,6 +123,9 @@ th{ text-align:left; background:var(--marino); color:#fff; padding:6pt 8pt; font
 td{ padding:5pt 8pt; border-bottom:1px solid var(--onda); vertical-align:top; }
 tr:nth-child(even) td{ background:#FAFCFD; }
 td.precio{ text-align:right; white-space:nowrap; font-weight:700; }
+td.tachado{ color:var(--tinta-suave); font-weight:500; text-decoration:line-through; }
+td.oferta{ color:var(--marino); }
+.total td.oferta{ color:#B07A20; }
 .total td{ background:var(--espuma)!important; border-top:2px solid var(--marino); border-bottom:none; font-weight:700; font-size:10.5pt;}
 
 .plan{ border:1.5px solid var(--onda); border-radius:12px; padding:10pt 11pt; }
@@ -296,13 +299,6 @@ td.precio{ text-align:right; white-space:nowrap; font-weight:700; }
   celular, y se ve bien en modo claro y oscuro. No son detalles decorativos: son la
   diferencia entre una carta que sirve a todos los clientes y una que deja gente afuera.</p>
 
-  <div class="caja avoid">
-    <h4>Estado del proyecto: terminado</h4>
-    <p>Esto no es una maqueta ni un concepto. Está desarrollado, probado y funcionando hoy,
-    con la carta de Bo Fomento cargada. <strong>Podemos mostrárselo andando en el celular de
-    ustedes en la misma reunión</strong> — y si quieren, dejárselo instalado ese mismo día
-    para que lo prueben con el equipo antes de decidir.</p>
-  </div>
 </section>
 
 <!-- ══════════ 4. LO QUE PACTAMOS ══════════ -->
@@ -350,8 +346,8 @@ td.precio{ text-align:right; white-space:nowrap; font-weight:700; }
   <h3>3 · Funcionalidades a medida</h3>
   <p>Todo lo que quieran agregar o modificar entra acá y se cotiza aparte, con precio cerrado
   antes de empezar. Algunas cosas que suelen pedirse: vinos y milanesas cargados como
-  categorías propias, menú de temporada que se activa solo, versión en inglés y portugués
-  para los meses de turismo, o un pequeño panel para que ustedes mismos cambien precios.</p>
+  categorías propias, menú de temporada que se activa solo, o versión en inglés y portugués
+  para los meses de turismo.</p>
 </section>
 
 <!-- ══════════ 5. INVERSIÓN ══════════ -->
@@ -360,24 +356,32 @@ td.precio{ text-align:right; white-space:nowrap; font-weight:700; }
   <div class="h2">Inversión</div>
   <div class="rule"></div>
 
-  <p class="lead">Dos partes: un pago único de puesta en marcha, y una mensualidad que cubre
-  hosting, dominio y soporte. Todos los valores en pesos uruguayos, IVA incluido.</p>
+  <p class="lead">Un pago único de puesta en marcha y una mensualidad que cubre hosting,
+  dominio y soporte. Valores en pesos uruguayos, IVA incluido.</p>
 
   <h3>Puesta en marcha — pago único</h3>
   <table>
-    <tr><th>Concepto</th><th style="text-align:right">Precio</th></tr>
-    <tr><td><b>Carta digital</b><br><span class="nota">Carga completa de la carta, búsqueda,
-    filtros, etiquetas, QR de mesa y publicación online.</span></td><td class="precio">$ 26.000</td></tr>
-    <tr><td><b>El genio</b><br><span class="nota">Personaje a medida (nombre, cara, voz),
-    banco de preguntas propio, motor de recomendación con bebida y postre, "Armá la mesa"
-    y tarjeta compartible.</span></td><td class="precio">$ 16.000</td></tr>
+    <tr><th>Concepto</th><th style="text-align:right">Lista</th><th style="text-align:right">Contratando ambos</th></tr>
+    <tr><td><b>Carta digital</b><br><span class="nota">Carta completa, búsqueda, filtros,
+    etiquetas, QR de mesa y publicación online.</span></td>
+    <td class="precio tachado">$ 16.000</td><td class="precio oferta">$ 12.000</td></tr>
+    <tr><td><b>El genio</b><br><span class="nota">Personaje a medida (nombre, cara, voz), banco
+    de preguntas propio, motor de recomendación, "Armá la mesa" y tarjeta compartible.</span></td>
+    <td class="precio tachado">$ 10.000</td><td class="precio oferta">$ 8.000</td></tr>
     <tr><td><b>Ajuste de identidad visual</b><br><span class="nota">Paleta, tipografías,
-    sello y arte del QR, trabajado junto a Aura Marketing.</span></td><td class="precio">Incluido</td></tr>
-    <tr class="total"><td>Total puesta en marcha — carta + genio</td><td class="precio">$ 42.000</td></tr>
+    sello y arte del QR, trabajado junto a Aura Marketing.</span></td>
+    <td class="precio">Incluido</td><td class="precio">Incluido</td></tr>
+    <tr class="total"><td>Total puesta en marcha — carta + genio</td>
+    <td class="precio tachado">$ 26.000</td><td class="precio oferta">$ 20.000</td></tr>
   </table>
-  <p class="nota">Se puede tomar solo la carta por $ 26.000 y sumar el genio más adelante,
-  pero lo recomendamos junto: el genio es lo que hace que el cliente vuelva a abrirla.
-  Forma de pago: 50% al arranque, 50% contra entrega.</p>
+
+  <div class="caja acento avoid" style="margin-top:6pt">
+    <h4>Oferta de lanzamiento — carta + genio + plan de redes</h4>
+    <p style="margin-bottom:0">Tomando los dos servicios juntos —el plan de redes de Aura y la carta
+    con el genio— la puesta en marcha queda en <strong>$ 20.000 en lugar de $ 26.000</strong>:
+    el diseño se hace una sola vez y ese ahorro se lo pasamos a ustedes.</p>
+  </div>
+  <p class="nota">Forma de pago: 50% al arranque, 50% contra entrega.</p>
 
   <h3>Mensualidad — hosting, dominio y soporte</h3>
   <div class="grid2" style="margin-top:8pt">
@@ -385,9 +389,8 @@ td.precio{ text-align:right; white-space:nowrap; font-weight:700; }
       <h4>Esencial</h4>
       <div class="cifra">$ 3.900 <small>/ mes</small></div>
       <ul>
-        <li>Hosting y dominio propio incluidos</li>
-        <li>Certificado de seguridad y respaldos</li>
-        <li>Hasta 2 actualizaciones de carta por mes (precios y platos)</li>
+        <li>Hosting, dominio propio, certificado y respaldos</li>
+        <li>Hasta 2 actualizaciones de carta por mes</li>
         <li>Soporte por WhatsApp, respuesta en 48 h hábiles</li>
       </ul>
     </div>
@@ -398,27 +401,24 @@ td.precio{ text-align:right; white-space:nowrap; font-weight:700; }
       <ul>
         <li>Todo lo del plan Esencial</li>
         <li><b>Actualizaciones de carta sin límite</b></li>
-        <li>Preguntas nuevas del genio cada temporada</li>
-        <li>Reporte mensual: qué recomendó, qué se pidió, qué se compartió</li>
+        <li>Reporte mensual de lo que el genio recomendó</li>
         <li>Soporte prioritario, respuesta en 24 h hábiles</li>
       </ul>
     </div>
   </div>
-  <p class="nota">Sin permanencia mínima: se puede dar de baja avisando con 30 días.
-  El dominio queda a nombre de Bo Fomento. Si en algún momento deciden no seguir,
-  la carta es de ustedes y se las entregamos.</p>
+  <p class="nota">Sin permanencia mínima: baja avisando con 30 días. El dominio queda a nombre
+  de Bo Fomento y la carta es de ustedes.</p>
 
-  <h3>Trabajos adicionales</h3>
-  <p>Funcionalidades nuevas o cambios grandes fuera del plan: <strong>$ 1.100 la hora</strong>,
-  siempre con presupuesto cerrado y aprobado por ustedes antes de empezar. Nunca hay una
-  factura sorpresa.</p>
-
-  <div class="caja avoid">
+  <div class="caja avoid" style="margin-top:7pt">
     <h4>Cuánto tiene que vender esto para pagarse</h4>
-    <p>Con el plan Temporada, la mensualidad se cubre con <strong>menos de un postre extra
-    por día</strong>. Todo lo que el genio recomiende por encima de eso es margen nuevo,
-    sobre clientes que ya estaban sentados en la mesa.</p>
+    <p>Con el plan Temporada, la mensualidad se cubre con <strong>menos de un postre extra por
+    día</strong>. Lo que el genio recomiende por encima de eso es margen nuevo.</p>
   </div>
+
+  <p class="nota" style="margin-top:8pt"><b>Trabajos adicionales.</b> Funcionalidades nuevas o
+  cambios grandes fuera del plan: <b>$ 1.100 la hora</b>, siempre con presupuesto cerrado y
+  aprobado antes de empezar. Nunca hay factura sorpresa.</p>
+
 </section>
 
 <!-- ══════════ 6. CÓMO SEGUIMOS ══════════ -->
@@ -436,20 +436,17 @@ td.precio{ text-align:right; white-space:nowrap; font-weight:700; }
     Lo prueban ustedes, no se los contamos. Ahí mismo bajamos las decisiones de identidad
     visual y de personalidad del genio.</p></div></div>
 
-    <div class="paso"><div class="b">2</div><div><b>Prueba interna — 1 semana</b>
-    <p>Les dejamos el link para que lo usen con el equipo y con clientes de confianza.
-    Sin compromiso y sin costo. Que lo rompan y nos digan qué falta.</p></div></div>
 
-    <div class="paso"><div class="b">3</div><div><b>Ajustes y personaje — 2 a 3 semanas</b>
+    <div class="paso"><div class="b">2</div><div><b>Ajustes y personaje — 2 a 3 semanas</b>
     <p>Aplicamos la identidad, dibujamos al genio, escribimos su voz y sus preguntas,
     y cargamos la carta definitiva. Con una revisión intermedia con ustedes.</p></div></div>
 
-    <div class="paso"><div class="b">4</div><div><b>Salida al aire — 1 día</b>
+    <div class="paso"><div class="b">3</div><div><b>Salida al aire — 1 día</b>
     <p>Dominio propio, QR impresos para las mesas, y la carta online. Junto con Aura
     coordinamos el anuncio en redes para que el lanzamiento tenga su propio empujón.</p></div></div>
 
-    <div class="paso"><div class="b">5</div><div><b>Temporada</b>
-    <p>Soporte, cambios de carta y preguntas nuevas cada temporada. Nosotros nos ocupamos;
+    <div class="paso"><div class="b">4</div><div><b>Temporada</b>
+    <p>Soporte y cambios de carta durante toda la temporada. Nosotros nos ocupamos;
     ustedes cocinan.</p></div></div>
   </div>
 
@@ -461,9 +458,8 @@ td.precio{ text-align:right; white-space:nowrap; font-weight:700; }
     cómodo?</strong> Vamos al local con la demo cargada.</p>
     <div class="firma">
       <div><b>Aura Marketing</b>Estrategia, marca y redes<br>
-      <span style="color:var(--arena)">[ mail · teléfono · @instagram ]</span></div>
-      <div><b>Santino Del Monte</b>Desarrollo y producto digital<br>
-      <span style="color:var(--arena)">santinodelmonte2015@gmail.com</span></div>
+      <a href="https://wa.me/59892681102" style="color:var(--arena);text-decoration:none">+598 92 681 102</a> · <a href="mailto:auramkt.uy@gmail.com" style="color:var(--arena);text-decoration:none">auramkt.uy@gmail.com</a></div>
+      <div><b>Santino Delmonte</b>Analista programador</div>
     </div>
   </div>
 
