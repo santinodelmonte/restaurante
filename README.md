@@ -7,9 +7,11 @@ el sitio se ve igual de bien con las tipografías de sistema.
 
 ## Qué hay adentro
 
-**La carta.** Categorías reales del local, búsqueda por texto y filtros
-rápidos (vegetariano, sin TACC, para compartir). Cada plato con nombre,
-descripción, precio en pesos uruguayos y sus etiquetas a la vista.
+**La carta.** Carta de muestra: los platos y los precios son de ejemplo,
+para que la demo no proponga cambios en la carta de nadie. Búsqueda por
+texto y filtros rápidos (vegetariano, sin TACC, para compartir). Cada
+plato con nombre, descripción, precio en pesos uruguayos y sus etiquetas
+a la vista. La carta real se carga reemplazando el array `MENU`.
 
 **El Chef.** Una experiencia de chat que termina recomendando un plato
 principal, dos alternativas, una bebida y un postre. Ese combo es el que
@@ -138,9 +140,9 @@ falta y en ningún otro lado.
 
 ## Pendiente
 
-Estas secciones de la carta todavía no están cargadas porque no vinieron en
-las imágenes: **vinos** y **milanesas / burgers**. Se agregan al array
-`MENU` con la misma forma que el resto; no hay que tocar nada más.
+La carta de muestra no tiene **vinos** ni **milanesas / burgers**. Se
+agregan al array `MENU` con la misma forma que el resto; no hay que tocar
+nada más.
 
 ## candela.html — segundo restaurante (Candela Express)
 
