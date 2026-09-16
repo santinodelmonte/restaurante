@@ -58,11 +58,24 @@ saquen captura: sello, nombre, plato y una frase corta del Vasco. El botón
 de compartir usa el menú del propio celular y, si no hay, copia al
 portapapeles.
 
-**Modo sol y carta hablada.** Un botón sube el contraste a tope y agranda
-el texto para leer con el sol de frente —el problema número uno de una
-carta digital en un parador— y otro hace que el navegador lea la carta en
-voz alta, para el que se olvidó los lentes de cerca. Los dos son locales:
-sin backend y sin costo.
+**Las tres herramientas de la barra.** En la barra de la carta hay tres
+botoncitos redondos, y cada uno resuelve un problema distinto de leer una
+carta en un celular:
+
+- **☾ Modo oscuro.** La carta de noche. Arranca siguiendo el tema del
+  sistema y, si se toca el botón, manda la persona y queda guardado. Se
+  aplica a la portada y a la carta; el Chef ya era de noche. El fondo del
+  `<html>` y el `theme-color` acompañan, así que no queda un marco blanco
+  alrededor ni la barra de estado del celular en otro color.
+- **☀ Modo sol.** Contraste a tope y un punto más de letra, para leer con
+  el sol de frente: el problema número uno de una carta digital en un
+  parador. Es lo contrario del oscuro, así que prender uno apaga el otro.
+- **♪ Carta hablada.** El navegador lee en voz alta lo que hay en
+  pantalla —respeta la categoría y los filtros activos— para el que se
+  olvidó los lentes de cerca. Si el navegador no tiene voz, el botón
+  directamente no aparece.
+
+Los tres son locales: sin backend y sin costo.
 
 ## El motor
 

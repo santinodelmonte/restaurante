@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Candela Express — Carta</title>
 <meta name="description" content="La carta de Candela Express. Y si no sabés qué pedir, el Maestro Tabárez te arma la formación.">
-<meta name="theme-color" content="#1B3A57">
+<meta name="theme-color" content="#0B6B3A">
 <meta property="og:title" content="Candela Express — Carta">
 <meta property="og:description" content="Acá se juega bien. La carta, y el Maestro Tabárez armándote la formación.">
 <meta property="og:type" content="restaurant.menu">
@@ -58,6 +58,12 @@
   --arena:        var(--tarjeta);
   --f-brush:      var(--f-camiseta);
   --f-script:     var(--f-charla);
+
+  /* superficies de las vistas claras. Salen del :root para que el modo
+     oscuro las pueda dar vuelta en un solo lugar. */
+  --barra:  rgba(246,250,247,.94);
+  --roce:   #E7F1EA;
+  --roce-suave: rgba(11,107,58,.08);
 
   --r-sm: 6px; --r-md: 14px; --r-lg: 22px;
   --ancho: 720px;
@@ -130,6 +136,10 @@ button{ font:inherit; color:inherit; }
 .app{ min-height:100dvh; display:flex; flex-direction:column; }
 .vista{ display:none; }
 .vista.activa{ display:block; }
+/* .noche pide display:flex, pero .vista.activa tiene más especificidad y
+   le ganaba: la columna del Chef quedaba en block y los flex:1 de adentro
+   no estiraban nada. */
+.vista.activa.noche{ display:flex; }
 .envoltura{ width:100%; max-width:var(--ancho); margin-inline:auto; padding-inline:var(--gutter); }
 
 /* ── SELLO ──────────────────────────────────────────────────────── */
@@ -187,7 +197,7 @@ button{ font:inherit; color:inherit; }
 /* ── BARRA SUPERIOR ─────────────────────────────────────────────── */
 .barra-top{
   position:sticky; top:0; z-index:30;
-  background:rgba(246,249,251,.94);
+  background:var(--barra);
   -webkit-backdrop-filter:blur(10px); backdrop-filter:blur(10px);
   border-bottom:1px solid var(--onda);
 }
@@ -197,10 +207,12 @@ button{ font:inherit; color:inherit; }
   display:inline-flex; align-items:center; gap:6px; font-weight:700; font-size:.92rem;
   padding:8px 10px 8px 4px; border-radius:var(--r-sm); color:var(--tinta);
 }
-.volver:hover{ background:rgba(27,58,87,.07); }
+.volver:hover{ background:var(--roce-suave); }
+.volver{ white-space:nowrap; }
 .barra-top__titulo{
   font-family:var(--f-brush); font-size:1.05rem; margin:0 auto 0 0;
   text-transform:uppercase; letter-spacing:.01em;
+  min-width:0; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;
 }
 
 /* ── BUSCADOR Y FILTROS ─────────────────────────────────────────── */
@@ -236,16 +248,24 @@ button{ font:inherit; color:inherit; }
   font-size:.88rem; font-weight:600; white-space:nowrap;
   transition:background-color .15s ease, border-color .15s ease, color .15s ease;
 }
-.chip:hover{ background:#EAF1F6; }
+.chip:hover{ background:var(--roce); }
 .chip[aria-pressed="true"], .chip.activo{ background:var(--marino); border-color:var(--marino); color:var(--papel); }
 .chip--filtro[aria-pressed="true"]{ background:var(--arena); border-color:#B9863A; color:var(--marino); }
-/* a 320px no entran volver + título + dos herramientas + el botón del
-   Chef. El título es lo único que sobra: ya se ve dónde estás. */
-@media (max-width:400px){
+/* no entran volver + título + tres herramientas + el botón del Chef. El
+   título es lo único que sobra: ya se ve dónde estás. El corte está en
+   480 y no en 400 porque con la herramienta de modo oscuro la fila pasó
+   a medir ~465px. */
+@media (max-width:480px){
   .barra-top__titulo{ display:none; }
   .barra-top__fila > .volver{ margin-inline-end:auto; }
-  .icono{ width:36px; height:36px; }
   .barra-top__fila{ gap:6px; }
+}
+/* a 360px tampoco entra la palabra al lado de la flecha: con tres
+   herramientas la fila se partía en dos renglones. La flecha sola se
+   entiende igual y el aria-label sigue diciendo "Volver al inicio". */
+@media (max-width:380px){
+  #v-carta .volver__txt{ display:none; }
+  #v-carta .volver{ padding-inline:6px; }
 }
 
 .conteo{ font-size:.82rem; color:var(--tinta-suave); padding-bottom:10px; font-weight:500; }
@@ -398,9 +418,57 @@ button{ font:inherit; color:inherit; }
   display:grid; place-items:center;
   transition:background-color .15s ease, border-color .15s ease, color .15s ease;
 }
-.icono:hover{ background:#EAF1F6; }
+.icono:hover{ background:var(--roce); }
 .icono[aria-pressed="true"]{ background:var(--arena); border-color:#B9863A; color:var(--marino); }
 .icono[hidden]{ display:none; }
+/* iba arriba, junto al resto de la barra angosta, pero .icono se declara
+   acá abajo y con la misma especificidad ganaba el de 40px: en 320 la
+   fila se pasaba de ancho. */
+@media (max-width:480px){ .icono{ width:36px; height:36px; font-size:1rem; } }
+
+/* ── MODO OSCURO ──────────────────────────────────────────────────────
+   El Chef ya era el pizarrón de la charla técnica; la carta no. Se da
+   vuelta scopeado a `.vista--clara` y no en :root, porque `--papel` no es
+   sólo "el fondo de las tarjetas": adentro del Chef es el color del
+   TEXTO. El hero y el pie —los dos bloques que ya eran oscuros dentro de
+   una vista clara— se vuelven a declarar en claro.                    */
+:root[data-tema="oscuro"] body{ background:#071A10; }
+:root[data-tema="oscuro"] .vista--clara{
+  --espuma:      #071A10;
+  --papel:       #0F2A1B;
+  --onda:        #234C34;
+  --linea:       #234C34;
+  --tinta:       #E4F2E9;
+  --tinta-suave: #9BBCA8;
+  --marino:      #D8EDE0;
+  --verde:       #D8EDE0;
+  --barra:       rgba(7,26,16,.94);
+  --roce:        #163A25;
+  --roce-suave:  rgba(255,255,255,.08);
+  background:var(--espuma); color:var(--tinta);
+}
+:root[data-tema="oscuro"] .hero,
+:root[data-tema="oscuro"] .pie{
+  --papel:#FFFFFF; --tinta:#FFFFFF; --marino:#0B6B3A; --verde:#0B6B3A; --tinta-suave:#4A6357;
+}
+:root[data-tema="oscuro"] .vista--clara .tag{ background:#1B3A27; color:#B9D6C4; }
+:root[data-tema="oscuro"] .vista--clara .tag--veg{ background:#1E3524; color:#A8D3AC; }
+:root[data-tema="oscuro"] .vista--clara .tag--stacc{ background:#272554; color:#BEBAE8; }
+:root[data-tema="oscuro"] .vista--clara .tag--comp{ background:#3B2E17; color:#E6C486; }
+:root[data-tema="oscuro"] .vista--clara .buscador input::placeholder{ color:#87A895; opacity:1; }
+:root[data-tema="oscuro"] .vista--clara .btn--linea{ color:var(--tinta); box-shadow:inset 0 0 0 2px rgba(216,237,224,.45); }
+:root[data-tema="oscuro"] .vista--clara .btn--linea:hover{ background:rgba(216,237,224,.1); }
+:root[data-tema="oscuro"] .vista--clara .olas{ opacity:.5; }
+:root[data-tema="oscuro"] .hero .olas,
+:root[data-tema="oscuro"] .pie .olas{ opacity:1; }
+
+/* el modo sol es lo contrario del oscuro, así que gana él: cuando se
+   prende, el toggle deja el tema en claro y esto es sólo el cinturón. */
+:root[data-sol="1"] .vista--clara{
+  --espuma:#FFFFFF; --papel:#FFFFFF; --onda:#7E9C8A; --linea:#7E9C8A;
+  --tinta:var(--marino); --tinta-suave:#1E3325; --marino:#04140B; --verde:#04140B;
+  --barra:#FFFFFF; --roce:#E7F1EA; --roce-suave:rgba(11,107,58,.08);
+}
 
 /* ── MODO SOL ─────────────────────────────────────────────────────────
    El problema número uno de una carta digital en un parador: el sol de
@@ -408,14 +476,14 @@ button{ font:inherit; color:inherit; }
    todo un punto más grande.                                          */
 :root[data-sol="1"]{
   --espuma:#FFFFFF; --papel:#FFFFFF;
-  --onda:#7C93A5; --tinta-suave:#20313D; --marino:#000B14;
+  --onda:#7E9C8A; --tinta-suave:#1E3325; --marino:#04140B;
 }
 :root[data-sol="1"] body{ font-size:17.5px; }
 :root[data-sol="1"] .olas{ background-image:none; }
 :root[data-sol="1"] .plato{ border-width:2px; border-color:var(--marino); }
-:root[data-sol="1"] .plato__desc{ color:#20313D; }
+:root[data-sol="1"] .plato__desc{ color:#1E3325; }
 :root[data-sol="1"] .chip{ border-width:2px; border-color:var(--marino); }
-:root[data-sol="1"] .tag{ background:#DDE6EC; color:#0C1F2C; }
+:root[data-sol="1"] .tag{ background:#DCE8E0; color:#07180E; }
 :root[data-sol="1"] .buscador input{ border-color:var(--marino); }
 :root[data-sol="1"] .barra-top{ background:#FFFFFF; border-bottom-width:2px; border-bottom-color:var(--marino); }
 
@@ -530,9 +598,16 @@ button{ font:inherit; color:inherit; }
    Sin eso queda un sticker pegado en la pantalla.                    */
 /* el <svg> de afuera no lleva viewBox propio, así que sin relación de
    aspecto explícita height:auto colapsa a cero y no se ve nada */
+/* el alto va calculado y no en `height:auto`: así el dibujo ocupa lo que
+   mide en cualquier navegador, incluidos los que no entienden
+   `aspect-ratio` —ahí `height:auto` cae al alto por defecto del <svg> y
+   el Maestro quedaba chico o directamente reservaba un hueco vacío. */
 .maestro{ color:var(--papel); display:block; flex:none; aspect-ratio:210/240; }
-.maestro--grande{ width:min(150px, 36vw); height:auto; }
-.maestro--chico{ width:52px; height:auto; }
+.maestro--grande{ --m-ancho:min(150px, 32vw); }
+.maestro--chico{ --m-ancho:52px; }
+.maestro--grande, .maestro--chico{
+  width:var(--m-ancho); height:calc(var(--m-ancho) * 240 / 210);
+}
 
 /* por defecto no se ve ninguna capa; cada gesto prende las suyas */
 .m-g{ display:none; }
@@ -726,6 +801,28 @@ button{ font:inherit; color:inherit; }
   .riel{ flex-wrap:wrap; overflow-x:visible; margin-inline:0; padding-inline:0; }
 }
 </style>
+<script>
+/* Tiene que correr antes del primer pixel: si el tema se aplicara recién
+   al final del script grande, el que eligió oscuro vería un flash blanco
+   en la cara, que es justo lo que el modo oscuro viene a evitar. */
+(function(){
+  var t;
+  try { t = localStorage.getItem("candela.tema"); } catch (e) {}
+  if (t !== "claro" && t !== "oscuro"){
+    t = window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches
+      ? "oscuro" : "claro";
+  }
+  var sol = "0";
+  try { sol = localStorage.getItem("candela.sol") === "1" ? "1" : "0"; } catch (e) {}
+  if (sol === "1") t = "claro";           // el sol manda sobre el tema
+  var r = document.documentElement;
+  r.setAttribute("data-tema", t);
+  r.setAttribute("data-sol", sol);
+  r.style.background = t === "oscuro" ? "#071A10" : "#F6FAF7";
+  var m = document.querySelector('meta[name="theme-color"]');
+  if (m) m.setAttribute("content", t === "oscuro" ? "#071A10" : "#0B6B3A");
+})();
+</script>
 </head>
 <body>
 <a class="saltar" href="#principal">Ir al contenido</a>
@@ -875,8 +972,11 @@ button{ font:inherit; color:inherit; }
     <div class="barra-top">
       <div class="envoltura">
         <div class="barra-top__fila">
-          <button class="volver" data-ir="landing" aria-label="Volver al inicio">&larr; Inicio</button>
+          <button class="volver" data-ir="landing" aria-label="Volver al inicio">&larr;&nbsp;<span class="volver__txt">Inicio</span></button>
           <h2 class="barra-top__titulo" id="h-carta">La carta</h2>
+          <button class="icono" id="b-tema" aria-pressed="false"
+                  aria-label="Modo oscuro"
+                  title="Modo oscuro">&#9789;</button>
           <button class="icono" id="b-sol" aria-pressed="false"
                   aria-label="Modo sol: subir el contraste para leer con el sol de frente"
                   title="Modo sol">&#9728;</button>
@@ -2403,7 +2503,7 @@ function vocativo(){ return S.nombre ? S.nombre + ", " : ""; }
 function ir(vista){
   S.vista = vista;
   $$(".vista").forEach(v => v.classList.toggle("activa", v.id === "v-" + vista));
-  document.documentElement.style.background = vista === "chef" ? "#08351E" : "#F6F9FB";
+  pintarFondo();
   window.scrollTo(0, 0);
   if (vista === "carta") pintarCarta();
   if (vista === "chef" && !S.modo) pantallaModo();
@@ -3515,7 +3615,7 @@ function pintarPreguntaMesa(){
     <p class="mesa__paso">${esc(c.nombre || "Comensal " + (M.i + 1))} · ${c.j + 1} de ${c.preguntas.length}</p>
     <div class="dice">
       <div class="dice__maestro">${maestroHTML("maestro--chico", "saludo")}</div>
-      <div class="burbuja">${esc(quien + (c.j === 0 ? p.texto.charAt(0).toLowerCase() + p.texto.slice(1) : p.texto))}</div>
+      <div class="burbuja">${esc(quien ? quien + p.texto.charAt(0).toLowerCase() + p.texto.slice(1) : p.texto)}</div>
     </div>
     ${p.nota ? `<p class="pregunta__nota">${esc(p.nota)}</p>` : ""}
     <div class="opciones opciones--largas" role="group" aria-label="${esc(p.texto)}">
@@ -3899,12 +3999,53 @@ async function compartirTarjeta(r){
 /* ── MODO SOL ─────────────────────────────────────────────────────────
    El problema número uno de una carta digital en un parador: el sol de
    frente en la pantalla. Sube el contraste a tope y agranda el texto.  */
+
+/* ── MODO OSCURO ──────────────────────────────────────────────────────
+   Arranca siguiendo al sistema; si la persona toca el botón, manda ella y
+   queda guardado. El color de fondo del <html> se pinta desde acá y no
+   con un literal, porque abajo de la vista hay barra de estado y rebote
+   de scroll: si ese color no acompaña al tema, la pantalla queda con un
+   marco blanco alrededor de una carta negra.                          */
+const FONDO = { claro:"#F6FAF7", oscuro:"#071A10", chef:"#08351E" };
+const raiz = () => document.documentElement;
+const temaActual = () => raiz().getAttribute("data-tema") === "oscuro" ? "oscuro" : "claro";
+
+function pintarFondo(){
+  raiz().style.background = S.vista === "chef" ? FONDO.chef : FONDO[temaActual()];
+  const m = document.querySelector('meta[name="theme-color"]');
+  if (m) m.setAttribute("content", S.vista === "chef" ? FONDO.chef
+                                 : (temaActual() === "oscuro" ? FONDO.oscuro : "#0B6B3A"));
+}
+
+function aplicarTema(t, guardar){
+  raiz().setAttribute("data-tema", t);
+  const b = $("#b-tema");
+  if (b){
+    const on = t === "oscuro";
+    b.setAttribute("aria-pressed", String(on));
+    b.title = on ? "Volver al modo claro" : "Modo oscuro";
+    b.setAttribute("aria-label", on ? "Modo oscuro activado. Volver al modo claro"
+                                    : "Modo oscuro");
+  }
+  if (guardar){ try { localStorage.setItem("candela.tema", t); } catch (e) {} }
+  pintarFondo();
+}
+
+function modoOscuro(){
+  const t = temaActual() === "oscuro" ? "claro" : "oscuro";
+  // sol y oscuro son opuestos: prender uno apaga el otro
+  if (t === "oscuro" && raiz().getAttribute("data-sol") === "1") modoSol();
+  aplicarTema(t, true);
+  decir(t === "oscuro" ? "Modo oscuro encendido." : "Modo claro.");
+}
+
 function modoSol(){
-  const on = document.documentElement.getAttribute("data-sol") === "1";
-  document.documentElement.setAttribute("data-sol", on ? "0" : "1");
+  const on = raiz().getAttribute("data-sol") === "1";
+  raiz().setAttribute("data-sol", on ? "0" : "1");
   const b = $("#b-sol");
   b.setAttribute("aria-pressed", String(!on));
   try { localStorage.setItem("candela.sol", on ? "0" : "1"); } catch (e) {}
+  if (!on && temaActual() === "oscuro") aplicarTema("claro", true);
   decir(on ? "Modo sol apagado." : "Modo sol encendido: más contraste y letra más grande.");
 }
 
@@ -3982,15 +4123,29 @@ function conectar(){
     S.q = ""; $("#q").value = ""; $("#q").focus(); pintarCarta();
   });
 
+  $("#b-tema").addEventListener("click", modoOscuro);
   $("#b-sol").addEventListener("click", modoSol);
   $("#b-voz").addEventListener("click", leerCarta);
   if (!("speechSynthesis" in window)) $("#b-voz").hidden = true;
-  try {
-    if (localStorage.getItem("candela.sol") === "1"){
-      document.documentElement.setAttribute("data-sol", "1");
-      $("#b-sol").setAttribute("aria-pressed", "true");
-    }
-  } catch (e) {}
+
+  // el script de arriba ya dejó los atributos puestos antes de pintar;
+  // acá sólo se sincronizan los botones con lo que ya está en pantalla
+  aplicarTema(temaActual(), false);
+  $("#b-sol").setAttribute("aria-pressed",
+    String(raiz().getAttribute("data-sol") === "1"));
+
+  // si nunca eligió, sigue al sistema aunque lo cambie con la app abierta
+  let guardado = null;
+  try { guardado = localStorage.getItem("candela.tema"); } catch (e) {}
+  if (guardado !== "claro" && guardado !== "oscuro" && window.matchMedia){
+    const mq = window.matchMedia("(prefers-color-scheme: dark)");
+    const seguir = e => {
+      if (raiz().getAttribute("data-sol") === "1") return;
+      aplicarTema(e.matches ? "oscuro" : "claro", false);
+    };
+    if (mq.addEventListener) mq.addEventListener("change", seguir);
+    else if (mq.addListener) mq.addListener(seguir);
+  }
 
   document.addEventListener("keydown", e => {
     if (e.key === "Escape" && S.vista !== "landing"){
