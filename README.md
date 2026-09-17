@@ -170,3 +170,34 @@ El motor es el mismo, ajustado en un solo lugar: la segunda alternativa
 puede no existir cuando el pool filtrado no ofrece dos categorías
 distintas. Es más honesto que forzar una repetida.
 
+
+## docs — lo que se le manda al cliente
+
+`docs/siguientes-pasos-bo-fomento.pdf` es el documento que se entrega **después
+de la demo**: qué necesitamos de ellos para pasar de la demo al sitio andando
+—carta completa, descripciones, clasificación de los platos, logo, dominio,
+datos del local—, el cronograma relativo a la entrega del material, las
+funcionalidades que se pueden sumar a pedido y lo acordado. Tiene un recuadro
+en la portada para completar con lo que se defina en la reunión: nombre del
+genio, cómo habla, dominio y contacto para cambios.
+
+Se escribe en `docs/siguientes-pasos-bo-fomento.html` —un solo archivo, con las
+fuentes incrustadas, así se imprime igual sin internet— y se convierte con:
+
+```
+npm install puppeteer-core
+node docs/imprimir.js
+```
+
+`docs/planilla-clasificacion-bo-fomento.xlsx` es la planilla que se adjunta:
+los 137 platos ya cargados, con nuestra lectura preliminar de la carta impresa,
+para que el local corrija vegetariano, vegano, sin gluten, para compartir,
+alérgenos y precios. Se regenera desde el `MENU` de `index.html` con:
+
+```
+pip install openpyxl
+python3 docs/planilla.py
+```
+
+Lo que el local devuelva en la planilla vuelve al array `MENU`. Los cinco ejes
+de cada plato los cargamos nosotros y no van en la planilla.
