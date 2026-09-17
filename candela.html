@@ -3,20 +3,22 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>BO | Fomento — Carta</title>
-<meta name="description" content="La carta de BO | Fomento, Playa Fomento, Colonia. Parrilla a toda brasa, horno de barro, entradas, tragos y postres. Y si no sabés qué pedir, el Chef te lee.">
+<title>Candela Express — Carta</title>
+<meta name="description" content="La carta de Candela Express. Y si no sabés qué pedir, el Maestro Tabárez te arma la formación.">
 <meta name="theme-color" content="#1B3A57">
-<meta property="og:title" content="BO | Fomento — Carta">
-<meta property="og:description" content="Estamos en la playa. La carta del parador, y un chef que te lee con solo verte.">
+<meta property="og:title" content="Candela Express — Carta">
+<meta property="og:description" content="Acá se juega bien. La carta, y el Maestro Tabárez armándote la formación.">
 <meta property="og:type" content="restaurant.menu">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700&family=Permanent+Marker&family=Yellowtail&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@400;500;600;700;800&family=Caveat:wght@600;700&display=swap" rel="stylesheet">
 <style>
 /* ═══════════════════════════════════════════════════════════════════
-   BO | FOMENTO — carta digital + Chef
-   Identidad tomada de la carta impresa: azul marino sobre blanco,
-   trama de olas, sello circular y zigzags entre secciones.
+   CANDELA EXPRESS — carta digital + El Maestro
+   Restaurante temático de fútbol. Verde césped, líneas de cancha, un
+   escudo circular por sello, y tipografía de camiseta. El Chef es
+   el Maestro Tabárez, dibujado como caricatura: busto, anteojos,
+   pelo gris, saco y corbata.
    ═══════════════════════════════════════════════════════════════════ */
 
 :root{
@@ -24,21 +26,38 @@
      blanco, con la trama de olas en gris azulado. La arena es el único
      color que agrego, y sólo donde hace falta una jerarquía que el
      monocromo no puede dar. */
-  --marino:       #1B3A57;   /* el azul de toda la carta impresa */
-  --marino-hondo: #10263B;   /* el mismo azul de noche: mundo del Chef */
-  --marino-medio: #24486B;   /* el azul un tono más cerca de la luz */
-  --papel:        #FFFFFF;
-  --espuma:       #F6F9FB;   /* el blanco roto donde vive la trama */
-  --onda:         #CBD9E3;   /* la línea de ola */
-  --arena:        #E0A94A;   /* sol bajo. Acento, nunca protagonista */
+  /* La paleta es la de una cancha vista de arriba: verde césped, líneas
+     blancas, negro pizarra para el pizarrón del entrenador. La tarjeta
+     amarilla es el único color de acento, y aparece donde algo lo pide
+     con urgencia: un botón, un puntaje, el peligro. Si sumo la roja
+     también, esto se vuelve un semáforo. */
+  --verde:       #0B6B3A;   /* césped al mediodía */
+  --verde-hondo: #08351E;   /* el pizarrón de la charla técnica */
+  --verde-medio: #0F864A;   /* césped un tono más vivo */
+  --papel:       #FFFFFF;
+  --espuma:      #F6FAF7;   /* blanco roto, un toque verdoso */
+  --linea:       #CBD9CE;   /* la línea de cancha desgastada */
+  --tarjeta:     #F5C518;   /* tarjeta amarilla. Sólo cuando hace falta */
+  --tarjeta-r:   #C8102E;   /* tarjeta roja. Reservada para errores */
 
-  --tinta:        var(--marino);
-  --tinta-suave:  #4A6379;
-  --tinta-clara:  #A9C0D0;
+  --tinta:        var(--verde-hondo);
+  --tinta-suave:  #4A6357;
+  --tinta-clara:  #B7CDBE;
 
-  --f-brush:  "Permanent Marker", "Archivo", system-ui, sans-serif;
-  --f-script: "Yellowtail", "Segoe Script", cursive;
-  --f-texto:  "Archivo", system-ui, "Helvetica Neue", Arial, sans-serif;
+  --f-camiseta: "Bebas Neue", "Impact", "Arial Narrow", sans-serif;
+  --f-charla:   "Caveat", "Segoe Script", cursive;
+  --f-texto:    "Inter", system-ui, "Helvetica Neue", Arial, sans-serif;
+
+  /* alias de compatibilidad: el CSS existente usa "marino" y "arena" en
+     ~150 lugares. En vez de renombrar todo, remapeo los nombres a las
+     nuevas variables. Cuando esto sea la única marca vigente se limpian. */
+  --marino:       var(--verde);
+  --marino-hondo: var(--verde-hondo);
+  --marino-medio: var(--verde-medio);
+  --onda:         var(--linea);
+  --arena:        var(--tarjeta);
+  --f-brush:      var(--f-camiseta);
+  --f-script:     var(--f-charla);
 
   --r-sm: 6px; --r-md: 14px; --r-lg: 22px;
   --ancho: 720px;
@@ -81,19 +100,19 @@ button{ font:inherit; color:inherit; }
 
 /* ── LA TRAMA DE OLAS ────────────────────────────────────────────────
    Es el fondo de la carta impresa y es lo único que la gente reconoce
-   de Bo Fomento antes de leer una palabra. Va en todos lados: fondo de
+   de Candela Express antes de leer una palabra. Va en todos lados: fondo de
    página, separadores entre secciones y el barrido del veredicto.    */
 .olas{
   background-image:
-    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='240' height='84' viewBox='0 0 240 84'%3E%3Cg fill='none' stroke='%23CBD9E3' stroke-width='1.5' stroke-linecap='round'%3E%3Cpath d='M0 8 Q30 3 60 8 T120 8 T180 8 T240 8'/%3E%3Cpath d='M0 22 Q30 28 60 22 T120 22 T180 22 T240 22'/%3E%3Cpath d='M0 36 Q30 31 60 36 T120 36 T180 36 T240 36'/%3E%3Cpath d='M0 50 Q30 57 60 50 T120 50 T180 50 T240 50'/%3E%3Cpath d='M0 64 Q30 59 60 64 T120 64 T180 64 T240 64'/%3E%3Cpath d='M0 78 Q30 84 60 78 T120 78 T180 78 T240 78'/%3E%3C/g%3E%3C/svg%3E");
-  background-size:240px 84px;
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='240' height='140' viewBox='0 0 240 140'%3E%3Cg fill='none' stroke='%23CBD9CE' stroke-width='1.4' stroke-linecap='round'%3E%3Cline x1='0' y1='10' x2='240' y2='10'/%3E%3Cline x1='0' y1='130' x2='240' y2='130'/%3E%3Cline x1='120' y1='10' x2='120' y2='130'/%3E%3Ccircle cx='120' cy='70' r='30'/%3E%3Ccircle cx='120' cy='70' r='1.6' fill='%23CBD9CE'/%3E%3Cpath d='M0 40 L40 40 L40 100 L0 100'/%3E%3Cpath d='M240 40 L200 40 L200 100 L240 100'/%3E%3Cpath d='M40 55 A 20 20 0 0 1 40 85'/%3E%3Cpath d='M200 55 A 20 20 0 0 0 200 85'/%3E%3Ccircle cx='22' cy='70' r='1.6' fill='%23CBD9CE'/%3E%3Ccircle cx='218' cy='70' r='1.6' fill='%23CBD9CE'/%3E%3C/g%3E%3C/svg%3E");
+  background-size:240px 140px;
 }
 .olas--claras{ opacity:1; }
 /* la misma trama sobre el azul de noche, en negativo */
 .olas--noche{
   background-image:
-    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='240' height='84' viewBox='0 0 240 84'%3E%3Cg fill='none' stroke='%23FFFFFF' stroke-opacity='.10' stroke-width='1.5' stroke-linecap='round'%3E%3Cpath d='M0 8 Q30 3 60 8 T120 8 T180 8 T240 8'/%3E%3Cpath d='M0 22 Q30 28 60 22 T120 22 T180 22 T240 22'/%3E%3Cpath d='M0 36 Q30 31 60 36 T120 36 T180 36 T240 36'/%3E%3Cpath d='M0 50 Q30 57 60 50 T120 50 T180 50 T240 50'/%3E%3Cpath d='M0 64 Q30 59 60 64 T120 64 T180 64 T240 64'/%3E%3Cpath d='M0 78 Q30 84 60 78 T120 78 T180 78 T240 78'/%3E%3C/g%3E%3C/svg%3E");
-  background-size:240px 84px;
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='240' height='140' viewBox='0 0 240 140'%3E%3Cg fill='none' stroke='%23FFFFFF' stroke-width='1.4' stroke-opacity='.10' stroke-linecap='round'%3E%3Cline x1='0' y1='10' x2='240' y2='10'/%3E%3Cline x1='0' y1='130' x2='240' y2='130'/%3E%3Cline x1='120' y1='10' x2='120' y2='130'/%3E%3Ccircle cx='120' cy='70' r='30'/%3E%3Ccircle cx='120' cy='70' r='1.6' fill='%23FFFFFF' fill-opacity='.10'/%3E%3Cpath d='M0 40 L40 40 L40 100 L0 100'/%3E%3Cpath d='M240 40 L200 40 L200 100 L240 100'/%3E%3Cpath d='M40 55 A 20 20 0 0 1 40 85'/%3E%3Cpath d='M200 55 A 20 20 0 0 0 200 85'/%3E%3Ccircle cx='22' cy='70' r='1.6' fill='%23FFFFFF' fill-opacity='.10'/%3E%3Ccircle cx='218' cy='70' r='1.6' fill='%23FFFFFF' fill-opacity='.10'/%3E%3C/g%3E%3C/svg%3E");
+  background-size:240px 140px;
 }
 
 /* el zigzag que la carta usa entre subsecciones */
@@ -126,8 +145,8 @@ button{ font:inherit; color:inherit; }
   transition:transform .14s cubic-bezier(.2,.8,.3,1), background-color .18s ease, box-shadow .18s ease;
 }
 .btn:active{ transform:translateY(1px) scale(.995); }
-.btn--sol{ background:var(--arena); color:var(--marino); box-shadow:0 3px 0 #B9863A; }
-.btn--sol:hover{ background:#EBB85C; }
+.btn--sol{ background:var(--arena); color:var(--verde-hondo); box-shadow:0 3px 0 #B9863A; }
+.btn--sol:hover{ background:#F8D040; }
 .btn--sol:active{ box-shadow:0 1px 0 #B9863A; }
 .btn--marino{ background:var(--marino); color:var(--papel); box-shadow:0 3px 0 #0E2740; }
 .btn--marino:hover{ background:#24486B; }
@@ -141,7 +160,7 @@ button{ font:inherit; color:inherit; }
 
 /* ── LANDING ────────────────────────────────────────────────────── */
 .hero{ background:var(--marino-hondo); color:var(--papel); position:relative; overflow:hidden; }
-.hero__cuerpo{ padding-block:36px 44px; position:relative; z-index:1; }
+.hero__cuerpo{ padding-block:170px 44px; position:relative; z-index:2; }
 .hero__olas{ position:absolute; inset:0; z-index:0; pointer-events:none; }
 .marca{
   font-family:var(--f-brush);
@@ -286,7 +305,7 @@ button{ font:inherit; color:inherit; }
 .noche{ background:var(--marino-hondo); color:var(--papel); min-height:100dvh; display:flex; flex-direction:column; position:relative; }
 .noche__olas{ position:fixed; inset:0; z-index:0; pointer-events:none; opacity:.75; }
 .noche > *{ position:relative; z-index:1; }
-.noche .barra-top{ background:rgba(16,38,59,.92); border-bottom-color:rgba(255,255,255,.16); }
+.noche .barra-top{ background:rgba(8,53,30,.92); border-bottom-color:rgba(255,255,255,.16); }
 .noche .volver, .noche .barra-top__titulo{ color:var(--papel); }
 .noche .volver:hover{ background:rgba(255,255,255,.12); }
 
@@ -339,10 +358,7 @@ button{ font:inherit; color:inherit; }
 
 .puntitos{ display:flex; align-items:center; gap:12px; margin-bottom:14px; }
 .puntitos__caja{ background:rgba(255,255,255,.07); border:1px solid rgba(255,255,255,.14); border-radius:20px 20px 20px 5px; padding:16px 18px; display:flex; gap:6px; }
-.puntitos__caja i{ width:9px; height:9px; border-radius:50%; background:var(--tinta-clara); animation:rebote calc(1.05s * var(--dur)) infinite ease-in-out; }
-.puntitos__caja i:nth-child(2){ animation-delay:.16s; }
-.puntitos__caja i:nth-child(3){ animation-delay:.32s; }
-@keyframes rebote{ 0%,60%,100%{ transform:none; opacity:.45; } 30%{ transform:translateY(-6px); opacity:1; } }
+/* ya no se usan puntitos: los reemplaza la pelota (más abajo) */
 .puntitos__frase{ font-family:var(--f-script); font-size:1.2rem; color:var(--tinta-clara); }
 
 .pregunta__nota{ font-size:.86rem; color:var(--tinta-clara); margin:0 0 18px; }
@@ -465,7 +481,7 @@ button{ font:inherit; color:inherit; }
 .marea__olas{ position:absolute; inset:0; opacity:.5; }
 .marea__borde{
   position:absolute; left:0; right:0; bottom:-2px; height:26px;
-  background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='240' height='26' viewBox='0 0 240 26'%3E%3Cpath d='M0 26 L0 12 Q 30 2 60 12 T 120 12 T 180 12 T 240 12 L240 26 Z' fill='%23E0A94A'/%3E%3C/svg%3E") repeat-x bottom/240px 26px;
+  background:linear-gradient(180deg, transparent 0 40%, var(--tarjeta) 40%);
 }
 @keyframes marea-baja{ 0%{ transform:translateY(0); } 100%{ transform:translateY(-104%); } }
 
@@ -514,46 +530,46 @@ button{ font:inherit; color:inherit; }
    Sin eso queda un sticker pegado en la pantalla.                    */
 /* el <svg> de afuera no lleva viewBox propio, así que sin relación de
    aspecto explícita height:auto colapsa a cero y no se ve nada */
-.vasco{ color:var(--papel); display:block; flex:none; aspect-ratio:210/240; }
-.vasco--grande{ width:min(150px, 36vw); height:auto; }
-.vasco--chico{ width:52px; height:auto; }
+.maestro{ color:var(--papel); display:block; flex:none; aspect-ratio:210/240; }
+.maestro--grande{ width:min(150px, 36vw); height:auto; }
+.maestro--chico{ width:52px; height:auto; }
 
 /* por defecto no se ve ninguna capa; cada gesto prende las suyas */
-.v-g{ display:none; }
-[data-gesto="saludo"]    :is(.v-ojos-abiertos,      .v-cejas-normal,   .v-boca-suave),
-[data-gesto="pensando"]  :is(.v-ojos-abiertos,      .v-cejas-una,      .v-boca-suave),
-[data-gesto="chicana"]   :is(.v-ojos-guino,         .v-cejas-alta,     .v-boca-torcida),
-[data-gesto="sorpresa"]  :is(.v-ojos-grandes,       .v-cejas-arriba,   .v-boca-o),
-[data-gesto="duda"]      :is(.v-ojos-entrecerrados, .v-cejas-caidas,   .v-boca-ondulada),
-[data-gesto="veredicto"] :is(.v-ojos-felices,       .v-cejas-contento, .v-boca-risa){ display:block; }
+.m-g{ display:none; }
+[data-gesto="saludo"]    :is(.m-ojos-abiertos,      .m-cejas-normal,   .m-boca-suave),
+[data-gesto="pensando"]  :is(.m-ojos-abiertos,      .m-cejas-una,      .m-boca-suave),
+[data-gesto="chicana"]   :is(.m-ojos-guino,         .m-cejas-alta,     .m-boca-torcida),
+[data-gesto="sorpresa"]  :is(.m-ojos-grandes,       .m-cejas-arriba,   .m-boca-o),
+[data-gesto="duda"]      :is(.m-ojos-entrecerrados, .m-cejas-caidas,   .m-boca-ondulada),
+[data-gesto="veredicto"] :is(.m-ojos-felices,       .m-cejas-contento, .m-boca-risa){ display:block; }
 
 /* respiración: sube y baja como quien está parado esperando */
-.vasco{ animation:v-respira calc(4.2s * var(--dur)) ease-in-out infinite; transform-origin:50% 90%; }
-@keyframes v-respira{
+.maestro{ animation:m-respira calc(4.2s * var(--dur)) ease-in-out infinite; transform-origin:50% 90%; }
+@keyframes m-respira{
   0%,100%{ transform:translateY(0) rotate(0deg); }
   50%    { transform:translateY(-5px) rotate(-.6deg); }
 }
 /* parpadeo cada tanto, no en loop constante: si parpadea seguido asusta */
-.v-parpadeo{ animation:v-parpadea calc(6.5s * var(--dur)) infinite; transform-origin:center; }
-@keyframes v-parpadea{
+.m-parpadeo{ animation:m-parpadea calc(6.5s * var(--dur)) infinite; transform-origin:center; }
+@keyframes m-parpadea{
   0%,95.5%,100%{ transform:scaleY(1); }
   97%          { transform:scaleY(.08); }
 }
 /* cuando piensa se inclina y mueve la pinza */
-[data-gesto="pensando"] .v-cabeza{ animation:v-piensa calc(2.4s * var(--dur)) ease-in-out infinite; transform-origin:105px 150px; }
-@keyframes v-piensa{ 0%,100%{ transform:rotate(0deg); } 50%{ transform:rotate(3.5deg); } }
-.v-brazo{ transform-origin:52px 196px; animation:v-pinza calc(3.6s * var(--dur)) ease-in-out infinite; }
-@keyframes v-pinza{ 0%,100%{ transform:rotate(0deg); } 50%{ transform:rotate(-7deg); } }
+[data-gesto="pensando"] .m-cabeza{ animation:m-piensa calc(2.4s * var(--dur)) ease-in-out infinite; transform-origin:105px 150px; }
+@keyframes m-piensa{ 0%,100%{ transform:rotate(0deg); } 50%{ transform:rotate(3.5deg); } }
+.m-brazo{ transform-origin:52px 196px; animation:m-pinza calc(3.6s * var(--dur)) ease-in-out infinite; }
+@keyframes m-pinza{ 0%,100%{ transform:rotate(0deg); } 50%{ transform:rotate(-7deg); } }
 /* en el veredicto pega un saltito y se queda */
-[data-gesto="veredicto"] .vasco,
-.vasco--remata{ animation:v-remata calc(.7s * var(--dur)) cubic-bezier(.2,1.5,.4,1) both; }
-@keyframes v-remata{
+[data-gesto="veredicto"] .maestro,
+.maestro--remata{ animation:m-remata calc(.7s * var(--dur)) cubic-bezier(.2,1.5,.4,1) both; }
+@keyframes m-remata{
   0%  { transform:translateY(0) scale(1); }
   40% { transform:translateY(-16px) scale(1.06); }
   100%{ transform:translateY(0) scale(1); }
 }
 
-/* el Vasco presentándose, arriba de la pantalla de modo */
+/* el Maestro presentándose, arriba de la pantalla de modo */
 .presenta{ display:flex; align-items:flex-end; gap:14px; margin:0 0 6px; }
 .presenta__globo{
   flex:1; min-width:0; background:rgba(255,255,255,.07); border:1px solid rgba(255,255,255,.16);
@@ -579,10 +595,10 @@ button{ font:inherit; color:inherit; }
 /* durante el chat va chiquito, al lado de lo que dice */
 .dice{ display:flex; align-items:flex-end; gap:10px; margin-bottom:14px; }
 .dice .burbuja{ margin-bottom:0; }
-.dice__vasco{ flex:none; align-self:flex-end; }
+.dice__maestro{ flex:none; align-self:flex-end; }
 
 @media (prefers-reduced-motion: reduce){
-  .vasco, .v-parpadeo, .v-brazo, [data-gesto="pensando"] .v-cabeza{ animation:none !important; }
+  .maestro, .m-parpadeo, .m-brazo, [data-gesto="pensando"] .m-cabeza{ animation:none !important; }
 }
 
 /* ── FORMATOS DE PREGUNTA ────────────────────────────────────────── */
@@ -720,31 +736,85 @@ button{ font:inherit; color:inherit; }
     <path id="aro-arriba" d="M 50,50 m -37,0 a 37,37 0 1,1 74,0"/>
     <path id="aro-abajo"  d="M 12,50 A 38,38 0 0,0 88,50"/>
     <symbol id="sello" viewBox="0 0 100 100">
+      <!-- doble círculo como escudo -->
       <circle cx="50" cy="50" r="48" fill="none" stroke="currentColor" stroke-width="2.4"/>
       <circle cx="50" cy="50" r="30" fill="none" stroke="currentColor" stroke-width="1.4"/>
-      <text font-family="Archivo, sans-serif" font-size="9.5" font-weight="700"
-            letter-spacing="1.6" fill="currentColor">
-        <textPath href="#aro-arriba" startOffset="50%" text-anchor="middle">BO • FOMENTO</textPath>
+      <text font-family="Inter, sans-serif" font-size="8.4" font-weight="800"
+            letter-spacing="1.4" fill="currentColor">
+        <textPath href="#aro-arriba" startOffset="50%" text-anchor="middle">CANDELA EXPRESS</textPath>
       </text>
-      <text font-family="Archivo, sans-serif" font-size="7" font-weight="700"
-            letter-spacing=".9" fill="currentColor">
-        <textPath href="#aro-abajo" startOffset="50%" text-anchor="middle">ESTAMOS EN LA PLAYA</textPath>
+      <text font-family="Inter, sans-serif" font-size="6.6" font-weight="700"
+            letter-spacing=".8" fill="currentColor">
+        <textPath href="#aro-abajo" startOffset="50%" text-anchor="middle">ACÁ SE JUEGA BIEN</textPath>
       </text>
-      <text x="11" y="52" font-family="Archivo, sans-serif" font-size="5.5" font-weight="700"
-            text-anchor="middle" fill="currentColor">PF</text>
-      <text x="89" y="52" font-family="Archivo, sans-serif" font-size="5.5" font-weight="700"
-            text-anchor="middle" fill="currentColor">UY</text>
-      <!-- sol sobre las olas -->
-      <circle cx="50" cy="42" r="8.5" fill="currentColor"/>
-      <g fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round">
-        <path d="M32 55 q 6 -5 12 0 t 12 0 t 12 0"/>
-        <path d="M34 63 q 5.5 -5 11 0 t 11 0 t 11 0"/>
+      <!-- balón de fútbol clásico blanco y negro: pentágono central y
+           parches alrededor. Va relleno con currentColor y los parches
+           en color de fondo para que se lea sobre cualquier lado. -->
+      <circle cx="50" cy="47" r="14" fill="currentColor"/>
+      <g fill="none" stroke="currentColor" stroke-width="1.2" stroke-linejoin="round">
+        <!-- costuras del balón -->
+        <path d="M50 41 L54.5 44 L52.7 49 L47.3 49 L45.5 44 Z" fill="var(--verde-hondo, #08351E)"/>
+        <path d="M45.5 44 L40 42.5 M54.5 44 L60 42.5 M47.3 49 L45 55 M52.7 49 L55 55"
+              stroke="var(--verde-hondo, #08351E)" stroke-width="1.4"/>
       </g>
     </symbol>
   </defs>
 </svg>
 
+<!-- ═══════════════════════════════════════════════════════════════════
+     LA TRIBUNA — se planta arriba del hero. Siluetas de gente, banderas
+     y papelitos que caen. Es lo primero que se ve. Que se sienta la
+     hinchada antes del logo.                                           -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
+<defs>
+<symbol id="tribuna" viewBox="0 0 400 140" preserveAspectRatio="none">
+  <!-- siluetas oscuras de gente, agrupadas y superpuestas como una
+       tribuna vista de lejos. Van en negro semi para que se lean sobre
+       cualquier verde. -->
+  <g fill="#000" opacity=".55">
+    <!-- primera fila (atrás): siluetas más chicas y en línea -->
+    <path d="M0 140 L0 90
+             Q10 82 20 92 Q30 82 40 92 Q50 82 60 92 Q70 82 80 92
+             Q90 82 100 92 Q110 82 120 92 Q130 82 140 92 Q150 82 160 92
+             Q170 82 180 92 Q190 82 200 92 Q210 82 220 92 Q230 82 240 92
+             Q250 82 260 92 Q270 82 280 92 Q290 82 300 92 Q310 82 320 92
+             Q330 82 340 92 Q350 82 360 92 Q370 82 380 92 Q390 82 400 92
+             L400 140 Z"/>
+    <!-- segunda fila (adelante): cabezas más grandes y más juntas -->
+    <path d="M0 140 L0 106
+             Q8 96 16 108 Q26 96 34 108 Q44 96 52 108 Q62 96 70 108
+             Q80 96 88 108 Q98 96 106 108 Q116 96 124 108 Q134 96 142 108
+             Q152 96 160 108 Q170 96 178 108 Q188 96 196 108 Q206 96 214 108
+             Q224 96 232 108 Q242 96 250 108 Q260 96 268 108 Q278 96 286 108
+             Q296 96 304 108 Q314 96 322 108 Q332 96 340 108 Q350 96 358 108
+             Q368 96 376 108 Q386 96 394 108 L400 108 L400 140 Z"/>
+  </g>
+  <!-- banderas celestes (colores hex directos: var() en symbol es
+       inconsistente entre navegadores cuando se usa con <use>) -->
+  <g fill="#4FA3D9" stroke="#08351E" stroke-width="1.5">
+    <path d="M40 106 L40 70 L64 82 L40 92 Z"/>
+    <path d="M120 100 L120 64 L144 76 L120 86 Z"/>
+    <path d="M240 104 L240 68 L264 80 L240 90 Z"/>
+    <path d="M334 102 L334 66 L358 78 L334 88 Z"/>
+    <line x1="40"  y1="106" x2="40"  y2="60" stroke="#08351E" stroke-width="2.5"/>
+    <line x1="120" y1="100" x2="120" y2="54" stroke="#08351E" stroke-width="2.5"/>
+    <line x1="240" y1="104" x2="240" y2="58" stroke="#08351E" stroke-width="2.5"/>
+    <line x1="334" y1="102" x2="334" y2="56" stroke="#08351E" stroke-width="2.5"/>
+  </g>
+  <!-- banderas amarillas alternadas -->
+  <g fill="#F5C518" stroke="#08351E" stroke-width="1.5">
+    <path d="M180 102 L180 66 L204 78 L180 88 Z"/>
+    <path d="M290 100 L290 64 L314 76 L290 86 Z"/>
+    <line x1="180" y1="102" x2="180" y2="56" stroke="#08351E" stroke-width="2.5"/>
+    <line x1="290" y1="100" x2="290" y2="54" stroke="#08351E" stroke-width="2.5"/>
+  </g>
+</symbol>
 
+<symbol id="papelito" viewBox="0 0 8 12">
+  <rect x="0" y="0" width="8" height="12" rx="1" fill="currentColor"/>
+</symbol>
+</defs>
+</svg>
 
 <div class="app" id="app">
 
@@ -752,21 +822,34 @@ button{ font:inherit; color:inherit; }
   <section class="vista activa vista--clara" id="v-landing" aria-labelledby="h-landing">
     <div class="hero">
       <div class="hero__olas olas olas--noche" aria-hidden="true"></div>
+      <div class="hero__tribuna" aria-hidden="true">
+        <svg class="tribuna-svg" preserveAspectRatio="none" viewBox="0 0 400 140">
+          <use href="#tribuna"/>
+        </svg>
+        <span class="papel papel-1" style="color:var(--celeste)"></span>
+        <span class="papel papel-2" style="color:var(--tarjeta)"></span>
+        <span class="papel papel-3" style="color:var(--papel)"></span>
+        <span class="papel papel-4" style="color:var(--celeste)"></span>
+        <span class="papel papel-5" style="color:var(--tarjeta)"></span>
+        <span class="papel papel-6" style="color:var(--papel)"></span>
+        <span class="papel papel-7" style="color:var(--celeste)"></span>
+        <span class="papel papel-8" style="color:var(--tarjeta)"></span>
+      </div>
       <div class="envoltura hero__cuerpo" id="principal">
         <svg class="sello" aria-hidden="true"><use href="#sello"/></svg>
-        <h1 class="marca" id="h-landing">Bo<em>Fomento</em></h1>
-        <p class="lema">Estamos en la playa</p>
-        <p class="ubic">Playa Fomento &middot; Colonia &middot; Uruguay</p>
-        <p class="bajada">La carta entera acá. Y si no sabés qué pedir, dejá que el Chef te lea.</p>
+        <h1 class="marca" id="h-landing">Candela<em>Express</em></h1>
+        <p class="lema">Acá se juega bien</p>
+        <p class="ubic">Restaurante temático &middot; Uruguay</p>
+        <p class="bajada">La carta entera acá. Y si no sabés qué pedir, dejá que el Maestro te arme la formación.</p>
 
         <div class="hero__acciones">
           <button class="btn btn--sol" data-ir="carta">Ver la carta</button>
-          <button class="btn btn--linea" data-ir="chef">Que te lea el Chef</button>
+          <button class="btn btn--linea" data-ir="chef">Que decida el Maestro</button>
         </div>
 
         <div class="hero__pie">
-          <span>Parrilla y horno de barro</span>
-          <span>Mesas afuera hasta que baje el sol</span>
+          <span>Cocina de estadio</span>
+          <span>Camisetas colgadas en la pared</span>
         </div>
       </div>
     </div>
@@ -779,10 +862,10 @@ button{ font:inherit; color:inherit; }
     <footer class="pie">
       <div class="pie__olas olas olas--noche" aria-hidden="true"></div>
       <div class="envoltura">
-        <p class="pie__marca">Bo | Fomento</p>
-        <p>Playa Fomento, Colonia. Sobre la barranca, donde termina el camino.</p>
-        <p>Instagram: <a href="https://instagram.com/bofomento.uy" rel="noopener">@bofomento.uy</a></p>
-        <p style="margin-top:12px;opacity:.7;font-size:.8rem">Precios en pesos uruguayos. Pueden cambiar sin aviso, como el viento.</p>
+        <p class="pie__marca">Candela Express</p>
+        <p>Restaurante temático de fútbol.</p>
+        <p>La carta se juega acá. Menú web.</p>
+        <p style="margin-top:12px;opacity:.7;font-size:.8rem">Precios en pesos uruguayos. Pueden cambiar sin aviso, como una alineación de última hora.</p>
       </div>
     </footer>
   </section>
@@ -799,7 +882,7 @@ button{ font:inherit; color:inherit; }
                   title="Modo sol">&#9728;</button>
           <button class="icono" id="b-voz" aria-pressed="false"
                   aria-label="Escuchar la carta en voz alta" title="Escuchar">&#9834;</button>
-          <button class="btn btn--marino btn--chico" data-ir="chef">El&nbsp;Chef</button>
+          <button class="btn btn--marino btn--chico" data-ir="chef">Maestro</button>
         </div>
       </div>
     </div>
@@ -808,7 +891,7 @@ button{ font:inherit; color:inherit; }
       <div class="buscador">
         <span class="buscador__lupa" aria-hidden="true">&#9906;</span>
         <label class="solo-lectores" for="q">Buscar en la carta</label>
-        <input id="q" type="search" autocomplete="off" placeholder="Buscar: entraña, fainá, chajá…">
+        <input id="q" type="search" autocomplete="off" placeholder="Buscar en la carta…">
         <button class="buscador__limpiar" id="q-limpiar" hidden aria-label="Limpiar búsqueda">&#10005;</button>
       </div>
       <div class="riel riel--filtros" id="riel-filtros" role="group" aria-label="Filtros rápidos"></div>
@@ -823,7 +906,7 @@ button{ font:inherit; color:inherit; }
       <div class="envoltura">
         <p class="pie__marca">¿Y si no sabés qué pedir?</p>
         <p style="margin-bottom:16px">El Chef te hace unas preguntas raras y te lo dice él.</p>
-        <button class="btn btn--sol" data-ir="chef">Que te lea el Chef</button>
+        <button class="btn btn--sol" data-ir="chef">Que decida el Maestro</button>
       </div>
     </footer>
   </section>
@@ -835,7 +918,7 @@ button{ font:inherit; color:inherit; }
       <div class="envoltura">
         <div class="barra-top__fila">
           <button class="volver" id="chef-volver" aria-label="Volver">&larr; Volver</button>
-          <h2 class="barra-top__titulo" id="h-chef">El Chef</h2>
+          <h2 class="barra-top__titulo" id="h-chef">El Maestro</h2>
           <button class="btn btn--chico btn--linea" data-ir="carta">Ver carta</button>
         </div>
         <div class="progreso" id="progreso" hidden>
@@ -857,10 +940,9 @@ button{ font:inherit; color:inherit; }
 
 /* ╔══════════════════════════════════════════════════════════════════╗
    ║  BLOQUE 1 DE 2 — LA CARTA                                        ║
-   ║  Carta de muestra. Los platos y los precios son de ejemplo:      ║
-   ║  la carta real del local se carga reemplazando este bloque.      ║
+   ║  Placeholder futbolero — reemplazar por la carta de candelaexpress.alacarta.online                  ║
    ║  Para clonar el producto a otro local se cambia sólo este bloque ║
-   ║  y el de PREGUNTAS. El motor no sabe nada de Bo Fomento.         ║
+   ║  y el de PREGUNTAS. El motor no sabe nada de Candela Express.         ║
    ╠══════════════════════════════════════════════════════════════════╣
    ║  EJES (0 a 10) — mismo vocabulario para platos y para personas:  ║
    ║    contundencia  0 picoteo         → 10 salgo rodando            ║
@@ -880,475 +962,218 @@ button{ font:inherit; color:inherit; }
    ╚══════════════════════════════════════════════════════════════════╝ */
 
 const CATEGORIAS = [
-  { id:"entradas",  nombre:"Entradas",              tipo:"entrada"   },
-  { id:"horno",     nombre:"Horno de barro",        tipo:"principal" },
-  { id:"parrilla",  nombre:"Parrilla a toda brasa", tipo:"principal" },
-  { id:"cervezas",  nombre:"Cervezas",              tipo:"bebida"    },
-  { id:"tragos",    nombre:"Tragos",                tipo:"bebida"    },
-  { id:"refrescos", nombre:"Refrescos y licuados",  tipo:"bebida"    },
-  { id:"bebidas",   nombre:"Bebidas y whiskys",     tipo:"bebida"    },
-  { id:"postres",   nombre:"Postres",               tipo:"postre"    },
-  { id:"cafeteria", nombre:"Cafetería",             tipo:"postre"    }
+  { id:"precalentamiento", nombre:"Precalentamiento",  tipo:"entrada"   },
+  { id:"titulares",        nombre:"Los titulares",     tipo:"principal" },
+  { id:"segundo-tiempo",   nombre:"Segundo tiempo",    tipo:"principal" },
+  { id:"vestuario",        nombre:"Vestuario (tragos)", tipo:"bebida"   },
+  { id:"cerveceria",       nombre:"Cervecería",        tipo:"bebida"    },
+  { id:"suplementario",    nombre:"Tiempo suplementario", tipo:"postre" }
 ];
 
+/* ⚠ PLACEHOLDER FUTBOLERO: platos y precios inventados con el estilo del
+   local. Reemplazar por la carta real de candelaexpress.alacarta.online
+   con la misma forma. El motor y los ejes no se tocan al hacerlo. */
 const MENU = [
-  /* ── ENTRADAS ───────────────────────────────────────────────── */
-  { id:"papas-cheddar", nombre:"Papas gratinadas con panceta", precio:360, categoria:"entradas",
-    descripcion:"", tags:["para la mesa"], apto:{vegetariano:false,singluten:false,compartir:true},
-    contiene:["cerdo","lacteos"], ejes:{contundencia:7,aventura:1,social:9,frescura:1,dulce:0} },
-  { id:"arrolladitos", nombre:"Rollitos de verdura crocantes", precio:380, categoria:"entradas",
-    descripcion:"", tags:["vegetariano","para la mesa"], apto:{vegetariano:true,singluten:false,compartir:true},
-    contiene:["gluten"], ejes:{contundencia:4,aventura:5,social:8,frescura:3,dulce:1} },
-  { id:"rabas", nombre:"Calamares a la romana", precio:540, categoria:"entradas",
-    descripcion:"", tags:["de mar","para la mesa"], apto:{vegetariano:false,singluten:false,compartir:true},
-    contiene:["mariscos","gluten","huevo"], ejes:{contundencia:6,aventura:4,social:8,frescura:3,dulce:0} },
-  { id:"miniatura-pescado", nombre:"Bocaditos de merluza rebozada", precio:470, categoria:"entradas",
-    descripcion:"", tags:["de mar","para la mesa"], apto:{vegetariano:false,singluten:false,compartir:true},
-    contiene:["pescado","gluten"], ejes:{contundencia:5,aventura:4,social:7,frescura:4,dulce:0} },
-  { id:"revuelto-gramajo", nombre:"Huevos rotos con jamón y papas", precio:460, categoria:"entradas",
-    descripcion:"", tags:["clásico","contundente"], apto:{vegetariano:false,singluten:true,compartir:true},
-    contiene:["cerdo","huevo"], ejes:{contundencia:8,aventura:2,social:7,frescura:1,dulce:0} },
-  { id:"croquetas-salmon", nombre:"Croquetas de atún y muzzarella (6 un)", precio:580, categoria:"entradas",
-    descripcion:"", tags:["de mar","para la mesa"], apto:{vegetariano:false,singluten:false,compartir:true},
-    contiene:["pescado","lacteos","gluten","huevo"], ejes:{contundencia:5,aventura:6,social:8,frescura:2,dulce:0} },
-  { id:"empanadas-asado", nombre:"Empanadas criollas de carne (2 un)", precio:340, categoria:"entradas",
-    descripcion:"", tags:["clásico"], apto:{vegetariano:false,singluten:false,compartir:true},
-    contiene:["carne","gluten"], ejes:{contundencia:5,aventura:1,social:7,frescura:1,dulce:0} },
 
-  /* ── HORNO DE BARRO · PIZZAS ────────────────────────────────── */
-  { id:"pizza-muzza", nombre:"Pizza clásica", precio:340, categoria:"horno", sub:"Pizzas",
-    descripcion:"", tags:["vegetariano","clásico"], apto:{vegetariano:true,singluten:false,compartir:true},
+  /* ── PRECALENTAMIENTO ────────────────────────────────────────────── */
+  { id:"papas-banco", nombre:"Papas del banco", precio:280, categoria:"precalentamiento",
+    descripcion:"Bastón, doradas, con sal gruesa. Las primeras que salen.",
+    tags:["clásico","para compartir"], apto:{vegetariano:true,singluten:true,compartir:true},
+    contiene:[], ejes:{contundencia:6,aventura:1,social:9,frescura:1,dulce:0} },
+  { id:"papas-cheddar", nombre:"Papas 4-3-3", precio:380, categoria:"precalentamiento",
+    descripcion:"Cheddar, panceta y cebolla morada. Contundente.",
+    tags:["contundente","para compartir"], apto:{vegetariano:false,singluten:true,compartir:true},
+    contiene:["cerdo","lacteos"], ejes:{contundencia:8,aventura:2,social:9,frescura:1,dulce:0} },
+  { id:"empanadas-carne", nombre:"Saque de banda (2 un)", precio:220, categoria:"precalentamiento",
+    descripcion:"Empanadas de carne al horno. Con o sin picante.",
+    tags:["clásico"], apto:{vegetariano:false,singluten:false,compartir:false},
+    contiene:["carne","gluten"], ejes:{contundencia:5,aventura:1,social:6,frescura:1,dulce:0} },
+  { id:"provoleta", nombre:"Provoleta del vestuario", precio:420, categoria:"precalentamiento",
+    descripcion:"A la parrilla, con orégano y pan.",
+    tags:["clásico","para compartir"], apto:{vegetariano:true,singluten:false,compartir:true},
+    contiene:["lacteos","gluten"], ejes:{contundencia:7,aventura:3,social:9,frescura:1,dulce:0} },
+  { id:"nachos", nombre:"Nachos del arquero", precio:360, categoria:"precalentamiento",
+    descripcion:"Con guacamole, pico de gallo y cheddar. Van al medio.",
+    tags:["para compartir","distinto"], apto:{vegetariano:true,singluten:true,compartir:true},
+    contiene:["lacteos"], ejes:{contundencia:5,aventura:5,social:10,frescura:3,dulce:0} },
+  { id:"croquetas", nombre:"Croquetas del delantero", precio:320, categoria:"precalentamiento",
+    descripcion:"De queso y jamón. Doradas, cremosas adentro.",
+    tags:["para compartir"], apto:{vegetariano:false,singluten:false,compartir:true},
+    contiene:["cerdo","lacteos","gluten","huevo"], ejes:{contundencia:6,aventura:3,social:9,frescura:1,dulce:0} },
+  { id:"ensalada-verde", nombre:"Ensalada del banco de suplentes", precio:290, categoria:"precalentamiento",
+    descripcion:"Verdes, palta, tomate cherry y semillas. Liviana.",
+    tags:["vegetariano","fresco"], apto:{vegetariano:true,singluten:true,compartir:false},
+    contiene:["frutos-secos"], ejes:{contundencia:1,aventura:3,social:2,frescura:9,dulce:1} },
+  { id:"tabla-mixta", nombre:"Tabla del once", precio:520, categoria:"precalentamiento",
+    descripcion:"Fiambres, quesos, aceitunas y pan tostado. Para arrancar la charla.",
+    tags:["para compartir","contundente"], apto:{vegetariano:false,singluten:false,compartir:true},
+    contiene:["carne","cerdo","lacteos","gluten"], ejes:{contundencia:6,aventura:2,social:10,frescura:3,dulce:0} },
+
+  /* ── LOS TITULARES ───────────────────────────────────────────────── */
+  { id:"mila-napo", nombre:"La 4-3-3 (milanesa napolitana)", precio:560, categoria:"titulares",
+    descripcion:"Milanesa con jamón, muzza y salsa. Papas fritas abajo.",
+    tags:["clásico","contundente"], apto:{vegetariano:false,singluten:false,compartir:false},
+    contiene:["carne","cerdo","lacteos","gluten","huevo"], ejes:{contundencia:9,aventura:2,social:3,frescura:1,dulce:0} },
+  { id:"mila-completa", nombre:"El wing derecho (milanesa a caballo)", precio:620, categoria:"titulares",
+    descripcion:"Milanesa completa con dos huevos fritos y guarnición.",
+    tags:["demoledor"], apto:{vegetariano:false,singluten:false,compartir:false},
+    contiene:["carne","cerdo","lacteos","gluten","huevo"], ejes:{contundencia:10,aventura:3,social:4,frescura:0,dulce:0} },
+  { id:"burger", nombre:"El caño (burger clásica)", precio:520, categoria:"titulares",
+    descripcion:"Doble carne, cheddar, panceta y cebolla quemada.",
+    tags:["contundente","de la casa"], apto:{vegetariano:false,singluten:false,compartir:false},
+    contiene:["carne","cerdo","lacteos","gluten"], ejes:{contundencia:10,aventura:3,social:3,frescura:1,dulce:1} },
+  { id:"burger-veg", nombre:"El líbero (burger vegetal)", precio:480, categoria:"titulares",
+    descripcion:"De garbanzos y remolacha, con alioli. No es un premio consuelo.",
+    tags:["vegetariano","distinto"], apto:{vegetariano:true,singluten:false,compartir:false},
+    contiene:["gluten","frutos-secos"], ejes:{contundencia:6,aventura:6,social:3,frescura:4,dulce:1} },
+  { id:"chivito", nombre:"El clásico (chivito canadiense)", precio:640, categoria:"titulares",
+    descripcion:"Lomo, jamón, queso, panceta, huevo y ensalada. Es un chivito.",
+    tags:["clásico","demoledor"], apto:{vegetariano:false,singluten:false,compartir:false},
+    contiene:["carne","cerdo","lacteos","gluten","huevo"], ejes:{contundencia:10,aventura:2,social:4,frescura:2,dulce:0} },
+  { id:"pizza-muzza", nombre:"El 10 (pizza muzzarella)", precio:460, categoria:"titulares",
+    descripcion:"Muzzarella, salsa y albahaca. Con lo justo.",
+    tags:["vegetariano","clásico","para compartir"], apto:{vegetariano:true,singluten:false,compartir:true},
     contiene:["lacteos","gluten"], ejes:{contundencia:7,aventura:0,social:9,frescura:1,dulce:0} },
-  { id:"pizza-jamon", nombre:"Napolitana con jamón", precio:380, categoria:"horno", sub:"Pizzas",
-    descripcion:"", tags:["clásico"], apto:{vegetariano:false,singluten:false,compartir:true},
-    contiene:["cerdo","lacteos","gluten"], ejes:{contundencia:8,aventura:0,social:9,frescura:1,dulce:0} },
-  { id:"pizza-panceta", nombre:"Pizza de panceta y cebolla", precio:400, categoria:"horno", sub:"Pizzas",
-    descripcion:"", tags:["contundente"], apto:{vegetariano:false,singluten:false,compartir:true},
-    contiene:["cerdo","lacteos","gluten"], ejes:{contundencia:9,aventura:2,social:9,frescura:0,dulce:0} },
-  { id:"pizza-anana", nombre:"Pizza tropical", precio:400, categoria:"horno", sub:"Pizzas",
-    descripcion:"Jamón, ananá y muzzarella.", tags:["distinto"], apto:{vegetariano:false,singluten:false,compartir:true},
-    contiene:["cerdo","lacteos","gluten"], ejes:{contundencia:7,aventura:7,social:9,frescura:4,dulce:5} },
-  { id:"pizza-capresse", nombre:"Pizza de tomate y albahaca", precio:400, categoria:"horno", sub:"Pizzas",
-    descripcion:"Muzzarella, tomate fresco y albahaca.", tags:["vegetariano","fresco"],
-    apto:{vegetariano:true,singluten:false,compartir:true},
-    contiene:["lacteos","gluten"], ejes:{contundencia:6,aventura:3,social:9,frescura:5,dulce:0} },
-  { id:"pizza-4quesos", nombre:"Pizza cuatro quesos", precio:460, categoria:"horno", sub:"Pizzas",
-    descripcion:"Muzzarella, parmesano, dambo y azul.", tags:["vegetariano","contundente"],
-    apto:{vegetariano:true,singluten:false,compartir:true},
-    contiene:["lacteos","gluten"], ejes:{contundencia:9,aventura:5,social:9,frescura:0,dulce:0} },
-  { id:"pizza-rucula", nombre:"Pizza verde", precio:460, categoria:"horno", sub:"Pizzas",
-    descripcion:"Rúcula, parmesano en lascas y aceite de oliva.", tags:["vegetariano","fresco"], apto:{vegetariano:true,singluten:false,compartir:true},
-    contiene:["lacteos","gluten"], ejes:{contundencia:6,aventura:4,social:9,frescura:6,dulce:0} },
-  { id:"faina", nombre:"Fainá", precio:200, categoria:"horno", sub:"Pizzas",
-    descripcion:"De garbanzo, como corresponde.", tags:["vegetariano","sin TACC"],
-    apto:{vegetariano:true,singluten:true,compartir:true},
-    contiene:[], ejes:{contundencia:4,aventura:2,social:9,frescura:1,dulce:0} },
-  { id:"faina-muzza", nombre:"Fainá con muzzarella", precio:260, categoria:"horno", sub:"Pizzas",
-    descripcion:"", tags:["vegetariano","sin TACC"], apto:{vegetariano:true,singluten:true,compartir:true},
-    contiene:["lacteos"], ejes:{contundencia:6,aventura:3,social:9,frescura:1,dulce:0} },
-  { id:"faina-espinaca", nombre:"Fainá gratinado con espinaca", precio:400, categoria:"horno", sub:"Pizzas",
-    descripcion:"", tags:["vegetariano","sin TACC"], apto:{vegetariano:true,singluten:true,compartir:true},
-    contiene:["lacteos"], ejes:{contundencia:7,aventura:5,social:9,frescura:2,dulce:0} },
+  { id:"pizza-espec", nombre:"La Panenka (pizza especial)", precio:560, categoria:"titulares",
+    descripcion:"Muzza, jamón crudo, rúcula y parmesano. Sorprendente.",
+    tags:["distinto","para compartir"], apto:{vegetariano:false,singluten:false,compartir:true},
+    contiene:["cerdo","lacteos","gluten"], ejes:{contundencia:8,aventura:5,social:9,frescura:4,dulce:0} },
+  { id:"pastas", nombre:"El mediocampista (pastas al pesto)", precio:480, categoria:"titulares",
+    descripcion:"Tallarines con pesto de albahaca y parmesano.",
+    tags:["vegetariano","clásico"], apto:{vegetariano:true,singluten:false,compartir:false},
+    contiene:["lacteos","gluten","huevo","frutos-secos"], ejes:{contundencia:7,aventura:2,social:3,frescura:3,dulce:0} },
+  { id:"tortilla", nombre:"La tortilla del capitán", precio:420, categoria:"titulares",
+    descripcion:"Tortilla de papa jugosa, con ensalada. Sencilla y suficiente.",
+    tags:["vegetariano","sin TACC"], apto:{vegetariano:true,singluten:true,compartir:false},
+    contiene:["huevo"], ejes:{contundencia:6,aventura:1,social:3,frescura:2,dulce:0} },
+  { id:"bowl-veg", nombre:"El bowl del jugador (sin gluten)", precio:480, categoria:"titulares",
+    descripcion:"Quinoa, palta, calabaza asada y semillas. Liviano y con hierro.",
+    tags:["vegetariano","sin TACC","liviano"], apto:{vegetariano:true,singluten:true,compartir:false},
+    contiene:["frutos-secos"], ejes:{contundencia:5,aventura:5,social:2,frescura:6,dulce:0} },
+  { id:"wok-veg", nombre:"La finta (wok de verduras)", precio:440, categoria:"titulares",
+    descripcion:"Verduras salteadas con jengibre y soja. Liviano en serio.",
+    tags:["vegetariano","liviano"], apto:{vegetariano:true,singluten:false,compartir:false},
+    contiene:["gluten"], ejes:{contundencia:4,aventura:5,social:2,frescura:6,dulce:0} },
 
-  /* ── HORNO DE BARRO · CALZONE ───────────────────────────────── */
-  { id:"calzone-jq", nombre:"Calzone de jamón y queso", precio:540, categoria:"horno", sub:"Calzone",
-    descripcion:"", tags:["contundente"], apto:{vegetariano:false,singluten:false,compartir:true},
-    contiene:["cerdo","lacteos","gluten"], ejes:{contundencia:9,aventura:2,social:7,frescura:0,dulce:0} },
-  { id:"calzone-aceitunas", nombre:"Calzone napolitano", precio:560, categoria:"horno", sub:"Calzone",
-    descripcion:"Jamón, queso y aceitunas negras.", tags:["contundente"], apto:{vegetariano:false,singluten:false,compartir:true},
-    contiene:["cerdo","lacteos","gluten"], ejes:{contundencia:9,aventura:3,social:7,frescura:1,dulce:0} },
-  { id:"calzone-cebolla", nombre:"Calzone de panceta y cebolla", precio:610, categoria:"horno", sub:"Calzone",
-    descripcion:"", tags:["demoledor"], apto:{vegetariano:false,singluten:false,compartir:true},
-    contiene:["cerdo","lacteos","gluten"], ejes:{contundencia:10,aventura:4,social:7,frescura:0,dulce:1} },
-  { id:"calzone-capresse", nombre:"Calzone caprese", precio:640, categoria:"horno", sub:"Calzone",
-    descripcion:"Muzzarella, tomate y albahaca.", tags:["vegetariano"],
-    apto:{vegetariano:true,singluten:false,compartir:true},
-    contiene:["lacteos","gluten"], ejes:{contundencia:8,aventura:3,social:7,frescura:4,dulce:0} },
-  { id:"calzone-espinaca", nombre:"Calzone de espinaca y ricota", precio:640, categoria:"horno", sub:"Calzone",
-    descripcion:"", tags:["vegetariano"], apto:{vegetariano:true,singluten:false,compartir:true},
-    contiene:["lacteos","gluten"], ejes:{contundencia:8,aventura:4,social:7,frescura:2,dulce:0} },
-
-  /* ── HORNO DE BARRO · SÁNDWICHES ────────────────────────────── */
-  { id:"sand-jq", nombre:"Tostado de jamón y queso", precio:370, categoria:"horno", sub:"Sándwiches",
-    descripcion:"", tags:["clásico"], apto:{vegetariano:false,singluten:false,compartir:false},
-    contiene:["cerdo","lacteos","gluten"], ejes:{contundencia:5,aventura:0,social:2,frescura:1,dulce:0} },
-  { id:"sand-muzza", nombre:"Tostado de muzzarella", precio:400, categoria:"horno", sub:"Sándwiches",
-    descripcion:"", tags:["vegetariano","clásico"], apto:{vegetariano:true,singluten:false,compartir:false},
-    contiene:["lacteos","gluten"], ejes:{contundencia:5,aventura:0,social:2,frescura:1,dulce:0} },
-  { id:"pan-bata", nombre:"El Contundente", precio:510, categoria:"horno", sub:"Sándwiches",
-    descripcion:"Lomo, panceta, cheddar y huevo frito.", tags:["demoledor","de la casa"],
-    apto:{vegetariano:false,singluten:false,compartir:false},
-    contiene:["carne","cerdo","lacteos","gluten","huevo"], ejes:{contundencia:10,aventura:3,social:2,frescura:0,dulce:0} },
-  { id:"sand-faina", nombre:"Sándwich en fainá", precio:500, categoria:"horno", sub:"Sándwiches",
-    descripcion:"Jamón crudo, rúcula y queso crema.", tags:["distinto","sin TACC"],
-    apto:{vegetariano:false,singluten:true,compartir:false},
-    contiene:["cerdo","lacteos"], ejes:{contundencia:6,aventura:7,social:3,frescura:5,dulce:0} },
-
-  /* ── HORNO DE BARRO · ESPECIALES ────────────────────────────── */
-  { id:"matambre-leche", nombre:"Matambre casero a la leche", precio:610, categoria:"horno", sub:"Especiales del horno",
-    descripcion:"", tags:["clásico","contundente"], apto:{vegetariano:false,singluten:true,compartir:false},
-    contiene:["carne","lacteos"], ejes:{contundencia:9,aventura:3,social:4,frescura:0,dulce:1} },
-  { id:"pescado-parmesana", nombre:"Merluza gratinada a la parmesana", precio:680, categoria:"horno", sub:"Especiales del horno",
-    descripcion:"Papas en capa fina, salsa de parmesano con un toque de azul, merluza, cherrys y muzzarella.",
-    tags:["de mar","de la casa"], apto:{vegetariano:false,singluten:false,compartir:false},
-    contiene:["pescado","lacteos","gluten"], ejes:{contundencia:8,aventura:6,social:3,frescura:3,dulce:0} },
-  { id:"boga-puerros", nombre:"Corvina con crema de puerros", precio:680, categoria:"horno", sub:"Especiales del horno",
-    descripcion:"", tags:["de mar","distinto"], apto:{vegetariano:false,singluten:true,compartir:false},
-    contiene:["pescado","lacteos"], ejes:{contundencia:7,aventura:7,social:3,frescura:4,dulce:0} },
-  { id:"pollo-mostaza", nombre:"Pechuga a la miel y mostaza", precio:610, categoria:"horno", sub:"Especiales del horno",
-    descripcion:"", tags:["distinto"], apto:{vegetariano:false,singluten:true,compartir:false},
-    contiene:["pollo"], ejes:{contundencia:7,aventura:5,social:3,frescura:3,dulce:4} },
-  { id:"berenjenas-parmeggiana", nombre:"Berenjenas gratinadas", precio:610, categoria:"horno", sub:"Especiales del horno",
-    descripcion:"", tags:["vegetariano","contundente"], apto:{vegetariano:true,singluten:true,compartir:false},
-    contiene:["lacteos"], ejes:{contundencia:8,aventura:5,social:4,frescura:2,dulce:0} },
-  { id:"canelones-verdura", nombre:"Canelones de espinaca y ricota", precio:610, categoria:"horno", sub:"Especiales del horno",
-    descripcion:"Gratinados con muzzarella y salsa fileto.", tags:["vegetariano","clásico"],
-    apto:{vegetariano:true,singluten:false,compartir:false},
-    contiene:["lacteos","gluten","huevo"], ejes:{contundencia:8,aventura:2,social:3,frescura:1,dulce:0} },
-
-  /* ── PARRILLA A TODA BRASA ──────────────────────────────────── */
-  { id:"asado-ternera", nombre:"Asado de tira", precio:600, categoria:"parrilla",
-    descripcion:"", tags:["clásico","contundente"], apto:{vegetariano:false,singluten:true,compartir:false},
+  /* ── SEGUNDO TIEMPO ──────────────────────────────────────────────── */
+  { id:"asado", nombre:"Asado de tira (el 9)", precio:680, categoria:"segundo-tiempo",
+    descripcion:"De la parrilla, jugoso. Guarnición a elección.",
+    tags:["clásico","contundente"], apto:{vegetariano:false,singluten:true,compartir:false},
+    contiene:["carne"], ejes:{contundencia:10,aventura:1,social:5,frescura:0,dulce:0} },
+  { id:"vacio", nombre:"Vacío", precio:640, categoria:"segundo-tiempo",
+    descripcion:"A la parrilla, tierno. Con papas o ensalada.",
+    tags:["clásico","contundente"], apto:{vegetariano:false,singluten:true,compartir:false},
     contiene:["carne"], ejes:{contundencia:9,aventura:1,social:5,frescura:0,dulce:0} },
-  { id:"asado-premium", nombre:"Asado premium", precio:700, categoria:"parrilla",
-    descripcion:"", tags:["contundente"], apto:{vegetariano:false,singluten:true,compartir:false},
-    contiene:["carne"], ejes:{contundencia:10,aventura:3,social:5,frescura:0,dulce:0} },
-  { id:"vacio", nombre:"Vacío", precio:600, categoria:"parrilla",
-    descripcion:"", tags:["clásico","contundente"], apto:{vegetariano:false,singluten:true,compartir:false},
-    contiene:["carne"], ejes:{contundencia:9,aventura:1,social:5,frescura:0,dulce:0} },
-  { id:"picana-angus", nombre:"Picaña", precio:700, categoria:"parrilla",
-    descripcion:"", tags:["de la casa","contundente"], apto:{vegetariano:false,singluten:true,compartir:false},
-    contiene:["carne"], ejes:{contundencia:10,aventura:4,social:4,frescura:0,dulce:0} },
-  { id:"entrana", nombre:"Entraña", precio:610, categoria:"parrilla",
-    descripcion:"", tags:["clásico"], apto:{vegetariano:false,singluten:true,compartir:false},
-    contiene:["carne"], ejes:{contundencia:9,aventura:3,social:4,frescura:0,dulce:0} },
-  { id:"entrana-napo", nombre:"Entraña a la napolitana", precio:710, categoria:"parrilla",
-    descripcion:"Jamón, muzzarella y salsa de tomate.", tags:["demoledor"],
-    apto:{vegetariano:false,singluten:true,compartir:false},
-    contiene:["carne","cerdo","lacteos"], ejes:{contundencia:10,aventura:3,social:4,frescura:0,dulce:0} },
-  { id:"entrana-caballo", nombre:"Entraña a caballo", precio:710, categoria:"parrilla",
-    descripcion:"Muzzarella y dos huevos fritos.", tags:["demoledor"],
-    apto:{vegetariano:false,singluten:true,compartir:false},
-    contiene:["carne","lacteos","huevo"], ejes:{contundencia:10,aventura:4,social:4,frescura:0,dulce:0} },
-  { id:"ojo-bife", nombre:"Ojo de bife", precio:680, categoria:"parrilla",
-    descripcion:"", tags:["contundente"], apto:{vegetariano:false,singluten:true,compartir:false},
+  { id:"bife-ancho", nombre:"El delantero centro (bife ancho)", precio:720, categoria:"segundo-tiempo",
+    descripcion:"Corte grande. Cocción a elección.",
+    tags:["contundente","de la casa"], apto:{vegetariano:false,singluten:true,compartir:false},
     contiene:["carne"], ejes:{contundencia:10,aventura:2,social:4,frescura:0,dulce:0} },
-  { id:"muslo-pollo", nombre:"Muslo de pollo deshuesado", precio:500, categoria:"parrilla",
-    descripcion:"", tags:["liviano"], apto:{vegetariano:false,singluten:true,compartir:false},
-    contiene:["pollo"], ejes:{contundencia:6,aventura:1,social:3,frescura:2,dulce:0} },
-  { id:"muslo-pollo-pizza", nombre:"Muslo de pollo a la pizza", precio:600, categoria:"parrilla",
-    descripcion:"", tags:["contundente"], apto:{vegetariano:false,singluten:true,compartir:false},
-    contiene:["pollo","lacteos"], ejes:{contundencia:8,aventura:3,social:3,frescura:1,dulce:0} },
-  { id:"matambrito-cerdo", nombre:"Matambrito de cerdo", precio:610, categoria:"parrilla",
-    descripcion:"", tags:["contundente"], apto:{vegetariano:false,singluten:true,compartir:false},
-    contiene:["cerdo"], ejes:{contundencia:9,aventura:3,social:4,frescura:0,dulce:0} },
-  { id:"matambrito-pizza", nombre:"Matambrito a la pizza", precio:710, categoria:"parrilla",
-    descripcion:"", tags:["demoledor"], apto:{vegetariano:false,singluten:true,compartir:false},
-    contiene:["cerdo","lacteos"], ejes:{contundencia:10,aventura:4,social:4,frescura:0,dulce:0} },
-  { id:"kassler", nombre:"Costillitas de cerdo ahumadas", precio:660, categoria:"parrilla",
-    descripcion:"", tags:["distinto","contundente"], apto:{vegetariano:false,singluten:true,compartir:false},
-    contiene:["cerdo"], ejes:{contundencia:10,aventura:6,social:5,frescura:0,dulce:1} },
-  { id:"tripa-farina", nombre:"Tripa gorda", precio:260, categoria:"parrilla",
-    descripcion:"", tags:["de acá","sin TACC"], apto:{vegetariano:false,singluten:true,compartir:true},
-    contiene:["achuras"], ejes:{contundencia:7,aventura:9,social:7,frescura:0,dulce:0} },
-  { id:"rinon", nombre:"Riñón", precio:260, categoria:"parrilla",
-    descripcion:"", tags:["achuras"], apto:{vegetariano:false,singluten:true,compartir:true},
-    contiene:["achuras"], ejes:{contundencia:6,aventura:9,social:6,frescura:0,dulce:0} },
-  { id:"rinoncitos-cordero", nombre:"Riñoncitos de cordero", precio:410, categoria:"parrilla",
-    descripcion:"", tags:["achuras","distinto"], apto:{vegetariano:false,singluten:true,compartir:true},
-    contiene:["achuras"], ejes:{contundencia:6,aventura:10,social:6,frescura:0,dulce:0} },
-  { id:"chorizo", nombre:"Chorizo", precio:260, categoria:"parrilla",
-    descripcion:"", tags:["clásico"], apto:{vegetariano:false,singluten:true,compartir:true},
-    contiene:["cerdo"], ejes:{contundencia:7,aventura:1,social:8,frescura:0,dulce:0} },
-  { id:"molleja", nombre:"Molleja", precio:460, categoria:"parrilla",
-    descripcion:"", tags:["achuras","de la casa"], apto:{vegetariano:false,singluten:true,compartir:true},
-    contiene:["achuras"], ejes:{contundencia:7,aventura:8,social:8,frescura:0,dulce:0} },
-  { id:"morcilla-salada", nombre:"Morcilla salada", precio:240, categoria:"parrilla",
-    descripcion:"", tags:["achuras"], apto:{vegetariano:false,singluten:true,compartir:true},
-    contiene:["achuras","cerdo"], ejes:{contundencia:7,aventura:7,social:8,frescura:0,dulce:0} },
-  { id:"morcilla-dulce", nombre:"Morcilla dulce", precio:240, categoria:"parrilla",
-    descripcion:"", tags:["achuras","distinto"], apto:{vegetariano:false,singluten:true,compartir:true},
-    contiene:["achuras","cerdo","frutos-secos"], ejes:{contundencia:7,aventura:8,social:8,frescura:0,dulce:6} },
-  { id:"provolone", nombre:"Provolone a la parrilla", precio:360, categoria:"parrilla",
-    descripcion:"", tags:["vegetariano","para la mesa"], apto:{vegetariano:true,singluten:true,compartir:true},
-    contiene:["lacteos"], ejes:{contundencia:7,aventura:3,social:9,frescura:0,dulce:0} },
-  { id:"provolone-caprese", nombre:"Provolone caprese", precio:410, categoria:"parrilla",
-    descripcion:"", tags:["vegetariano","para la mesa"], apto:{vegetariano:true,singluten:true,compartir:true},
-    contiene:["lacteos"], ejes:{contundencia:7,aventura:4,social:9,frescura:4,dulce:0} },
-  { id:"provolone-crudo", nombre:"Provolone con jamón crudo", precio:510, categoria:"parrilla",
-    descripcion:"", tags:["para la mesa"], apto:{vegetariano:false,singluten:true,compartir:true},
-    contiene:["lacteos","cerdo"], ejes:{contundencia:8,aventura:5,social:9,frescura:2,dulce:0} },
+  { id:"pollo-lima", nombre:"El extremo (pollo con lima)", precio:520, categoria:"segundo-tiempo",
+    descripcion:"Pechuga marinada con lima y ajo. Papas rústicas.",
+    tags:["liviano"], apto:{vegetariano:false,singluten:true,compartir:false},
+    contiene:["pollo"], ejes:{contundencia:5,aventura:5,social:3,frescura:5,dulce:0} },
+  { id:"pescado", nombre:"La chilena (pescado del día)", precio:620, categoria:"segundo-tiempo",
+    descripcion:"Merluza o corvina, según lo que llegó. A la plancha.",
+    tags:["de mar","liviano"], apto:{vegetariano:false,singluten:true,compartir:false},
+    contiene:["pescado"], ejes:{contundencia:5,aventura:5,social:3,frescura:6,dulce:0} },
+  { id:"verduras-parrilla", nombre:"Verduras a la parrilla (sin TACC)", precio:440, categoria:"segundo-tiempo",
+    descripcion:"Zucchini, berenjena, morrón y batata. Aceite de oliva y sal.",
+    tags:["vegetariano","sin TACC"], apto:{vegetariano:true,singluten:true,compartir:true},
+    contiene:[], ejes:{contundencia:4,aventura:3,social:5,frescura:5,dulce:0} },
+  { id:"chorizo", nombre:"El 9 de área (choripán)", precio:280, categoria:"segundo-tiempo",
+    descripcion:"Con chimichurri y salsa criolla. Se come con la mano.",
+    tags:["clásico","para compartir"], apto:{vegetariano:false,singluten:false,compartir:true},
+    contiene:["cerdo","gluten"], ejes:{contundencia:7,aventura:1,social:8,frescura:0,dulce:0} },
 
-  /* ── ESPECIALES DE PARRILLA ─────────────────────────────────── */
-  { id:"molleja-verdeo", nombre:"Molleja a la crema de verdeo", precio:560, categoria:"parrilla", sub:"Especiales de parrilla",
-    descripcion:"", tags:["achuras","de la casa"], apto:{vegetariano:false,singluten:true,compartir:false},
-    contiene:["achuras","lacteos"], ejes:{contundencia:8,aventura:8,social:5,frescura:0,dulce:0} },
-  { id:"matambre-arrollado", nombre:"Matambre arrollado relleno", precio:640, categoria:"parrilla", sub:"Especiales de parrilla",
-    descripcion:"", tags:["contundente"], apto:{vegetariano:false,singluten:true,compartir:false},
-    contiene:["carne","huevo"], ejes:{contundencia:9,aventura:5,social:5,frescura:1,dulce:0} },
-  { id:"ojo-champinones", nombre:"Ojo de bife con champiñones", precio:740, categoria:"parrilla", sub:"Especiales de parrilla",
-    descripcion:"", tags:["de la casa","contundente"], apto:{vegetariano:false,singluten:true,compartir:false},
-    contiene:["carne","lacteos"], ejes:{contundencia:10,aventura:5,social:4,frescura:0,dulce:0} },
-  { id:"picana-mostaza", nombre:"Picaña a la mostaza y queso", precio:740, categoria:"parrilla", sub:"Especiales de parrilla",
-    descripcion:"", tags:["distinto","contundente"], apto:{vegetariano:false,singluten:true,compartir:false},
-    contiene:["carne","lacteos"], ejes:{contundencia:10,aventura:6,social:4,frescura:0,dulce:2} },
-  { id:"medallon-lomo", nombre:"Medallón de lomo con panceta", precio:740, categoria:"parrilla", sub:"Especiales de parrilla",
-    descripcion:"", tags:["de la casa","demoledor"], apto:{vegetariano:false,singluten:true,compartir:false},
-    contiene:["carne","cerdo"], ejes:{contundencia:10,aventura:5,social:4,frescura:0,dulce:0} },
-  { id:"rack-cordero", nombre:"Rack de cordero", precio:840, categoria:"parrilla", sub:"Especiales de parrilla",
-    descripcion:"", tags:["distinto","de la casa"], apto:{vegetariano:false,singluten:true,compartir:false},
-    contiene:["carne"], ejes:{contundencia:9,aventura:8,social:4,frescura:1,dulce:0} },
-  { id:"picana-cordero", nombre:"Picaña de cordero", precio:740, categoria:"parrilla", sub:"Especiales de parrilla",
-    descripcion:"", tags:["distinto"], apto:{vegetariano:false,singluten:true,compartir:false},
-    contiene:["carne"], ejes:{contundencia:9,aventura:8,social:4,frescura:1,dulce:0} },
-  { id:"salmon", nombre:"Salmón a la parrilla", precio:710, categoria:"parrilla", sub:"Especiales de parrilla",
-    descripcion:"", tags:["de mar","liviano"], apto:{vegetariano:false,singluten:true,compartir:false},
-    contiene:["pescado"], ejes:{contundencia:6,aventura:6,social:3,frescura:5,dulce:0} },
-  { id:"salmon-camarones", nombre:"Salmón con salsa de camarones", precio:840, categoria:"parrilla", sub:"Especiales de parrilla",
-    descripcion:"", tags:["de mar","de la casa"], apto:{vegetariano:false,singluten:true,compartir:false},
-    contiene:["pescado","mariscos","lacteos"], ejes:{contundencia:7,aventura:7,social:3,frescura:4,dulce:0} },
-
-  /* ── CERVEZAS ───────────────────────────────────────────────── */
-  { id:"patricia-1l", nombre:"Patricia 1L", precio:360, categoria:"cervezas",
-    descripcion:"", tags:["clásico","para la mesa"], apto:{vegetariano:true,singluten:false,compartir:true},
-    contiene:["alcohol","gluten"], ejes:{contundencia:2,aventura:0,social:8,frescura:9,dulce:0} },
-  { id:"stella-1l", nombre:"Stella Artois 1L", precio:390, categoria:"cervezas",
-    descripcion:"", tags:["para la mesa"], apto:{vegetariano:true,singluten:false,compartir:true},
-    contiene:["alcohol","gluten"], ejes:{contundencia:2,aventura:2,social:8,frescura:9,dulce:0} },
-  { id:"stella-noire", nombre:"Stella Artois Noire", precio:400, categoria:"cervezas",
-    descripcion:"", tags:["distinto"], apto:{vegetariano:true,singluten:false,compartir:false},
-    contiene:["alcohol","gluten"], ejes:{contundencia:4,aventura:6,social:4,frescura:6,dulce:2} },
-  { id:"stella-330", nombre:"Stella Artois 330cc", precio:220, categoria:"cervezas",
-    descripcion:"", tags:["clásico"], apto:{vegetariano:true,singluten:false,compartir:false},
-    contiene:["alcohol","gluten"], ejes:{contundencia:2,aventura:1,social:4,frescura:9,dulce:0} },
-  { id:"zillertal-1l", nombre:"Zillertal 1L", precio:390, categoria:"cervezas",
-    descripcion:"", tags:["clásico","para la mesa"], apto:{vegetariano:true,singluten:false,compartir:true},
-    contiene:["alcohol","gluten"], ejes:{contundencia:2,aventura:1,social:8,frescura:9,dulce:0} },
-  { id:"zillertal-ipa", nombre:"Zillertal IPA 1L", precio:420, categoria:"cervezas",
-    descripcion:"", tags:["distinto","para la mesa"], apto:{vegetariano:true,singluten:false,compartir:true},
-    contiene:["alcohol","gluten"], ejes:{contundencia:3,aventura:7,social:8,frescura:8,dulce:0} },
-  { id:"corona-710", nombre:"Corona 710cc", precio:380, categoria:"cervezas",
-    descripcion:"", tags:["fresco","para la mesa"], apto:{vegetariano:true,singluten:false,compartir:true},
-    contiene:["alcohol","gluten"], ejes:{contundencia:1,aventura:3,social:7,frescura:10,dulce:1} },
-  { id:"corona-330", nombre:"Corona 330cc", precio:250, categoria:"cervezas",
-    descripcion:"", tags:["fresco"], apto:{vegetariano:true,singluten:false,compartir:false},
-    contiene:["alcohol","gluten"], ejes:{contundencia:1,aventura:3,social:4,frescura:10,dulce:1} },
-  { id:"corona-0", nombre:"Corona 0% alcohol", precio:250, categoria:"cervezas",
-    descripcion:"", tags:["sin alcohol","fresco"], apto:{vegetariano:true,singluten:false,compartir:false},
-    contiene:["gluten"], ejes:{contundencia:1,aventura:3,social:4,frescura:10,dulce:1} },
-  { id:"franziscaner", nombre:"Franziskaner", precio:320, categoria:"cervezas",
-    descripcion:"", tags:["distinto"], apto:{vegetariano:true,singluten:false,compartir:false},
-    contiene:["alcohol","gluten"], ejes:{contundencia:3,aventura:7,social:4,frescura:7,dulce:2} },
-  { id:"brahma-0", nombre:"Brahma 0% alcohol", precio:220, categoria:"cervezas",
-    descripcion:"", tags:["sin alcohol"], apto:{vegetariano:true,singluten:false,compartir:false},
-    contiene:["gluten"], ejes:{contundencia:1,aventura:1,social:4,frescura:9,dulce:0} },
-  { id:"patagonia-730", nombre:"Patagonia 730cc", precio:380, categoria:"cervezas",
-    descripcion:"Bohemian Pilsener · Amber · Weisse · Küne · 24.7 · Porter.",
-    tags:["distinto","para la mesa"], apto:{vegetariano:true,singluten:false,compartir:true},
-    contiene:["alcohol","gluten"], ejes:{contundencia:3,aventura:8,social:8,frescura:7,dulce:1} },
-
-  /* ── TRAGOS ─────────────────────────────────────────────────── */
-  { id:"daikiri-frutilla", nombre:"Daikiri de frutilla", precio:290, categoria:"tragos",
-    descripcion:"Ron y pulpa de frutilla.", tags:["fresco"], apto:{vegetariano:true,singluten:true,compartir:false},
-    contiene:["alcohol"], ejes:{contundencia:1,aventura:5,social:5,frescura:10,dulce:7} },
-  { id:"caipirina", nombre:"Caipiriña de frutos rojos", precio:320, categoria:"tragos",
-    descripcion:"", tags:["fresco"], apto:{vegetariano:true,singluten:true,compartir:false},
-    contiene:["alcohol"], ejes:{contundencia:1,aventura:6,social:5,frescura:10,dulce:6} },
-  { id:"pina-colada", nombre:"Piña Colada", precio:290, categoria:"tragos",
-    descripcion:"Ron blanco, jugo de piña y leche de coco.", tags:["fresco"],
-    apto:{vegetariano:true,singluten:true,compartir:false},
-    contiene:["alcohol","lacteos"], ejes:{contundencia:2,aventura:6,social:5,frescura:9,dulce:8} },
-  { id:"malibu-rose", nombre:"Malibú Rosé", precio:360, categoria:"tragos",
-    descripcion:"Malibú, vino espumante y pulpa de frutilla.", tags:["distinto"],
-    apto:{vegetariano:true,singluten:true,compartir:false},
-    contiene:["alcohol"], ejes:{contundencia:1,aventura:7,social:6,frescura:9,dulce:7} },
-  { id:"mango-mixer", nombre:"Mango mixer", precio:340, categoria:"tragos",
-    descripcion:"Malibú, jugo de mango y frutos rojos.", tags:["distinto"],
-    apto:{vegetariano:true,singluten:true,compartir:false},
-    contiene:["alcohol"], ejes:{contundencia:1,aventura:7,social:5,frescura:9,dulce:7} },
-  { id:"gin-tonic", nombre:"Gin tónic", precio:320, categoria:"tragos",
-    descripcion:"Gin Pinares y tónica.", tags:["clásico"], apto:{vegetariano:true,singluten:true,compartir:false},
+  /* ── VESTUARIO (tragos) ──────────────────────────────────────────── */
+  { id:"fernet-coca", nombre:"Fernet con coca", precio:280, categoria:"vestuario",
+    descripcion:"Con mucho hielo. La proporción es un secreto de vestuario.",
+    tags:["clásico"], apto:{vegetariano:true,singluten:true,compartir:false},
+    contiene:["alcohol"], ejes:{contundencia:3,aventura:5,social:6,frescura:7,dulce:2} },
+  { id:"gin-tonic", nombre:"Gin tónic", precio:340, categoria:"vestuario",
+    descripcion:"Con cáscara de pomelo y hielo grande.",
+    tags:["clásico"], apto:{vegetariano:true,singluten:true,compartir:false},
     contiene:["alcohol"], ejes:{contundencia:2,aventura:4,social:4,frescura:9,dulce:2} },
-  { id:"gin-tonic-0", nombre:"Gin tónic 0% alcohol", precio:320, categoria:"tragos",
-    descripcion:"Gin Pinares 0% y tónica.", tags:["sin alcohol"], apto:{vegetariano:true,singluten:true,compartir:false},
-    contiene:[], ejes:{contundencia:1,aventura:5,social:4,frescura:9,dulce:2} },
-  { id:"gin-maracuya", nombre:"Gin tónic de maracuyá", precio:360, categoria:"tragos",
-    descripcion:"Gin de maracuyá y tónica.", tags:["distinto"], apto:{vegetariano:true,singluten:true,compartir:false},
-    contiene:["alcohol"], ejes:{contundencia:2,aventura:7,social:4,frescura:9,dulce:4} },
-  { id:"aperol-spritz", nombre:"Aperol Spritz", precio:360, categoria:"tragos",
-    descripcion:"Espumante, Aperol y soda.", tags:["fresco"], apto:{vegetariano:true,singluten:true,compartir:false},
-    contiene:["alcohol"], ejes:{contundencia:1,aventura:6,social:6,frescura:10,dulce:4} },
-  { id:"mojito", nombre:"Mojito", precio:290, categoria:"tragos",
-    descripcion:"Lima, ron, menta y soda.", tags:["clásico","fresco"],
-    apto:{vegetariano:true,singluten:true,compartir:false},
+  { id:"mojito", nombre:"Mojito", precio:320, categoria:"vestuario",
+    descripcion:"Lima, ron, menta y soda. Bien frío.",
+    tags:["fresco","clásico"], apto:{vegetariano:true,singluten:true,compartir:false},
     contiene:["alcohol"], ejes:{contundencia:1,aventura:4,social:5,frescura:10,dulce:4} },
-  { id:"mojito-kiwi", nombre:"Mojito de kiwi", precio:360, categoria:"tragos",
-    descripcion:"Kiwi, jugo de limón, menta, ron y soda.", tags:["distinto","fresco"],
-    apto:{vegetariano:true,singluten:true,compartir:false},
-    contiene:["alcohol"], ejes:{contundencia:1,aventura:7,social:5,frescura:10,dulce:5} },
-  { id:"mojito-sandia", nombre:"Mojito de sandía", precio:360, categoria:"tragos",
-    descripcion:"Sandía, jugo de limón, menta, ron y soda.", tags:["distinto","fresco"],
-    apto:{vegetariano:true,singluten:true,compartir:false},
-    contiene:["alcohol"], ejes:{contundencia:1,aventura:7,social:5,frescura:10,dulce:5} },
-  { id:"clerico", nombre:"Clericó 1 litro", precio:820, categoria:"tragos",
-    descripcion:"Vino blanco y frutas varias.", tags:["para la mesa","fresco"],
-    apto:{vegetariano:true,singluten:true,compartir:true},
+  { id:"clerico", nombre:"Clericó 1 litro", precio:820, categoria:"vestuario",
+    descripcion:"Vino blanco con fruta y hielo. Para la mesa.",
+    tags:["para compartir","fresco"], apto:{vegetariano:true,singluten:true,compartir:true},
     contiene:["alcohol"], ejes:{contundencia:2,aventura:5,social:10,frescura:10,dulce:6} },
-  { id:"sangria", nombre:"Sangría 1 litro", precio:820, categoria:"tragos",
-    descripcion:"Vino tinto y frutas varias.", tags:["para la mesa","fresco"],
-    apto:{vegetariano:true,singluten:true,compartir:true},
-    contiene:["alcohol"], ejes:{contundencia:3,aventura:5,social:10,frescura:9,dulce:6} },
+  { id:"vino-copa", nombre:"Copa de tinto", precio:280, categoria:"vestuario",
+    descripcion:"Tannat de la casa.",
+    tags:["clásico"], apto:{vegetariano:true,singluten:true,compartir:false},
+    contiene:["alcohol"], ejes:{contundencia:6,aventura:3,social:4,frescura:2,dulce:1} },
+  { id:"vino-botella", nombre:"Botella de tinto", precio:1450, categoria:"vestuario",
+    descripcion:"Tannat, para la sobremesa larga.",
+    tags:["para compartir"], apto:{vegetariano:true,singluten:true,compartir:true},
+    contiene:["alcohol"], ejes:{contundencia:7,aventura:3,social:9,frescura:2,dulce:1} },
 
-  /* ── REFRESCOS Y LICUADOS ───────────────────────────────────── */
-  { id:"coca-500", nombre:"Línea Coca Cola 500cc", precio:160, categoria:"refrescos",
-    descripcion:"", tags:["sin alcohol"], apto:{vegetariano:true,singluten:true,compartir:false},
+  /* ── CERVECERÍA ──────────────────────────────────────────────────── */
+  { id:"rubia-pinta", nombre:"Rubia tirada, pinta", precio:280, categoria:"cerveceria",
+    descripcion:"Bien fría. Es lo que hay que tomar.",
+    tags:["clásico"], apto:{vegetariano:true,singluten:false,compartir:false},
+    contiene:["alcohol","gluten"], ejes:{contundencia:2,aventura:1,social:5,frescura:9,dulce:0} },
+  { id:"ipa", nombre:"IPA del entretiempo", precio:340, categoria:"cerveceria",
+    descripcion:"Artesanal, amarga, con carácter.",
+    tags:["distinto"], apto:{vegetariano:true,singluten:false,compartir:false},
+    contiene:["alcohol","gluten"], ejes:{contundencia:3,aventura:7,social:5,frescura:8,dulce:0} },
+  { id:"stout", nombre:"Stout del vestuario", precio:360, categoria:"cerveceria",
+    descripcion:"Oscura, cremosa, con notas a café.",
+    tags:["distinto"], apto:{vegetariano:true,singluten:false,compartir:false},
+    contiene:["alcohol","gluten"], ejes:{contundencia:5,aventura:7,social:4,frescura:4,dulce:3} },
+  { id:"cerveza-litro", nombre:"Litro (para la mesa)", precio:520, categoria:"cerveceria",
+    descripcion:"Para la mesa larga. Sirvan con hielo.",
+    tags:["para compartir"], apto:{vegetariano:true,singluten:false,compartir:true},
+    contiene:["alcohol","gluten"], ejes:{contundencia:2,aventura:1,social:10,frescura:9,dulce:0} },
+  { id:"agua", nombre:"Agua con o sin gas", precio:120, categoria:"cerveceria",
+    descripcion:"Grande. Tomen agua, que hace calor.",
+    tags:["sin alcohol"], apto:{vegetariano:true,singluten:true,compartir:true},
+    contiene:[], ejes:{contundencia:0,aventura:0,social:5,frescura:9,dulce:0} },
+  { id:"coca", nombre:"Coca-Cola", precio:180, categoria:"cerveceria",
+    descripcion:"En vidrio. Bien fría.",
+    tags:["sin alcohol"], apto:{vegetariano:true,singluten:true,compartir:false},
     contiene:[], ejes:{contundencia:1,aventura:0,social:3,frescura:8,dulce:5} },
-  { id:"coca-1l", nombre:"Línea Coca Cola 1 litro", precio:280, categoria:"refrescos",
-    descripcion:"", tags:["sin alcohol","para la mesa"], apto:{vegetariano:true,singluten:true,compartir:true},
-    contiene:[], ejes:{contundencia:1,aventura:0,social:7,frescura:8,dulce:5} },
-  { id:"salus-frutte", nombre:"Salus Frutté 500cc", precio:150, categoria:"refrescos",
-    descripcion:"", tags:["sin alcohol"], apto:{vegetariano:true,singluten:true,compartir:false},
-    contiene:[], ejes:{contundencia:0,aventura:1,social:3,frescura:9,dulce:4} },
-  { id:"salus-agua", nombre:"Salus agua 500cc", precio:140, categoria:"refrescos",
-    descripcion:"", tags:["sin alcohol"], apto:{vegetariano:true,singluten:true,compartir:false},
-    contiene:[], ejes:{contundencia:0,aventura:0,social:3,frescura:9,dulce:0} },
-  { id:"licuado-frutilla", nombre:"Licuado de frutilla", precio:240, categoria:"refrescos",
-    descripcion:"", tags:["sin alcohol","fresco"], apto:{vegetariano:true,singluten:true,compartir:false},
-    contiene:[], ejes:{contundencia:2,aventura:3,social:3,frescura:9,dulce:7} },
-  { id:"licuado-durazno", nombre:"Licuado de durazno y naranja", precio:240, categoria:"refrescos",
-    descripcion:"", tags:["sin alcohol","fresco"], apto:{vegetariano:true,singluten:true,compartir:false},
-    contiene:[], ejes:{contundencia:2,aventura:3,social:3,frescura:9,dulce:7} },
-  { id:"licuado-banana", nombre:"Licuado de banana y leche", precio:240, categoria:"refrescos",
-    descripcion:"", tags:["sin alcohol"], apto:{vegetariano:true,singluten:true,compartir:false},
-    contiene:["lacteos"], ejes:{contundencia:4,aventura:2,social:3,frescura:7,dulce:7} },
-  { id:"jugo-naranja", nombre:"Jugo de naranja natural", precio:200, categoria:"refrescos",
-    descripcion:"", tags:["sin alcohol","fresco"], apto:{vegetariano:true,singluten:true,compartir:false},
-    contiene:[], ejes:{contundencia:1,aventura:1,social:3,frescura:10,dulce:5} },
-  { id:"jugo-pomelo", nombre:"Jugo de pomelo natural", precio:200, categoria:"refrescos",
-    descripcion:"", tags:["sin alcohol","fresco"], apto:{vegetariano:true,singluten:true,compartir:false},
-    contiene:[], ejes:{contundencia:1,aventura:4,social:3,frescura:10,dulce:3} },
-  { id:"limonada-jarra", nombre:"Jarra de limonada 1 litro", precio:320, categoria:"refrescos",
-    descripcion:"", tags:["sin alcohol","para la mesa"], apto:{vegetariano:true,singluten:true,compartir:true},
+  { id:"limonada", nombre:"Jarra de limonada 1 litro", precio:340, categoria:"cerveceria",
+    descripcion:"Con menta y jengibre. Para la mesa.",
+    tags:["sin alcohol","para compartir","fresco"], apto:{vegetariano:true,singluten:true,compartir:true},
     contiene:[], ejes:{contundencia:0,aventura:3,social:9,frescura:10,dulce:4} },
-  { id:"monster", nombre:"Monster 473cc", precio:220, categoria:"refrescos",
-    descripcion:"Energizante.", tags:["sin alcohol"], apto:{vegetariano:true,singluten:true,compartir:false},
-    contiene:[], ejes:{contundencia:2,aventura:6,social:3,frescura:8,dulce:6} },
 
-  /* ── BEBIDAS Y WHISKYS ──────────────────────────────────────── */
-  { id:"terma", nombre:"Terma", precio:120, categoria:"bebidas",
-    descripcion:"", tags:["sin alcohol","de acá"], apto:{vegetariano:true,singluten:true,compartir:false},
-    contiene:[], ejes:{contundencia:1,aventura:3,social:3,frescura:8,dulce:3} },
-  { id:"martini", nombre:"Martini", precio:180, categoria:"bebidas",
-    descripcion:"", tags:["clásico"], apto:{vegetariano:true,singluten:true,compartir:false},
-    contiene:["alcohol"], ejes:{contundencia:3,aventura:5,social:4,frescura:6,dulce:4} },
-  { id:"fernet-coca", nombre:"Fernet con coca", precio:220, categoria:"bebidas",
-    descripcion:"", tags:["clásico"], apto:{vegetariano:true,singluten:true,compartir:false},
-    contiene:["alcohol"], ejes:{contundencia:3,aventura:4,social:5,frescura:7,dulce:2} },
-  { id:"jagger", nombre:"Jägermeister", precio:250, categoria:"bebidas",
-    descripcion:"", tags:["distinto"], apto:{vegetariano:true,singluten:true,compartir:false},
-    contiene:["alcohol"], ejes:{contundencia:4,aventura:8,social:5,frescura:4,dulce:5} },
-  { id:"gin-gordon", nombre:"Gin Gordon's", precio:200, categoria:"bebidas",
-    descripcion:"", tags:["clásico"], apto:{vegetariano:true,singluten:true,compartir:false},
-    contiene:["alcohol"], ejes:{contundencia:3,aventura:4,social:3,frescura:7,dulce:1} },
-  { id:"gin-tanqueray", nombre:"Gin Tanqueray", precio:280, categoria:"bebidas",
-    descripcion:"", tags:["distinto"], apto:{vegetariano:true,singluten:true,compartir:false},
-    contiene:["alcohol"], ejes:{contundencia:3,aventura:6,social:3,frescura:7,dulce:1} },
-  { id:"vodka-smirnoff", nombre:"Vodka Smirnoff", precio:200, categoria:"bebidas",
-    descripcion:"", tags:["clásico"], apto:{vegetariano:true,singluten:true,compartir:false},
-    contiene:["alcohol"], ejes:{contundencia:3,aventura:4,social:4,frescura:7,dulce:1} },
-  { id:"vodka-absolut", nombre:"Vodka Absolut", precio:280, categoria:"bebidas",
-    descripcion:"", tags:["distinto"], apto:{vegetariano:true,singluten:true,compartir:false},
-    contiene:["alcohol"], ejes:{contundencia:3,aventura:5,social:4,frescura:7,dulce:1} },
-  { id:"ron-bacardi", nombre:"Ron Bacardí", precio:200, categoria:"bebidas",
-    descripcion:"", tags:["clásico"], apto:{vegetariano:true,singluten:true,compartir:false},
-    contiene:["alcohol"], ejes:{contundencia:3,aventura:4,social:4,frescura:7,dulce:3} },
-  { id:"ron-anejo", nombre:"Ron Bacardí Añejo", precio:240, categoria:"bebidas",
-    descripcion:"", tags:["distinto"], apto:{vegetariano:true,singluten:true,compartir:false},
-    contiene:["alcohol"], ejes:{contundencia:4,aventura:6,social:4,frescura:5,dulce:4} },
-  { id:"bayleys", nombre:"Baileys", precio:240, categoria:"bebidas",
-    descripcion:"", tags:["dulce"], apto:{vegetariano:true,singluten:false,compartir:false},
-    contiene:["alcohol","lacteos","gluten"], ejes:{contundencia:5,aventura:4,social:4,frescura:3,dulce:9} },
-  { id:"aperol", nombre:"Aperol", precio:220, categoria:"bebidas",
-    descripcion:"", tags:["fresco"], apto:{vegetariano:true,singluten:true,compartir:false},
-    contiene:["alcohol"], ejes:{contundencia:2,aventura:5,social:5,frescura:8,dulce:4} },
-  { id:"tequila", nombre:"Tequila", precio:220, categoria:"bebidas",
-    descripcion:"", tags:["distinto"], apto:{vegetariano:true,singluten:true,compartir:false},
-    contiene:["alcohol"], ejes:{contundencia:4,aventura:8,social:6,frescura:4,dulce:0} },
-  { id:"vat69", nombre:"Whisky Vat 69", precio:160, categoria:"bebidas", sub:"Whiskys",
-    descripcion:"", tags:["clásico"], apto:{vegetariano:true,singluten:false,compartir:false},
-    contiene:["alcohol","gluten"], ejes:{contundencia:4,aventura:3,social:3,frescura:2,dulce:1} },
-  { id:"jameson", nombre:"Jameson", precio:240, categoria:"bebidas", sub:"Whiskys",
-    descripcion:"", tags:["distinto"], apto:{vegetariano:true,singluten:false,compartir:false},
-    contiene:["alcohol","gluten"], ejes:{contundencia:5,aventura:6,social:3,frescura:2,dulce:2} },
-  { id:"jw-red", nombre:"Johnnie Walker Red", precio:180, categoria:"bebidas", sub:"Whiskys",
-    descripcion:"", tags:["clásico"], apto:{vegetariano:true,singluten:false,compartir:false},
-    contiene:["alcohol","gluten"], ejes:{contundencia:5,aventura:4,social:3,frescura:2,dulce:1} },
-  { id:"jw-black", nombre:"Johnnie Walker Black", precio:280, categoria:"bebidas", sub:"Whiskys",
-    descripcion:"", tags:["distinto"], apto:{vegetariano:true,singluten:false,compartir:false},
-    contiene:["alcohol","gluten"], ejes:{contundencia:6,aventura:6,social:3,frescura:1,dulce:1} },
-  { id:"jw-gold", nombre:"Johnnie Walker Gold", precio:490, categoria:"bebidas", sub:"Whiskys",
-    descripcion:"", tags:["distinto"], apto:{vegetariano:true,singluten:false,compartir:false},
-    contiene:["alcohol","gluten"], ejes:{contundencia:6,aventura:8,social:3,frescura:1,dulce:2} },
-  { id:"jw-blue", nombre:"Johnnie Walker Blue", precio:1200, categoria:"bebidas", sub:"Whiskys",
-    descripcion:"", tags:["distinto"], apto:{vegetariano:true,singluten:false,compartir:false},
-    contiene:["alcohol","gluten"], ejes:{contundencia:7,aventura:10,social:3,frescura:1,dulce:2} },
-
-  /* ── POSTRES ────────────────────────────────────────────────── */
-  { id:"helado-2", nombre:"Helado, dos sabores", precio:260, categoria:"postres",
-    descripcion:"", tags:["fresco","sin TACC"], apto:{vegetariano:true,singluten:true,compartir:false},
-    contiene:["lacteos"], ejes:{contundencia:3,aventura:2,social:3,frescura:10,dulce:9} },
-  { id:"flan-ddl", nombre:"Flan casero con dulce de leche", precio:260, categoria:"postres",
-    descripcion:"", tags:["clásico","sin TACC"], apto:{vegetariano:true,singluten:true,compartir:false},
+  /* ── TIEMPO SUPLEMENTARIO ────────────────────────────────────────── */
+  { id:"chaja", nombre:"Chajá del campeón", precio:340, categoria:"suplementario",
+    descripcion:"Merengue, durazno y crema. El postre nacional.",
+    tags:["clásico","dulce"], apto:{vegetariano:true,singluten:false,compartir:true},
+    contiene:["lacteos","gluten","huevo"], ejes:{contundencia:5,aventura:2,social:5,frescura:5,dulce:10} },
+  { id:"flan-ddl", nombre:"Flan con dulce de leche", precio:280, categoria:"suplementario",
+    descripcion:"Con crema si querés. El dulce de leche no se negocia.",
+    tags:["clásico","sin TACC"], apto:{vegetariano:true,singluten:true,compartir:false},
     contiene:["lacteos","huevo"], ejes:{contundencia:5,aventura:1,social:2,frescura:3,dulce:10} },
-  { id:"tartas-frutales", nombre:"Tarta de frutas", precio:310, categoria:"postres",
-    descripcion:"", tags:["fresco"], apto:{vegetariano:true,singluten:false,compartir:false},
-    contiene:["lacteos","gluten","huevo"], ejes:{contundencia:4,aventura:3,social:3,frescura:6,dulce:8} },
-  { id:"lemon-pie", nombre:"Lemon pie", precio:310, categoria:"postres",
-    descripcion:"", tags:["fresco","clásico"], apto:{vegetariano:true,singluten:false,compartir:false},
-    contiene:["lacteos","gluten","huevo"], ejes:{contundencia:4,aventura:4,social:3,frescura:7,dulce:9} },
-  { id:"chaja", nombre:"Chajá", precio:310, categoria:"postres",
-    descripcion:"El postre nacional.", tags:["clásico","de acá"],
-    apto:{vegetariano:true,singluten:false,compartir:true},
-    contiene:["lacteos","gluten","huevo"], ejes:{contundencia:5,aventura:2,social:5,frescura:6,dulce:10} },
-  { id:"cheesecake", nombre:"Cheesecake de frutos del bosque", precio:360, categoria:"postres",
-    descripcion:"", tags:["clásico"], apto:{vegetariano:true,singluten:false,compartir:false},
-    contiene:["lacteos","gluten","huevo"], ejes:{contundencia:6,aventura:3,social:3,frescura:5,dulce:9} },
-  { id:"degustacion-cheesecake", nombre:"Tabla de cheesecakes", precio:400, categoria:"postres",
-    descripcion:"Frutos rojos, maracuyá y dulce de leche.", tags:["para la mesa","distinto"],
-    apto:{vegetariano:true,singluten:false,compartir:true},
-    contiene:["lacteos","gluten","huevo"], ejes:{contundencia:6,aventura:6,social:9,frescura:5,dulce:10} },
-  { id:"bombon-ddl", nombre:"Bombón helado de dulce de leche", precio:340, categoria:"postres",
-    descripcion:"", tags:["dulce"], apto:{vegetariano:true,singluten:false,compartir:false},
-    contiene:["lacteos","gluten","huevo"], ejes:{contundencia:6,aventura:4,social:3,frescura:3,dulce:10} },
-  { id:"brownie-helado", nombre:"Brownie con helado", precio:340, categoria:"postres",
-    descripcion:"", tags:["contundente","clásico"], apto:{vegetariano:true,singluten:false,compartir:true},
+  { id:"brownie", nombre:"Brownie con helado (el gol del final)", precio:360, categoria:"suplementario",
+    descripcion:"Caliente y frío al mismo tiempo. Con nueces.",
+    tags:["contundente","dulce"], apto:{vegetariano:true,singluten:false,compartir:true},
     contiene:["lacteos","gluten","huevo","frutos-secos"], ejes:{contundencia:8,aventura:3,social:5,frescura:5,dulce:10} },
-  { id:"franui", nombre:"Frambuesas bañadas en chocolate", precio:360, categoria:"postres",
-    descripcion:"", tags:["fresco","distinto"], apto:{vegetariano:true,singluten:true,compartir:true},
-    contiene:["lacteos"], ejes:{contundencia:3,aventura:6,social:6,frescura:9,dulce:9} },
-  { id:"copa-frutilla", nombre:"Copa de frutillas con chantilly", precio:340, categoria:"postres",
-    descripcion:"", tags:["fresco"], apto:{vegetariano:true,singluten:true,compartir:false},
-    contiene:["lacteos"], ejes:{contundencia:3,aventura:2,social:3,frescura:9,dulce:8} },
-  { id:"panqueques-ddl", nombre:"Panqueques de dulce de leche con helado", precio:360, categoria:"postres",
-    descripcion:"", tags:["contundente","clásico"], apto:{vegetariano:true,singluten:false,compartir:false},
-    contiene:["lacteos","gluten","huevo"], ejes:{contundencia:8,aventura:2,social:3,frescura:4,dulce:10} },
-  { id:"mousse-sin", nombre:"Mousse de chocolate sin azúcar", precio:340, categoria:"postres",
-    descripcion:"", tags:["sin TACC","distinto"], apto:{vegetariano:true,singluten:true,compartir:false},
-    contiene:["lacteos","huevo"], ejes:{contundencia:4,aventura:6,social:2,frescura:4,dulce:6} },
-
-  /* ── CAFETERÍA ──────────────────────────────────────────────── */
-  { id:"te", nombre:"Té", precio:120, categoria:"cafeteria",
-    descripcion:"", tags:["sin alcohol","sin TACC"], apto:{vegetariano:true,singluten:true,compartir:false},
-    contiene:[], ejes:{contundencia:0,aventura:1,social:2,frescura:1,dulce:1} },
-  { id:"cafe", nombre:"Café", precio:140, categoria:"cafeteria",
-    descripcion:"", tags:["clásico","sin TACC"], apto:{vegetariano:true,singluten:true,compartir:false},
-    contiene:[], ejes:{contundencia:1,aventura:1,social:2,frescura:1,dulce:1} },
-  { id:"cafe-americano", nombre:"Café americano", precio:160, categoria:"cafeteria",
-    descripcion:"", tags:["sin TACC"], apto:{vegetariano:true,singluten:true,compartir:false},
-    contiene:[], ejes:{contundencia:1,aventura:2,social:2,frescura:2,dulce:1} },
-  { id:"capuccino", nombre:"Capuccino", precio:180, categoria:"cafeteria",
-    descripcion:"", tags:["sin TACC"], apto:{vegetariano:true,singluten:true,compartir:false},
-    contiene:["lacteos"], ejes:{contundencia:3,aventura:2,social:3,frescura:1,dulce:4} }
+  { id:"helado", nombre:"Helado 2 bochas", precio:260, categoria:"suplementario",
+    descripcion:"Preguntá los sabores del día.",
+    tags:["fresco","sin TACC"], apto:{vegetariano:true,singluten:true,compartir:false},
+    contiene:["lacteos"], ejes:{contundencia:3,aventura:2,social:3,frescura:10,dulce:9} },
+  { id:"frutas", nombre:"Frutas de estación", precio:220, categoria:"suplementario",
+    descripcion:"Fría, cítrica. El postre del que no quería postre.",
+    tags:["fresco","liviano"], apto:{vegetariano:true,singluten:true,compartir:false},
+    contiene:[], ejes:{contundencia:1,aventura:2,social:2,frescura:10,dulce:7} },
+  { id:"panqueque", nombre:"Panqueque de dulce de leche", precio:300, categoria:"suplementario",
+    descripcion:"Quemadito arriba. Dos por porción.",
+    tags:["clásico","dulce"], apto:{vegetariano:true,singluten:false,compartir:false},
+    contiene:["lacteos","gluten","huevo"], ejes:{contundencia:6,aventura:1,social:3,frescura:2,dulce:10} },
+  { id:"cafe", nombre:"Café expreso", precio:140, categoria:"suplementario",
+    descripcion:"Corto, fuerte. Para cerrar bien.",
+    tags:["clásico","sin TACC"], apto:{vegetariano:true,singluten:true,compartir:false},
+    contiene:[], ejes:{contundencia:1,aventura:0,social:2,frescura:1,dulce:1} },
+  { id:"cortado", nombre:"Cortado", precio:160, categoria:"suplementario",
+    descripcion:"Con un toque de leche. Y una charla más.",
+    tags:["clásico"], apto:{vegetariano:true,singluten:true,compartir:false},
+    contiene:["lacteos"], ejes:{contundencia:2,aventura:0,social:3,frescura:1,dulce:2} }
 ];
 
 /* ╔══════════════════════════════════════════════════════════════════╗
@@ -1438,8 +1263,8 @@ const PREGUNTAS = [
     texto:"Sin pensar. Dale, dale, dale.",
     nota:"No hay respuesta correcta. Bueno, sí, pero no te la voy a decir.",
     pares:[
-      { a:{ texto:"Mar",     emo:"🌊", pesos:{ frescura:+2, aventura:+1 } },
-        b:{ texto:"Piscina", emo:"🩳", pesos:{ frescura:-1, aventura:-1 } } },
+      { a:{ texto:"Cancha grande",    emo:"🏟️", pesos:{ frescura:+2, aventura:+1 } },
+        b:{ texto:"Potrero de barrio", emo:"🥅", pesos:{ frescura:-1, aventura:-1 } } },
       { a:{ texto:"Mañana",  emo:"🌅", pesos:{ frescura:+1, contundencia:-1 } },
         b:{ texto:"Noche",   emo:"🌙", pesos:{ aventura:+2, contundencia:+1 } } },
       { a:{ texto:"Asado",   emo:"🥩", pesos:{ contundencia:+3, social:+2 } },
@@ -1502,124 +1327,124 @@ const PREGUNTAS = [
 /* ══ SITUACIONES — la playa y lo que pasa en ella ═══════════════════ */
 
   { id:"gaviota", tipo:"sabor", peso:"alto", grupo:"absurdo", modos:["express","completo"],
-    texto:"Vas por la arena con algo para comer en la mano. Una gaviota te lo mira fijo.",
+    texto:"Penal a favor en el minuto 89. ¿Quién lo patea?",
     opciones:[
-      { texto:"Se lo doy, que coma", emo:"🕊️", pesos:{ social:+3, dulce:+1, contundencia:-1 },
-        eco:"que a la gaviota le dabas de comer", chiste:"Y después son treinta. Pero es lindo lo que hiciste." },
-      { texto:"Me lo como más rápido", emo:"💨", pesos:{ contundencia:+3, aventura:-1, social:-1 },
-        eco:"que te lo comías más rápido antes que la gaviota", chiste:"La respuesta correcta y todos lo sabemos." },
-      { texto:"La miro fijo hasta que se va", emo:"👁️", pesos:{ aventura:+2, social:-2, contundencia:+1 },
-        eco:"que a la gaviota la mirás fijo hasta que se va", chiste:"¿Y funciona? ¿En serio?" },
-      { texto:"Corro", emo:"😱", pesos:{ frescura:+2, contundencia:-2, aventura:+1 },
-        eco:"que saliste corriendo de una gaviota", chiste:"Corriste. De un pájaro. Bueno." }
+      { texto:"El del cuadro, sin discutir", emo:"👤", pesos:{ social:+3, dulce:+1, contundencia:-1 },
+        eco:"que el penal lo patea el del cuadro sin discutir", chiste:"Las jerarquías se ganan. Ese ya la ganó." },
+      { texto:"Yo lo pateo, dame la pelota", emo:"⚽", pesos:{ contundencia:+3, aventura:-1, social:-1 },
+        eco:"que el penal lo patearías vos", chiste:"Bien. La responsabilidad no se le da al que no la quiere." },
+      { texto:"Que decida el técnico", emo:"🧠", pesos:{ aventura:+2, social:-2, contundencia:+1 },
+        eco:"que dejás que decida el técnico", chiste:"Uno lo aprecia. No siempre pasa." },
+      { texto:"Salgo del área, prefiero no ver", emo:"🙈", pesos:{ frescura:+2, contundencia:-2, aventura:+1 },
+        eco:"que preferís no mirar el penal", chiste:"Los nervios son parte. Está bien." }
     ] },
 
   { id:"sombrilla", tipo:"sabor", peso:"alto", grupo:"absurdo", modos:["express","completo"],
-    texto:"El viento se lleva tu sombrilla y va derecho al agua.",
+    texto:"El árbitro te comió un gol legítimo. ¿Cómo reaccionás?",
     opciones:[
-      { texto:"Salgo corriendo descalzo", emo:"🏃‍♂️", pesos:{ aventura:+3, contundencia:+1, social:-1 },
-        eco:"que saliste corriendo descalzo atrás de la sombrilla", chiste:"Y la arena a cuarenta grados. Un héroe." },
-      { texto:"Grito para que alguien la agarre", emo:"📣", pesos:{ social:+3, aventura:+1 },
-        eco:"que gritaste para que alguien te agarrara la sombrilla", chiste:"Delegar también es una habilidad." },
-      { texto:"La dejo ir, era fea", emo:"🤷", pesos:{ aventura:+2, social:-2, contundencia:-1 },
-        eco:"que dejaste ir la sombrilla porque era fea", chiste:"Frialdad quirúrgica. Me gusta." },
-      { texto:"Ya me pasó, tengo técnica", emo:"🧠", pesos:{ aventura:-2, contundencia:+2 },
-        eco:"que ya tenés técnica para cuando se vuela la sombrilla", chiste:"Un profesional. No se discute con un profesional." }
+      { texto:"Le grito todo lo que se merece", emo:"🗣️", pesos:{ aventura:+3, contundencia:+1, social:-1 },
+        eco:"que al árbitro le gritás todo lo que se merece", chiste:"Uno se descarga. Después piensa." },
+      { texto:"Que el capitán vaya a hablar", emo:"🧑‍✈️", pesos:{ social:+3, aventura:+1 },
+        eco:"que mandás al capitán a hablar", chiste:"La forma correcta. Se aprende con el tiempo." },
+      { texto:"Aplaudo con ironía", emo:"👏", pesos:{ aventura:+2, social:-2, contundencia:-1 },
+        eco:"que al árbitro le aplaudís con ironía", chiste:"Elegante. Y peligroso." },
+      { texto:"Ya está. A seguir jugando.", emo:"😤", pesos:{ aventura:-2, contundencia:+2 },
+        eco:"que dejás pasar y seguís jugando", chiste:"El fútbol premia al que no se distrae." }
     ] },
 
   { id:"botella", tipo:"chamuyo", grupo:"texto", formato:"texto", modos:["completo"],
-    texto:"Encontrás una botella en la orilla. Adentro hay un papel con una sola palabra.",
-    nota:"¿Qué dice? Escribila.",
+    texto:"Escribí una sola palabra en el bombo de la hinchada.",
+    nota:"Lo que le grites a tu equipo cuando pierde.",
     placeholder:"Una palabra",
-    ecoTpl:"que en la botella de la orilla decía «{}»",
-    chiste:"«{}». Guardá eso, después lo vas a entender." },
+    ecoTpl:"que en el bombo de la hinchada vos escribís «{}»",
+    chiste:"«{}». Guardala. Se va a decir sola en algún momento." },
 
   { id:"escarbar", tipo:"sabor", peso:"bajo", grupo:"absurdo", modos:["completo"],
-    texto:"Caminando por la arena pisás algo duro. Escarbás.",
+    texto:"Entrás al vestuario después de años. Encontrás algo. ¿Qué es?",
     opciones:[
-      { texto:"Que sea plata", emo:"💰", pesos:{ contundencia:+2, aventura:+1 },
-        eco:"que querías que fuera plata", chiste:"Honesto. Brutal, pero honesto." },
-      { texto:"Una moneda vieja de otro país", emo:"🪙", pesos:{ aventura:+3, dulce:+1 },
-        eco:"que querías que fuera una moneda de otro país", chiste:"Vos sos de los que se quedan pensando después. Ya veo." },
-      { texto:"Una llave", emo:"🗝️", pesos:{ aventura:+2, social:-1 },
-        eco:"que querías que fuera una llave", chiste:"¿De qué? No, no me contestes." },
-      { texto:"Nada. Tapo y sigo.", emo:"🚶", pesos:{ aventura:-3, contundencia:+1 },
-        eco:"que tapaste y seguiste de largo", chiste:"La paz mental tiene su precio y vos lo pagás contento." }
+      { texto:"Una camiseta con tu número", emo:"👕", pesos:{ contundencia:+2, aventura:+1 },
+        eco:"que en el vestuario encontrás una camiseta con tu número", chiste:"El número es tuyo. No se olvida." },
+      { texto:"Una foto vieja del plantel", emo:"📸", pesos:{ aventura:+3, dulce:+1 },
+        eco:"que encontrás una foto vieja del plantel", chiste:"Ahí están todos. Uno los reconoce por la posición." },
+      { texto:"Un cassette con la charla técnica", emo:"📼", pesos:{ aventura:+2, social:-1 },
+        eco:"que encontrás un cassette con la charla técnica", chiste:"Guardalo. Lo que se dijo entonces sirve hoy también." },
+      { texto:"Nada. Y está bien.", emo:"🚪", pesos:{ aventura:-3, contundencia:+1 },
+        eco:"que en el vestuario no encontrás nada y está bien", chiste:"El pasado en su lugar. Uno mira adelante." }
     ] },
 
   { id:"perro", tipo:"sabor", peso:"bajo", grupo:"absurdo", modos:["completo"],
-    texto:"Un perro sin dueño se sienta al lado de tu mesa y te clava los ojos.",
+    texto:"Un pibe se cuela en el entrenamiento. Te clava los ojos.",
     opciones:[
-      { texto:"Ya es mi perro", emo:"🐕", pesos:{ social:+3, dulce:+2 },
-        eco:"que el perro de la playa ya era tuyo", chiste:"Se llama Toto y no me lo saco de encima hace dos veranos." },
-      { texto:"Le tiro algo a escondidas", emo:"🤫", pesos:{ social:+2, aventura:+1 },
-        eco:"que al perro le tirabas algo a escondidas", chiste:"Te vi. Siempre los veo." },
-      { texto:"Lo saludo pero no le doy nada", emo:"✋", pesos:{ social:-1, aventura:-1 },
-        eco:"que al perro lo saludaste pero no le diste nada", chiste:"Firme en tus principios. Fríamente." },
-      { texto:"Me cambio de mesa", emo:"🪑", pesos:{ social:-3, frescura:+1 },
-        eco:"que te cambiaste de mesa por el perro", chiste:"Bueno. Alguien tenía que decirlo." }
+      { texto:"Le tiro la pelota, jugamos un rato", emo:"⚽", pesos:{ social:+3, dulce:+2 },
+        eco:"que al pibe que se cuela le tirás la pelota", chiste:"Uno sabe qué gesto importa. Ese importa." },
+      { texto:"Le regalo una camiseta a escondidas", emo:"🤫", pesos:{ social:+2, aventura:+1 },
+        eco:"que al pibe le regalás una camiseta a escondidas", chiste:"Los gestos chicos son los que se recuerdan." },
+      { texto:"Le explico que hay reglas", emo:"✋", pesos:{ social:-1, aventura:-1 },
+        eco:"que al pibe le explicás las reglas", chiste:"Las reglas también enseñan. Firme, pero enseñan." },
+      { texto:"Sigo entrenando como si nada", emo:"🏃", pesos:{ social:-3, frescura:+1 },
+        eco:"que seguís entrenando como si el pibe no estuviera", chiste:"Concentración. Es un valor." }
     ] },
 
   { id:"apagon", tipo:"sabor", peso:"bajo", grupo:"absurdo", modos:["completo"],
-    texto:"Se corta la luz en todo el balneario justo cuando sale tu comida.",
+    texto:"Se apagan las luces del estadio justo antes del segundo tiempo.",
     opciones:[
-      { texto:"Como igual, a oscuras", emo:"🌚", pesos:{ contundencia:+3, aventura:+2 },
-        eco:"que a oscuras comés igual", chiste:"Esa es la actitud que hace grande a un país." },
+      { texto:"Que sigan jugando a oscuras", emo:"🌚", pesos:{ contundencia:+3, aventura:+2 },
+        eco:"que a oscuras querías que el partido siguiera", chiste:"Uno lo entiende. El fútbol no debería parar." },
       { texto:"Prendo la linterna del celular", emo:"🔦", pesos:{ aventura:-2, contundencia:+1 },
-        eco:"que prendiste la linterna del celular", chiste:"Práctico. Nada romántico, pero práctico." },
-      { texto:"Aplaudo", emo:"👏", pesos:{ social:+3, aventura:+1 },
-        eco:"que aplaudiste cuando se cortó la luz", chiste:"Aplaudiste. En un apagón. Sos de los míos." },
-      { texto:"Aprovecho para robarme un salero", emo:"🧂", pesos:{ aventura:+3, social:-1 },
-        eco:"que aprovechaste el apagón para llevarte un salero", chiste:"Te estoy mirando. Devolvelo." }
+        eco:"que en el apagón prendés la linterna del celular", chiste:"Práctico. En la tribuna sirve mucho." },
+      { texto:"Aplaudo con toda la tribuna", emo:"👏", pesos:{ social:+3, aventura:+1 },
+        eco:"que en el apagón aplaudís con toda la tribuna", chiste:"La hinchada empuja hasta cuando no hay luz." },
+      { texto:"Aprovecho y me tomo un descanso", emo:"🛋️", pesos:{ aventura:+3, social:-1 },
+        eco:"que en el apagón te tomás un descanso", chiste:"Uno aprovecha lo que hay. Bien." }
     ] },
 
   { id:"tormenta", tipo:"sabor", peso:"alto", grupo:"elementos", modos:["express","completo"],
-    texto:"Se viene la tormenta. Se ve venir desde el agua.",
+    texto:"Van perdiendo 2 a 0 y quedan diez minutos.",
     opciones:[
-      { texto:"Me quedo a mirarla", emo:"⛈️", pesos:{ aventura:+3, frescura:+1, social:-1 },
-        eco:"que a la tormenta te quedás a mirarla", chiste:"Y después te agarra y no te arrepentís. Ya sé." },
-      { texto:"Guardo todo, ordenado", emo:"🧺", pesos:{ aventura:-3, contundencia:+1 },
-        eco:"que guardás todo ordenado antes de la tormenta", chiste:"En tu casa las llaves siempre están en el mismo lugar, ¿no?" },
-      { texto:"Me meto al agua justo antes", emo:"🌊", pesos:{ aventura:+3, frescura:+3, contundencia:-2 },
-        eco:"que te metés al agua justo antes de la tormenta", chiste:"Eso es ilegal en cuatro departamentos." },
-      { texto:"Ya me fui hace rato", emo:"🚗", pesos:{ aventura:-2, social:-1, frescura:-1 },
-        eco:"que ya te habías ido antes de la tormenta", chiste:"El que se va temprano nunca cuenta buenas historias. Pero llega seco." }
+      { texto:"Todo al frente, salga lo que salga", emo:"⚡", pesos:{ aventura:+3, frescura:+1, social:-1 },
+        eco:"que perdiendo 2 a 0 vos vas todo al frente", chiste:"Uno intenta. Es lo mínimo que corresponde." },
+      { texto:"Empezar a manejar el partido", emo:"🧊", pesos:{ aventura:-3, contundencia:+1 },
+        eco:"que perdiendo vos preferís manejar el partido", chiste:"El fútbol premia al que sabe leer los tiempos." },
+      { texto:"Amagar con un cambio inesperado", emo:"🎲", pesos:{ aventura:+3, frescura:+3, contundencia:-2 },
+        eco:"que perdiendo probás con un cambio inesperado", chiste:"A veces sale. A veces se convierte en anécdota." },
+      { texto:"Aceptar que hoy no era", emo:"🙏", pesos:{ aventura:-2, social:-1, frescura:-1 },
+        eco:"que perdiendo aceptás que hoy no era", chiste:"El fútbol enseña eso. La aceptación." }
     ] },
 
   { id:"mar", tipo:"sabor", peso:"alto", grupo:"elementos", modos:["express","completo"],
-    texto:"El mar te habla ahora mismo. ¿Qué te dice?",
+    texto:"El estadio está lleno y falta un minuto. ¿Qué hacés?",
     opciones:[
-      { texto:"Quedate quieto", emo:"🪨", pesos:{ contundencia:+3, frescura:-2, social:-2, aventura:-1 },
-        eco:"que el mar te mandó a quedarte quieto", chiste:"Hacele caso. Sabe más que vos." },
-      { texto:"Metete de una vez", emo:"🌊", pesos:{ frescura:+3, aventura:+2, contundencia:-2, dulce:-1 },
-        eco:"que el mar te mandó a meterte de una vez", chiste:"Y vos todavía acá sentado, hablando conmigo." },
-      { texto:"Traé a los demás", emo:"🫂", pesos:{ social:+3, contundencia:+1, dulce:+1 },
-        eco:"que el mar te dijo que trajeras a todos", chiste:"Avisales que la mesa la armo yo." },
-      { texto:"Vos ya sabés", emo:"👁️", pesos:{ aventura:+2, social:-1, dulce:-1, frescura:+1 },
-        eco:"que el mar te dijo que vos ya sabías", chiste:"Los dos sabemos. Por eso estás acá." }
+      { texto:"Aguanto atrás", emo:"🛡️", pesos:{ contundencia:+3, frescura:-2, social:-2, aventura:-1 },
+        eco:"que en el último minuto vos te parás atrás", chiste:"Prudencia. En la mesa también sirve." },
+      { texto:"Voy al frente", emo:"⚡", pesos:{ frescura:+3, aventura:+2, contundencia:-2, dulce:-1 },
+        eco:"que faltando un minuto vos vas al frente", chiste:"El que arriesga puede perder. El que no, seguro." },
+      { texto:"Junto a la barra", emo:"🎺", pesos:{ social:+3, contundencia:+1, dulce:+1 },
+        eco:"que en ese minuto vos mirás a la tribuna", chiste:"La hinchada empuja. Uno lo sabe." },
+      { texto:"Miro y decido en el momento", emo:"👀", pesos:{ aventura:+2, social:-1, dulce:-1, frescura:+1 },
+        eco:"que en ese minuto vos leés y decidís", chiste:"Bien. El fútbol y la mesa se leen igual." }
     ] },
 
   { id:"fuego", tipo:"sabor", peso:"alto", grupo:"elementos", modos:["express","completo"],
-    texto:"Elegí un fuego.",
+    texto:"Elegí una jugada.",
     opciones:[
-      { texto:"Brasa quieta, sin llama", emo:"🔴", pesos:{ contundencia:+3, aventura:-2, frescura:-2, social:+1 },
-        eco:"que elegiste la brasa quieta", chiste:"El que sabe, elige eso. No es opinión." },
-      { texto:"Llamarada que asusta", emo:"🔥", pesos:{ aventura:+3, contundencia:+2, frescura:-1, social:-1 },
-        eco:"que elegiste la llamarada", chiste:"Vos quemaste algo alguna vez. No me lo niegues." },
-      { texto:"Fogón con gente alrededor", emo:"🪵", pesos:{ social:+3, contundencia:+1, dulce:+1 },
-        eco:"que elegiste el fogón con gente alrededor", chiste:"Y sos el que atiza, seguro." },
-      { texto:"Un fósforo, a ver qué pasa", emo:"🕯️", pesos:{ contundencia:-3, aventura:+2, frescura:+2, dulce:-1 },
-        eco:"que elegiste el fósforo a ver qué pasaba", chiste:"Peligroso. Seguí." }
+      { texto:"Un centro al área", emo:"⚽", pesos:{ contundencia:+3, aventura:-2, frescura:-2, social:+1 },
+        eco:"que tu jugada preferida es el centro al área", chiste:"Lo clásico funciona. Siempre funcionó." },
+      { texto:"Una chilena", emo:"🤸", pesos:{ aventura:+3, contundencia:+2, frescura:-1, social:-1 },
+        eco:"que tu jugada preferida es la chilena", chiste:"Bien. Uno tiene derecho a intentar lo lindo." },
+      { texto:"Una pared entre tres", emo:"🤝", pesos:{ social:+3, contundencia:+1, dulce:+1 },
+        eco:"que tu jugada preferida es la pared entre tres", chiste:"El fútbol de asociación. Se disfruta." },
+      { texto:"Un caño y salir corriendo", emo:"💨", pesos:{ contundencia:-3, aventura:+2, frescura:+2, dulce:-1 },
+        eco:"que tu jugada preferida es el caño y salir corriendo", chiste:"Uno hace el caño. Y después se banca." }
     ] },
 
 /* ══ VIVENCIAS — lo que ya te pasó ══════════════════════════════════ */
 
   { id:"mejor-verano", tipo:"chamuyo", grupo:"texto", formato:"texto", modos:["completo"],
-    texto:"¿Dónde fue tu mejor verano?",
-    nota:"Un lugar. Con eso me arreglo.",
-    placeholder:"Un lugar",
-    ecoTpl:"que tu mejor verano fue en {}",
-    chiste:"{}. Uh. Conozco a alguien de ahí." },
+    texto:"El partido que más te marcó. ¿Cuál fue?",
+    nota:"El equipo o el año. Con eso me alcanza.",
+    placeholder:"El partido",
+    ecoTpl:"que el partido que más te marcó fue {}",
+    chiste:"{}. Ese lo tengo bien anotado." },
 
   { id:"abuela", tipo:"chamuyo", grupo:"texto", formato:"texto", modos:["completo"],
     texto:"¿Qué cocinaba tu abuela que nadie más te sabe hacer igual?",
@@ -1628,35 +1453,35 @@ const PREGUNTAS = [
     chiste:"{}. No te lo voy a intentar imitar, sería una falta de respeto." },
 
   { id:"cancion", tipo:"chamuyo", grupo:"texto", formato:"texto", modos:["completo"],
-    texto:"Una canción que te tira derecho a un verano.",
-    placeholder:"La canción",
-    ecoTpl:"que {} te tira derecho a un verano",
-    chiste:"{}. Ahora la voy a tener todo el día, gracias." },
+    texto:"Un cántico de tribuna que te la canta.",
+    placeholder:"El cántico",
+    ecoTpl:"que {} te la canta cuando lo escuchás",
+    chiste:"{}. Ahora la voy a tener toda la tarde." },
 
   { id:"primera-vez", tipo:"sabor", peso:"bajo", grupo:"pasado", modos:["completo"],
-    texto:"La primera vez que tomaste algo en una playa, ¿con quién estabas?",
+    texto:"El primer partido al que fuiste. ¿Con quién?",
     opciones:[
-      { texto:"Con los de siempre", emo:"🫂", pesos:{ social:+3, aventura:-1 },
-        eco:"que la primera vez estabas con los de siempre", chiste:"Y siguen siendo los mismos, apostaría." },
-      { texto:"Con alguien que ya no veo", emo:"🕰️", pesos:{ dulce:+2, social:-1, aventura:+1 },
-        eco:"que la primera vez fue con alguien que ya no ves", chiste:"Bueno. Eso lo dejamos ahí." },
-      { texto:"Solo", emo:"🧍", pesos:{ social:-3, aventura:+2 },
-        eco:"que la primera vez estabas solo", chiste:"Los que empiezan solos después eligen mejor. Es así." },
-      { texto:"No me acuerdo, y eso es buena señal", emo:"🌀", pesos:{ aventura:+3, contundencia:+1, dulce:-1 },
-        eco:"que de esa primera vez no te acordás", chiste:"La mejor respuesta que me dieron en todo el verano." }
+      { texto:"Con el que me llevó siempre", emo:"👨", pesos:{ social:+3, aventura:-1 },
+        eco:"que al primer partido fuiste con el que te lleva siempre", chiste:"Uno se marca esas cosas para toda la vida." },
+      { texto:"Con alguien que ya no está", emo:"🕰️", pesos:{ dulce:+2, social:-1, aventura:+1 },
+        eco:"que al primer partido fuiste con alguien que ya no está", chiste:"Ese recuerdo se guarda con cariño. Está bien." },
+      { texto:"Solo, y me acuerdo de todo", emo:"🧍", pesos:{ social:-3, aventura:+2 },
+        eco:"que al primer partido fuiste solo y te acordás de todo", chiste:"Uno respeta eso. Ir solo también es una decisión." },
+      { texto:"Con todo el barrio, ni me acuerdo", emo:"🎉", pesos:{ aventura:+3, contundencia:+1, dulce:-1 },
+        eco:"que al primer partido fuiste con el barrio entero", chiste:"Los partidos así son los que se cuentan después." }
     ] },
 
   { id:"regreso", tipo:"sabor", peso:"alto", grupo:"pasado", modos:["express","completo"],
-    texto:"Volvés a un verano de tu vida. ¿A cuál?",
+    texto:"Volvés a una temporada de fútbol. ¿A cuál?",
     opciones:[
-      { texto:"A uno que tengo clavado", emo:"📌", pesos:{ aventura:-2, dulce:+2, contundencia:+1 },
-        eco:"que hay un verano que tenés clavado", chiste:"Todos tenemos uno. El mío fue el 98 y no lo voy a explicar." },
-      { texto:"A uno que no me acuerdo bien", emo:"🌫️", pesos:{ aventura:+2, frescura:+1, dulce:-1, social:-1 },
-        eco:"que volverías a un verano que ni te acordás bien", chiste:"Esos son los buenos." },
-      { texto:"A ninguno. Quiero uno nuevo.", emo:"🧭", pesos:{ aventura:+3, contundencia:-1, social:-1 },
-        eco:"que no querés volver a ninguno, querés uno nuevo", chiste:"Respuesta de gente peligrosa. Me caés bien." },
-      { texto:"A este, que todavía no terminó", emo:"🏖️", pesos:{ social:+2, frescura:+2, contundencia:+1, dulce:+1 },
-        eco:"que el verano que elegís es este, que todavía no terminó", chiste:"Ah, sos de los que están presentes. Qué raro se ha vuelto eso." }
+      { texto:"A una que nunca voy a olvidar", emo:"🏆", pesos:{ aventura:-2, dulce:+2, contundencia:+1 },
+        eco:"que hay una temporada que tenés grabada", chiste:"Todos tenemos una. Uno la nombra sin dudar." },
+      { texto:"A una que ya casi no recuerdo", emo:"🌫️", pesos:{ aventura:+2, frescura:+1, dulce:-1, social:-1 },
+        eco:"que volverías a una temporada que ya casi no recordás", chiste:"El olvido también hace su parte. Está bien." },
+      { texto:"A ninguna. Quiero una nueva.", emo:"🧭", pesos:{ aventura:+3, contundencia:-1, social:-1 },
+        eco:"que no querés volver a ninguna temporada, querés una nueva", chiste:"El camino es la recompensa. Adelante." },
+      { texto:"A esta, que todavía no terminó", emo:"⚽", pesos:{ social:+2, frescura:+2, contundencia:+1, dulce:+1 },
+        eco:"que la temporada que elegís es esta, que todavía no terminó", chiste:"Los que están en el presente son los que ganan." }
     ] },
 
   { id:"foto", tipo:"sabor", peso:"bajo", grupo:"pasado", modos:["completo"],
@@ -1801,59 +1626,103 @@ const PREGUNTAS = [
     ] },
 
   { id:"arena-auto", tipo:"sabor", peso:"bajo", grupo:"costumbre", modos:["completo"],
-    texto:"Arena en los pies, adentro del auto.",
+    texto:"La camiseta después del partido. ¿Qué hacés con ella?",
     opciones:[
-      { texto:"Es parte. Ni lo miro.", emo:"😌", pesos:{ aventura:+2, social:+1, contundencia:+1 },
-        eco:"que la arena en el auto ni la mirás", chiste:"Vivís bien vos." },
-      { texto:"Me molesta pero aguanto", emo:"😑", pesos:{ aventura:-1 },
-        eco:"que la arena en el auto te molesta y aguantás", chiste:"El sufrimiento silencioso, deporte nacional." },
-      { texto:"Tengo toalla en el baúl", emo:"🧻", pesos:{ aventura:-3, contundencia:+1 },
-        eco:"que tenés una toalla en el baúl para la arena", chiste:"Preparado. Se nota que ya te arruinaron un día." },
-      { texto:"Me arruina el día", emo:"😤", pesos:{ aventura:-2, social:-2, frescura:-1 },
-        eco:"que la arena en el auto te arruina el día", chiste:"Vas a tener que hacer las paces con la playa, bo." }
+      { texto:"La cambio, sudada, y listo", emo:"😌", pesos:{ aventura:+2, social:+1, contundencia:+1 },
+        eco:"que la camiseta la cambiás sudada y listo", chiste:"Uno hace lo que corresponde y sigue." },
+      { texto:"La cuelgo con cuidado", emo:"👕", pesos:{ aventura:-1 },
+        eco:"que la camiseta la colgás con cuidado", chiste:"El respeto por la ropa también se transmite." },
+      { texto:"La cambio antes de subir al auto", emo:"🧺", pesos:{ aventura:-3, contundencia:+1 },
+        eco:"que la camiseta la cambiás antes de subir al auto", chiste:"Preparado, como debe ser." },
+      { texto:"Me quedo con ella puesta", emo:"🔥", pesos:{ aventura:-2, social:-2, frescura:-1 },
+        eco:"que te quedás con la camiseta puesta después del partido", chiste:"Uno se identifica con la ropa. Se entiende." }
     ] },
 
   { id:"signo", tipo:"sabor", peso:"bajo", grupo:"signo", formato:"grilla", modos:["completo"],
-    texto:"Última. Y no me preguntes para qué: ¿de qué signo sos?",
+    texto:"Última. Y sin explicar por qué: ¿de qué cuadro sos?",
     nota:"No decide nada. Pero explica bastante.",
     opciones:[
-      { emo:"♈", texto:"Aries",       pesos:{ aventura:+1, contundencia:+1 }, eco:"que sos de Aries",       remate:"Aries. Ibas a terminar en lo más grande de la carta, con o sin mí." },
-      { emo:"♉", texto:"Tauro",       pesos:{ contundencia:+1, dulce:+1 },    eco:"que sos de Tauro",       remate:"Tauro. No disimulás nada las ganas de comer bien, y está perfecto." },
-      { emo:"♊", texto:"Géminis",     pesos:{ aventura:+1, social:+1 },       eco:"que sos de Géminis",     remate:"Géminis. Vas a cambiar de idea en la mesa. Pedí esto igual." },
-      { emo:"♋", texto:"Cáncer",      pesos:{ dulce:+1, contundencia:+1 },    eco:"que sos de Cáncer",      remate:"Cáncer. Vos no venís a comer, venís a que algo te abrace." },
-      { emo:"♌", texto:"Leo",         pesos:{ social:+1, contundencia:+1 },   eco:"que sos de Leo",         remate:"Leo. Querés el plato que se mire desde la otra mesa. Este se mira." },
-      { emo:"♍", texto:"Virgo",       pesos:{ aventura:-1, frescura:+1 },     eco:"que sos de Virgo",       remate:"Virgo. Ya estás calculando si te va a caer bien. Te va a caer bien." },
-      { emo:"♎", texto:"Libra",       pesos:{ social:+1, dulce:+1 },          eco:"que sos de Libra",       remate:"Libra. Ibas a tardar veinte minutos en decidir. Para eso estoy yo." },
-      { emo:"♏", texto:"Escorpio",    pesos:{ aventura:+1, frescura:-1, dulce:-1 }, eco:"que sos de Escorpio", remate:"Escorpio. Obvio que te iba a tocar lo más intenso que hay." },
-      { emo:"♐", texto:"Sagitario",   pesos:{ aventura:+1, social:+1 },       eco:"que sos de Sagitario",   remate:"Sagitario. Si te doy algo clásico te ofendés, y con razón." },
-      { emo:"♑", texto:"Capricornio", pesos:{ aventura:-1, contundencia:+1, dulce:-1 }, eco:"que sos de Capricornio", remate:"Capricornio. Lo probado, bien hecho, sin experimentos." },
-      { emo:"♒", texto:"Acuario",     pesos:{ aventura:+1, frescura:+1 },     eco:"que sos de Acuario",     remate:"Acuario. Te doy lo raro porque sos de los pocos que se lo come." },
-      { emo:"♓", texto:"Piscis",      pesos:{ frescura:+1, dulce:+1 },        eco:"que sos de Piscis",      remate:"Piscis. Venías mirando el agua desde que entraste. No me lo niegues." }
+      { emo:"🐦", texto:"Peñarol",     pesos:{ contundencia:+1, social:+1 },  eco:"que sos de Peñarol",     remate:"Peñarol. La mesa se maneja como un cuadro grande: con jerarquía." },
+      { emo:"🦁", texto:"Nacional",    pesos:{ contundencia:+1, aventura:+1 }, eco:"que sos de Nacional",    remate:"Nacional. Uno se sienta y ya se sabe lo que se banca." },
+      { emo:"🦋", texto:"Defensor",    pesos:{ aventura:+1, social:+1 },       eco:"que sos de Defensor",    remate:"Defensor. Sos de los que aprecia el juego bien hecho." },
+      { emo:"🐰", texto:"Danubio",     pesos:{ aventura:+1, dulce:+1 },        eco:"que sos de Danubio",     remate:"Danubio. La cantera. Los que saben, van por ese lado." },
+      { emo:"🌊", texto:"Wanderers",   pesos:{ social:+1, contundencia:+1 },   eco:"que sos de Wanderers",   remate:"Wanderers. El bohemio. Tenés cara de romantiquear la mesa también." },
+      { emo:"⚫", texto:"Cerro",        pesos:{ contundencia:+1, aventura:-1 }, eco:"que sos de Cerro",       remate:"Cerro. Barrio, historia. Se come lo que hay y se disfruta." },
+      { emo:"🟡", texto:"Peñarol pero del interior", pesos:{ social:+1, dulce:+1 }, eco:"que sos de Peñarol pero del interior", remate:"Del interior. La pasión es doble cuando hay que viajar." },
+      { emo:"⚽", texto:"De un cuadro chico, y a mucha honra", pesos:{ aventura:+1, frescura:-1 }, eco:"que sos de un cuadro chico y a mucha honra", remate:"Los cuadros chicos enseñan lo importante. Bienvenido." },
+      { emo:"🌍", texto:"De un cuadro de afuera",     pesos:{ aventura:+1, social:+1 }, eco:"que sos hincha de un equipo de afuera", remate:"Afuera. Bueno. Elegiste un amor complicado. Se respeta." },
+      { emo:"🇺🇾", texto:"Sólo la selección", pesos:{ social:+1, dulce:+1 }, eco:"que sos sólo de la selección", remate:"Sólo la celeste. Ese amor no se discute nunca." },
+      { emo:"⚖️", texto:"De ninguno, me da igual", pesos:{ aventura:-1, contundencia:+1, dulce:-1 }, eco:"que no sos de ningún cuadro", remate:"Bueno. Uno respeta la decisión. Poco frecuente por acá, pero se respeta." },
+      { emo:"🎭", texto:"Del rival, para no aburrirme", pesos:{ aventura:+1, frescura:+1 }, eco:"que sos del rival para no aburrirte", remate:"Peligrosa esa. Después vemos si te sale bien." }
     ] }
 ];
 
-/* La voz del Chef. Un tipo que hace veinte años que mira gente entrar y
-   ya sabe. No es un asistente ni un mayordomo: no dice "excelente
-   elección". Te lee, te chicanea y te lo dice. */
+/* La voz del Maestro. Pausado, digno, con metáforas del vestuario. No
+   grita. Cuando puede, usa sus frases famosas — el camino es la
+   recompensa, somos lo que hacemos — y el resto lo dice en su tono.
+   Nada de "excelente elección": el Maestro nunca fue de eso. */
+/* La voz del Maestro. Pausado, digno. Habla poco pero cuando habla usa
+   frases suyas. Esperas, cierres y remate del veredicto están armados
+   para que en una corrida escuches sus frases más de una vez.       */
+const FRASES_MAESTRO = [
+  "El camino es la recompensa.",
+  "Somos lo que hacemos.",
+  "Reafirmemos los valores.",
+  "Las jerarquías se ganan.",
+  "El grupo es lo más importante.",
+  "No hay que perder de vista lo importante.",
+  "Uno hace lo que puede con lo que tiene.",
+  "El trabajo es lo único que dignifica al hombre.",
+  "Todo lo que se hace por primera vez es histórico.",
+  "Yo no soy el más inteligente, pero sé escuchar.",
+  "El equipo trasciende al jugador.",
+  "En el fútbol como en la vida.",
+  "Con humildad y con trabajo.",
+  "El respeto se gana con las acciones.",
+  "Es cuestión de valores."
+];
+
 const VOZ = {
   esperas:[
-    "Dejame ver…", "Ajá.", "Mirá vos.", "Eso me lo confirma.",
-    "Ya sé por dónde venís.", "Uh. Esperá.", "Tal cual.",
-    "Eso me cambia todo.", "Sabía.", "Interesante. Seguimos."
+    "Vamos por partes.",
+    "Es cuestión de leer el partido.",
+    "Uno hace lo que puede con lo que tiene.",
+    "El detalle importa.",
+    "Sí. Ya voy viendo.",
+    "Con humildad. Y con trabajo.",
+    "El grupo es lo más importante.",
+    "Reafirmemos los valores acá.",
+    "Yo no soy el más inteligente, pero sé escuchar.",
+    "Este dato lo guardo.",
+    "Ajá. En el fútbol como en la vida.",
+    "Somos lo que hacemos."
   ],
   cierres:[
-    "Yo esto lo supe cuando cruzaste la puerta.",
-    "No es magia. Es que hace veinte años que miro gente entrar.",
-    "Confiá y pedilo.",
-    "Después me contás.",
-    "La próxima vez ni te voy a preguntar."
+    "El camino es la recompensa.",
+    "Somos lo que hacemos.",
+    "Las jerarquías se ganan.",
+    "Reafirmemos los valores.",
+    "El grupo es lo más importante.",
+    "No hay que perder de vista lo importante.",
+    "Todo lo que se hace por primera vez es histórico.",
+    "En el fútbol como en la vida: primero se piensa, después se pide.",
+    "Uno hace lo que puede con lo que tiene. Y hoy podés bien.",
+    "El respeto se gana con las acciones. Empezá comiendo con respeto."
   ],
   tarde:[
-    "Uh, lo pensaste. Eso ya me dice algo.",
-    "Tres segundos y te quedaste pensando. Anotado.",
-    "El que duda dos veces, duda tres. Dale igual."
+    "El que duda tiene con qué comparar. Está bien.",
+    "En el fútbol y en la mesa: nunca se decide apurado.",
+    "Tomarse un momento no está mal. Al contrario.",
+    "El apuro es enemigo de la buena decisión."
   ]
 };
+
+/* devuelve una frase del Maestro al azar. Se usa para rematar los
+   momentos importantes (chiste, veredicto). */
+function fraseMaestro(rnd){
+  const r = rnd || Math.random;
+  return FRASES_MAESTRO[Math.floor(r() * FRASES_MAESTRO.length)];
+}
 /* ═══════════════════════════════════════════════════════════════════
    MOTOR — 100% local y determinístico. Sin IA, sin API, sin backend.
    Costo cero por usuario, latencia cero, anda con mala señal, y
@@ -1897,7 +1766,7 @@ function semillaDe(respuestas){
 
 /* ── memoria de apariciones: para que no gane siempre el mismo plato ── */
 const Memoria = {
-  clave: "bofomento.apariciones.v1",
+  clave: "candela.apariciones.v1",
   cache: null,
   leer(){
     if (this.cache) return this.cache;
@@ -1913,7 +1782,7 @@ const Memoria = {
   veces(id){ return this.leer()[id] || 0; },
 
   /* El último plato que salió, para saludar al que vuelve. */
-  claveUlt: "bofomento.ultimo.v1",
+  claveUlt: "candela.ultimo.v1",
   guardarUltimo(plato){
     try { localStorage.setItem(this.claveUlt,
       JSON.stringify({ id: plato.id, nombre: plato.nombre, cuando: Date.now() })); } catch (e) {}
@@ -1928,7 +1797,7 @@ const Memoria = {
    segunda corrida no se parezca a la primera. Vive en el celular; si el
    navegador no deja guardar, funciona igual dentro de la misma visita. */
 const MemoriaPreg = {
-  clave: "bofomento.preguntas.v1",
+  clave: "candela.preguntas.v1",
   cache: null,
   leer(){
     if (this.cache) return this.cache;
@@ -2313,10 +2182,12 @@ function recomendar(respuestas, preguntas){
   // "Salmón" y "Salmón con salsa de camarones" no es dar a elegir.
   const cat0 = alternativas[0] ? alternativas[0].categoria : null;
   const libre = r => !alternativas.includes(r.plato);
+  // La segunda alternativa DEBE ser de una categoría distinta de la
+  // primera: si no, la dupla se lee como una repetición. Si el pool
+  // filtrado no tiene con qué, es mejor devolver una sola alternativa
+  // que una repetida — el veredicto lo tolera y el copy se acomoda.
   const otra = resto.find(r => libre(r) && r.plato.categoria !== principal.categoria && r.plato.categoria !== cat0)
-            || resto.find(r => libre(r) && r.plato.categoria !== cat0)
-            || resto.find(r => libre(r) && r.plato.categoria !== principal.categoria)
-            || resto.find(libre);
+            || resto.find(r => libre(r) && r.plato.categoria !== cat0);
   if (otra) alternativas.push(otra.plato);
 
   // Bebida: pesa poco la contundencia, mucho la frescura y lo social.
@@ -2460,6 +2331,7 @@ function lineaDeEje(v){
 function vozPrincipal(r, rnd){
   const ecos = elegirEcos(r.ecos, 3).map(esc);
   const nombre = "<b>" + esc(r.principal.nombre) + "</b>";
+  const suya = esc(fraseMaestro(rnd));   // remate con frase real del Maestro
   const vos = S.nombre ? esc(S.nombre) + ", " : "";
   let apertura;
   if (ecos.length >= 3){
@@ -2479,34 +2351,35 @@ function vozPrincipal(r, rnd){
     apertura = "No me diste casi nada. Con la cara me arreglo.";
   }
   const cierres = [
-    `Así que es ${nombre}, y no lo discuto.`,
+    `Así que es ${nombre}. No hay que perder de vista lo importante.`,
     `Te toca ${nombre}. Estaba cantado.`,
-    `${nombre}. Ni lo pienses.`,
-    `Con eso te va ${nombre}. Fin.`
+    `${nombre}. Y no lo discuto.`,
+    `Con eso te va ${nombre}. Confíen en el proceso.`,
+    `${nombre}. El camino es la recompensa.`
   ];
   const partes = [apertura, cierres[Math.floor(rnd() * cierres.length)], lineaDeEje(r.vector)];
   if (r.remate) partes.push(esc(r.remate));
+  partes.push('<i style="opacity:.85">' + suya + '</i>');
   return partes.join(" ");
 }
 
 function vozBebida(r){
-  if (r.bebida.contiene.includes("alcohol")) return "Para bajarlo.";
-  if (r.vector.frescura >= 6.5) return "Bien fría, que si no no sirve.";
-  return "Va con eso. Confiá.";
+  if (r.bebida.contiene.includes("alcohol")) return "Para bajarlo. En la mesa como en el fútbol: se acompaña bien.";
+  if (r.vector.frescura >= 6.5) return "Bien fría. El detalle importa.";
+  return "Va con eso. Uno confía cuando el otro sabe.";
 }
 function vozPostre(r){
-  // Se burla si el eje dulce quedó bajo, o si dijiste que venías a picar.
   const pocasGanas = r.vector.dulce < 4.6 ||
     r.filtros.blandos.some(b => b.eje === "contundencia" && b.objetivo <= 2);
   if (pocasGanas){
     const burlas = [
-      "Ya sé que dijiste que no. Te lo dejo anotado igual.",
-      "Vos no sos de postre. Y sin embargo lo vas a pedir. Siempre pasa.",
-      "No lo ibas a pedir. Pedilo."
+      "Dijiste que no ibas a pedir postre. Uno respeta la palabra, pero también la debilidad.",
+      "Vos no sos de postre. Y sin embargo lo vas a pedir. En el fútbol como en la vida.",
+      "No lo ibas a pedir. Pedilo. Todo lo que se hace por primera vez es histórico."
     ];
     return burlas[Math.floor(r.total % burlas.length)];
   }
-  return "Esto ya lo tenías decidido antes de sentarte.";
+  return "Esto ya lo tenías decidido antes de sentarte. Reafirmá los valores y disfrutalo.";
 }
 
 /* ═══════════════════════════════════════════════════════════════════
@@ -2530,7 +2403,7 @@ function vocativo(){ return S.nombre ? S.nombre + ", " : ""; }
 function ir(vista){
   S.vista = vista;
   $$(".vista").forEach(v => v.classList.toggle("activa", v.id === "v-" + vista));
-  document.documentElement.style.background = vista === "chef" ? "#10263B" : "#F6F9FB";
+  document.documentElement.style.background = vista === "chef" ? "#08351E" : "#F6F9FB";
   window.scrollTo(0, 0);
   if (vista === "carta") pintarCarta();
   if (vista === "chef" && !S.modo) pantallaModo();
@@ -2650,167 +2523,331 @@ function pintarCarta(){
 }
 
 /* ═══════════════════════════════════════════════════════════════════
-   EL VASCO — el parrillero
-   Va inline y no con <use>: <use> arma un shadow tree y `display` no se
-   hereda, así que desde afuera no se pueden prender y apagar los gestos.
-   La cabeza es una sola; ojos, cejas y boca son capas que se cambian.
+   EL MAESTRO — caricatura tipo vector plano (memoji)
+   Rellenos de color, sin línea de contorno negra alrededor. Piel
+   beige, pelo blanco, saco azul marino, corbata celeste, cuaderno
+   abierto en la mano. Reconocible como Tabárez pero simplificado:
+   evocación, no retrato. La cabeza es una sola; ojos, cejas y boca
+   siguen siendo capas intercambiables que se prenden y apagan por
+   data-gesto para conservar los seis gestos.
    ═══════════════════════════════════════════════════════════════════ */
-const CHEF = { nombre: "El Vasco", corto: "Vasco" };
 
-const VASCO_CUERPO = `
-  <g class="v-brazo">
-    <path d="M64 210 Q38 196 42 164" fill="none" stroke="currentColor" stroke-width="7" stroke-linecap="round"/>
-    <g class="v-pinza">
-      <path d="M42 166 Q34 140 33 122" fill="none" stroke="currentColor" stroke-width="5" stroke-linecap="round"/>
-      <path d="M42 166 Q46 140 50 124" fill="none" stroke="currentColor" stroke-width="5" stroke-linecap="round"/>
-      <circle cx="42" cy="167" r="5" fill="currentColor"/>
-    </g>
-  </g>
-  <rect x="88" y="140" width="34" height="46" rx="14" fill="var(--marino-hondo)" stroke="currentColor" stroke-width="6"/>
-  <path d="M46 240 Q49 199 80 186 L130 186 Q161 199 164 240 Z" fill="var(--marino-hondo)" stroke="currentColor" stroke-width="6" stroke-linejoin="round"/>
-  <path d="M78 192 L132 192 L137 240 L73 240 Z" fill="var(--marino-hondo)" stroke="currentColor" stroke-width="5" stroke-linejoin="round"/>
-  <rect x="88" y="208" width="34" height="22" rx="3" fill="var(--arena)" stroke="currentColor" stroke-width="4"/>`;
+/* Paleta interna del Maestro. Colores planos, sin gradientes ni sombras
+   realistas — sólo dos tonos por elemento cuando hace falta separar. */
+const P_MAESTRO = {
+  piel:      "#F1CFAF",
+  pielS:     "#DCA97F",   // sombra de piel (cuello)
+  pelo:      "#F5F5F5",   // pelo blanco muy claro
+  peloS:     "#D8D8D8",   // sombra del pelo
+  saco:      "#1E3E6D",   // saco azul marino
+  sacoS:     "#152B4C",   // solapa/sombra del saco
+  camisa:    "#FFFFFF",
+  corbata:   "#4FA3D9",   // celeste
+  corbataS:  "#3F86B3",
+  anteojos:  "#2A2A2E",   // marco casi negro
+  cejas:     "#4A4A50",   // ceja gris oscura
+  papel:     "#FCF6E4",   // hoja del cuaderno
+  papelS:    "#E8DDBB",   // borde del cuaderno
+  garabato:  "#7A867E",   // líneas garabateadas en la hoja
+  tapaLibro: "#0F864A"    // tapa verde del cuaderno
+};
+const CHEF = { nombre: "El Maestro", corto: "Maestro" };
 
-const VASCO_CARA = `
-  <ellipse cx="55" cy="102" rx="9" ry="12" fill="var(--marino-hondo)" stroke="currentColor" stroke-width="5"/>
-  <ellipse cx="155" cy="102" rx="9" ry="12" fill="var(--marino-hondo)" stroke="currentColor" stroke-width="5"/>
-  <path d="M58 90 Q58 42 105 42 Q152 42 152 90 Q152 146 105 150 Q58 146 58 90 Z"
-        fill="var(--marino-hondo)" stroke="currentColor" stroke-width="6" stroke-linejoin="round"/>
-  <path d="M52 57 Q56 20 105 20 Q154 20 158 57 Z" fill="currentColor"/>
-  <path d="M46 58 Q105 48 164 58 Q105 70 46 58 Z" fill="currentColor"/>
-  <circle cx="105" cy="20" r="6" fill="currentColor"/>
-  <path d="M105 104 Q98 120 108 123" fill="none" stroke="currentColor" stroke-width="5" stroke-linecap="round"/>`;
+const MAESTRO_CUERPO = `
+  <!-- brazo derecho sosteniendo el cuaderno abierto -->
+  <g class="m-brazo">
+    <!-- manga del saco -->
+    <path d="M68 210 Q46 200 44 176 Q46 168 56 168 Q66 172 70 190 Z"
+          fill="${P_MAESTRO.saco}"/>
+    <!-- mano -->
+    <circle cx="46" cy="170" r="9" fill="${P_MAESTRO.piel}"/>
+    <!-- cuaderno abierto: tapa verde, dos hojas y garabatos -->
+    <g class="m-pinza">
+      <!-- tapa por atrás -->
+      <path d="M12 138 L78 138 L78 176 L12 176 Z" fill="${P_MAESTRO.tapaLibro}"/>
+      <!-- hojas: dos rectángulos apoyados uno al lado del otro, con un
+           pliegue leve al medio -->
+      <path d="M14 140 L44 140 L45 174 L14 174 Z" fill="${P_MAESTRO.papel}"/>
+      <path d="M46 140 L76 140 L76 174 L45 174 Z" fill="${P_MAESTRO.papel}"/>
+      <line x1="45" y1="140" x2="45" y2="174" stroke="${P_MAESTRO.papelS}" stroke-width="1"/>
+      <!-- garabato: la formación anotada, líneas irregulares -->
+      <g stroke="${P_MAESTRO.garabato}" stroke-width="1.4" stroke-linecap="round" fill="none">
+        <path d="M18 147 Q26 145 34 148 Q40 149 42 147"/>
+        <path d="M18 153 Q26 151 34 154 Q39 155 42 153"/>
+        <path d="M18 160 Q28 158 38 161"/>
+        <path d="M18 167 Q26 166 32 168"/>
+        <path d="M50 147 Q60 145 68 148 Q72 149 74 147"/>
+        <path d="M50 155 Q60 154 70 156"/>
+        <!-- una florcita o círculo, como si fuera un símbolo táctico -->
+        <circle cx="60" cy="164" r="3" fill="${P_MAESTRO.garabato}" fill-opacity=".55"/>
+        <path d="M50 170 L74 170"/>
+      </g>
+    </g>
+  </g>
 
-/* Cada capa lleva UNA sola clase de gesto: si una capa tuviera dos, las
-   dos reglas de display pelearían y ganaría la última siempre. */
-const VASCO_GESTOS = `
-  <g class="v-ojos">
-    <g class="v-g v-ojos-abiertos">
-      <circle class="v-parpadeo" cx="82" cy="97" r="9.5" fill="var(--marino-hondo)" stroke="currentColor" stroke-width="4.5"/>
-      <circle class="v-parpadeo" cx="128" cy="97" r="9.5" fill="var(--marino-hondo)" stroke="currentColor" stroke-width="4.5"/>
-      <circle cx="83" cy="98" r="3.8" fill="currentColor"/>
-      <circle cx="129" cy="98" r="3.8" fill="currentColor"/>
+  <!-- cuello (piel), va detrás del saco -->
+  <path d="M92 148 L92 184 Q105 190 118 184 L118 148 Z"
+        fill="${P_MAESTRO.pielS}"/>
+
+  <!-- saco: gran forma redondeada de hombros a base -->
+  <path d="M40 240 Q42 194 82 180 L128 180 Q168 194 170 240 Z"
+        fill="${P_MAESTRO.saco}"/>
+
+  <!-- solapas del saco: dos triángulos triangulares con sombra -->
+  <path d="M82 180 L96 218 L105 202 L114 218 L128 180 Z"
+        fill="${P_MAESTRO.sacoS}"/>
+
+  <!-- camisa: rombo blanco entre solapas -->
+  <path d="M96 218 L105 202 L114 218 L105 234 Z"
+        fill="${P_MAESTRO.camisa}"/>
+
+  <!-- corbata celeste: nudo triangular + parte larga -->
+  <path d="M100 205 L110 205 L107 212 Z" fill="${P_MAESTRO.corbataS}"/>
+  <path d="M100 212 L110 212 L114 240 L96 240 Z" fill="${P_MAESTRO.corbata}"/>
+  <!-- brillo sutil en la corbata -->
+  <path d="M104 215 L106 215 L107 238 L105 238 Z"
+        fill="${P_MAESTRO.corbataS}" opacity=".55"/>
+
+`;
+
+const MAESTRO_CARA = `
+  <!-- ═══ CABEZA ═══ -->
+  <!-- pelo canoso por atrás: banda que asoma detrás de la cara.
+       Es lo más lejos del centro, va primero. -->
+  <path d="M52 100 Q48 60 76 44 Q105 34 134 44 Q162 60 158 100
+           Q160 130 148 148 L62 148 Q50 130 52 100 Z"
+        fill="${P_MAESTRO.pelo}"/>
+  <!-- ombra de pelo (parte de atrás más oscura) -->
+  <path d="M52 100 Q48 60 76 44 Q90 40 100 44 L100 148 L62 148 Q50 130 52 100 Z"
+        fill="${P_MAESTRO.peloS}" opacity=".6"/>
+
+  <!-- orejas: dos óvalos de piel a los costados -->
+  <ellipse cx="58" cy="106" rx="8" ry="12" fill="${P_MAESTRO.piel}"/>
+  <ellipse cx="152" cy="106" rx="8" ry="12" fill="${P_MAESTRO.piel}"/>
+  <!-- pequeña sombra dentro de la oreja -->
+  <path d="M55 106 Q58 100 61 106 Q58 112 55 106 Z" fill="${P_MAESTRO.pielS}" opacity=".55"/>
+  <path d="M149 106 Q152 100 155 106 Q152 112 149 106 Z" fill="${P_MAESTRO.pielS}" opacity=".55"/>
+
+  <!-- CARA: forma ovalada tipo memoji, un poco más alargada abajo -->
+  <path d="M62 90 Q60 46 105 42 Q150 46 148 90 Q150 138 128 152
+           Q117 158 105 158 Q93 158 82 152 Q60 138 62 90 Z"
+        fill="${P_MAESTRO.piel}"/>
+
+  <!-- calvicie: coronilla despejada, un semicírculo de piel visible
+       arriba entre los mechones de pelo lateral -->
+  <path d="M78 62 Q105 42 132 62 Q125 54 105 52 Q85 54 78 62 Z"
+        fill="${P_MAESTRO.piel}"/>
+
+  <!-- mechones de pelo blanco arriba, a los costados de la calvicie -->
+  <path d="M62 78 Q60 54 76 44 Q80 54 78 76 Z" fill="${P_MAESTRO.pelo}"/>
+  <path d="M148 78 Q150 54 134 44 Q130 54 132 76 Z" fill="${P_MAESTRO.pelo}"/>
+
+  <!-- NARIZ: forma suave, no aguileña. Punto de sombra abajo. -->
+  <path d="M105 102 Q100 118 106 124 Q112 122 112 118 Q110 108 105 102 Z"
+        fill="${P_MAESTRO.pielS}" opacity=".65"/>
+
+  <!-- mejilla suave (un toque de rubor cálido, muy sutil) -->
+  <circle cx="76" cy="128" r="7" fill="#E89A88" opacity=".28"/>
+  <circle cx="134" cy="128" r="7" fill="#E89A88" opacity=".28"/>
+
+  <!-- ANTEOJOS: dos rectángulos redondeados con marco oscuro y vidrios
+       muy claros (blanco con transparencia sobre la piel).
+       Van encima de todas las capas de ojos, así siempre se ven al
+       frente. -->
+  <g class="m-anteojos">
+    <!-- vidrios (fondo casi transparente) -->
+    <rect x="66" y="86" width="32" height="24" rx="5" fill="${P_MAESTRO.camisa}" opacity=".35"/>
+    <rect x="112" y="86" width="32" height="24" rx="5" fill="${P_MAESTRO.camisa}" opacity=".35"/>
+    <!-- marco -->
+    <rect x="66" y="86" width="32" height="24" rx="5"
+          fill="none" stroke="${P_MAESTRO.anteojos}" stroke-width="3.5"/>
+    <rect x="112" y="86" width="32" height="24" rx="5"
+          fill="none" stroke="${P_MAESTRO.anteojos}" stroke-width="3.5"/>
+    <!-- puente entre los dos vidrios -->
+    <line x1="98" y1="96" x2="112" y2="96"
+          stroke="${P_MAESTRO.anteojos}" stroke-width="3"/>
+    <!-- patillas hacia las orejas -->
+    <path d="M66 92 L60 94 M144 92 L150 94"
+          fill="none" stroke="${P_MAESTRO.anteojos}" stroke-width="3" stroke-linecap="round"/>
+  </g>
+`;
+
+const MAESTRO_GESTOS = `
+  <!-- OJOS: van adentro del marco de los anteojos. Las capas se prenden
+       por [data-gesto]. Colores planos: iris casi negro sobre blanco. -->
+  <g class="m-ojos">
+    <g class="m-g m-ojos-abiertos">
+      <ellipse class="m-parpadeo" cx="82" cy="98" rx="6" ry="6.5" fill="${P_MAESTRO.camisa}"/>
+      <ellipse class="m-parpadeo" cx="128" cy="98" rx="6" ry="6.5" fill="${P_MAESTRO.camisa}"/>
+      <circle cx="83" cy="99" r="3" fill="${P_MAESTRO.anteojos}"/>
+      <circle cx="129" cy="99" r="3" fill="${P_MAESTRO.anteojos}"/>
+      <!-- brillito -->
+      <circle cx="84" cy="97" r=".9" fill="${P_MAESTRO.camisa}"/>
+      <circle cx="130" cy="97" r=".9" fill="${P_MAESTRO.camisa}"/>
     </g>
-    <g class="v-g v-ojos-guino">
-      <path d="M72 98 Q82 90 92 98" fill="none" stroke="currentColor" stroke-width="5.5" stroke-linecap="round"/>
-      <circle cx="128" cy="97" r="10" fill="var(--marino-hondo)" stroke="currentColor" stroke-width="4.5"/>
-      <circle cx="129" cy="98" r="4.2" fill="currentColor"/>
+    <g class="m-g m-ojos-guino">
+      <!-- ojo izquierdo cerrado (línea curva) -->
+      <path d="M76 100 Q82 94 90 100" fill="none"
+            stroke="${P_MAESTRO.anteojos}" stroke-width="3.5" stroke-linecap="round"/>
+      <ellipse cx="128" cy="98" rx="6.5" ry="7" fill="${P_MAESTRO.camisa}"/>
+      <circle cx="129" cy="99" r="3.4" fill="${P_MAESTRO.anteojos}"/>
+      <circle cx="130" cy="97" r=".9" fill="${P_MAESTRO.camisa}"/>
     </g>
-    <g class="v-g v-ojos-grandes">
-      <circle cx="82" cy="96" r="13" fill="var(--marino-hondo)" stroke="currentColor" stroke-width="4.5"/>
-      <circle cx="128" cy="96" r="13" fill="var(--marino-hondo)" stroke="currentColor" stroke-width="4.5"/>
-      <circle cx="82" cy="96" r="4.6" fill="currentColor"/>
-      <circle cx="128" cy="96" r="4.6" fill="currentColor"/>
+    <g class="m-g m-ojos-grandes">
+      <ellipse cx="82" cy="98" rx="8" ry="8.5" fill="${P_MAESTRO.camisa}"/>
+      <ellipse cx="128" cy="98" rx="8" ry="8.5" fill="${P_MAESTRO.camisa}"/>
+      <circle cx="82" cy="98" r="4" fill="${P_MAESTRO.anteojos}"/>
+      <circle cx="128" cy="98" r="4" fill="${P_MAESTRO.anteojos}"/>
+      <circle cx="84" cy="96" r="1.1" fill="${P_MAESTRO.camisa}"/>
+      <circle cx="130" cy="96" r="1.1" fill="${P_MAESTRO.camisa}"/>
     </g>
-    <g class="v-g v-ojos-entrecerrados">
-      <path d="M72 101 Q82 93 92 101" fill="none" stroke="currentColor" stroke-width="5.5" stroke-linecap="round"/>
-      <path d="M118 101 Q128 93 138 101" fill="none" stroke="currentColor" stroke-width="5.5" stroke-linecap="round"/>
+    <g class="m-g m-ojos-entrecerrados">
+      <path d="M76 100 Q82 94 90 100" fill="none"
+            stroke="${P_MAESTRO.anteojos}" stroke-width="3.5" stroke-linecap="round"/>
+      <path d="M120 100 Q128 94 136 100" fill="none"
+            stroke="${P_MAESTRO.anteojos}" stroke-width="3.5" stroke-linecap="round"/>
     </g>
-    <g class="v-g v-ojos-felices">
-      <path d="M71 102 Q82 89 93 102" fill="none" stroke="currentColor" stroke-width="5.5" stroke-linecap="round"/>
-      <path d="M117 102 Q128 89 139 102" fill="none" stroke="currentColor" stroke-width="5.5" stroke-linecap="round"/>
+    <g class="m-g m-ojos-felices">
+      <path d="M74 101 Q82 92 92 101" fill="none"
+            stroke="${P_MAESTRO.anteojos}" stroke-width="4" stroke-linecap="round"/>
+      <path d="M118 101 Q128 92 138 101" fill="none"
+            stroke="${P_MAESTRO.anteojos}" stroke-width="4" stroke-linecap="round"/>
     </g>
   </g>
-  <g class="v-cejas">
-    <g class="v-g v-cejas-normal">
-      <path d="M69 80 Q82 74 95 79" fill="none" stroke="currentColor" stroke-width="6.5" stroke-linecap="round"/>
-      <path d="M115 79 Q128 74 141 80" fill="none" stroke="currentColor" stroke-width="6.5" stroke-linecap="round"/>
+
+  <!-- CEJAS: van arriba de los anteojos, en la frente. Gris oscuro. -->
+  <g class="m-cejas">
+    <g class="m-g m-cejas-normal">
+      <path d="M68 78 Q82 72 96 78" fill="none" stroke="${P_MAESTRO.cejas}"
+            stroke-width="5" stroke-linecap="round"/>
+      <path d="M114 78 Q128 72 142 78" fill="none" stroke="${P_MAESTRO.cejas}"
+            stroke-width="5" stroke-linecap="round"/>
     </g>
-    <g class="v-g v-cejas-una">
-      <path d="M69 83 Q82 78 95 82" fill="none" stroke="currentColor" stroke-width="6.5" stroke-linecap="round"/>
-      <path d="M115 74 Q128 67 141 76" fill="none" stroke="currentColor" stroke-width="6.5" stroke-linecap="round"/>
+    <g class="m-g m-cejas-una">
+      <path d="M68 81 Q82 76 96 80" fill="none" stroke="${P_MAESTRO.cejas}"
+            stroke-width="5" stroke-linecap="round"/>
+      <path d="M114 72 Q128 65 142 72" fill="none" stroke="${P_MAESTRO.cejas}"
+            stroke-width="5" stroke-linecap="round"/>
     </g>
-    <g class="v-g v-cejas-alta">
-      <path d="M69 84 Q82 80 95 84" fill="none" stroke="currentColor" stroke-width="6.5" stroke-linecap="round"/>
-      <path d="M113 72 Q128 63 143 74" fill="none" stroke="currentColor" stroke-width="7" stroke-linecap="round"/>
+    <g class="m-g m-cejas-alta">
+      <path d="M68 82 Q82 78 96 82" fill="none" stroke="${P_MAESTRO.cejas}"
+            stroke-width="5" stroke-linecap="round"/>
+      <path d="M112 70 Q128 60 144 70" fill="none" stroke="${P_MAESTRO.cejas}"
+            stroke-width="5.5" stroke-linecap="round"/>
     </g>
-    <g class="v-g v-cejas-arriba">
-      <path d="M67 74 Q82 65 97 74" fill="none" stroke="currentColor" stroke-width="6.5" stroke-linecap="round"/>
-      <path d="M113 74 Q128 65 143 74" fill="none" stroke="currentColor" stroke-width="6.5" stroke-linecap="round"/>
+    <g class="m-g m-cejas-arriba">
+      <path d="M66 72 Q82 63 98 72" fill="none" stroke="${P_MAESTRO.cejas}"
+            stroke-width="5" stroke-linecap="round"/>
+      <path d="M112 72 Q128 63 144 72" fill="none" stroke="${P_MAESTRO.cejas}"
+            stroke-width="5" stroke-linecap="round"/>
     </g>
-    <g class="v-g v-cejas-caidas">
-      <path d="M69 76 Q82 84 95 88" fill="none" stroke="currentColor" stroke-width="6.5" stroke-linecap="round"/>
-      <path d="M115 88 Q128 84 141 76" fill="none" stroke="currentColor" stroke-width="6.5" stroke-linecap="round"/>
+    <g class="m-g m-cejas-caidas">
+      <path d="M68 74 Q82 82 96 86" fill="none" stroke="${P_MAESTRO.cejas}"
+            stroke-width="5" stroke-linecap="round"/>
+      <path d="M114 86 Q128 82 142 74" fill="none" stroke="${P_MAESTRO.cejas}"
+            stroke-width="5" stroke-linecap="round"/>
     </g>
-    <g class="v-g v-cejas-contento">
-      <path d="M69 78 Q82 71 95 77" fill="none" stroke="currentColor" stroke-width="6.5" stroke-linecap="round"/>
-      <path d="M115 77 Q128 71 141 78" fill="none" stroke="currentColor" stroke-width="6.5" stroke-linecap="round"/>
+    <g class="m-g m-cejas-contento">
+      <path d="M68 76 Q82 70 96 74" fill="none" stroke="${P_MAESTRO.cejas}"
+            stroke-width="5" stroke-linecap="round"/>
+      <path d="M114 74 Q128 70 142 76" fill="none" stroke="${P_MAESTRO.cejas}"
+            stroke-width="5" stroke-linecap="round"/>
     </g>
   </g>
-  <g class="v-boca">
-    <g class="v-g v-boca-suave"><path d="M92 139 Q105 145 118 139" fill="none" stroke="currentColor" stroke-width="5" stroke-linecap="round"/></g>
-    <g class="v-g v-boca-torcida"><path d="M90 140 Q105 148 122 134" fill="none" stroke="currentColor" stroke-width="5" stroke-linecap="round"/></g>
-    <g class="v-g v-boca-o"><ellipse cx="105" cy="140" rx="9" ry="8" fill="currentColor"/></g>
-    <g class="v-g v-boca-ondulada"><path d="M92 141 Q98 135 105 141 Q112 147 118 141" fill="none" stroke="currentColor" stroke-width="5" stroke-linecap="round"/></g>
-    <g class="v-g v-boca-risa"><path d="M87 133 Q105 153 123 133 Z" fill="currentColor" stroke="currentColor" stroke-width="5" stroke-linejoin="round"/></g>
+
+  <!-- BOCA: tono rosado oscuro. El Maestro es más contenido, la boca
+       chica y expresiva. -->
+  <g class="m-boca">
+    <g class="m-g m-boca-suave">
+      <path d="M96 141 Q105 145 114 141" fill="none"
+            stroke="#8E4A4A" stroke-width="3.5" stroke-linecap="round"/>
+    </g>
+    <g class="m-g m-boca-torcida">
+      <path d="M94 141 Q105 148 116 137" fill="none"
+            stroke="#8E4A4A" stroke-width="3.5" stroke-linecap="round"/>
+    </g>
+    <g class="m-g m-boca-o">
+      <ellipse cx="105" cy="141" rx="6" ry="7" fill="#8E4A4A"/>
+      <ellipse cx="105" cy="142" rx="4" ry="4.5" fill="#5A2A2A"/>
+    </g>
+    <g class="m-g m-boca-ondulada">
+      <path d="M96 142 Q100 137 105 142 Q110 147 114 142" fill="none"
+            stroke="#8E4A4A" stroke-width="3.5" stroke-linecap="round"/>
+    </g>
+    <g class="m-g m-boca-risa">
+      <!-- boca abierta con dientes -->
+      <path d="M92 137 Q105 152 118 137 Z" fill="#8E4A4A"/>
+      <path d="M96 139 Q105 148 114 139 Z" fill="#5A2A2A"/>
+      <rect x="98" y="139" width="14" height="3" rx="1" fill="${P_MAESTRO.camisa}"/>
+    </g>
   </g>
-  <path class="v-bigote"
-        d="M105 120 Q88 114 74 120 Q62 126 68 134 Q76 141 90 134 Q99 129 105 126
-           Q111 129 120 134 Q134 141 142 134 Q148 126 136 120 Q122 114 105 120 Z"
-        fill="currentColor"/>`;
+`;
 
 /* Devuelve el dibujo entero listo para meter en el DOM. */
-function vascoHTML(clase, gesto){
-  return `<svg class="vasco ${clase}" viewBox="0 0 210 240" data-gesto="${gesto || "saludo"}"
-               role="img" aria-label="${CHEF.nombre}, el parrillero">
-      <g class="v-cuerpo">${VASCO_CUERPO}</g>
-      <g class="v-cabeza">${VASCO_CARA}${VASCO_GESTOS}</g>
+function maestroHTML(clase, gesto){
+  return `<svg class="maestro ${clase}" viewBox="0 0 210 240" data-gesto="${gesto || "saludo"}"
+               role="img" aria-label="${CHEF.nombre}, entrenador">
+      <g class="m-cuerpo">${MAESTRO_CUERPO}</g>
+      <g class="m-cabeza">${MAESTRO_CARA}${MAESTRO_GESTOS}</g>
     </svg>`;
 }
-/* Le cambia la cara a todos los Vascos que haya en pantalla. */
-function gesto(g){ $$(".vasco").forEach(v => v.setAttribute("data-gesto", g)); }
+/* Le cambia la cara a todos los Maestros que haya en pantalla. */
+function gesto(g){ $$(".maestro").forEach(v => v.setAttribute("data-gesto", g)); }
 
 /* ── LOS CHISTES CON EL NOMBRE ────────────────────────────────────────
-   Es lo que hace que a El Vasco le agarres cariño en vez de sólo usarlo.
+   Es lo que hace que al Maestro le agarres cariño en vez de sólo usarlo.
    Primero busca el nombre exacto; si no lo tiene, se agarra de la forma
    del nombre. Nunca se queda sin decir algo.                         */
 const CHISTES_NOMBRE = {
-  "martin":"Martín. En esta playa hay cuatro Martines y ninguno paga la cuenta.",
-  "juan":"Juan. El nombre más honesto que hay. No se puede desconfiar de un Juan.",
-  "diego":"Diego. Vos de chico jugabas al fútbol con ese nombre, no me lo niegues.",
-  "santiago":"Santiago. Muy elegante para venir con arena en los pies, pero pasá.",
-  "matias":"Matías. Conozco tres y los tres llegan tarde. Vos también, seguro.",
-  "sebastian":"Sebastián. Nombre largo, hambre larga. Es matemática.",
-  "rodrigo":"Rodrigo. Sos el que organiza todo y después nadie te agradece. Lo sé.",
-  "gonzalo":"Gonzalo. En algún momento alguien te dijo Gonza y ya no hubo vuelta atrás.",
-  "federico":"Federico. O Fede. Yo te voy a decir Fede, avisame si te molesta. Igual te voy a decir Fede.",
-  "nicolas":"Nicolás. Nombre de tipo tranquilo. Después vemos si es verdad.",
-  "pablo":"Pablo. Dos sílabas, cero vueltas. Vamos bien.",
-  "fernando":"Fernando. Con ese nombre yo esperaría que pidas algo de la parrilla. Veremos.",
-  "gabriel":"Gabriel. Nombre de arcángel y estás acá comiendo. Me gusta la contradicción.",
-  "sofia":"Sofía. Nombre de las que después piden postre y dicen que no querían.",
-  "camila":"Camila. Vos sos de las que ya sabe qué va a pedir y me deja hablar igual. Gracias.",
-  "valentina":"Valentina. Nombre largo para una carta corta. Lo vamos a resolver.",
-  "lucia":"Lucía. Sos de las que se sienta mirando al mar sí o sí. Se nota.",
-  "florencia":"Florencia. O Flor. Con ese nombre y esta playa, la tenés fácil.",
-  "agustina":"Agustina. Vos venís con hambre y lo estás disimulando. Yo también lo hago.",
-  "victoria":"Victoria. Empezamos ganando, entonces.",
-  "carolina":"Carolina. Nombre de la que elige el restaurante para todo el grupo. ¿Me equivoco?",
-  "ana":"Ana. Tres letras. Sos de las que no pierde el tiempo, ya me di cuenta.",
-  "paula":"Paula. Corto, firme, sin adornos. Como debe ser.",
-  "laura":"Laura. Nombre de la que lee la carta entera y después pide lo mismo de siempre.",
-  "andres":"Andrés. Tenés cara de pedir entraña. No me hagas quedar mal.",
-  "vasco":"¿Vasco? Vasco soy yo. Uno de los dos se va a tener que cambiar el nombre."
+  "martin":"Martín. Buen nombre para jugar de nueve. Y para comer bien.",
+  "juan":"Juan. En un equipo cualquier Juan juega. Y come. Bienvenido.",
+  "diego":"Diego. Ese nombre pesa en Uruguay. Ojalá lo hayas cargado con orgullo.",
+  "santiago":"Santiago. Nombre de capitán. Voy a esperar que dirijas la mesa.",
+  "matias":"Matías. Conocí tres. Los tres eran laterales. Vos elegí igual.",
+  "sebastian":"Sebastián. Nombre serio. Vamos a estar a la altura.",
+  "rodrigo":"Rodrigo. Vos sos de los que llegan puntuales. Lo respeto.",
+  "gonzalo":"Gonzalo. Alguien te dice Gonza. No lo voy a hacer yo, tranquilo.",
+  "federico":"Federico. O Fede. Uno elige cómo lo llaman. Yo te digo Federico.",
+  "nicolas":"Nicolás. Tenés cara de mediocampista de contención. Es un elogio.",
+  "pablo":"Pablo. Dos sílabas. No hace falta más para decir lo importante.",
+  "fernando":"Fernando. Nombre uruguayo si los hay. Casa, familia, mesa. Empezamos bien.",
+  "gabriel":"Gabriel. Los Gabriel que conocí siempre tenían algo para decir. A ver.",
+  "luis":"Luis. Como el Maestro Suárez. Espero que muerdas menos que él.",
+  "sofia":"Sofía. Las Sofía deciden rápido. Yo te sigo.",
+  "camila":"Camila. Vos ya elegiste antes de sentarte. Igual me dejás hablar. Gracias.",
+  "valentina":"Valentina. Nombre largo. Te lo respeto entero, sin apocopar.",
+  "lucia":"Lucía. Nombre de esas que tienen la mesa bajo control desde antes.",
+  "florencia":"Florencia. O Flor. Elegís vos, yo respeto la decisión.",
+  "agustina":"Agustina. Tenés hambre y no lo estás diciendo. Yo también lo hago.",
+  "victoria":"Victoria. Con ese nombre uno se sienta y ya suma un punto.",
+  "carolina":"Carolina. Vos elegís el restaurante para todo el grupo. ¿O me equivoco?",
+  "ana":"Ana. Tres letras y no perdés el tiempo. Como los grandes.",
+  "paula":"Paula. Firme y sin adornos. Así se juega.",
+  "laura":"Laura. Vas a leer toda la carta y después pedir lo mismo de siempre. Ya está.",
+  "andres":"Andrés. Buen mediocampista, buen comensal. Vamos.",
+  "maestro":"¿Maestro? Uno solo. Los dos no nos vamos a bancar. Sentate igual.",
+  "tabarez":"Tabárez… ese nombre lo respetamos mucho por acá. Sentate como en casa.",
+  "obdulio":"Obdulio. Bueno. Ya sabemos cómo va a ser esta mesa. Con carácter."
 };
 
 const CHISTES_FORMA = [
   { test: n => n.split(/\s+/).length > 1,
-    di: n => `${n}, nombre y apellido. Uh. Esto se puso formal de golpe.` },
+    di: n => `${n}. Nombre y apellido. Está bien. Uno se presenta como debe ser.` },
   { test: n => n.length <= 3,
-    di: n => `${n}. Corto. Me gusta, así queda más tiempo para comer.` },
+    di: n => `${n}. Nombre corto, decisión rápida. Me lo guardo.` },
   { test: n => n.length >= 11,
-    di: n => `${n}. Ese nombre no me lo voy a acordar. Te voy a decir campeón.` },
+    di: n => `${n}. Nombre largo. Merece que uno lo pronuncie entero.` },
   { test: n => /^[aeiouáéíóú]/i.test(n),
-    di: n => `${n}. Arranca con vocal, suena bien cuando lo gritás desde la cocina.` },
+    di: n => `${n}. Arranca con vocal. Suena bien cuando uno lo dice en voz alta.` },
   { test: n => /(ito|ita)$/i.test(n),
-    di: n => `${n}. ¿Ese es el nombre o te lo puso tu abuela? Da igual, me gusta.` }
+    di: n => `${n}. Diminutivo. En la mesa está bien; en el vestuario también.` }
 ];
 
 const CHISTES_GENERICOS = [
-  n => `${n}. No conozco ningún ${n} que coma mal. Empezamos bien.`,
-  n => `${n}. Mirá vos. Tenés cara de ${n}, la verdad.`,
-  n => `${n}. Ya lo anoté. Y yo no anoto a cualquiera.`,
-  n => `Bueno, ${n}. Ahora sí estamos hablando en serio.`
+  n => `${n}. Nunca conocí un ${n} sin criterio en la mesa. Vamos con esa.`,
+  n => `${n}. Está bien. Los nombres poco comunes son los que se recuerdan.`,
+  n => `${n}. Anotado. Y yo no anoto a cualquiera.`,
+  n => `Bueno, ${n}. Ahora conversamos en serio.`
 ];
 
 const normalizar = t => t.toLowerCase()
@@ -2837,18 +2874,18 @@ function bromaMesa(nombres){
   const repetido = Object.keys(repes).find(k => repes[k] > 1);
   if (repetido){
     const cual = limpios.find(n => normalizar(n) === repetido);
-    return `Dos que se llaman ${cual}, en la misma mesa. Esto termina con alguien comiendo el plato del otro.`;
+    return `Dos que se llaman ${cual}. Como en un plantel: siempre hay dos con el mismo nombre.`;
   }
-  if (limpios.length === 0) return "Nadie me dijo el nombre. Una mesa de incógnito. Me encanta.";
-  if (nombres.length >= 8) return `${nombres.length} personas. Avisá en la cocina que hoy no salgo temprano.`;
-  if (nombres.length === 2) return "De a dos. Esto o es una cita o es una discusión. Las dos comen igual.";
+  if (limpios.length === 0) return "Nadie firmó la lista. Mesa de incógnitos. Se respeta.";
+  if (nombres.length >= 8) return `${nombres.length} en la mesa. Una convocatoria seria. Manos a la obra.`;
+  if (nombres.length === 2) return "De a dos. Formación corta, planteo claro.";
   return null;
 }
 
 /* ═══════════════════════════════════════════════════════════════════
    ARMÁ LA MESA
    El celular da la vuelta: cada uno pone su nombre, dice qué no come y
-   contesta dos preguntas. Al final El Vasco arma el pedido de todos.
+   contesta dos preguntas. Al final el Maestro arma la formación de la mesa.
 
    No es correr el motor N veces y listo: una mesa pide distinto que N
    personas sueltas. Lo que va al medio tiene que servirle a TODOS, así
@@ -2949,23 +2986,23 @@ function pantallaModo(){
   $("#progreso").hidden = true;
   $("#chef-volver").onclick = () => ir("landing");
 
-  // Lo primero que ve la persona es la cara del Vasco, no un título.
+  // Lo primero que ve la persona es la cara del Maestro, no un título.
   const dice = S.nombre
     ? bromaNombre(S.nombre)
     : (Memoria.ultimoPlato()
-        ? "Pará. Vos ya estuviste acá."
-        : "Sentate. Yo soy El Vasco y hace una vida que estoy atrás de esta parrilla.");
+        ? "Un veterano. Con los de la casa se empieza distinto."
+        : "Tomá asiento. Yo soy el Maestro. Hace una vida que armo mesas como quien arma una selección.");
 
   panel().innerHTML = `<div class="modo">
     <div class="presenta">
-      ${vascoHTML("vasco--grande", S.nombre ? "chicana" : "saludo")}
+      ${maestroHTML("maestro--grande", S.nombre ? "chicana" : "saludo")}
       <div class="presenta__globo">
         <span class="presenta__nombre">${esc(CHEF.nombre)}</span>
         ${esc(dice)}
       </div>
     </div>
     ${recuerdoHTML()}
-    <h2 class="modo__titulo">Con solo verte<br>ya sé qué vas a pedir.</h2>
+    <h2 class="modo__titulo">Con solo verte<br>ya sé qué comés.</h2>
     <p class="modo__texto">Te hago unas preguntas. Casi ninguna es sobre comida, y no hace falta que entiendas por qué. Después te lo digo.</p>
 
     ${S.nombre ? "" : `<div class="nombre">
@@ -2999,7 +3036,7 @@ function pantallaModo(){
         <h3>Armá la mesa</h3>
         <span class="tarjeta-modo__meta">Para varios</span>
       </span>
-      <p>Se pasan el celular y cada uno contesta tres cosas. Al final armo el pedido de toda la mesa y te digo cuánto sale por cabeza.</p>
+      <p>Se pasan el celular y cada uno pone su nombre. Al final armo la formación de la mesa entera y te digo cuánto sale por cabeza.</p>
     </button>
 
     <p class="modo__texto" style="margin:18px 0 0;font-size:.84rem;opacity:.72">
@@ -3032,7 +3069,7 @@ function pantallaModo(){
   decir("Elegí el modo del chef.");
 }
 
-/* Lo que El Vasco se acuerda de la última vez. Vive en el celular. */
+/* Lo que el Maestro se acuerda de la última vez. Vive en el celular. */
 function recuerdoHTML(){
   const u = Memoria.ultimoPlato();
   if (!u) return "";
@@ -3064,8 +3101,8 @@ async function pensando(forzada){
   const frase = forzada || VOZ.esperas[Math.floor(Math.random() * VOZ.esperas.length)];
   const div = document.createElement("div");
   div.className = "puntitos";
-  div.innerHTML = `<div class="dice__vasco">${vascoHTML("vasco--chico", forzada ? "chicana" : "pensando")}</div>
-                   <div class="puntitos__caja"><i></i><i></i><i></i></div>
+  div.innerHTML = `<div class="dice__maestro">${maestroHTML("maestro--chico", forzada ? "chicana" : "pensando")}</div>
+                   <div class="puntitos__caja"><div class="pelota"></div></div>
                    <span class="puntitos__frase">${esc(frase)}</span>`;
   panel().appendChild(div);
   await esperar(forzada ? 900 + Math.random() * 300 : 560 + Math.random() * 340);
@@ -3082,7 +3119,7 @@ function pintarPregunta(){
 
   const cabecera = `
     <div class="dice">
-      <div class="dice__vasco">${vascoHTML("vasco--chico", "saludo")}</div>
+      <div class="dice__maestro">${maestroHTML("maestro--chico", "saludo")}</div>
       <div class="burbuja">${esc(hablarme(p.texto))}</div>
     </div>
     <h3 class="solo-lectores">${esc(p.texto)}</h3>
@@ -3395,10 +3432,10 @@ function pantallaMesa(){
 
   panel().innerHTML = `<div class="modo">
     <div class="presenta">
-      ${vascoHTML("vasco--grande", "saludo")}
+      ${maestroHTML("maestro--grande", "saludo")}
       <div class="presenta__globo">
         <span class="presenta__nombre">${esc(CHEF.nombre)}</span>
-        ¿Cuántos son? Y no me mientas, que después falta comida.
+        ¿Cuántos son? Toda formación empieza con la lista.
       </div>
     </div>
     <div class="cuantos" role="group" aria-label="Cuántos son">
@@ -3406,7 +3443,7 @@ function pantallaMesa(){
         `<button class="cuantos__n" data-n="${n}">${n}</button>`).join("")}
     </div>
     <p class="modo__texto" style="margin-top:20px">
-      Se van pasando el celular. Cada uno contesta tres cosas y listo.</p>
+      Se van pasando el celular. Cada uno contesta y arma su parte de la formación.</p>
   </div>`;
 
   $$(".cuantos__n").forEach(b => b.addEventListener("click", () => {
@@ -3430,12 +3467,12 @@ function turnoDe(i){
 function pintarPasa(i){
   const anterior = i > 0 ? M.comensales[i-1] : null;
   const dice = i === 0
-    ? "Empezá vos. Después se lo pasás al de al lado."
+    ? "Empezá vos. Después le tocás al de al lado."
     : `Listo${anterior && anterior.nombre ? ", " + esc(anterior.nombre) : ""}. Pasale el celular al que sigue.`;
 
   panel().innerHTML = `<div class="modo">
     <div class="presenta">
-      ${vascoHTML("vasco--grande", i === 0 ? "saludo" : "chicana")}
+      ${maestroHTML("maestro--grande", i === 0 ? "saludo" : "chicana")}
       <div class="presenta__globo">
         <span class="presenta__nombre">${esc(CHEF.nombre)}</span>${esc(dice)}
       </div>
@@ -3477,7 +3514,7 @@ function pintarPreguntaMesa(){
   panel().innerHTML = `<div class="chat">
     <p class="mesa__paso">${esc(c.nombre || "Comensal " + (M.i + 1))} · ${c.j + 1} de ${c.preguntas.length}</p>
     <div class="dice">
-      <div class="dice__vasco">${vascoHTML("vasco--chico", "saludo")}</div>
+      <div class="dice__maestro">${maestroHTML("maestro--chico", "saludo")}</div>
       <div class="burbuja">${esc(quien + (c.j === 0 ? p.texto.charAt(0).toLowerCase() + p.texto.slice(1) : p.texto))}</div>
     </div>
     ${p.nota ? `<p class="pregunta__nota">${esc(p.nota)}</p>` : ""}
@@ -3567,6 +3604,27 @@ async function avanzarMesa(p, c){
   else await pintarVeredictoMesa();
 }
 
+
+/* Papelitos que caen cuando aparece el veredicto. Concentrado, no
+   espolvoreado: 22 papelitos en 2 segundos y desaparecen. Con
+   reduced-motion, no se dispara. */
+function tirarConfeti(){
+  if (reducido()) return;
+  const cont = document.createElement("div");
+  cont.className = "confeti";
+  const colores = ["var(--celeste)", "var(--tarjeta)", "var(--papel)", "var(--tarjeta-r)"];
+  for (let k = 0; k < 22; k++){
+    const p = document.createElement("span");
+    p.style.left  = (5 + Math.random() * 90) + "%";
+    p.style.background = colores[k % colores.length];
+    p.style.animationDelay = (Math.random() * .4) + "s";
+    p.style.setProperty("--dx", ((Math.random() - .5) * 200) + "px");
+    cont.appendChild(p);
+  }
+  document.body.appendChild(cont);
+  setTimeout(() => cont.remove(), 2500);
+}
+
 /* ── VEREDICTO ─────────────────────────────────────────────────── */
 async function pintarVeredicto(){
   $("#progreso-lleno").style.width = "100%";
@@ -3584,13 +3642,15 @@ async function pintarVeredicto(){
   const voz = vozPrincipal(r, rnd);
   const cierre = VOZ.cierres[Math.floor(rnd() * VOZ.cierres.length)];
 
-  // El momento: sube la marea, tapa todo, y cuando baja ya está servido.
+  // El momento: sube la marea, tapa todo, cuando baja está el plato,
+  // y le tira una lluvia corta de papelitos como si fuera un gol.
   if (!reducido()){
     const m = document.createElement("div");
     m.className = "marea";
     m.innerHTML = '<div class="marea__olas olas olas--noche"></div><div class="marea__borde"></div>';
     document.body.appendChild(m);
     setTimeout(() => m.remove(), 1100);
+    setTimeout(tirarConfeti, 900);
   }
 
   const precio = n => "$ " + n.toLocaleString("es-UY");
@@ -3607,7 +3667,7 @@ async function pintarVeredicto(){
   panel().innerHTML = `<div class="veredicto reveal">
     ${r.aviso ? `<p class="pregunta__nota" style="color:var(--arena)">${esc(r.aviso)}</p>` : ""}
     <div class="presenta">
-      ${vascoHTML("vasco--grande", "veredicto")}
+      ${maestroHTML("maestro--grande", "veredicto")}
       <div class="presenta__globo">
         <span class="presenta__nombre">${esc(CHEF.nombre)}</span>
         ${esc(S.nombre ? S.nombre + ", esto es lo tuyo." : "Esto es lo tuyo.")}
@@ -3665,10 +3725,10 @@ async function pintarVeredicto(){
 /* Para las que no traen descripción propia: una frase distinta cada vez,
    que si repiten las dos se ve la plantilla. */
 const FRASES_MEDIO = [
-  "Va al medio y que se arreglen.",
-  "Esto se come con la mano, avisales.",
-  "Poné esto primero, que la parrilla tarda.",
-  "De esto siempre falta. Pedí dos si son muchos."
+  "Va al medio. La mesa es un equipo.",
+  "Se come con la mano. Como en las reuniones que se recuerdan.",
+  "Sale primero. Para que nadie llegue con hambre a la charla.",
+  "De esto siempre falta. Pidan dos, no seamos avaros."
 ];
 function lineaMedio(usadas){
   const libre = FRASES_MEDIO.find(t => !usadas.has(t)) || FRASES_MEDIO[0];
@@ -3705,10 +3765,10 @@ async function pintarVeredictoMesa(){
 
   panel().innerHTML = `<div class="veredicto reveal">
     <div class="presenta">
-      ${vascoHTML("vasco--grande", "veredicto")}
+      ${maestroHTML("maestro--grande", "veredicto")}
       <div class="presenta__globo">
         <span class="presenta__nombre">${esc(CHEF.nombre)}</span>
-        ${esc(chiste || "Esta mesa ya está resuelta. Sentate y esperá.")}
+        ${esc(chiste || "Esta formación ya está armada. Confíen y esperen.")}
       </div>
     </div>
 
@@ -3745,7 +3805,7 @@ async function pintarVeredictoMesa(){
       <p class="ticket__monto">${precio(r.total)}</p>
     </div>
 
-    <p class="burbuja" style="margin-top:24px">Si alguno se queja, decile que hablé yo.</p>
+    <p class="burbuja" style="margin-top:24px">Si alguno se queja, decile que la formación la puse yo.</p>
 
     <div class="veredicto__acciones">
       <button class="btn btn--sol" id="b-otra-mesa">Armar otra mesa</button>
@@ -3801,10 +3861,10 @@ function tarjetaHTML(r){
     <div class="tarjeta__olas olas" aria-hidden="true"></div>
     <div class="tarjeta__cuerpo">
       <svg class="sello sello--chico" style="color:var(--marino)" aria-hidden="true"><use href="#sello"/></svg>
-      <p class="tarjeta__sobre">${quien}, según El Vasco</p>
+      <p class="tarjeta__sobre">${quien}, según El Maestro</p>
       <h3 class="tarjeta__plato">${esc(r.principal.nombre)}</h3>
       <p class="tarjeta__frase">${esc(frasePostal(r))}</p>
-      <p class="tarjeta__pie">BO · FOMENTO — Estamos en la playa</p>
+      <p class="tarjeta__pie">CANDELA EXPRESS — ACÁ SE JUEGA BIEN</p>
     </div>
   </section>
   <div class="tarjeta__acciones">
@@ -3822,7 +3882,7 @@ function frasePostal(r){
 }
 
 async function compartirTarjeta(r){
-  const texto = `${S.nombre ? S.nombre + ", según" : "Según"} El Vasco de Bo Fomento: `
+  const texto = `${S.nombre ? S.nombre + ", según" : "Según"} El Maestro de Candela Express: `
     + `${r.principal.nombre}. ${frasePostal(r)}`;
   const tip = $("#tarjeta-tip");
   try {
@@ -3844,7 +3904,7 @@ function modoSol(){
   document.documentElement.setAttribute("data-sol", on ? "0" : "1");
   const b = $("#b-sol");
   b.setAttribute("aria-pressed", String(!on));
-  try { localStorage.setItem("bofomento.sol", on ? "0" : "1"); } catch (e) {}
+  try { localStorage.setItem("candela.sol", on ? "0" : "1"); } catch (e) {}
   decir(on ? "Modo sol apagado." : "Modo sol encendido: más contraste y letra más grande.");
 }
 
@@ -3926,7 +3986,7 @@ function conectar(){
   $("#b-voz").addEventListener("click", leerCarta);
   if (!("speechSynthesis" in window)) $("#b-voz").hidden = true;
   try {
-    if (localStorage.getItem("bofomento.sol") === "1"){
+    if (localStorage.getItem("candela.sol") === "1"){
       document.documentElement.setAttribute("data-sol", "1");
       $("#b-sol").setAttribute("aria-pressed", "true");
     }
@@ -4115,7 +4175,7 @@ function bofoTest(){
     R.fallas.length ? `FALLAS: ${R.fallas.length}` : "FALLAS: 0 — todo verde"
   ].join("\n");
 
-  console.log("%c BO | Fomento — autotest ", "background:#10263B;color:#E0A94A;font-weight:bold");
+  console.log("%c Candela Express — autotest ", "background:#08351E;color:#E0A94A;font-weight:bold");
   console.log(linea);
   R.fallas.slice(0, 12).forEach(f => console.error(f));
   return { ok: R.ok, fallas: R.fallas, resumen: linea };
