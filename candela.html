@@ -127,9 +127,16 @@ button{ font:inherit; color:inherit; }
     url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='9' viewBox='0 0 24 9'%3E%3Cpath d='M0 7 L6 2 L12 7 L18 2 L24 7' fill='none' stroke='%23A9C0D0' stroke-width='1.6' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
 }
 
-.app{ min-height:100dvh; display:flex; flex-direction:column; }
+.app{ min-height:100vh; min-height:100dvh; display:flex; flex-direction:column; }
+/* Una vista por vez, y el display se decide SOLO acá. Si más abajo otra
+   regla del mismo peso vuelve a tocar display (le pasó a .noche), la
+   vista escondida reaparece pegada al pie de la anterior y deja un hueco
+   del alto de la pantalla. */
 .vista{ display:none; }
-.vista.activa{ display:block; }
+.vista.activa{ display:flex; flex-direction:column; flex:1 0 auto; min-width:0; }
+/* El bloque que se estira para que el pie quede abajo aunque la carta
+   filtrada sean tres platos. */
+.crece{ flex:1 0 auto; }
 .envoltura{ width:100%; max-width:var(--ancho); margin-inline:auto; padding-inline:var(--gutter); }
 
 /* ── SELLO ──────────────────────────────────────────────────────── */
@@ -211,6 +218,10 @@ button{ font:inherit; color:inherit; }
   border:2px solid var(--onda); background:var(--papel); color:var(--tinta);
 }
 .buscador input::placeholder{ color:var(--tinta-suave); opacity:.9; }
+/* WebKit le pone su propia ✕ al input[type=search] y en el iPhone quedaban
+   dos, una arriba de la otra. La nuestra es la que limpia el filtro. */
+.buscador input::-webkit-search-cancel-button,
+.buscador input::-webkit-search-decoration{ -webkit-appearance:none; appearance:none; display:none; }
 .buscador input:focus{ border-color:var(--marino); outline-offset:1px; }
 .buscador__lupa{ position:absolute; left:15px; top:50%; transform:translateY(-50%); color:var(--tinta-suave); pointer-events:none; }
 .buscador__limpiar{
@@ -302,9 +313,18 @@ button{ font:inherit; color:inherit; }
 /* ══ EL CHEF ════════════════════════════════════════════════════════
    La carta es blanca; el Chef es la misma carta de noche. Mismo azul,
    invertido. Ahí adentro el tipo te lee.                            */
-.noche{ background:var(--marino-hondo); color:var(--papel); min-height:100dvh; display:flex; flex-direction:column; position:relative; }
-.noche__olas{ position:fixed; inset:0; z-index:0; pointer-events:none; opacity:.75; }
-.noche > *{ position:relative; z-index:1; }
+.noche{ background:var(--marino-hondo); color:var(--papel); position:relative; }
+/* La trama de olas va detrás de todo lo demás. Antes acá había un
+   .noche > * { position:relative } que le pisaba el position a los dos
+   hijos que lo tenían puesto a mano: la trama quedaba en cero y la barra
+   de arriba dejaba de ser sticky. Por eso ahora se nombra uno por uno. */
+.noche > .noche__olas{ position:absolute; inset:0; z-index:0; pointer-events:none; opacity:.75; }
+.noche > .envoltura{ position:relative; z-index:1; }
+.noche > .barra-top{ z-index:30; }
+/* El panel del Chef se queda con lo que sobra de pantalla, así ninguna
+   de sus pantallas termina a media altura con un hueco muerto debajo. */
+#chef-panel{ flex:1 0 auto; display:flex; flex-direction:column; justify-content:center; }
+#chef-panel > *{ width:100%; }
 .noche .barra-top{ background:rgba(8,53,30,.92); border-bottom-color:rgba(255,255,255,.16); }
 .noche .volver, .noche .barra-top__titulo{ color:var(--papel); }
 .noche .volver:hover{ background:rgba(255,255,255,.12); }
@@ -342,6 +362,12 @@ button{ font:inherit; color:inherit; }
 
 /* chat */
 .chat{ flex:1; padding:16px 0 26px; }
+/* La pantalla de pregunta se dibuja entera de una: si es corta se acomoda
+   en el medio de lo que queda de pantalla en vez de dejar la mitad de
+   abajo vacía. Los chats que se van escribiendo de a poco no llevan esta
+   clase, para que las burbujas no salten. */
+.chat--pregunta{ display:flex; flex-direction:column; }
+.chat--pregunta > .acciones-chat{ margin-top:auto; padding-top:18px; }
 .burbuja{
   max-width:32ch; padding:16px 18px; margin-bottom:14px;
   background:rgba(255,255,255,.07); border:1px solid rgba(255,255,255,.14);
@@ -854,7 +880,7 @@ button{ font:inherit; color:inherit; }
       </div>
     </div>
 
-    <div class="envoltura" style="padding-block:26px 40px">
+    <div class="envoltura crece" style="padding-block:26px 40px">
       <p style="margin:0 0 14px;font-size:.74rem;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:var(--tinta-suave)">Lo que hay</p>
       <div class="riel" id="riel-landing"></div>
     </div>
@@ -899,7 +925,7 @@ button{ font:inherit; color:inherit; }
       <p class="conteo" id="conteo" role="status" aria-live="polite"></p>
     </div>
 
-    <main class="envoltura" id="lista-carta" style="padding-bottom:30px"></main>
+    <main class="envoltura crece" id="lista-carta" style="padding-bottom:30px"></main>
 
     <footer class="pie">
       <div class="pie__olas olas olas--noche" aria-hidden="true"></div>
@@ -927,8 +953,8 @@ button{ font:inherit; color:inherit; }
         </div>
       </div>
     </div>
-    <div class="envoltura" style="flex:1;display:flex;flex-direction:column">
-      <div id="chef-panel" style="flex:1"></div>
+    <div class="envoltura crece" style="display:flex;flex-direction:column">
+      <div id="chef-panel"></div>
     </div>
     <p class="solo-lectores" id="chef-live" role="status" aria-live="polite"></p>
   </section>
@@ -3133,7 +3159,7 @@ function pintarPregunta(){
   const cuerpo = { texto:cuerpoTexto, deslizador:cuerpoDesliz, grilla:cuerpoGrilla,
                    rapido:cuerpoRapido, duplas:cuerpoDuplas }[fmtDe(p)] || cuerpoOpciones;
 
-  panel().innerHTML = `<div class="chat">${cabecera}${cuerpo(p, pie)}</div>`;
+  panel().innerHTML = `<div class="chat chat--pregunta">${cabecera}${cuerpo(p, pie)}</div>`;
   decir(p.texto);
 
   ({ texto:conectarTexto, deslizador:conectarDesliz, grilla:conectarGrilla,
