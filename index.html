@@ -739,23 +739,29 @@ button{ font:inherit; color:inherit; }
    nadie ve un ícono roto ni un rectángulo gris repetido 137 veces. En el
    veredicto, donde hay una sola foto y grande, queda el sello de la casa
    en su lugar, que se lee como decisión y no como error.              */
+/* Una foto que todavía no existe no deja rastro: ni un hueco gris, ni un
+   ícono roto, ni un rectángulo repetido 137 veces. Hasta que carga, la
+   caja no ocupa nada; cuando carga, se abre.
+
+   Es al revés de lo que parece natural —esconder el hueco cuando la
+   imagen falla— y la razón es `loading="lazy"`: las fotos de más abajo no
+   se piden hasta que alguien scrollea, así que nunca fallan, y el hueco
+   se quedaba ahí para siempre. Revelar al cargar funciona en los dos
+   casos y no necesita saber de antemano cuántas fotos hay. */
 .foto{
   position:relative; overflow:hidden; border-radius:var(--r-md);
-  background:var(--espuma); display:grid; place-items:center; flex:none;
+  background:var(--espuma); flex:none;
+  display:block; width:0; height:0;
 }
+.foto--ok{ display:grid; place-items:center; }
 .foto img{ position:absolute; inset:0; width:100%; height:100%; object-fit:cover; }
-.foto__sello{ color:var(--onda); display:grid; place-items:center; }
-.foto--thumb{ width:86px; height:86px; }
-/* en la carta el hueco no se disimula: desaparece */
-.foto--thumb.foto--sin{ display:none; }
-.foto--ficha{ width:100%; aspect-ratio:16/10; border-radius:0; }
-.foto--ficha.foto--sin{ background:var(--espuma); }
-.foto--mini{ width:58px; height:58px; }
-.foto--mini.foto--sin{ display:none; }
+.foto--ok.foto--thumb{ width:86px; height:86px; }
+.foto--ok.foto--ficha{ width:100%; height:auto; aspect-ratio:16/10; border-radius:0; }
+.foto--ok.foto--mini{ width:58px; height:58px; }
 
 .plato{ display:flex; gap:13px; align-items:flex-start; }
 .plato__cuerpo{ flex:1; min-width:0; }
-:root[data-sol="1"] .foto{ display:none; }   /* con el sol de frente, texto y nada más */
+:root[data-sol="1"] .foto{ display:none !important; }   /* con el sol de frente, texto y nada más */
 
 /* ── EL VEREDICTO: LA ENTRADA VA PRIMERO ──────────────────────────────
    Es lo primero que llega a la mesa, así que es lo primero que se ve. No
@@ -839,7 +845,8 @@ button{ font:inherit; color:inherit; }
 .kid .btn--sol:hover{ background:#4FD6C5; }
 .kid .chapa{ background:var(--acento); }
 .kid .bloque__txt{ color:var(--acento); }
-.kid .mini__precio{ color:var(--acento); }
+.kid .mini__precio, .kid .ticket__monto{ color:var(--acento); }
+.kid .ticket{ border-color:rgba(55,194,177,.45); }
 .kid .progreso__lleno{ background:linear-gradient(90deg, var(--marino-medio), var(--acento)); }
 .kid .ficha__voz{ background:#E9FBF8; border-left-color:var(--acento); font-size:1.08rem; }
 .kid .tarjeta-modo:hover{ border-color:var(--acento); }
@@ -2572,6 +2579,36 @@ function leerFiltros(respuestas, preguntas){
   return f;
 }
 
+/* Una opción imposible no se muestra. Si alguien acaba de decir que es
+   vegetariano, ofrecerle "carne roja" en la pregunta siguiente lo deja
+   eligiendo algo que el chef después no le puede dar —y el veredicto
+   termina citándole un gusto y contradiciéndolo en la misma frase—. Las
+   restricciones abren siempre la tanda, así que para cuando llega una
+   pregunta de gustos ya sabemos qué sacar de la pantalla. */
+const IMPOSIBLE_SIN_CARNE = ["carne","cerdo","pollo","pescado","mariscos","achuras"];
+
+function opcionImposible(o, f){
+  if (!f) return false;
+  if (o.afin && o.afin.proteina){
+    const p = o.afin.proteina;
+    if (f.requiere.indexOf("vegetariano") !== -1 && IMPOSIBLE_SIN_CARNE.indexOf(p) !== -1) return true;
+    if (f.excluyeContiene.indexOf(p) !== -1) return true;   // pescado, mariscos, achuras
+  }
+  if (o.prefBebida && f.excluyeContiene.indexOf("alcohol") !== -1 &&
+      ["tinto","blanco","cerveza"].indexOf(o.prefBebida) !== -1) return true;
+  return false;
+}
+
+/* Los índices no se tocan: la respuesta guardada es la posición en la
+   pregunta original, así que esconder una opción no puede correr el
+   significado de las otras. */
+function opcionesPosibles(p, f){
+  const todas = p.opciones.map((o, i) => ({ o, i }));
+  const quedan = todas.filter(x => !opcionImposible(x.o, f));
+  // con menos de dos no hay elección posible: mejor mostrarlas todas
+  return quedan.length >= 2 ? quedan : todas;
+}
+
 function pasaFiltrosDuros(plato, f){
   for (const req of f.requiere) if (!plato.apto[req]) return false;
   for (const ing of f.excluyeContiene) if (plato.contiene.includes(ing)) return false;
@@ -2809,23 +2846,23 @@ function elegirVino(plato, f, rnd, punto, colorForzado){
    Antes de un pescado va algo con acidez, que no tape lo que sigue.     */
 const PERFIL_ENTRADA = {
   carne:    { proteina:"queso", untuosidad:8, acidez:3,
-              razon:"antes de una carne va queso: abre el apetito y aguanta los veinte minutos que tarda la parrilla" },
+              razon:"antes de una carne va queso. Te abre el apetito y te aguanta los veinte minutos que tarda la parrilla" },
   achuras:  { proteina:"queso", untuosidad:8, acidez:4,
-              razon:"con achuras adelante conviene algo de queso, que sostiene sin competir" },
+              razon:"con lo que viene después, algo de queso adelante sostiene la mesa sin competirle" },
   cerdo:    { proteina:"queso", untuosidad:7, acidez:5,
-              razon:"el cerdo ya trae grasa: la entrada tiene que acompañar y no duplicar" },
+              razon:"el cerdo ya trae bastante grasa, así que la entrada acompaña en vez de duplicar" },
   pollo:    { proteina:"queso", untuosidad:7, acidez:4,
-              razon:"el pollo es suave, así que el sabor fuerte conviene ponerlo antes" },
+              razon:"el plato que viene es suave, así que el sabor fuerte lo ponemos al principio" },
   pescado:  { proteina:"mariscos", untuosidad:4, acidez:8,
-              razon:"antes de un pescado va algo del mar y con acidez, para no taparlo" },
+              razon:"antes de un pescado va algo del mar y con filo, para no taparte el plato que sigue" },
   mariscos: { proteina:"pescado", untuosidad:4, acidez:8,
-              razon:"seguimos en el mar, pero más liviano al principio" },
+              razon:"seguimos en el mar, pero arrancamos por lo más liviano" },
   queso:    { proteina:"mariscos", untuosidad:4, acidez:7,
-              razon:"si el plato ya es de queso, la entrada tiene que ir para otro lado" },
+              razon:"el plato que viene ya trae queso, así que para empezar vamos para el otro lado" },
   vegetal:  { proteina:"queso", untuosidad:7, acidez:5,
               razon:"algo de queso al principio le da cuerpo a una comida de verduras" },
   dulce:    { proteina:"queso", untuosidad:6, acidez:5,
-              razon:"algo salado para empezar, que después viene lo dulce" }
+              razon:"arrancamos por algo salado, que lo dulce viene después" }
 };
 
 function elegirEntrada(principal, permitidos, v, f, rnd){
@@ -2862,12 +2899,16 @@ function elegirEntrada(principal, permitidos, v, f, rnd){
    cuando lo que se busca es que la comida empiece bien.                */
 function recomendar(respuestas, preguntas, opciones){
   opciones = opciones || {};
+  const fuera = opciones.excluir || [];
   const f    = leerFiltros(respuestas, preguntas);
   const v    = vectorUsuario(respuestas, preguntas);
   const rnd  = mulberry32(semillaDe(respuestas));
 
   // El menú de niños no existe para este motor. Lo recomienda el Chef Kid.
-  const permitidos = MENU.filter(p => !esNino(p) && pasaFiltrosDuros(p, f));
+  // `excluir` lo usa la mesa: lo que ya está al medio no se le sirve
+  // además a alguien como plato propio.
+  const permitidos = MENU.filter(p =>
+    !esNino(p) && fuera.indexOf(p.id) === -1 && pasaFiltrosDuros(p, f));
   const porTipo = t => permitidos.filter(p => tipoDe(p) === t);
 
   const principales = porTipo("principal");
@@ -3290,9 +3331,9 @@ const fotoDe = p => p.foto || (FOTOS + p.id + ".jpg");
 
 function fotoHTML(p, variante){
   return `<div class="foto foto--${variante}">
-      <svg class="sello sello--chico foto__sello" aria-hidden="true"><use href="#sello"/></svg>
       <img src="${esc(fotoDe(p))}" alt="" loading="lazy" decoding="async"
-           onerror="this.parentNode.classList.add('foto--sin');this.remove();">
+           onload="this.parentNode.classList.add('foto--ok');"
+           onerror="this.remove();">
     </div>`;
 }
 
@@ -3605,11 +3646,16 @@ function recomendarMesa(comensales, ninos){
   const filtrosMesa = { requiere:[], excluyeContiene:[], blandos:[], blandoPrecio:null,
                         ecos:[], afin:[], prefBebida:null };
 
-  // 3. el principal es de cada uno, con sus propios filtros
-  const platos = comensales.map(c => {
-    const r = recomendar(c.respuestas, c.preguntas);
-    return { comensal: c, plato: r ? r.principal : null };
-  });
+  // 3. el principal es de cada uno, con sus propios filtros. Va en dos
+  // pasadas: la primera es para saber qué está comiendo la mesa —de eso
+  // dependen lo que va al medio y el vino—, y la segunda vuelve a elegir
+  // sacando lo que ya quedó al medio. Sin eso el provolone termina al
+  // medio de la mesa y además como plato de alguien, que es algo que
+  // ningún mozo dejaría pasar.
+  const tentativos = comensales.map(c => recomendar(c.respuestas, c.preguntas));
+  let platos = comensales.map((c, k) => ({
+    comensal: c, plato: tentativos[k] ? tentativos[k].principal : null
+  }));
 
   // 2. PARA EL MEDIO. Es lo primero que llega y lo que hace que la mesa
   // empiece bien, así que se elige contra lo que van a comer después: si
@@ -3645,6 +3691,13 @@ function recomendarMesa(comensales, ninos){
     .filter((x,i,a) => a.findIndex(y => y.plato.categoria === x.plato.categoria) === i)
     .slice(0, cuantasEntradas)
     .map(x => x.plato);
+
+  // segunda pasada: el plato de cada uno, ya sin lo que está al medio
+  const idsMedio = entradas.map(p => p.id);
+  platos = comensales.map((c, k) => {
+    const r = recomendar(c.respuestas, c.preguntas, { excluir: idsMedio });
+    return { comensal: c, plato: r ? r.principal : (tentativos[k] ? tentativos[k].principal : null) };
+  });
 
   // 4. LA BEBIDA. Si la mesa come mayoritariamente una cosa, el vino se
   // elige contra esa proteína: una mesa no pide cuatro vinos distintos.
@@ -3766,17 +3819,17 @@ const PREGUNTAS_NINOS = [
   { id:"n-favorito", tipo:"sabor", grupo:"gusto", formato:"grilla",
     texto:"¿Qué es lo que más te gusta del mundo?",
     opciones:[
-      { emo:"🍟", texto:"Papas fritas", pesos:{ untuosidad:+3, intensidad:+1 }, eco:"que amás las papas fritas",
+      { emo:"🍟", texto:"Papas fritas", afin:{ proteina:"vegetal" }, pesos:{ untuosidad:+3, intensidad:+1 }, eco:"que amás las papas fritas",
         chiste:"¡Buenísimo! Yo también." },
-      { emo:"🍕", texto:"Pizza",        pesos:{ untuosidad:+2, social:+2 }, eco:"que la pizza te vuelve loco",
+      { emo:"🍕", texto:"Pizza",        afin:{ proteina:"queso" }, pesos:{ untuosidad:+2, social:+2 }, eco:"que la pizza te vuelve loco",
         chiste:"La pizza nunca falla, es verdad." },
-      { emo:"🍝", texto:"Fideos",       pesos:{ untuosidad:+2, intensidad:-2 }, eco:"que los fideos te encantan",
+      { emo:"🍝", texto:"Fideos",       afin:{ proteina:"queso" }, pesos:{ untuosidad:+2, intensidad:-2 }, eco:"que los fideos te encantan",
         chiste:"Los fideos son de los que abrazan la panza." },
-      { emo:"🍗", texto:"Pollito",      pesos:{ intensidad:-1, untuosidad:+1 }, eco:"que te gusta el pollito",
+      { emo:"🍗", texto:"Pollito",      afin:{ proteina:"pollo" }, pesos:{ intensidad:-1, untuosidad:+1 }, eco:"que te gusta el pollito",
         chiste:"Buena elección, campeón." },
-      { emo:"🍔", texto:"Hamburguesa",  pesos:{ intensidad:+2, untuosidad:+3 }, eco:"que la hamburguesa es tu favorita",
+      { emo:"🍔", texto:"Hamburguesa",  afin:{ proteina:"carne" }, pesos:{ intensidad:+2, untuosidad:+3 }, eco:"que la hamburguesa es tu favorita",
         chiste:"Con queso arriba, ¿no? Ya sé." },
-      { emo:"🥩", texto:"Carne",        pesos:{ intensidad:+3, untuosidad:+1 }, eco:"que te gusta la carne",
+      { emo:"🥩", texto:"Carne",        afin:{ proteina:"carne" }, pesos:{ intensidad:+3, untuosidad:+1 }, eco:"que te gusta la carne",
         chiste:"¡Mirá vos! Comés como los grandes." }
     ] },
 
@@ -3877,7 +3930,7 @@ function recomendarNino(respuestas, preguntas){
   }
   if (!principales.length) return null;
 
-  const principal = ordenar(principales, v, f, rnd, { sinAfin:true })[0].plato;
+  const principal = ordenar(principales, v, f, rnd)[0].plato;
 
   const bebidas = delMenu("bebida");
   const bebida = bebidas.length
@@ -4073,6 +4126,8 @@ async function pensando(forzada){
 function pintarPregunta(){
   const p = S.preguntas[S.i];
   pintarProgreso();
+  // lo que la persona ya dijo que no come, para no ofrecérselo de nuevo
+  S.f = leerFiltros(S.respuestas, S.preguntas);
 
   const cabecera = `
     <div class="dice">
@@ -4113,7 +4168,7 @@ function cuerpoOpciones(p, pie){
   const yaMult = Array.isArray(S.respuestas[p.id]) ? S.respuestas[p.id] : [];
   const ya = S.respuestas[p.id];
   return `<div class="opciones ${p.compacta ? "" : "opciones--largas"}" role="group" aria-label="${esc(p.texto)}">
-      ${p.opciones.map((o, i) => {
+      ${opcionesPosibles(p, S.f).map(({ o, i }) => {
         const on = p.multiple ? yaMult.indexOf(i) !== -1 : ya === i;
         return `<button class="opcion" data-i="${i}" aria-pressed="${on}">
           ${p.multiple ? `<span class="opcion__marca" aria-hidden="true">${on ? "✓" : ""}</span>` : ""}
@@ -4188,7 +4243,7 @@ function conectarDesliz(p){
 /* ── grilla de emojis ──────────────────────────────────────────── */
 function cuerpoGrilla(p, pie){
   return `<div class="grilla" role="group" aria-label="${esc(p.texto)}">
-      ${p.opciones.map((o, i) => `<button class="grilla__item" data-i="${i}"
+      ${opcionesPosibles(p, S.f).map(({ o, i }) => `<button class="grilla__item" data-i="${i}"
           aria-pressed="${S.respuestas[p.id] === i}">
           <span class="grilla__emo" aria-hidden="true">${o.emo}</span>
           <span class="grilla__txt">${esc(o.texto)}</span>
@@ -4210,7 +4265,7 @@ function conectarGrilla(p){
 function cuerpoRapido(p, pie){
   return `<div class="reloj" id="reloj" aria-hidden="true"><div class="reloj__barra"></div></div>
     <div class="opciones opciones--largas" role="group" aria-label="${esc(p.texto)}">
-      ${p.opciones.map((o, i) => `<button class="opcion" data-i="${i}">
+      ${opcionesPosibles(p, S.f).map(({ o, i }) => `<button class="opcion" data-i="${i}">
           ${o.emo ? `<span aria-hidden="true" style="flex:none;font-size:1.2rem;line-height:1">${o.emo}</span>` : ""}
           <span>${esc(o.texto)}</span>
         </button>`).join("")}
@@ -4454,6 +4509,7 @@ function pasosKid(){
 
 function pintarPreguntaKid(){
   const p = K.preguntas[K.i];
+  const f = leerFiltros(K.respuestas, K.preguntas);
   const quien = K.nombre && K.i === 0 ? K.nombre + ", " : "";
   const texto = quien ? quien + p.texto.charAt(0).toLowerCase() + p.texto.slice(1) : p.texto;
   const esGrilla = fmtDe(p) === "grilla";
@@ -4468,13 +4524,13 @@ function pintarPreguntaKid(){
     ${p.nota ? `<p class="pregunta__nota">${esc(p.nota)}</p>` : ""}
     ${esGrilla
       ? `<div class="grilla" role="group" aria-label="${esc(p.texto)}">
-          ${p.opciones.map((o, i) => `<button class="grilla__item" data-i="${i}">
+          ${opcionesPosibles(p, f).map(({ o, i }) => `<button class="grilla__item" data-i="${i}">
               <span class="grilla__emo" aria-hidden="true">${o.emo}</span>
               <span class="grilla__txt">${esc(o.texto)}</span>
             </button>`).join("")}
         </div>`
       : `<div class="opciones opciones--largas" role="group" aria-label="${esc(p.texto)}">
-          ${p.opciones.map((o, i) => {
+          ${opcionesPosibles(p, f).map(({ o, i }) => {
             const sel = Array.isArray(K.respuestas[p.id]) ? K.respuestas[p.id] : [];
             const on = p.multiple ? sel.indexOf(i) !== -1 : K.respuestas[p.id] === i;
             return `<button class="opcion" data-i="${i}" aria-pressed="${on}">
@@ -4644,7 +4700,7 @@ async function pintarVeredictoKid(){
    ═══════════════════════════════════════════════════════════════════ */
 const JUEGOS = [
   { id:"pintar",  emo:"🎨", nombre:"Pintá tu plato", sub:"Elegí un color y tocá" },
-  { id:"memo",    emo:"🃏", nombre:"Memotest",       sub:"Encontrá las parejas" },
+  { id:"memo",    emo:"🧠", nombre:"Memotest",       sub:"Encontrá las parejas" },
   { id:"intruso", emo:"🔍", nombre:"El intruso",     sub:"¿Cuál no va con los otros?" }
 ];
 
@@ -5097,6 +5153,7 @@ function turnoNino(k){
 function pintarPreguntaNino(){
   const c = M.ninos[M.ni];
   const p = c.preguntas[c.j];
+  const f = leerFiltros(c.respuestas, c.preguntas);
   const quien = c.nombre && c.j === 0 ? c.nombre + ", " : "";
   const esGrilla = fmtDe(p) === "grilla";
   const texto = quien ? quien + p.texto.charAt(0).toLowerCase() + p.texto.slice(1) : p.texto;
@@ -5111,13 +5168,13 @@ function pintarPreguntaNino(){
     ${p.nota ? `<p class="pregunta__nota">${esc(p.nota)}</p>` : ""}
     ${esGrilla
       ? `<div class="grilla" role="group" aria-label="${esc(p.texto)}">
-          ${p.opciones.map((o, i) => `<button class="grilla__item" data-i="${i}">
+          ${opcionesPosibles(p, f).map(({ o, i }) => `<button class="grilla__item" data-i="${i}">
               <span class="grilla__emo" aria-hidden="true">${o.emo}</span>
               <span class="grilla__txt">${esc(o.texto)}</span>
             </button>`).join("")}
         </div>`
       : `<div class="opciones opciones--largas" role="group" aria-label="${esc(p.texto)}">
-          ${p.opciones.map((o, i) => {
+          ${opcionesPosibles(p, f).map(({ o, i }) => {
             const sel = Array.isArray(c.respuestas[p.id]) ? c.respuestas[p.id] : [];
             const on = p.multiple ? sel.indexOf(i) !== -1 : c.respuestas[p.id] === i;
             return `<button class="opcion" data-i="${i}" aria-pressed="${on}">
@@ -5198,6 +5255,7 @@ function pintarPreguntaMesa(){
   const c = M.comensales[M.i];
   const p = c.preguntas[c.j];
   const quien = c.nombre ? c.nombre + ", " : "";
+  const f = leerFiltros(c.respuestas, c.preguntas);
 
   panel().innerHTML = `<div class="chat">
     <p class="mesa__paso">${esc(c.nombre || "Comensal " + (M.i + 1))} · ${c.j + 1} de ${c.preguntas.length}</p>
@@ -5207,7 +5265,7 @@ function pintarPreguntaMesa(){
     </div>
     ${p.nota ? `<p class="pregunta__nota">${esc(p.nota)}</p>` : ""}
     <div class="opciones opciones--largas" role="group" aria-label="${esc(p.texto)}">
-      ${p.opciones.map((o, k) => {
+      ${opcionesPosibles(p, f).map(({ o, i: k }) => {
         const sel = Array.isArray(c.respuestas[p.id]) ? c.respuestas[p.id] : [];
         const on = p.multiple ? sel.indexOf(k) !== -1 : c.respuestas[p.id] === k;
         return `<button class="opcion" data-i="${k}" aria-pressed="${on}">
@@ -6055,6 +6113,12 @@ function bofoTest(){
       chequear(m.platos.length === n, `[mesa ${n}] faltan platos individuales`);
       chequear(m.porCabeza > 0 && m.total > 0, `[mesa ${n}] la cuenta dio cero`);
       chequear(m.platosNinos.length === cuantosNinos, `[mesa ${n}] faltan los platos de los chicos`);
+      // lo que está al medio no se sirve además como plato de alguien
+      const alMedio = new Set(m.entradas.map(p => p.id));
+      m.platos.forEach((x, k) => {
+        if (x.plato) chequear(!alMedio.has(x.plato.id),
+          `[mesa ${n}] "${x.plato.nombre}" está al medio y encima es el plato del comensal ${k}`);
+      });
 
       // lo compartido pasa los filtros de todos, sin excepción
       const compartido = m.entradas.concat(m.postres)
@@ -6110,6 +6174,25 @@ function bofoTest(){
     `el que dijo pescado recibió ${rPescado.principal.proteina}`);
   chequear(!rPescado.esVino || rPescado.bebida.vino.color === "blanco",
     "con pescado el vino no salió blanco");
+
+  // ── al que dijo que no come algo no se le vuelve a ofrecer ──
+  // Sin esto el chef le pregunta a un vegetariano si prefiere carne roja,
+  // y después le cita la respuesta en un veredicto sin carne.
+  pReq.opciones.forEach((op, i) => {
+    if (!op.excluye) return;
+    const f = leerFiltros({ restricciones:[i] }, [pReq]);
+    PREGUNTAS.filter(q => q.opciones).forEach(q => {
+      opcionesPosibles(q, f).forEach(x => {
+        chequear(!opcionImposible(x.o, f) || opcionesPosibles(q, f).length === q.opciones.length,
+          `con "${op.texto}" marcado, "${q.id}" sigue ofreciendo "${x.o.texto}"`);
+      });
+    });
+  });
+  const iVeg = pReq.opciones.findIndex(o => o.excluye && o.excluye.requiere === "vegetariano");
+  const fVeg = leerFiltros({ restricciones:[iVeg] }, [pReq]);
+  chequear(opcionesPosibles(pProt, fVeg).every(x =>
+      !x.o.afin || IMPOSIBLE_SIN_CARNE.indexOf(x.o.afin.proteina) === -1),
+    "a un vegetariano se le sigue ofreciendo carne");
 
   const linea = [
     `banco: ${PREGUNTAS.length} preguntas (${PREGUNTAS.filter(p => p.tipo !== "filtro").length} rotativas)`,
