@@ -995,11 +995,14 @@ button{ font:inherit; color:inherit; }
         <h1 class="marca" id="h-landing">Bo<em>Fomento</em></h1>
         <p class="lema">Estamos en la playa</p>
         <p class="ubic">Playa Fomento &middot; Colonia &middot; Uruguay</p>
-        <p class="bajada">La carta entera acá. Y si no sabés qué pedir, dejá que el Chef te lea.</p>
+        <p class="bajada">La carta entera acá. Y si no sabés qué pedir, el Chef te arma la mesa: con qué empezar, qué plato y con qué bajarlo.</p>
 
         <div class="hero__acciones">
           <button class="btn btn--sol" data-ir="carta">Ver la carta</button>
           <button class="btn btn--linea" data-ir="chef">Que te lea el Chef</button>
+        </div>
+        <div class="hero__acciones" style="margin-top:12px;grid-template-columns:1fr">
+          <button class="btn btn--linea" id="b-landing-kid">¿Vienen los más chicos?</button>
         </div>
 
         <div class="hero__pie">
@@ -1151,83 +1154,83 @@ const MENU = [
     empieza:true, proteina:"cerdo", contiene:["cerdo","lacteos"], ejes:{intensidad:7,untuosidad:10,acidez:0,aventura:1,social:9,dulce:0} },
   { id:"arrolladitos", nombre:"Arrolladitos primavera", precio:390, categoria:"entradas",
     descripcion:"", tags:["vegetariano","para la mesa"], apto:{vegetariano:true,singluten:false,compartir:true},
-    empieza:true, proteina:"vegetal", contiene:["gluten"], ejes:{intensidad:4,untuosidad:3,acidez:3,aventura:5,social:8,dulce:1} },
+    empieza:true, proteina:"vegetal", contiene:["gluten"], ejes:{intensidad:4,untuosidad:3,acidez:5,aventura:5,social:8,dulce:1} },
   { id:"rabas", nombre:"Rabas", precio:520, categoria:"entradas",
     descripcion:"", tags:["de mar","para la mesa"], apto:{vegetariano:false,singluten:false,compartir:true},
-    empieza:true, proteina:"mariscos", contiene:["mariscos","gluten","huevo"], ejes:{intensidad:6,untuosidad:5,acidez:3,aventura:4,social:8,dulce:0} },
+    empieza:true, proteina:"mariscos", contiene:["mariscos","gluten","huevo"], ejes:{intensidad:6,untuosidad:5,acidez:5,aventura:4,social:8,dulce:0} },
   { id:"miniatura-pescado", nombre:"Miniatura de pescado", precio:490, categoria:"entradas",
     descripcion:"", tags:["de mar","para la mesa"], apto:{vegetariano:false,singluten:false,compartir:true},
-    empieza:true, proteina:"pescado", contiene:["pescado","gluten"], ejes:{intensidad:5,untuosidad:2,acidez:4,aventura:4,social:7,dulce:0} },
+    empieza:true, proteina:"pescado", contiene:["pescado","gluten"], ejes:{intensidad:5,untuosidad:2,acidez:5,aventura:4,social:7,dulce:0} },
   { id:"revuelto-gramajo", nombre:"Revuelto Gramajo", precio:440, categoria:"entradas",
     descripcion:"", tags:["clásico","contundente"], apto:{vegetariano:false,singluten:true,compartir:true},
-    empieza:true, proteina:"cerdo", contiene:["cerdo","huevo"], ejes:{intensidad:8,untuosidad:8,acidez:1,aventura:2,social:7,dulce:0} },
+    empieza:true, proteina:"cerdo", contiene:["cerdo","huevo"], ejes:{intensidad:8,untuosidad:8,acidez:2,aventura:2,social:7,dulce:0} },
   { id:"croquetas-salmon", nombre:"Croquetas de salmón (6 un)", precio:560, categoria:"entradas",
     descripcion:"", tags:["de mar","para la mesa"], apto:{vegetariano:false,singluten:false,compartir:true},
-    empieza:true, proteina:"pescado", contiene:["pescado","lacteos","gluten","huevo"], ejes:{intensidad:5,untuosidad:9,acidez:1,aventura:6,social:8,dulce:0} },
+    empieza:true, proteina:"pescado", contiene:["pescado","lacteos","gluten","huevo"], ejes:{intensidad:5,untuosidad:9,acidez:5,aventura:6,social:8,dulce:0} },
   { id:"empanadas-asado", nombre:"Empanadas de asado (2 un)", precio:320, categoria:"entradas",
     descripcion:"", tags:["clásico"], apto:{vegetariano:false,singluten:false,compartir:true},
-    empieza:true, proteina:"carne", contiene:["carne","gluten"], ejes:{intensidad:5,untuosidad:3,acidez:1,aventura:1,social:7,dulce:0} },
+    empieza:true, proteina:"carne", contiene:["carne","gluten"], ejes:{intensidad:5,untuosidad:3,acidez:2,aventura:1,social:7,dulce:0} },
 
   /* ── HORNO DE BARRO · PIZZAS ────────────────────────────────── */
   { id:"pizza-muzza", nombre:"Muzzarella", precio:320, categoria:"horno", sub:"Pizzas",
     descripcion:"", tags:["vegetariano","clásico"], apto:{vegetariano:true,singluten:false,compartir:true},
-    proteina:"queso", contiene:["lacteos","gluten"], ejes:{intensidad:7,untuosidad:6,acidez:0,aventura:0,social:9,dulce:0} },
+    proteina:"queso", contiene:["lacteos","gluten"], ejes:{intensidad:7,untuosidad:6,acidez:6,aventura:0,social:9,dulce:0} },
   { id:"pizza-jamon", nombre:"Muzzarella y jamón", precio:360, categoria:"horno", sub:"Pizzas",
     descripcion:"", tags:["clásico"], apto:{vegetariano:false,singluten:false,compartir:true},
-    proteina:"cerdo", contiene:["cerdo","lacteos","gluten"], ejes:{intensidad:8,untuosidad:8,acidez:0,aventura:0,social:9,dulce:0} },
+    proteina:"cerdo", contiene:["cerdo","lacteos","gluten"], ejes:{intensidad:8,untuosidad:8,acidez:6,aventura:0,social:9,dulce:0} },
   { id:"pizza-panceta", nombre:"Muzzarella, jamón y panceta", precio:380, categoria:"horno", sub:"Pizzas",
     descripcion:"", tags:["contundente"], apto:{vegetariano:false,singluten:false,compartir:true},
-    proteina:"cerdo", contiene:["cerdo","lacteos","gluten"], ejes:{intensidad:9,untuosidad:10,acidez:0,aventura:2,social:9,dulce:0} },
+    proteina:"cerdo", contiene:["cerdo","lacteos","gluten"], ejes:{intensidad:9,untuosidad:10,acidez:6,aventura:2,social:9,dulce:0} },
   { id:"pizza-anana", nombre:"Muzzarella, jamón y ananá", precio:380, categoria:"horno", sub:"Pizzas",
     descripcion:"", tags:["distinto"], apto:{vegetariano:false,singluten:false,compartir:true},
-    proteina:"cerdo", contiene:["cerdo","lacteos","gluten"], ejes:{intensidad:7,untuosidad:8,acidez:6,aventura:7,social:9,dulce:5} },
+    proteina:"cerdo", contiene:["cerdo","lacteos","gluten"], ejes:{intensidad:7,untuosidad:8,acidez:7,aventura:7,social:9,dulce:5} },
   { id:"pizza-capresse", nombre:"Capresse", precio:380, categoria:"horno", sub:"Pizzas",
     descripcion:"Muzzarella, tomate y albahaca.", tags:["vegetariano","fresco"],
     apto:{vegetariano:true,singluten:false,compartir:true},
-    proteina:"queso", contiene:["lacteos","gluten"], ejes:{intensidad:6,untuosidad:6,acidez:7,aventura:3,social:9,dulce:0} },
+    proteina:"queso", contiene:["lacteos","gluten"], ejes:{intensidad:6,untuosidad:6,acidez:8,aventura:3,social:9,dulce:0} },
   { id:"pizza-4quesos", nombre:"4 quesos", precio:440, categoria:"horno", sub:"Pizzas",
     descripcion:"Muzzarella, parmesano, dambo y roquefort.", tags:["vegetariano","contundente"],
     apto:{vegetariano:true,singluten:false,compartir:true},
-    proteina:"queso", contiene:["lacteos","gluten"], ejes:{intensidad:9,untuosidad:8,acidez:0,aventura:5,social:9,dulce:0} },
+    proteina:"queso", contiene:["lacteos","gluten"], ejes:{intensidad:9,untuosidad:8,acidez:1,aventura:5,social:9,dulce:0} },
   { id:"pizza-rucula", nombre:"Rúcula y parmesano", precio:440, categoria:"horno", sub:"Pizzas",
     descripcion:"", tags:["vegetariano","fresco"], apto:{vegetariano:true,singluten:false,compartir:true},
     proteina:"queso", contiene:["lacteos","gluten"], ejes:{intensidad:6,untuosidad:4,acidez:8,aventura:4,social:9,dulce:0} },
   { id:"faina", nombre:"Fainá", precio:190, categoria:"horno", sub:"Pizzas",
     descripcion:"De garbanzo, como corresponde.", tags:["vegetariano","sin TACC"],
     apto:{vegetariano:true,singluten:true,compartir:true},
-    empieza:true, proteina:"vegetal", contiene:[], ejes:{intensidad:4,untuosidad:3,acidez:1,aventura:2,social:9,dulce:0} },
+    empieza:true, proteina:"vegetal", contiene:[], ejes:{intensidad:4,untuosidad:3,acidez:5,aventura:2,social:9,dulce:0} },
   { id:"faina-muzza", nombre:"Fainá con muzza", precio:250, categoria:"horno", sub:"Pizzas",
     descripcion:"", tags:["vegetariano","sin TACC"], apto:{vegetariano:true,singluten:true,compartir:true},
-    empieza:true, proteina:"queso", contiene:["lacteos"], ejes:{intensidad:6,untuosidad:6,acidez:0,aventura:3,social:9,dulce:0} },
+    empieza:true, proteina:"queso", contiene:["lacteos"], ejes:{intensidad:6,untuosidad:6,acidez:6,aventura:3,social:9,dulce:0} },
   { id:"faina-espinaca", nombre:"Fainá con espinaca y muzza gratinado", precio:390, categoria:"horno", sub:"Pizzas",
     descripcion:"", tags:["vegetariano","sin TACC"], apto:{vegetariano:true,singluten:true,compartir:true},
-    empieza:true, proteina:"queso", contiene:["lacteos"], ejes:{intensidad:7,untuosidad:6,acidez:1,aventura:5,social:9,dulce:0} },
+    empieza:true, proteina:"queso", contiene:["lacteos"], ejes:{intensidad:7,untuosidad:6,acidez:7,aventura:5,social:9,dulce:0} },
 
   /* ── HORNO DE BARRO · CALZONE ───────────────────────────────── */
   { id:"calzone-jq", nombre:"Jamón y queso", precio:520, categoria:"horno", sub:"Calzone",
     descripcion:"", tags:["contundente"], apto:{vegetariano:false,singluten:false,compartir:true},
-    proteina:"cerdo", contiene:["cerdo","lacteos","gluten"], ejes:{intensidad:9,untuosidad:10,acidez:0,aventura:2,social:7,dulce:0} },
+    proteina:"cerdo", contiene:["cerdo","lacteos","gluten"], ejes:{intensidad:9,untuosidad:10,acidez:6,aventura:2,social:7,dulce:0} },
   { id:"calzone-aceitunas", nombre:"Jamón, queso y aceitunas", precio:540, categoria:"horno", sub:"Calzone",
     descripcion:"", tags:["contundente"], apto:{vegetariano:false,singluten:false,compartir:true},
-    proteina:"cerdo", contiene:["cerdo","lacteos","gluten"], ejes:{intensidad:9,untuosidad:10,acidez:0,aventura:3,social:7,dulce:0} },
+    proteina:"cerdo", contiene:["cerdo","lacteos","gluten"], ejes:{intensidad:9,untuosidad:10,acidez:7,aventura:3,social:7,dulce:0} },
   { id:"calzone-cebolla", nombre:"Cebolla, queso y panceta", precio:590, categoria:"horno", sub:"Calzone",
     descripcion:"", tags:["demoledor"], apto:{vegetariano:false,singluten:false,compartir:true},
-    proteina:"cerdo", contiene:["cerdo","lacteos","gluten"], ejes:{intensidad:10,untuosidad:10,acidez:0,aventura:4,social:7,dulce:1} },
+    proteina:"cerdo", contiene:["cerdo","lacteos","gluten"], ejes:{intensidad:10,untuosidad:10,acidez:7,aventura:4,social:7,dulce:1} },
   { id:"calzone-capresse", nombre:"Capresse", precio:620, categoria:"horno", sub:"Calzone",
     descripcion:"Muzzarella, tomate y albahaca.", tags:["vegetariano"],
     apto:{vegetariano:true,singluten:false,compartir:true},
-    proteina:"queso", contiene:["lacteos","gluten"], ejes:{intensidad:8,untuosidad:8,acidez:6,aventura:3,social:7,dulce:0} },
+    proteina:"queso", contiene:["lacteos","gluten"], ejes:{intensidad:8,untuosidad:8,acidez:8,aventura:3,social:7,dulce:0} },
   { id:"calzone-espinaca", nombre:"Espinaca y queso", precio:620, categoria:"horno", sub:"Calzone",
     descripcion:"", tags:["vegetariano"], apto:{vegetariano:true,singluten:false,compartir:true},
-    proteina:"queso", contiene:["lacteos","gluten"], ejes:{intensidad:8,untuosidad:8,acidez:1,aventura:4,social:7,dulce:0} },
+    proteina:"queso", contiene:["lacteos","gluten"], ejes:{intensidad:8,untuosidad:8,acidez:7,aventura:4,social:7,dulce:0} },
 
   /* ── HORNO DE BARRO · SÁNDWICHES ────────────────────────────── */
   { id:"sand-jq", nombre:"Caliente de jamón y queso", precio:350, categoria:"horno", sub:"Sándwiches",
     descripcion:"", tags:["clásico"], apto:{vegetariano:false,singluten:false,compartir:false},
-    proteina:"cerdo", contiene:["cerdo","lacteos","gluten"], ejes:{intensidad:5,untuosidad:10,acidez:0,aventura:0,social:2,dulce:0} },
+    proteina:"cerdo", contiene:["cerdo","lacteos","gluten"], ejes:{intensidad:5,untuosidad:10,acidez:3,aventura:0,social:2,dulce:0} },
   { id:"sand-muzza", nombre:"Caliente con muzza", precio:390, categoria:"horno", sub:"Sándwiches",
     descripcion:"", tags:["vegetariano","clásico"], apto:{vegetariano:true,singluten:false,compartir:false},
-    proteina:"queso", contiene:["lacteos","gluten"], ejes:{intensidad:5,untuosidad:6,acidez:0,aventura:0,social:2,dulce:0} },
+    proteina:"queso", contiene:["lacteos","gluten"], ejes:{intensidad:5,untuosidad:6,acidez:3,aventura:0,social:2,dulce:0} },
   { id:"pan-bata", nombre:"Caliente pan Bata", precio:490, categoria:"horno", sub:"Sándwiches",
     descripcion:"Lomito, panceta, cheddar y huevo frito.", tags:["demoledor","de la casa"],
     apto:{vegetariano:false,singluten:false,compartir:false},
@@ -1240,11 +1243,11 @@ const MENU = [
   /* ── HORNO DE BARRO · ESPECIALES ────────────────────────────── */
   { id:"matambre-leche", nombre:"Matambre a la leche", precio:590, categoria:"horno", sub:"Especiales del horno",
     descripcion:"", tags:["clásico","contundente"], apto:{vegetariano:false,singluten:true,compartir:false},
-    proteina:"carne", contiene:["carne","lacteos"], ejes:{intensidad:9,untuosidad:8,acidez:0,aventura:3,social:4,dulce:1} },
+    proteina:"carne", contiene:["carne","lacteos"], ejes:{intensidad:9,untuosidad:8,acidez:2,aventura:3,social:4,dulce:1} },
   { id:"pescado-parmesana", nombre:"Pescado a la parmesana", precio:660, categoria:"horno", sub:"Especiales del horno",
     descripcion:"Capa fina de papas, salsa de parmesano con un toque de roquefort, merluza, tomates cherry y muzzarella.",
     tags:["de mar","de la casa"], apto:{vegetariano:false,singluten:false,compartir:false},
-    proteina:"pescado", contiene:["pescado","lacteos","gluten"], ejes:{intensidad:8,untuosidad:8,acidez:2,aventura:6,social:3,dulce:0} },
+    proteina:"pescado", contiene:["pescado","lacteos","gluten"], ejes:{intensidad:8,untuosidad:8,acidez:3,aventura:6,social:3,dulce:0} },
   { id:"boga-puerros", nombre:"Boga con salsa de puerros y roquefort", precio:660, categoria:"horno", sub:"Especiales del horno",
     descripcion:"", tags:["de mar","distinto"], apto:{vegetariano:false,singluten:true,compartir:false},
     proteina:"pescado", contiene:["pescado","lacteos"], ejes:{intensidad:7,untuosidad:8,acidez:3,aventura:7,social:3,dulce:0} },
@@ -1253,113 +1256,113 @@ const MENU = [
     proteina:"pollo", contiene:["pollo"], ejes:{intensidad:7,untuosidad:5,acidez:5,aventura:5,social:3,dulce:4} },
   { id:"berenjenas-parmeggiana", nombre:"Berenjenas a la parmeggiana", precio:590, categoria:"horno", sub:"Especiales del horno",
     descripcion:"", tags:["vegetariano","contundente"], apto:{vegetariano:true,singluten:true,compartir:false},
-    proteina:"vegetal", contiene:["lacteos"], ejes:{intensidad:8,untuosidad:8,acidez:1,aventura:5,social:4,dulce:0} },
+    proteina:"vegetal", contiene:["lacteos"], ejes:{intensidad:8,untuosidad:8,acidez:2,aventura:5,social:4,dulce:0} },
   { id:"canelones-verdura", nombre:"Canelones de verdura", precio:590, categoria:"horno", sub:"Especiales del horno",
     descripcion:"Gratinados con muzzarella y salsa fileto.", tags:["vegetariano","clásico"],
     apto:{vegetariano:true,singluten:false,compartir:false},
-    proteina:"vegetal", contiene:["lacteos","gluten","huevo"], ejes:{intensidad:8,untuosidad:5,acidez:0,aventura:2,social:3,dulce:0} },
+    proteina:"vegetal", contiene:["lacteos","gluten","huevo"], ejes:{intensidad:8,untuosidad:5,acidez:3,aventura:2,social:3,dulce:0} },
 
   /* ── PARRILLA A TODA BRASA ──────────────────────────────────── */
   { id:"asado-ternera", nombre:"Asado de ternera", precio:580, categoria:"parrilla",
     descripcion:"", tags:["clásico","contundente"], apto:{vegetariano:false,singluten:true,compartir:false},
-    proteina:"carne", contiene:["carne"], ejes:{intensidad:9,untuosidad:7,acidez:0,aventura:1,social:5,dulce:0} },
+    proteina:"carne", contiene:["carne"], ejes:{intensidad:9,untuosidad:7,acidez:2,aventura:1,social:5,dulce:0} },
   { id:"asado-premium", nombre:"Asado premium feedlot", precio:680, categoria:"parrilla",
     descripcion:"", tags:["contundente"], apto:{vegetariano:false,singluten:true,compartir:false},
-    proteina:"carne", contiene:["carne"], ejes:{intensidad:10,untuosidad:8,acidez:0,aventura:3,social:5,dulce:0} },
+    proteina:"carne", contiene:["carne"], ejes:{intensidad:10,untuosidad:8,acidez:2,aventura:3,social:5,dulce:0} },
   { id:"vacio", nombre:"Vacío", precio:580, categoria:"parrilla",
     descripcion:"", tags:["clásico","contundente"], apto:{vegetariano:false,singluten:true,compartir:false},
-    proteina:"carne", contiene:["carne"], ejes:{intensidad:9,untuosidad:7,acidez:0,aventura:1,social:5,dulce:0} },
+    proteina:"carne", contiene:["carne"], ejes:{intensidad:9,untuosidad:7,acidez:2,aventura:1,social:5,dulce:0} },
   { id:"picana-angus", nombre:"Picaña Angus Premium", precio:680, categoria:"parrilla",
     descripcion:"", tags:["de la casa","contundente"], apto:{vegetariano:false,singluten:true,compartir:false},
-    proteina:"carne", contiene:["carne"], ejes:{intensidad:10,untuosidad:8,acidez:0,aventura:4,social:4,dulce:0} },
+    proteina:"carne", contiene:["carne"], ejes:{intensidad:10,untuosidad:8,acidez:2,aventura:4,social:4,dulce:0} },
   { id:"entrana", nombre:"Entraña", precio:590, categoria:"parrilla",
     descripcion:"", tags:["clásico"], apto:{vegetariano:false,singluten:true,compartir:false},
-    proteina:"carne", contiene:["carne"], ejes:{intensidad:9,untuosidad:6,acidez:0,aventura:3,social:4,dulce:0} },
+    proteina:"carne", contiene:["carne"], ejes:{intensidad:9,untuosidad:6,acidez:2,aventura:3,social:4,dulce:0} },
   { id:"entrana-napo", nombre:"Entraña napolitana", precio:690, categoria:"parrilla",
     descripcion:"Jamón, muzzarella y salsa de tomate.", tags:["demoledor"],
     apto:{vegetariano:false,singluten:true,compartir:false},
-    proteina:"carne", contiene:["carne","cerdo","lacteos"], ejes:{intensidad:10,untuosidad:9,acidez:0,aventura:3,social:4,dulce:0} },
+    proteina:"carne", contiene:["carne","cerdo","lacteos"], ejes:{intensidad:10,untuosidad:9,acidez:5,aventura:3,social:4,dulce:0} },
   { id:"entrana-caballo", nombre:"Entraña a caballo", precio:690, categoria:"parrilla",
     descripcion:"Muzzarella y dos huevos fritos.", tags:["demoledor"],
     apto:{vegetariano:false,singluten:true,compartir:false},
-    proteina:"carne", contiene:["carne","lacteos","huevo"], ejes:{intensidad:10,untuosidad:8,acidez:0,aventura:4,social:4,dulce:0} },
+    proteina:"carne", contiene:["carne","lacteos","huevo"], ejes:{intensidad:10,untuosidad:8,acidez:3,aventura:4,social:4,dulce:0} },
   { id:"ojo-bife", nombre:"Ojo de bife", precio:660, categoria:"parrilla",
     descripcion:"", tags:["contundente"], apto:{vegetariano:false,singluten:true,compartir:false},
-    proteina:"carne", contiene:["carne"], ejes:{intensidad:10,untuosidad:8,acidez:0,aventura:2,social:4,dulce:0} },
+    proteina:"carne", contiene:["carne"], ejes:{intensidad:10,untuosidad:8,acidez:2,aventura:2,social:4,dulce:0} },
   { id:"muslo-pollo", nombre:"Muslo de pollo deshuesado", precio:480, categoria:"parrilla",
     descripcion:"", tags:["liviano"], apto:{vegetariano:false,singluten:true,compartir:false},
     proteina:"pollo", contiene:["pollo"], ejes:{intensidad:6,untuosidad:5,acidez:2,aventura:1,social:3,dulce:0} },
   { id:"muslo-pollo-pizza", nombre:"Muslo de pollo deshuesado a la pizza", precio:580, categoria:"parrilla",
     descripcion:"", tags:["contundente"], apto:{vegetariano:false,singluten:true,compartir:false},
-    proteina:"pollo", contiene:["pollo","lacteos"], ejes:{intensidad:8,untuosidad:8,acidez:0,aventura:3,social:3,dulce:0} },
+    proteina:"pollo", contiene:["pollo","lacteos"], ejes:{intensidad:8,untuosidad:8,acidez:5,aventura:3,social:3,dulce:0} },
   { id:"matambrito-cerdo", nombre:"Matambrito de cerdo", precio:590, categoria:"parrilla",
     descripcion:"", tags:["contundente"], apto:{vegetariano:false,singluten:true,compartir:false},
-    proteina:"cerdo", contiene:["cerdo"], ejes:{intensidad:9,untuosidad:7,acidez:0,aventura:3,social:4,dulce:0} },
+    proteina:"cerdo", contiene:["cerdo"], ejes:{intensidad:9,untuosidad:7,acidez:2,aventura:3,social:4,dulce:0} },
   { id:"matambrito-pizza", nombre:"Matambrito de cerdo a la pizza", precio:690, categoria:"parrilla",
     descripcion:"", tags:["demoledor"], apto:{vegetariano:false,singluten:true,compartir:false},
-    proteina:"cerdo", contiene:["cerdo","lacteos"], ejes:{intensidad:10,untuosidad:9,acidez:0,aventura:4,social:4,dulce:0} },
+    proteina:"cerdo", contiene:["cerdo","lacteos"], ejes:{intensidad:10,untuosidad:9,acidez:5,aventura:4,social:4,dulce:0} },
   { id:"kassler", nombre:"Costillas de cerdo ahumadas Kassler", precio:640, categoria:"parrilla",
     descripcion:"", tags:["distinto","contundente"], apto:{vegetariano:false,singluten:true,compartir:false},
-    proteina:"cerdo", contiene:["cerdo"], ejes:{intensidad:10,untuosidad:8,acidez:0,aventura:6,social:5,dulce:1} },
+    proteina:"cerdo", contiene:["cerdo"], ejes:{intensidad:10,untuosidad:8,acidez:2,aventura:6,social:5,dulce:1} },
   { id:"tripa-farina", nombre:"Tripa rellena de fariña", precio:240, categoria:"parrilla",
     descripcion:"", tags:["de acá","sin TACC"], apto:{vegetariano:false,singluten:true,compartir:true},
-    empieza:true, proteina:"achuras", contiene:["achuras"], ejes:{intensidad:7,untuosidad:7,acidez:0,aventura:9,social:7,dulce:0} },
+    empieza:true, proteina:"achuras", contiene:["achuras"], ejes:{intensidad:7,untuosidad:7,acidez:2,aventura:9,social:7,dulce:0} },
   { id:"rinon", nombre:"Riñón", precio:240, categoria:"parrilla",
     descripcion:"", tags:["achuras"], apto:{vegetariano:false,singluten:true,compartir:true},
-    empieza:true, proteina:"achuras", contiene:["achuras"], ejes:{intensidad:7,untuosidad:5,acidez:0,aventura:9,social:6,dulce:0} },
+    empieza:true, proteina:"achuras", contiene:["achuras"], ejes:{intensidad:7,untuosidad:5,acidez:2,aventura:9,social:6,dulce:0} },
   { id:"rinoncitos-cordero", nombre:"Riñoncitos de cordero", precio:390, categoria:"parrilla",
     descripcion:"", tags:["achuras","distinto"], apto:{vegetariano:false,singluten:true,compartir:true},
-    empieza:true, proteina:"achuras", contiene:["achuras"], ejes:{intensidad:7,untuosidad:5,acidez:0,aventura:10,social:6,dulce:0} },
+    empieza:true, proteina:"achuras", contiene:["achuras"], ejes:{intensidad:7,untuosidad:5,acidez:2,aventura:10,social:6,dulce:0} },
   { id:"chorizo", nombre:"Chorizo", precio:240, categoria:"parrilla",
     descripcion:"", tags:["clásico"], apto:{vegetariano:false,singluten:true,compartir:true},
-    empieza:true, proteina:"cerdo", contiene:["cerdo"], ejes:{intensidad:7,untuosidad:8,acidez:0,aventura:1,social:8,dulce:0} },
+    empieza:true, proteina:"cerdo", contiene:["cerdo"], ejes:{intensidad:7,untuosidad:8,acidez:2,aventura:1,social:8,dulce:0} },
   { id:"molleja", nombre:"Molleja", precio:440, categoria:"parrilla",
     descripcion:"", tags:["achuras","de la casa"], apto:{vegetariano:false,singluten:true,compartir:true},
-    empieza:true, proteina:"achuras", contiene:["achuras"], ejes:{intensidad:7,untuosidad:9,acidez:0,aventura:8,social:8,dulce:0} },
+    empieza:true, proteina:"achuras", contiene:["achuras"], ejes:{intensidad:7,untuosidad:9,acidez:2,aventura:8,social:8,dulce:0} },
   { id:"morcilla-salada", nombre:"Morcilla salada", precio:220, categoria:"parrilla",
     descripcion:"", tags:["achuras"], apto:{vegetariano:false,singluten:true,compartir:true},
-    empieza:true, proteina:"achuras", contiene:["achuras","cerdo"], ejes:{intensidad:7,untuosidad:8,acidez:0,aventura:7,social:8,dulce:0} },
+    empieza:true, proteina:"achuras", contiene:["achuras","cerdo"], ejes:{intensidad:7,untuosidad:8,acidez:2,aventura:7,social:8,dulce:0} },
   { id:"morcilla-dulce", nombre:"Morcilla dulce", precio:220, categoria:"parrilla",
     descripcion:"", tags:["achuras","distinto"], apto:{vegetariano:false,singluten:true,compartir:true},
-    empieza:true, proteina:"achuras", contiene:["achuras","cerdo","frutos-secos"], ejes:{intensidad:7,untuosidad:8,acidez:0,aventura:8,social:8,dulce:6} },
+    empieza:true, proteina:"achuras", contiene:["achuras","cerdo","frutos-secos"], ejes:{intensidad:7,untuosidad:8,acidez:2,aventura:8,social:8,dulce:6} },
   { id:"provolone", nombre:"Queso provolone", precio:340, categoria:"parrilla",
     descripcion:"", tags:["vegetariano","para la mesa"], apto:{vegetariano:true,singluten:true,compartir:true},
-    empieza:true, proteina:"queso", contiene:["lacteos"], ejes:{intensidad:7,untuosidad:8,acidez:0,aventura:3,social:9,dulce:0} },
+    empieza:true, proteina:"queso", contiene:["lacteos"], ejes:{intensidad:7,untuosidad:8,acidez:2,aventura:3,social:9,dulce:0} },
   { id:"provolone-caprese", nombre:"Queso provolone caprese", precio:390, categoria:"parrilla",
     descripcion:"", tags:["vegetariano","para la mesa"], apto:{vegetariano:true,singluten:true,compartir:true},
     empieza:true, proteina:"queso", contiene:["lacteos"], ejes:{intensidad:7,untuosidad:8,acidez:3,aventura:4,social:9,dulce:0} },
   { id:"provolone-crudo", nombre:"Queso provolone con jamón crudo", precio:490, categoria:"parrilla",
     descripcion:"", tags:["para la mesa"], apto:{vegetariano:false,singluten:true,compartir:true},
-    empieza:true, proteina:"cerdo", contiene:["lacteos","cerdo"], ejes:{intensidad:8,untuosidad:10,acidez:1,aventura:5,social:9,dulce:0} },
+    empieza:true, proteina:"cerdo", contiene:["lacteos","cerdo"], ejes:{intensidad:8,untuosidad:10,acidez:3,aventura:5,social:9,dulce:0} },
 
   /* ── ESPECIALES DE PARRILLA ─────────────────────────────────── */
   { id:"molleja-verdeo", nombre:"Molleja a la crema de verdeo", precio:540, categoria:"parrilla", sub:"Especiales de parrilla",
     descripcion:"", tags:["achuras","de la casa"], apto:{vegetariano:false,singluten:true,compartir:false},
-    proteina:"achuras", contiene:["achuras","lacteos"], ejes:{intensidad:8,untuosidad:10,acidez:0,aventura:8,social:5,dulce:0} },
+    proteina:"achuras", contiene:["achuras","lacteos"], ejes:{intensidad:8,untuosidad:10,acidez:2,aventura:8,social:5,dulce:0} },
   { id:"matambre-arrollado", nombre:"Matambre de ternera arrollado relleno", precio:620, categoria:"parrilla", sub:"Especiales de parrilla",
     descripcion:"", tags:["contundente"], apto:{vegetariano:false,singluten:true,compartir:false},
-    proteina:"carne", contiene:["carne","huevo"], ejes:{intensidad:9,untuosidad:7,acidez:1,aventura:5,social:5,dulce:0} },
+    proteina:"carne", contiene:["carne","huevo"], ejes:{intensidad:9,untuosidad:7,acidez:2,aventura:5,social:5,dulce:0} },
   { id:"ojo-champinones", nombre:"Ojo de bife con salsa de champiñones", precio:720, categoria:"parrilla", sub:"Especiales de parrilla",
     descripcion:"", tags:["de la casa","contundente"], apto:{vegetariano:false,singluten:true,compartir:false},
-    proteina:"carne", contiene:["carne","lacteos"], ejes:{intensidad:10,untuosidad:9,acidez:0,aventura:5,social:4,dulce:0} },
+    proteina:"carne", contiene:["carne","lacteos"], ejes:{intensidad:10,untuosidad:9,acidez:4,aventura:5,social:4,dulce:0} },
   { id:"picana-mostaza", nombre:"Picaña a la mostaza y queso", precio:720, categoria:"parrilla", sub:"Especiales de parrilla",
     descripcion:"", tags:["distinto","contundente"], apto:{vegetariano:false,singluten:true,compartir:false},
-    proteina:"carne", contiene:["carne","lacteos"], ejes:{intensidad:10,untuosidad:9,acidez:2,aventura:6,social:4,dulce:2} },
+    proteina:"carne", contiene:["carne","lacteos"], ejes:{intensidad:10,untuosidad:9,acidez:4,aventura:6,social:4,dulce:2} },
   { id:"medallon-lomo", nombre:"Medallón de lomo envuelto con panceta", precio:720, categoria:"parrilla", sub:"Especiales de parrilla",
     descripcion:"", tags:["de la casa","demoledor"], apto:{vegetariano:false,singluten:true,compartir:false},
-    proteina:"carne", contiene:["carne","cerdo"], ejes:{intensidad:10,untuosidad:9,acidez:0,aventura:5,social:4,dulce:0} },
+    proteina:"carne", contiene:["carne","cerdo"], ejes:{intensidad:10,untuosidad:9,acidez:2,aventura:5,social:4,dulce:0} },
   { id:"rack-cordero", nombre:"Rack de cordero", precio:820, categoria:"parrilla", sub:"Especiales de parrilla",
     descripcion:"", tags:["distinto","de la casa"], apto:{vegetariano:false,singluten:true,compartir:false},
-    proteina:"carne", contiene:["carne"], ejes:{intensidad:9,untuosidad:8,acidez:1,aventura:8,social:4,dulce:0} },
+    proteina:"carne", contiene:["carne"], ejes:{intensidad:9,untuosidad:8,acidez:2,aventura:8,social:4,dulce:0} },
   { id:"picana-cordero", nombre:"Picaña de cordero", precio:720, categoria:"parrilla", sub:"Especiales de parrilla",
     descripcion:"", tags:["distinto"], apto:{vegetariano:false,singluten:true,compartir:false},
-    proteina:"carne", contiene:["carne"], ejes:{intensidad:9,untuosidad:8,acidez:1,aventura:8,social:4,dulce:0} },
+    proteina:"carne", contiene:["carne"], ejes:{intensidad:9,untuosidad:8,acidez:2,aventura:8,social:4,dulce:0} },
   { id:"salmon", nombre:"Salmón", precio:690, categoria:"parrilla", sub:"Especiales de parrilla",
     descripcion:"", tags:["de mar","liviano"], apto:{vegetariano:false,singluten:true,compartir:false},
     proteina:"pescado", contiene:["pescado"], ejes:{intensidad:6,untuosidad:5,acidez:5,aventura:6,social:3,dulce:0} },
   { id:"salmon-camarones", nombre:"Salmón con salsa de camarones", precio:820, categoria:"parrilla", sub:"Especiales de parrilla",
     descripcion:"", tags:["de mar","de la casa"], apto:{vegetariano:false,singluten:true,compartir:false},
-    proteina:"mariscos", contiene:["pescado","mariscos","lacteos"], ejes:{intensidad:7,untuosidad:8,acidez:3,aventura:7,social:3,dulce:0} },
+    proteina:"mariscos", contiene:["pescado","mariscos","lacteos"], ejes:{intensidad:7,untuosidad:8,acidez:5,aventura:7,social:3,dulce:0} },
 
   /* ── CERVEZAS ───────────────────────────────────────────────── */
   { id:"patricia-1l", nombre:"Patricia 1L", precio:360, categoria:"cervezas",
@@ -2591,7 +2594,7 @@ function vectorUsuario(respuestas, preguntas){
     if (el === undefined || el === null || el === "") return;
 
     // El 5 no está en el cero de la escala: está en el promedio de lo que
-    // ofrece la pregunta. Si tres de cuatro opciones suben "frescura", el
+    // ofrece la pregunta. Si tres de cuatro opciones suben "acidez", el
     // que contesta cualquier cosa ya sale fresco, y entonces sólo ganan
     // los platos fríos. Se corrige contra el promedio real de los datos,
     // así que sigue andando aunque cambie el banco entero.
@@ -2613,7 +2616,7 @@ function vectorUsuario(respuestas, preguntas){
   // máximos de cada pregunta, y para alcanzarlo habría que elegir la
   // opción más extrema en TODAS. Nadie hace eso. Sin ganancia el vector
   // vive pegado al 5, y como los platos fuertes de la carta viven en los
-  // extremos (una milanesa completa es un 10 de contundencia), ganaban
+  // extremos (un asado premium es un 10 de intensidad), ganaban
   // siempre los platos tibios del medio. Con ganancia 2, responder de
   // forma decidida te lleva de verdad hasta la punta del eje.
   const GANANCIA = 2;
@@ -2765,6 +2768,10 @@ function objetivoVino(plato, punto, colorForzado){
   const graso = (plato.ejes.untuosidad - 5) / 5;
   o.tanino = clamp(o.tanino + graso * 1.5, 0, 10);
   o.acidez = clamp(o.acidez + graso * 1.0, 0, 10);
+  // Y cuanto más intenso, más cuerpo: un provolone a la parrilla y una
+  // muzzarella son los dos "queso", pero no piden el mismo tinto. Sin
+  // esto el motor mandaba el mismo Merlot a medio menú.
+  o.cuerpo = clamp(o.cuerpo + (plato.ejes.intensidad - 5) * 0.55, 0, 10);
   // El punto de la carne cambia el vino de verdad: una carne bien cocida
   // perdió el jugo que ablandaba el tanino, y un tinto áspero la vuelve
   // áspera a ella. Una jugosa aguanta —y pide— bastante más.
@@ -2880,7 +2887,14 @@ function recomendar(respuestas, preguntas, opciones){
   }
   if (poolPrincipal.length === 0) return null;   // la vista lo maneja con una invitación
 
-  const rankPrincipal = ordenar(poolPrincipal, v, f, rnd);
+  // La acidez pesa poco para ELEGIR el plato fuerte, y mucho para lo que
+  // viene con él. Una persona no "tiene" un nivel de acidez como lo tiene
+  // un plato: tiene una preferencia sobre lo que la acompaña. Medida como
+  // distancia, la acidez castigaba sistemáticamente a la parrilla —que es
+  // poco ácida por naturaleza— y empujaba a todo el mundo a las pizzas,
+  // que llevan tomate. Acá vale la mitad; donde vale entera es en la
+  // entrada y en el vino, que es donde de verdad decide.
+  const rankPrincipal = ordenar(poolPrincipal, v, f, rnd, { pesosEje:{ acidez:0.5 } });
   const principal     = rankPrincipal[0].plato;
 
   // La entrada, elegida contra el principal y no contra la persona.
@@ -2914,9 +2928,14 @@ function recomendar(respuestas, preguntas, opciones){
   const colorForzado = f.prefBebida === "tinto" ? "tinto"
                      : f.prefBebida === "blanco" ? "blanco" : null;
 
+  // El vino pasa al frente sólo cuando el plato de verdad lo pide. Con un
+  // umbral más bajo terminaba siendo la bebida de casi todo el mundo, y
+  // una botella encima de cada plato se lee como que le estás vendiendo
+  // de más a alguien que quería una cerveza. En el resto de los casos el
+  // vino igual aparece, al costado y sin imponerse.
   const meritaVino = ["carne","achuras","cerdo","pescado","mariscos","pollo","queso"]
                        .indexOf(principal.proteina) !== -1 &&
-                     (principal.ejes.untuosidad >= 6 || principal.ejes.intensidad >= 7);
+                     (principal.ejes.untuosidad >= 7 || principal.ejes.intensidad >= 8);
   const quiereVino = tomaAlcohol && (
       colorForzado !== null || f.prefBebida === "maridaje" ||
       (f.prefBebida !== "cerveza" && meritaVino));
@@ -3911,26 +3930,27 @@ function preguntasDe(modo){ return PREGUNTAS.filter(p => p.modos.indexOf(modo) !
 function pantallaModo(){
   S.modo = null; S.i = 0; S.respuestas = {}; S.preguntas = [];
   $("#progreso").hidden = true;
+  $("#v-chef").classList.remove("kid");
   $("#chef-volver").onclick = () => ir("landing");
 
   // Lo primero que ve la persona es la cara del Vasco, no un título.
   const dice = S.nombre
     ? bromaNombre(S.nombre)
     : (Memoria.ultimoPlato()
-        ? "Pará. Vos ya estuviste acá."
-        : "Sentate. Yo soy El Vasco y hace una vida que estoy atrás de esta parrilla.");
+        ? "Vos ya estuviste acá. Me acuerdo."
+        : "Sentate. Soy El Vasco y hace veinte años que estoy atrás de esta parrilla.");
 
   panel().innerHTML = `<div class="modo">
     <div class="presenta">
-      ${vascoHTML("vasco--grande", S.nombre ? "chicana" : "saludo")}
+      ${vascoHTML("vasco--grande", "saludo")}
       <div class="presenta__globo">
         <span class="presenta__nombre">${esc(CHEF.nombre)}</span>
         ${esc(dice)}
       </div>
     </div>
     ${recuerdoHTML()}
-    <h2 class="modo__titulo">Con solo verte<br>ya sé qué vas a pedir.</h2>
-    <p class="modo__texto">Te hago unas preguntas. Casi ninguna es sobre comida, y no hace falta que entiendas por qué. Después te lo digo.</p>
+    <h2 class="modo__titulo">Contame cómo comés<br>y te digo qué pedir.</h2>
+    <p class="modo__texto">Son preguntas de comida: qué te gusta, cómo lo querés, qué olor te da hambre. Con eso te armo la mesa entera, desde la entrada hasta con qué bajarla.</p>
 
     ${S.nombre ? "" : `<div class="nombre">
       <label class="nombre__label" for="mi-nombre">Antes que nada: ¿cómo te digo?</label>
@@ -3955,7 +3975,7 @@ function pantallaModo(){
         <h3>Completo</h3>
         <span class="tarjeta-modo__meta">${LARGO.completo} preguntas</span>
       </span>
-      <p>Todavía no llegó nadie a la mesa. Acá hay juegos y cosas que no le contás a cualquiera.</p>
+      <p>Todavía no llegó nadie a la mesa. Acá te leo bien y afino hasta el vino.</p>
     </button>
 
     <button class="tarjeta-modo" data-modo="mesa">
@@ -3963,7 +3983,15 @@ function pantallaModo(){
         <h3>Armá la mesa</h3>
         <span class="tarjeta-modo__meta">Para varios</span>
       </span>
-      <p>Se pasan el celular y cada uno contesta tres cosas. Al final armo el pedido de toda la mesa y te digo cuánto sale por cabeza.</p>
+      <p>Se pasan el celular y cada uno contesta tres cosas. Al final armo el pedido de todos y te digo cuánto sale por cabeza. Si vienen chicos, también.</p>
+    </button>
+
+    <button class="tarjeta-modo" data-modo="kid">
+      <span class="tarjeta-modo__top">
+        <h3>Para los más chicos</h3>
+        <span class="tarjeta-modo__meta">Con Tito</span>
+      </span>
+      <p>Pasale el celular al más chico de la mesa. Lo atiende ${esc(KID.nombre)}, mi ayudante, con el menú de niños y unos juegos para la espera.</p>
     </button>
 
     <p class="modo__texto" style="margin:18px 0 0;font-size:.84rem;opacity:.72">
@@ -3991,11 +4019,13 @@ function pantallaModo(){
   }
 
   $$("[data-modo]").forEach(b => b.addEventListener("click", () => {
-    if (b.dataset.modo === "mesa") pantallaMesa(); else arrancar(b.dataset.modo);
+    const m = b.dataset.modo;
+    if (m === "mesa") pantallaMesa();
+    else if (m === "kid") pantallaKid();
+    else arrancar(m);
   }));
   decir("Elegí el modo del chef.");
 }
-
 /* Lo que El Vasco se acuerda de la última vez. Vive en el celular. */
 function recuerdoHTML(){
   const u = Memoria.ultimoPlato();
@@ -4348,13 +4378,556 @@ function atras(){
   pintarPregunta();
 }
 
+/* ═══════════════════════════════════════════════════════════════════
+   LAS PANTALLAS DEL CHEF KID
+   Mismo esqueleto que el del Vasco, con tres diferencias que importan:
+   todo es más grande, el progreso son estrellitas y no "3 de 5", y
+   después del veredicto hay juegos, porque el rato entre que se pide y
+   llega la comida es exactamente el problema que tiene una familia con
+   chicos en un parador.
+   ═══════════════════════════════════════════════════════════════════ */
+const K = { nombre:"", i:0, respuestas:{}, preguntas:[], vuelta:0, ultimo:null };
+
+const modoKid = on => $("#v-chef").classList.toggle("kid", !!on);
+
+function pantallaKid(){
+  modoKid(true);
+  K.i = 0; K.respuestas = {}; K.preguntas = [];
+  S.modo = "kid";
+  $("#progreso").hidden = true;
+  $("#chef-volver").onclick = () => { modoKid(false); pantallaModo(); };
+
+  panel().innerHTML = `<div class="modo">
+    <div class="presenta">
+      ${titoHTML("tito--grande", "saludo")}
+      <div class="presenta__globo">
+        <span class="presenta__nombre">${esc(KID.nombre)}</span>
+        ¡Hola! Soy ${esc(KID.nombre)} y ayudo al Vasco en la cocina. ¿Querés que te elija la comida?
+      </div>
+    </div>
+
+    <h2 class="modo__titulo">Contestame cinco cosas<br>y te digo qué pedir.</h2>
+    <p class="modo__texto">Y después te dejo juegos para hacer mientras se cocina.</p>
+
+    <div class="nombre">
+      <label class="nombre__label" for="kid-nombre">¿Cómo te llamás?</label>
+      <div class="campo">
+        <input id="kid-nombre" type="text" maxlength="20" placeholder="Tu nombre" enterkeyhint="go">
+        <button class="btn btn--sol" id="b-kid-nombre">¡Dale!</button>
+      </div>
+      <button class="saltear" id="b-kid-anon">No quiero decirlo</button>
+    </div>
+  </div>`;
+
+  const inp = $("#kid-nombre");
+  const seguir = () => {
+    const v = inp.value.replace(/[^\p{L}\p{M}\s'’-]/gu, "").replace(/\s+/g, " ").trim().slice(0, 20);
+    K.nombre = v ? v.charAt(0).toUpperCase() + v.slice(1) : "";
+    arrancarKid();
+  };
+  $("#b-kid-nombre").addEventListener("click", seguir);
+  inp.addEventListener("keydown", e => { if (e.key === "Enter"){ e.preventDefault(); seguir(); } });
+  $("#b-kid-anon").addEventListener("click", () => { inp.value = ""; seguir(); });
+  decir("Hola, soy " + KID.nombre + ". ¿Cómo te llamás?");
+}
+
+function arrancarKid(){
+  K.preguntas = tandaNino(K.vuelta++);
+  K.i = 0; K.respuestas = {};
+  $("#chef-volver").onclick = () => atrasKid();
+  pintarPreguntaKid();
+}
+
+function atrasKid(){
+  if (K.i === 0){ pantallaKid(); return; }
+  K.i--;
+  pintarPreguntaKid();
+}
+
+/* Las estrellitas: a los seis años "pregunta 3 de 5" no dice nada, pero
+   tres estrellas prendidas de cinco se entienden sin leer. */
+function pasosKid(){
+  return `<p class="kid-pasos" aria-hidden="true">${
+    K.preguntas.map((_, j) => `<span class="${j <= K.i ? "hecho" : ""}">⭐</span>`).join("")
+  }</p>`;
+}
+
+function pintarPreguntaKid(){
+  const p = K.preguntas[K.i];
+  const quien = K.nombre && K.i === 0 ? K.nombre + ", " : "";
+  const texto = quien ? quien + p.texto.charAt(0).toLowerCase() + p.texto.slice(1) : p.texto;
+  const esGrilla = fmtDe(p) === "grilla";
+
+  panel().innerHTML = `<div class="chat chat--pregunta">
+    ${pasosKid()}
+    <div class="dice">
+      <div class="dice__vasco">${titoHTML("tito--chico", "saludo")}</div>
+      <div class="burbuja">${esc(texto)}</div>
+    </div>
+    <h3 class="solo-lectores">${esc(p.texto)}</h3>
+    ${p.nota ? `<p class="pregunta__nota">${esc(p.nota)}</p>` : ""}
+    ${esGrilla
+      ? `<div class="grilla" role="group" aria-label="${esc(p.texto)}">
+          ${p.opciones.map((o, i) => `<button class="grilla__item" data-i="${i}">
+              <span class="grilla__emo" aria-hidden="true">${o.emo}</span>
+              <span class="grilla__txt">${esc(o.texto)}</span>
+            </button>`).join("")}
+        </div>`
+      : `<div class="opciones opciones--largas" role="group" aria-label="${esc(p.texto)}">
+          ${p.opciones.map((o, i) => {
+            const sel = Array.isArray(K.respuestas[p.id]) ? K.respuestas[p.id] : [];
+            const on = p.multiple ? sel.indexOf(i) !== -1 : K.respuestas[p.id] === i;
+            return `<button class="opcion" data-i="${i}" aria-pressed="${on}">
+              ${p.multiple ? `<span class="opcion__marca" aria-hidden="true">${on ? "✓" : ""}</span>` : ""}
+              <span aria-hidden="true" style="flex:none;font-size:1.7rem;line-height:1">${o.emo}</span>
+              <span>${esc(o.texto)}</span>
+            </button>`;
+          }).join("")}
+        </div>`}
+    <div class="acciones-chat">
+      <button class="link-atras" id="b-atras" ${K.i === 0 ? "disabled" : ""}>← Volver</button>
+      ${p.multiple ? `<button class="btn btn--sol" id="b-seguir">Seguir</button>` : ""}
+    </div>
+  </div>`;
+
+  decir(p.texto);
+  const sel = esGrilla ? ".grilla__item" : ".opcion";
+  $$(sel, panel()).forEach(b => {
+    b.addEventListener("click", () => {
+      const i = parseInt(b.dataset.i, 10);
+      if (p.multiple){ elegirMultipleKid(p, i); return; }
+      K.respuestas[p.id] = i;
+      avanzarKid(p);
+    });
+    b.addEventListener("keydown", ev => moverFoco(ev, b, sel));
+  });
+  if (p.multiple) $("#b-seguir").addEventListener("click", () => avanzarKid(p));
+  const atras = $("#b-atras");
+  if (atras) atras.addEventListener("click", atrasKid);
+}
+
+function elegirMultipleKid(p, i){
+  const o = p.opciones[i];
+  let sel = Array.isArray(K.respuestas[p.id]) ? K.respuestas[p.id].slice() : [];
+  if (o.exclusiva) sel = sel.indexOf(i) !== -1 ? [] : [i];
+  else {
+    const excl = p.opciones.map((x,j) => x.exclusiva ? j : -1).filter(j => j >= 0);
+    sel = sel.filter(j => excl.indexOf(j) === -1);
+    sel = sel.indexOf(i) !== -1 ? sel.filter(j => j !== i) : sel.concat(i);
+  }
+  K.respuestas[p.id] = sel;
+  $$(".opcion", panel()).forEach((b, j) => {
+    const on = sel.indexOf(j) !== -1;
+    b.setAttribute("aria-pressed", String(on));
+    const m = $(".opcion__marca", b);
+    if (m) m.textContent = on ? "✓" : "";
+  });
+}
+
+async function pensandoKid(frase){
+  const f = frase || VOZ_KID.esperas[Math.floor(Math.random() * VOZ_KID.esperas.length)];
+  const div = document.createElement("div");
+  div.className = "puntitos";
+  div.innerHTML = `<div class="dice__vasco">${titoHTML("tito--chico", "piensa")}</div>
+                   <div class="puntitos__caja"><i></i><i></i><i></i></div>
+                   <span class="puntitos__frase">${esc(f)}</span>`;
+  panel().appendChild(div);
+  await esperar(620 + Math.random() * 300);
+  div.remove();
+}
+
+async function avanzarKid(p){
+  if (p.multiple && (!K.respuestas[p.id] || K.respuestas[p.id].length === 0)){
+    const i = p.opciones.findIndex(o => o.exclusiva);
+    K.respuestas[p.id] = i >= 0 ? [i] : [];
+  }
+  const dicho = opcionesElegidas(p, K.respuestas[p.id]).map(o => o.texto).join(" · ");
+  const chat = $(".chat", panel());
+  if (chat && dicho){
+    $$("button", panel()).forEach(b => b.disabled = true);
+    const eco = document.createElement("div");
+    eco.className = "burbuja burbuja--yo";
+    eco.textContent = dicho;
+    chat.appendChild(eco);
+    await esperar(240);
+  }
+
+  K.i++;
+  if (K.i >= K.preguntas.length){ await pintarVeredictoKid(); return; }
+  panel().innerHTML = `<div class="chat"></div>`;
+  await pensandoKid(chisteDe(p, K.respuestas[p.id]));
+  pintarPreguntaKid();
+}
+
+async function pintarVeredictoKid(){
+  panel().innerHTML = `<div class="chat"></div>`;
+  await pensandoKid("Ya lo tengo…");
+
+  const r = recomendarNino(K.respuestas, K.preguntas);
+  if (!r){ pintarSinSalida(); return; }
+  K.ultimo = r;
+  Memoria.sumar([r.principal, r.bebida, r.postre].filter(Boolean).map(p => p.id));
+
+  if (!reducido()){
+    const m = document.createElement("div");
+    m.className = "marea";
+    m.innerHTML = '<div class="marea__olas olas olas--noche"></div><div class="marea__borde"></div>';
+    document.body.appendChild(m);
+    setTimeout(() => m.remove(), 1100);
+  }
+
+  const mini = (p, linea) => `<div class="mini">
+      ${fotoHTML(p, "mini")}
+      <div class="mini__txt">
+        <p class="mini__nombre">${esc(p.nombre)}</p>
+        <p class="mini__linea">${esc(linea)}</p>
+      </div>
+      <p class="mini__precio">${precioTxt(p.precio)}</p>
+    </div>`;
+  const titulo = t => `<p class="bloque__titulo"><span class="bloque__txt">${esc(t)}</span><span class="zigzag zigzag--claro" aria-hidden="true"></span></p>`;
+  const cierre = VOZ_KID.cierres[Math.floor(Math.random() * VOZ_KID.cierres.length)];
+
+  panel().innerHTML = `<div class="veredicto reveal">
+    ${r.aviso ? `<p class="pregunta__nota" style="color:var(--acento)">${esc(r.aviso)}</p>` : ""}
+    <div class="presenta">
+      ${titoHTML("tito--grande", "festeja")}
+      <div class="presenta__globo">
+        <span class="presenta__nombre">${esc(KID.nombre)}</span>
+        ${esc(vozKid(r, K.nombre))}
+      </div>
+    </div>
+
+    <article class="ficha">
+      ${fotoHTML(r.principal, "ficha")}
+      <div class="ficha__cuerpo">
+        <p class="ficha__cat">Para vos</p>
+        <h2 class="ficha__nombre">${esc(r.principal.nombre)}</h2>
+        <p class="ficha__precio">${precioTxt(r.principal.precio)}</p>
+        ${r.principal.descripcion ? `<p class="ficha__desc">${esc(r.principal.descripcion)}</p>` : ""}
+        <p class="ficha__voz">Mostrale esta pantalla a quien te acompaña y ya está pedido.</p>
+      </div>
+    </article>
+
+    <div class="bloque">
+      ${titulo("Y además")}
+      ${r.bebida ? mini(r.bebida, "Para tomar mientras esperás.") : ""}
+      ${r.postre ? mini(r.postre, "Esto es para el final. Ganátelo.") : ""}
+    </div>
+
+    <div class="ticket">
+      <p class="ticket__txt">Todo junto</p>
+      <p class="ticket__monto">${precioTxt(r.total)}</p>
+    </div>
+
+    <p class="burbuja" style="margin-top:22px">${esc(cierre)}</p>
+
+    ${bloqueJuegos()}
+
+    <div class="veredicto__acciones">
+      <button class="btn btn--sol" id="b-kid-otra">Elegir de nuevo</button>
+      <button class="btn btn--linea" id="b-kid-salir">Devolver el celular</button>
+    </div>
+  </div>`;
+
+  $("#chef-volver").onclick = () => { modoKid(false); pantallaModo(); };
+  $("#b-kid-otra").addEventListener("click", pantallaKid);
+  $("#b-kid-salir").addEventListener("click", () => { modoKid(false); pantallaModo(); });
+  conectarJuegos();
+  decir("Listo. Te toca " + r.principal.nombre + ".");
+}
+
+/* ═══════════════════════════════════════════════════════════════════
+   LOS JUEGOS DE LA ESPERA
+   El rato entre que se pide y llega la comida es el problema real de una
+   familia con chicos en un parador. Tres juegos que andan sin internet,
+   sin librerías y sin sacar a nadie de la carta.
+   ═══════════════════════════════════════════════════════════════════ */
+const JUEGOS = [
+  { id:"pintar",  emo:"🎨", nombre:"Pintá tu plato", sub:"Elegí un color y tocá" },
+  { id:"memo",    emo:"🃏", nombre:"Memotest",       sub:"Encontrá las parejas" },
+  { id:"intruso", emo:"🔍", nombre:"El intruso",     sub:"¿Cuál no va con los otros?" }
+];
+
+function bloqueJuegos(){
+  return `<div class="juegos">
+    <p class="bloque__titulo"><span class="bloque__txt">Mientras se cocina</span><span class="zigzag zigzag--claro" aria-hidden="true"></span></p>
+    <div class="juegos__riel" id="juegos-riel">
+      ${JUEGOS.map(j => `<button class="juego-btn" data-juego="${j.id}">
+          <span class="juego-btn__emo" aria-hidden="true">${j.emo}</span>
+          <span class="juego-btn__txt">${esc(j.nombre)}</span>
+          <span class="juego-btn__sub">${esc(j.sub)}</span>
+        </button>`).join("")}
+    </div>
+  </div>`;
+}
+
+function conectarJuegos(){
+  $$("[data-juego]", panel()).forEach(b =>
+    b.addEventListener("click", () => abrirJuego(b.dataset.juego)));
+}
+
+function cabezaJuego(titulo, marcador){
+  return `<div class="juego__cabeza">
+    <button class="link-atras" id="b-juego-salir">← Volver</button>
+    <h3 class="juego__titulo">${esc(titulo)}</h3>
+    <span class="juego__marcador" id="juego-marcador">${esc(marcador || "")}</span>
+  </div>`;
+}
+
+function abrirJuego(id){
+  ({ pintar: juegoPintar, memo: juegoMemo, intruso: juegoIntruso }[id] || juegoPintar)();
+}
+
+function volverAlVeredicto(){
+  if (K.ultimo) pintarVeredictoKidYaCalculado();
+  else pantallaKid();
+}
+
+/* Se repinta el veredicto sin volver a calcular ni a animar la marea:
+   el chico ya vio el momento una vez y repetirlo lo aburre. */
+function pintarVeredictoKidYaCalculado(){
+  const r = K.ultimo;
+  const mini = (p, linea) => `<div class="mini">
+      ${fotoHTML(p, "mini")}
+      <div class="mini__txt">
+        <p class="mini__nombre">${esc(p.nombre)}</p>
+        <p class="mini__linea">${esc(linea)}</p>
+      </div>
+      <p class="mini__precio">${precioTxt(p.precio)}</p>
+    </div>`;
+  panel().innerHTML = `<div class="veredicto">
+    <div class="presenta">
+      ${titoHTML("tito--grande", "saludo")}
+      <div class="presenta__globo">
+        <span class="presenta__nombre">${esc(KID.nombre)}</span>
+        ${esc(K.nombre ? K.nombre + ", esto es lo tuyo." : "Esto es lo tuyo.")}
+      </div>
+    </div>
+    <article class="ficha">
+      ${fotoHTML(r.principal, "ficha")}
+      <div class="ficha__cuerpo">
+        <p class="ficha__cat">Para vos</p>
+        <h2 class="ficha__nombre">${esc(r.principal.nombre)}</h2>
+        <p class="ficha__precio">${precioTxt(r.principal.precio)}</p>
+      </div>
+    </article>
+    <div class="bloque">
+      ${r.bebida ? mini(r.bebida, "Para tomar mientras esperás.") : ""}
+      ${r.postre ? mini(r.postre, "Esto es para el final.") : ""}
+    </div>
+    ${bloqueJuegos()}
+    <div class="veredicto__acciones">
+      <button class="btn btn--sol" id="b-kid-otra">Elegir de nuevo</button>
+      <button class="btn btn--linea" id="b-kid-salir">Devolver el celular</button>
+    </div>
+  </div>`;
+  $("#b-kid-otra").addEventListener("click", pantallaKid);
+  $("#b-kid-salir").addEventListener("click", () => { modoKid(false); pantallaModo(); });
+  conectarJuegos();
+}
+
+/* ── PINTÁ TU PLATO ───────────────────────────────────────────────────
+   Un plato dibujado en SVG por zonas. Se elige un color y se tocan las
+   zonas. No hay que saber dibujar ni arrastrar el dedo con precisión,
+   que a los cinco años todavía no pasa.                               */
+const COLORES = ["#E0A94A","#E2574C","#5DBB63","#4B9BD6","#8E5BB5","#F0F0F0","#7A4B2A","#2B2B2B"];
+
+function juegoPintar(){
+  const zona = (d, fill, nombre) =>
+    `<path class="pintar__zona" data-zona d="${d}" fill="${fill}" stroke="#1B3A57" stroke-width="3"
+           stroke-linejoin="round" role="button" tabindex="0" aria-label="${nombre}"/>`;
+
+  panel().innerHTML = `<div class="juego">
+    ${cabezaJuego("Pintá tu plato", "")}
+    <div class="pintar">
+      <div class="pintar__lienzo">
+        <svg viewBox="0 0 320 260" aria-label="Un plato para pintar">
+          <ellipse class="pintar__zona" data-zona cx="160" cy="150" rx="140" ry="95"
+                   fill="#FFFFFF" stroke="#1B3A57" stroke-width="4" role="button" tabindex="0" aria-label="El plato"/>
+          <ellipse cx="160" cy="150" rx="118" ry="78" fill="none" stroke="#CBD9E3" stroke-width="3"/>
+          ${zona("M70 150 Q70 112 112 110 L150 110 Q186 114 184 150 Q182 186 148 188 L110 188 Q70 188 70 150 Z", "#F3E2C7", "La milanesa")}
+          ${zona("M200 104 L232 96 L240 124 L208 132 Z", "#F6D97A", "Una papa frita")}
+          ${zona("M214 138 L248 132 L254 160 L220 166 Z", "#F6D97A", "Otra papa frita")}
+          ${zona("M206 170 L242 168 L244 196 L208 196 Z", "#F6D97A", "La última papa frita")}
+          <circle class="pintar__zona" data-zona cx="112" cy="206" r="20" fill="#EFA6A0"
+                  stroke="#1B3A57" stroke-width="3" role="button" tabindex="0" aria-label="El tomate"/>
+          <circle class="pintar__zona" data-zona cx="160" cy="214" r="14" fill="#BFE3B5"
+                  stroke="#1B3A57" stroke-width="3" role="button" tabindex="0" aria-label="Una hojita"/>
+        </svg>
+      </div>
+      <div class="pintar__paleta" id="paleta" role="group" aria-label="Colores">
+        ${COLORES.map((c, i) => `<button class="pintar__color" data-color="${c}"
+            style="background:${c}" aria-pressed="${i === 0}" aria-label="Color ${i + 1}"></button>`).join("")}
+      </div>
+      <p class="juego__dice" id="juego-dice">Elegí un color y tocá el dibujo.</p>
+      <button class="btn btn--linea btn--chico" id="b-pintar-limpiar">Empezar de nuevo</button>
+    </div>
+  </div>`;
+
+  let color = COLORES[0];
+  const original = $$(".pintar__zona", panel()).map(z => z.getAttribute("fill"));
+
+  $$(".pintar__color", panel()).forEach(b => b.addEventListener("click", () => {
+    color = b.dataset.color;
+    $$(".pintar__color", panel()).forEach(x => x.setAttribute("aria-pressed", String(x === b)));
+    $("#juego-dice").textContent = "Ahora tocá el dibujo.";
+  }));
+
+  const pintar = z => { z.setAttribute("fill", color); $("#juego-dice").textContent = "¡Quedó bárbaro!"; };
+  $$(".pintar__zona", panel()).forEach(z => {
+    z.addEventListener("click", () => pintar(z));
+    z.addEventListener("keydown", e => {
+      if (e.key === "Enter" || e.key === " "){ e.preventDefault(); pintar(z); }
+    });
+  });
+
+  $("#b-pintar-limpiar").addEventListener("click", () => {
+    $$(".pintar__zona", panel()).forEach((z, i) => z.setAttribute("fill", original[i]));
+    $("#juego-dice").textContent = "Listo, de nuevo en blanco.";
+  });
+  $("#b-juego-salir").addEventListener("click", volverAlVeredicto);
+  decir("Juego para pintar un plato.");
+}
+
+/* ── MEMOTEST ─────────────────────────────────────────────────────── */
+const MEMO_EMOJIS = ["🍕","🍟","🍦","🍔","🍌","🍓","🧀","🌽","🍉","🥑"];
+
+function mezclar(a){
+  const x = a.slice();
+  for (let i = x.length - 1; i > 0; i--){
+    const j = Math.floor(Math.random() * (i + 1));
+    const t = x[i]; x[i] = x[j]; x[j] = t;
+  }
+  return x;
+}
+
+function juegoMemo(){
+  const elegidos = mezclar(MEMO_EMOJIS).slice(0, 6);
+  const cartas = mezclar(elegidos.concat(elegidos));
+  let abierta = null, bloqueado = false, hechas = 0, intentos = 0;
+
+  panel().innerHTML = `<div class="juego">
+    ${cabezaJuego("Memotest", "0 de 6")}
+    <div class="memo" id="memo" role="group" aria-label="Memotest de comidas">
+      ${cartas.map((e, i) => `<button class="memo__carta" data-i="${i}" data-emo="${e}"
+          data-estado="tapada" aria-label="Carta ${i + 1}"><span>${e}</span></button>`).join("")}
+    </div>
+    <p class="juego__dice" id="juego-dice">Tocá dos cartas y buscá las iguales.</p>
+  </div>`;
+
+  const marcador = () => { $("#juego-marcador").textContent = hechas + " de 6"; };
+
+  $$(".memo__carta", panel()).forEach(b => b.addEventListener("click", () => {
+    if (bloqueado || b.dataset.estado !== "tapada") return;
+    b.dataset.estado = "abierta";
+    if (!abierta){ abierta = b; return; }
+
+    intentos++;
+    if (abierta.dataset.emo === b.dataset.emo){
+      abierta.dataset.estado = b.dataset.estado = "hecha";
+      abierta = null; hechas++; marcador();
+      $("#juego-dice").textContent = hechas === 6
+        ? `¡Las encontraste todas! En ${intentos} intentos.`
+        : "¡Muy bien! Seguí.";
+      if (hechas === 6) decir("Ganaste el memotest.");
+      return;
+    }
+    bloqueado = true;
+    $("#juego-dice").textContent = "Esas dos no eran. Probá otra vez.";
+    const a = abierta; abierta = null;
+    setTimeout(() => {
+      a.dataset.estado = b.dataset.estado = "tapada";
+      bloqueado = false;
+    }, reducido() ? 200 : 750);
+  }));
+
+  $("#b-juego-salir").addEventListener("click", volverAlVeredicto);
+  decir("Memotest de comidas.");
+}
+
+/* ── EL INTRUSO ───────────────────────────────────────────────────────
+   Siete cosas de la misma familia y una que no va. Es el juego que mejor
+   funciona a los cinco años porque no hay que leer nada.              */
+const RONDAS_INTRUSO = [
+  { familia:["🍎","🍌","🍓","🍇","🍊","🍐","🍉"], intruso:"🥕", dice:"La zanahoria es una verdura, no una fruta." },
+  { familia:["🥕","🥦","🌽","🥬","🍆","🫑","🥒"], intruso:"🍪", dice:"La galletita no es una verdura, aunque sea rica." },
+  { familia:["🍕","🍔","🌭","🍟","🥪","🌮","🍝"], intruso:"⚽", dice:"¡La pelota no se come!" },
+  { familia:["🍦","🍰","🍩","🍪","🧁","🍫","🍮"], intruso:"🥩", dice:"El bife no es un postre. Eso es cosa del Vasco." },
+  { familia:["🥛","🧃","☕","🍵","🥤","🧉","🍶"], intruso:"🍞", dice:"El pan no se toma, se come." }
+];
+
+function juegoIntruso(){
+  const orden = mezclar(RONDAS_INTRUSO.map((_, i) => i));
+  let k = 0, puntos = 0;
+
+  const pintar = () => {
+    const r = RONDAS_INTRUSO[orden[k]];
+    const items = mezclar(r.familia.slice(0, 7).concat(r.intruso));
+    panel().innerHTML = `<div class="juego">
+      ${cabezaJuego("El intruso", puntos + " de " + RONDAS_INTRUSO.length)}
+      <p class="burbuja">¿Cuál no va con los demás?</p>
+      <div class="intruso" role="group" aria-label="Encontrá el intruso">
+        ${items.map((e, i) => `<button class="intruso__item" data-emo="${e}"
+            aria-label="Opción ${i + 1}">${e}</button>`).join("")}
+      </div>
+      <p class="juego__dice" id="juego-dice">Tocá el que sobra.</p>
+    </div>`;
+
+    $$(".intruso__item", panel()).forEach(b => b.addEventListener("click", () => {
+      if (b.classList.contains("bien") || b.classList.contains("mal")) return;
+      const acerto = b.dataset.emo === r.intruso;
+      b.classList.add(acerto ? "bien" : "mal");
+      if (acerto){
+        puntos++;
+        $("#juego-marcador").textContent = puntos + " de " + RONDAS_INTRUSO.length;
+        $("#juego-dice").textContent = "¡Eso! " + r.dice;
+        $$(".intruso__item", panel()).forEach(x => x.disabled = true);
+        setTimeout(() => {
+          k++;
+          if (k < orden.length) pintar();
+          else final();
+        }, reducido() ? 200 : 1100);
+      } else {
+        $("#juego-dice").textContent = "Ese no. Mirá bien.";
+      }
+    }));
+    $("#b-juego-salir").addEventListener("click", volverAlVeredicto);
+  };
+
+  const final = () => {
+    panel().innerHTML = `<div class="juego">
+      ${cabezaJuego("El intruso", puntos + " de " + RONDAS_INTRUSO.length)}
+      <div class="presenta">
+        ${titoHTML("tito--grande", "festeja")}
+        <div class="presenta__globo">
+          <span class="presenta__nombre">${esc(KID.nombre)}</span>
+          ${puntos === RONDAS_INTRUSO.length
+            ? "¡Todas! Vos de comida sabés tanto como yo."
+            : `Sacaste ${puntos} de ${RONDAS_INTRUSO.length}. ¿Jugamos otra?`}
+        </div>
+      </div>
+      <div class="veredicto__acciones">
+        <button class="btn btn--sol" id="b-otra-vez">Jugar de nuevo</button>
+        <button class="btn btn--linea" id="b-juego-salir2">Volver</button>
+      </div>
+    </div>`;
+    $("#b-otra-vez").addEventListener("click", juegoIntruso);
+    $("#b-juego-salir2").addEventListener("click", volverAlVeredicto);
+    decir("Terminaste el juego con " + puntos + " de " + RONDAS_INTRUSO.length + ".");
+  };
+
+  pintar();
+  decir("Juego: encontrá el intruso.");
+}
+
 /* ── ARMÁ LA MESA: la pantalla ─────────────────────────────────────── */
-const M = { total:0, i:0, comensales:[], paso:"cuantos" };
+const M = { total:0, i:0, comensales:[], ninos:[], ni:0, paso:"cuantos" };
 
 function pantallaMesa(){
-  M.total = 0; M.i = 0; M.comensales = []; M.paso = "cuantos";
+  M.total = 0; M.i = 0; M.comensales = []; M.ninos = []; M.ni = 0; M.paso = "cuantos";
   S.modo = "mesa";
   $("#progreso").hidden = true;
+  $("#v-chef").classList.remove("kid");
   $("#chef-volver").onclick = () => pantallaModo();
 
   panel().innerHTML = `<div class="modo">
@@ -4362,11 +4935,11 @@ function pantallaMesa(){
       ${vascoHTML("vasco--grande", "saludo")}
       <div class="presenta__globo">
         <span class="presenta__nombre">${esc(CHEF.nombre)}</span>
-        ¿Cuántos son? Y no me mientas, que después falta comida.
+        ¿Cuántos grandes son? Decime bien, que de eso depende cuánto va al medio.
       </div>
     </div>
-    <div class="cuantos" role="group" aria-label="Cuántos son">
-      ${[2,3,4,5,6,7,8,9,10,11,12].map(n =>
+    <div class="cuantos" role="group" aria-label="Cuántos adultos son">
+      ${[1,2,3,4,5,6,7,8,9,10,11,12].map(n =>
         `<button class="cuantos__n" data-n="${n}">${n}</button>`).join("")}
     </div>
     <p class="modo__texto" style="margin-top:20px">
@@ -4375,17 +4948,52 @@ function pantallaMesa(){
 
   $$(".cuantos__n").forEach(b => b.addEventListener("click", () => {
     M.total = parseInt(b.dataset.n, 10);
+    pantallaNinos();
+  }));
+  decir("¿Cuántos adultos son en la mesa?");
+}
+
+/* La pregunta por los chicos. Va acá y no al final porque cambia lo que
+   se pone en el medio para todos: con un nene de seis en la mesa, la
+   picada no puede ser una molleja. */
+function pantallaNinos(){
+  M.paso = "ninos";
+  $("#chef-volver").onclick = () => pantallaMesa();
+
+  panel().innerHTML = `<div class="modo">
+    <div class="presenta">
+      ${vascoHTML("vasco--grande", "saludo")}
+      <div class="presenta__globo">
+        <span class="presenta__nombre">${esc(CHEF.nombre)}</span>
+        ¿Y vienen chicos? Si hay, los atiende ${esc(KID.nombre)}, que para eso lo tengo.
+      </div>
+    </div>
+    <p class="mesa__paso">Cuántos chicos</p>
+    <div class="cuantos" role="group" aria-label="Cuántos chicos vienen">
+      ${[0,1,2,3,4,5].map(n =>
+        `<button class="cuantos__n" data-nn="${n}">${n === 0 ? "Ninguno" : n}</button>`).join("")}
+    </div>
+    <p class="modo__texto" style="margin-top:20px">
+      A cada uno le voy a pasar el celular un minuto. Si no quiere contestar, se saltea y yo le elijo igual.</p>
+  </div>`;
+
+  $$("[data-nn]").forEach(b => b.addEventListener("click", () => {
+    const n = parseInt(b.dataset.nn, 10);
+    M.ninos = Array.from({ length:n }, (_, k) => ({
+      nombre:"", respuestas:{}, preguntas: tandaNino(k).slice(0, 3), j:0, salteado:false
+    }));
     M.i = 0; M.comensales = [];
     turnoDe(0);
   }));
-  decir("¿Cuántos son en la mesa?");
+  decir("¿Cuántos chicos vienen a la mesa?");
 }
 
 /* Le toca a uno: primero el nombre, después sus tres preguntas. */
 function turnoDe(i){
+  M.paso = "adultos";
   M.i = i;
   M.comensales[i] = M.comensales[i] || { nombre:"", respuestas:{}, preguntas: tandaComensal(i), j:0 };
-  $("#chef-volver").onclick = () => (i === 0 ? pantallaMesa() : turnoDe(i - 1));
+  $("#chef-volver").onclick = () => (i === 0 ? pantallaNinos() : turnoDe(i - 1));
   pintarPasa(i);
 }
 
@@ -4395,11 +5003,11 @@ function pintarPasa(i){
   const anterior = i > 0 ? M.comensales[i-1] : null;
   const dice = i === 0
     ? "Empezá vos. Después se lo pasás al de al lado."
-    : `Listo${anterior && anterior.nombre ? ", " + esc(anterior.nombre) : ""}. Pasale el celular al que sigue.`;
+    : `Listo${anterior && anterior.nombre ? ", " + anterior.nombre : ""}. Pasale el celular al que sigue.`;
 
   panel().innerHTML = `<div class="modo">
     <div class="presenta">
-      ${vascoHTML("vasco--grande", i === 0 ? "saludo" : "chicana")}
+      ${vascoHTML("vasco--grande", "saludo")}
       <div class="presenta__globo">
         <span class="presenta__nombre">${esc(CHEF.nombre)}</span>${esc(dice)}
       </div>
@@ -4433,6 +5041,159 @@ function pintarPasa(i){
   decir(dice + " Comensal " + (i + 1) + " de " + M.total);
 }
 
+/* ── EL TURNO DE LOS CHICOS ───────────────────────────────────────────
+   El momento que vende la funcionalidad: el celular le llega al nene y
+   lo atiende otro personaje, con otra cara y otro tono. Siempre con
+   "saltear" a mano, porque un chico de cuatro no va a contestar y el
+   padre no tiene que quedar trabado.                                  */
+function turnoNino(k){
+  M.paso = "ninos-turno";
+  M.ni = k;
+  modoKid(true);
+  $("#chef-volver").onclick = () => (k === 0 ? turnoDe(M.total - 1) : turnoNino(k - 1));
+
+  panel().innerHTML = `<div class="modo">
+    <div class="presenta">
+      ${titoHTML("tito--grande", "saludo")}
+      <div class="presenta__globo">
+        <span class="presenta__nombre">${esc(KID.nombre)}</span>
+        ¡Hola! Ahora me toca a mí. ${M.ninos.length > 1 ? "Che, pasame al chico número " + (k + 1) + "." : "Pasale el celular al más chico."}
+      </div>
+    </div>
+    <p class="mesa__paso">Chico ${k + 1} de ${M.ninos.length}</p>
+    <div class="mesa__puntos" aria-hidden="true">
+      ${M.ninos.map((_, j) =>
+        `<span class="mesa__punto ${j < k ? "hecho" : j === k ? "activo" : ""}"></span>`).join("")}
+    </div>
+    <div class="nombre">
+      <label class="nombre__label" for="nino-nombre">¿Cómo te llamás?</label>
+      <div class="campo">
+        <input id="nino-nombre" type="text" maxlength="20" placeholder="Tu nombre" enterkeyhint="go">
+        <button class="btn btn--sol" id="b-nino-nombre">¡Dale!</button>
+      </div>
+      <button class="saltear" id="b-nino-saltear">Elegile vos, ${esc(KID.nombre)}</button>
+    </div>
+  </div>`;
+
+  const inp = $("#nino-nombre");
+  const seguir = () => {
+    const v = inp.value.replace(/[^\p{L}\p{M}\s'’-]/gu, "").replace(/\s+/g, " ").trim().slice(0, 20);
+    M.ninos[k].nombre = v ? v.charAt(0).toUpperCase() + v.slice(1) : "";
+    M.ninos[k].j = 0;
+    pintarPreguntaNino();
+  };
+  $("#b-nino-nombre").addEventListener("click", seguir);
+  inp.addEventListener("keydown", e => { if (e.key === "Enter"){ e.preventDefault(); seguir(); } });
+  // Saltear no deja al chico sin plato: deja que Tito elija con lo que hay.
+  $("#b-nino-saltear").addEventListener("click", () => {
+    M.ninos[k].salteado = true;
+    M.ninos[k].respuestas = {};
+    siguienteNino();
+  });
+  inp.focus({ preventScroll:true });
+  decir("Le toca al chico " + (k + 1) + " de " + M.ninos.length);
+}
+
+function pintarPreguntaNino(){
+  const c = M.ninos[M.ni];
+  const p = c.preguntas[c.j];
+  const quien = c.nombre && c.j === 0 ? c.nombre + ", " : "";
+  const esGrilla = fmtDe(p) === "grilla";
+  const texto = quien ? quien + p.texto.charAt(0).toLowerCase() + p.texto.slice(1) : p.texto;
+
+  panel().innerHTML = `<div class="chat chat--pregunta">
+    <p class="kid-pasos" aria-hidden="true">${
+      c.preguntas.map((_, j) => `<span class="${j <= c.j ? "hecho" : ""}">⭐</span>`).join("")}</p>
+    <div class="dice">
+      <div class="dice__vasco">${titoHTML("tito--chico", "saludo")}</div>
+      <div class="burbuja">${esc(texto)}</div>
+    </div>
+    ${p.nota ? `<p class="pregunta__nota">${esc(p.nota)}</p>` : ""}
+    ${esGrilla
+      ? `<div class="grilla" role="group" aria-label="${esc(p.texto)}">
+          ${p.opciones.map((o, i) => `<button class="grilla__item" data-i="${i}">
+              <span class="grilla__emo" aria-hidden="true">${o.emo}</span>
+              <span class="grilla__txt">${esc(o.texto)}</span>
+            </button>`).join("")}
+        </div>`
+      : `<div class="opciones opciones--largas" role="group" aria-label="${esc(p.texto)}">
+          ${p.opciones.map((o, i) => {
+            const sel = Array.isArray(c.respuestas[p.id]) ? c.respuestas[p.id] : [];
+            const on = p.multiple ? sel.indexOf(i) !== -1 : c.respuestas[p.id] === i;
+            return `<button class="opcion" data-i="${i}" aria-pressed="${on}">
+              ${p.multiple ? `<span class="opcion__marca" aria-hidden="true">${on ? "✓" : ""}</span>` : ""}
+              <span aria-hidden="true" style="flex:none;font-size:1.7rem;line-height:1">${o.emo}</span>
+              <span>${esc(o.texto)}</span>
+            </button>`;
+          }).join("")}
+        </div>`}
+    <div class="acciones-chat">
+      <button class="link-atras" id="b-atras">← Volver</button>
+      ${p.multiple ? `<button class="btn btn--sol" id="b-seguir">Seguir</button>` : ""}
+    </div>
+  </div>`;
+
+  decir(p.texto);
+  const sel = esGrilla ? ".grilla__item" : ".opcion";
+  $$(sel, panel()).forEach(b => b.addEventListener("click", () => {
+    const i = parseInt(b.dataset.i, 10);
+    if (p.multiple){
+      const o = p.opciones[i];
+      let s = Array.isArray(c.respuestas[p.id]) ? c.respuestas[p.id].slice() : [];
+      if (o.exclusiva) s = s.indexOf(i) !== -1 ? [] : [i];
+      else {
+        const excl = p.opciones.map((x,j) => x.exclusiva ? j : -1).filter(j => j >= 0);
+        s = s.filter(j => excl.indexOf(j) === -1);
+        s = s.indexOf(i) !== -1 ? s.filter(j => j !== i) : s.concat(i);
+      }
+      c.respuestas[p.id] = s;
+      $$(".opcion", panel()).forEach((x, j) => {
+        const on = s.indexOf(j) !== -1;
+        x.setAttribute("aria-pressed", String(on));
+        const m = $(".opcion__marca", x);
+        if (m) m.textContent = on ? "✓" : "";
+      });
+      return;
+    }
+    c.respuestas[p.id] = i;
+    avanzarNino(p, c);
+  }));
+  if (p.multiple) $("#b-seguir").addEventListener("click", () => avanzarNino(p, c));
+  $("#b-atras").addEventListener("click", () => {
+    if (c.j > 0){ c.j--; pintarPreguntaNino(); } else turnoNino(M.ni);
+  });
+}
+
+async function avanzarNino(p, c){
+  if (p.multiple && (!c.respuestas[p.id] || c.respuestas[p.id].length === 0)){
+    const i = p.opciones.findIndex(o => o.exclusiva);
+    c.respuestas[p.id] = i >= 0 ? [i] : [];
+  }
+  $$("button", panel()).forEach(b => b.disabled = true);
+  const dicho = opcionesElegidas(p, c.respuestas[p.id]).map(o => o.texto).join(" · ");
+  const chat = $(".chat", panel());
+  if (chat && dicho){
+    const eco = document.createElement("div");
+    eco.className = "burbuja burbuja--yo";
+    eco.textContent = dicho;
+    chat.appendChild(eco);
+    await esperar(220);
+  }
+  c.j++;
+  if (c.j < c.preguntas.length){
+    panel().innerHTML = `<div class="chat"></div>`;
+    await pensandoKid(chisteDe(p, c.respuestas[p.id]));
+    pintarPreguntaNino();
+    return;
+  }
+  siguienteNino();
+}
+
+async function siguienteNino(){
+  if (M.ni + 1 < M.ninos.length){ turnoNino(M.ni + 1); return; }
+  modoKid(false);
+  await pintarVeredictoMesa();
+}
 function pintarPreguntaMesa(){
   const c = M.comensales[M.i];
   const p = c.preguntas[c.j];
@@ -4528,6 +5289,7 @@ async function avanzarMesa(p, c){
   c.filtros = leerFiltros(c.respuestas, c.preguntas);
   c.vector  = vectorUsuario(c.respuestas, c.preguntas);
   if (M.i + 1 < M.total) turnoDe(M.i + 1);
+  else if (M.ninos.length) turnoNino(0);
   else await pintarVeredictoMesa();
 }
 
@@ -4743,11 +5505,10 @@ function lineaMedio(usadas){
 /* ── EL PEDIDO DE LA MESA ──────────────────────────────────────────── */
 async function pintarVeredictoMesa(){
   panel().innerHTML = `<div class="chat"></div>`;
-  await pensando("Dejame ver qué pasa en esta mesa…");
+  await pensando("Dejame ver cómo resuelvo esta mesa…");
 
-  const r = recomendarMesa(M.comensales);
-  const nombres = M.comensales.map(c => c.nombre);
-  const chiste = bromaMesa(nombres);
+  const r = recomendarMesa(M.comensales, M.ninos);
+  const chiste = bromaMesa(M.comensales.map(c => c.nombre));
 
   if (!reducido()){
     const m = document.createElement("div");
@@ -4757,13 +5518,14 @@ async function pintarVeredictoMesa(){
     setTimeout(() => m.remove(), 1100);
   }
 
-  const precio = n => "$ " + n.toLocaleString("es-UY");
-  const fila = (nombre, linea, monto) => `<div class="mini">
+  const fila = (nombre, linea, monto, plato, clase) => `<div class="mini ${clase || ""}">
+      ${plato ? fotoHTML(plato, "mini") : ""}
       <div class="mini__txt">
+        ${plato && plato.vino ? `<p class="mini__cepa">${esc(plato.vino.cepa)} · ${esc(plato.vino.color)}</p>` : ""}
         <p class="mini__nombre">${esc(nombre)}</p>
         ${linea ? `<p class="mini__linea">${esc(linea)}</p>` : ""}
       </div>
-      <p class="mini__precio">${precio(monto)}</p>
+      <p class="mini__precio">${precioTxt(monto)}</p>
     </div>`;
   const titulo = t => `<p class="bloque__titulo"><span class="bloque__txt">${esc(t)}</span><span class="zigzag zigzag--claro" aria-hidden="true"></span></p>`;
 
@@ -4772,14 +5534,16 @@ async function pintarVeredictoMesa(){
       ${vascoHTML("vasco--grande", "veredicto")}
       <div class="presenta__globo">
         <span class="presenta__nombre">${esc(CHEF.nombre)}</span>
-        ${esc(chiste || "Esta mesa ya está resuelta. Sentate y esperá.")}
+        ${esc(chiste || "Esta mesa ya está resuelta. Siéntense que empiezo.")}
       </div>
     </div>
 
     <div class="bloque">
-      ${titulo("Para el medio, mientras esperan")}
+      ${titulo("Al medio, y va primero")}
       ${(() => { const u = new Set();
-                 return r.entradas.map(p => fila(p.nombre, p.descripcion || lineaMedio(u), p.precio)).join(""); })()}
+                 return r.entradas.map(p => fila(p.nombre, p.descripcion || lineaMedio(u), p.precio, p)).join(""); })()}
+      <p class="ficha__voz" style="margin-top:6px">${esc(r.entradaRazon.charAt(0).toUpperCase() + r.entradaRazon.slice(1))}.
+         Que salga esto antes que nada: la parrilla tarda y la mesa no puede estar vacía.</p>
     </div>
 
     <div class="bloque">
@@ -4787,29 +5551,48 @@ async function pintarVeredictoMesa(){
       ${r.platos.map((x, k) => fila(
           x.plato ? x.plato.nombre : "Hablalo conmigo",
           (x.comensal.nombre || "Comensal " + (k + 1)) + (x.plato ? "" : " — no me quedó nada que le sirva"),
-          x.plato ? x.plato.precio : 0)).join("")}
+          x.plato ? x.plato.precio : 0, x.plato)).join("")}
     </div>
+
+    ${r.platosNinos.length ? `<div class="bloque">
+      ${titulo("Para los chicos")}
+      ${r.platosNinos.map((x, k) => {
+        const quien = x.nino.nombre || "Chico " + (k + 1);
+        if (!x.pedido) return fila("Hablalo conmigo", quien, 0, null);
+        const extras = [x.pedido.bebida, x.pedido.postre].filter(Boolean)
+          .map(p => p.nombre.toLowerCase()).join(" y ");
+        return fila(x.pedido.principal.nombre,
+          quien + (x.nino.salteado ? " — lo elegí yo" : "") + (extras ? " · con " + extras : ""),
+          x.pedido.total, x.pedido.principal);
+      }).join("")}
+      <p class="ficha__voz" style="margin-top:6px">Esto lo eligió ${esc(KID.nombre)}, y sale del menú de los chicos y de ningún otro lado.</p>
+    </div>` : ""}
 
     <div class="bloque">
       ${titulo("Para tomar")}
+      ${r.vino ? fila(
+          r.vino.plato.nombre + (r.cuantosVinos > 1 ? ` × ${r.cuantosVinos}` : ""),
+          r.vino.razon.charAt(0).toUpperCase() + r.vino.razon.slice(1) + ".",
+          r.vino.plato.precio * r.cuantosVinos, r.vino.plato, "mini--vino") : ""}
       ${r.bebida ? fila(
           r.bebida.nombre + (r.cuantasBebidas > 1 ? ` × ${r.cuantasBebidas}` : ""),
           r.compartir ? "Al medio, que alcanza para todos." : "Uno para cada uno.",
-          r.bebida.precio * r.cuantasBebidas) : ""}
+          r.bebida.precio * r.cuantasBebidas, r.bebida) : ""}
     </div>
 
-    <div class="bloque">
-      ${titulo("Y el postre, que nadie pide y todos comen")}
-      ${r.postres.map(p => fila(p.nombre, "Con varias cucharas.", p.precio)).join("")}
+    <div class="bloque bloque--tenue">
+      ${titulo("Y si llegan con lugar")}
+      ${r.postres.map(p => fila(p.nombre, "Con varias cucharas.", p.precio, p)).join("")}
     </div>
 
     <div class="ticket">
-      <p class="ticket__txt">Toda la mesa · ${M.total} personas<br>
-        <b style="color:var(--papel)">${precio(r.porCabeza)} por cabeza</b></p>
-      <p class="ticket__monto">${precio(r.total)}</p>
+      <p class="ticket__txt">Toda la mesa · ${M.total} ${M.total === 1 ? "grande" : "grandes"}${
+        M.ninos.length ? " y " + M.ninos.length + (M.ninos.length === 1 ? " chico" : " chicos") : ""}<br>
+        <b style="color:var(--papel)">${precioTxt(r.porCabeza)} por cabeza</b></p>
+      <p class="ticket__monto">${precioTxt(r.total)}</p>
     </div>
 
-    <p class="burbuja" style="margin-top:24px">Si alguno se queja, decile que hablé yo.</p>
+    <p class="burbuja" style="margin-top:24px">Si alguno se queja, decile que lo elegí yo.</p>
 
     <div class="veredicto__acciones">
       <button class="btn btn--sol" id="b-otra-mesa">Armar otra mesa</button>
@@ -4820,9 +5603,8 @@ async function pintarVeredictoMesa(){
   $("#chef-volver").onclick = () => pantallaModo();
   $("#b-otra-mesa").addEventListener("click", pantallaMesa);
   $$("[data-ir]", panel()).forEach(b => b.addEventListener("click", () => ir(b.dataset.ir)));
-  decir("Listo. La mesa sale " + precio(r.total) + ", " + precio(r.porCabeza) + " por cabeza.");
+  decir("Listo. La mesa sale " + precioTxt(r.total) + ", " + precioTxt(r.porCabeza) + " por cabeza.");
 }
-
 /* Último recurso: ni una sola cosa de la carta pasa los filtros duros.
    No se rompe ni se muestra vacío: se invita a hacer algo.          */
 function pintarSinSalida(){
@@ -4843,13 +5625,14 @@ function pintarSinSalida(){
    se ve la plantilla y se cae el personaje. */
 function lineaAlternativa(p, r, usadas){
   const razones = [];
-  if (p.precio < r.principal.precio) razones.push("Lo mismo pero más barato. No se lo digas a nadie.");
-  if (p.ejes.contundencia >= 9)      razones.push("Si traés más hambre de la que me dijiste.");
-  if (p.ejes.frescura >= 7)          razones.push("Si el sol te pegó más de lo que pensabas.");
-  if (p.ejes.aventura >= 7)          razones.push("Esto te lo doy sólo si te la querés jugar.");
-  if (p.apto.compartir)              razones.push("Este va al medio de la mesa.");
-  if (p.categoria !== r.principal.categoria) razones.push("Por si querés ir para otro lado.");
-  razones.push("La segunda opción, que acá también es buena.");
+  if (p.precio < r.principal.precio) razones.push("Lo mismo por menos plata. Sale igual de bien.");
+  if (p.ejes.intensidad >= 9)        razones.push("Si querés algo con más carácter que lo que te di.");
+  if (p.ejes.untuosidad <= 3)        razones.push("Si preferís algo más limpio y menos graso.");
+  if (p.ejes.acidez >= 7)            razones.push("Si con el calor de afuera querés algo que refresque.");
+  if (p.ejes.aventura >= 7)          razones.push("Esto lo pide poca gente. Si te la querés jugar, es por acá.");
+  if (p.apto.compartir)              razones.push("Este va al medio y lo comen todos.");
+  if (p.proteina !== r.principal.proteina) razones.push("Por si querés cambiar de proteína del todo.");
+  razones.push("La segunda opción, que acá también está muy bien resuelta.");
   const libre = razones.find(t => !usadas.has(t)) || razones[razones.length - 1];
   usadas.add(libre);
   return libre;
@@ -4880,9 +5663,9 @@ function tarjetaHTML(r){
 /* La frase de la tarjeta es corta a propósito: tiene que leerse en una
    historia de Instagram a un metro de distancia. */
 function frasePostal(r){
-  if (r.remate) return r.remate;
+  if (r.entrada) return `Empezá por ${r.entrada.nombre.toLowerCase()}. Después hablamos.`;
   const eco = elegirEcos(r.ecos, 1)[0];
-  return eco ? "Me dijiste " + eco + ". No había con qué darle." : "Lo supe cuando cruzaste la puerta.";
+  return eco ? "Me dijiste " + eco + ". Con eso me alcanzó." : "Veinte años atrás de la parrilla no se discuten.";
 }
 
 async function compartirTarjeta(r){
@@ -4944,6 +5727,10 @@ function leerCarta(){
 function conectar(){
   chipsCarta();
   $$("[data-ir]").forEach(b => b.addEventListener("click", () => ir(b.dataset.ir)));
+
+  // El modo niños tiene su propia puerta en la portada: si estuviera sólo
+  // adentro del Chef, el padre que viene con dos chicos no lo encuentra.
+  $("#b-landing-kid").addEventListener("click", () => { ir("chef"); pantallaKid(); });
 
   $("#riel-landing").addEventListener("click", e => {
     const b = e.target.closest("[data-cat-ir]");
@@ -5013,7 +5800,7 @@ function conectar(){
 function bofoTest(){
   const R = { ok:0, fallas:[] };
   const chequear = (cond, msg) => { if (cond) R.ok++; else R.fallas.push(msg); };
-  const rnd = mulberry32(20260822);
+  const rnd = mulberry32(20260918);
   const azar = n => Math.floor(rnd() * n);
 
   const pReq  = PREGUNTAS.find(p => p.id === "restricciones");
@@ -5028,7 +5815,7 @@ function bofoTest(){
   // una respuesta válida al azar para cualquier formato
   function respuestaAlAzar(p){
     switch (fmtDe(p)){
-      case "texto":      return azar(4) === 0 ? "" : ["Cabo Polonio","tallarines","el 98","milanesa"][azar(4)];
+      case "texto":      return azar(4) === 0 ? "" : ["milanesa de mi abuela","un asado en Colonia","los fideos del domingo","pescado frito"][azar(4)];
       case "deslizador": return azar(11);
       case "duplas":     return p.pares.map(() => azar(2));
       case "rapido":     return { i: azar(p.opciones.length), tardo: azar(2) === 1 };
@@ -5036,9 +5823,17 @@ function bofoTest(){
     }
   }
 
+  // Qué color de vino corresponde a cada proteína. Es el titular de la
+  // regla de maridaje; el motor afina adentro de eso, pero de acá no se
+  // puede salir: un tinto con tanino sobre unas rabas es un error.
+  const COLOR_ESPERADO = {
+    carne:"tinto", achuras:"tinto", cerdo:"tinto", queso:"tinto",
+    pescado:"blanco", mariscos:"blanco", pollo:"blanco", vegetal:"rosado"
+  };
+
   function correr(modo, vueltas){
-    const principales = new Set();
-    let corridas = 0;
+    const principales = new Set(), entradas = new Set();
+    let corridas = 0, conVino = 0, conPunto = 0;
 
     setsRestriccion.forEach(sr => {
       for (let v = 0; v < vueltas; v++){
@@ -5054,15 +5849,33 @@ function bofoTest(){
         chequear(!!r, `[${modo}] recomendar() no devolvió nada`);
         if (!r) return;
         principales.add(r.principal.id);
+        if (r.entrada) entradas.add(r.entrada.id);
 
-        const todos = [r.principal, r.bebida, r.postre].concat(r.alternativas);
+        const todos = [r.principal, r.bebida, r.postre]
+          .concat(r.alternativas).concat(r.entrada ? [r.entrada] : []);
+
         chequear(!!r.principal && !!r.bebida && !!r.postre,
           `[${modo}] veredicto incompleto`);
+        // La entrada es el cambio de esta versión: si falta, falló lo que
+        // vinimos a hacer. Sólo se perdona cuando los filtros duros no
+        // dejaron nada con qué empezar.
+        const hayConQue = MENU.some(p => !esNino(p) && empieza(p) && pasaFiltrosDuros(p, r.filtros));
+        chequear(!!r.entrada || !hayConQue, `[${modo}] no hay entrada y sí había con qué`);
+        if (r.entrada){
+          chequear(empieza(r.entrada), `[${modo}] "${r.entrada.nombre}" no es algo con que empezar`);
+          chequear(r.entrada.id !== r.principal.id, `[${modo}] la entrada y el plato son el mismo`);
+        }
+
+        // El menú de niños no puede aparecer NUNCA en el veredicto de un
+        // adulto. Es la regla que pidió el local con todas las letras.
+        todos.forEach(x => chequear(!esNino(x),
+          `[${modo}] "${x.nombre}" es del menú de niños y salió para un adulto`));
+
         chequear(r.alternativas.length === 2, `[${modo}] faltan alternativas`);
         chequear(r.alternativas.length < 2 ||
                  r.alternativas[0].categoria !== r.alternativas[1].categoria,
           `[${modo}] las dos alternativas son de la misma categoría`);
-        chequear(r.ecos.filter(e => e.eco !== "que tu cuerpo acepta todo").length >= 2,
+        chequear(r.ecos.filter(e => e.eco !== "que comés de todo").length >= 2,
           `[${modo}] el veredicto no tiene respuestas concretas que citar`);
         EJES.forEach(e => chequear(r.vector[e] >= 0 && r.vector[e] <= 10,
           `[${modo}] eje ${e} fuera de rango: ${r.vector[e]}`));
@@ -5076,13 +5889,100 @@ function bofoTest(){
           if (ex.contiene) todos.forEach(x => ex.contiene.forEach(ing =>
             chequear(!x.contiene.includes(ing), `[${modo}] "${x.nombre}" contiene ${ing}`)));
         });
+
+        // ── EL MARIDAJE ───────────────────────────────────────────────
+        if (r.esVino){
+          conVino++;
+          chequear(!!r.bebida.vino, `[${modo}] el vino recomendado no tiene ficha de vino`);
+          chequear(!!r.razonBebida, `[${modo}] el vino salió sin explicar por qué`);
+          // salvo que la persona haya pedido un color con todas las letras
+          const forzado = r.filtros.prefBebida === "tinto" || r.filtros.prefBebida === "blanco";
+          const esperado = COLOR_ESPERADO[r.principal.proteina];
+          if (!forzado && esperado)
+            chequear(r.bebida.vino.color === esperado ||
+                     (esperado === "rosado" && r.bebida.vino.color !== "tinto"),
+              `[${modo}] a "${r.principal.nombre}" (${r.principal.proteina}) le tocó un ${r.bebida.vino.color}`);
+        }
+        // nadie que dijo que no toma se lleva alcohol
+        if (sr.some(i => (pReq.opciones[i].excluye || {}).contiene &&
+                         pReq.opciones[i].excluye.contiene.indexOf("alcohol") !== -1)){
+          chequear(r.bebida.contiene.indexOf("alcohol") === -1,
+            `[${modo}] le dieron alcohol a alguien que dijo que no toma`);
+          chequear(!r.vinoSugerido, `[${modo}] le sugirieron vino a alguien que no toma`);
+        }
+
+        // ── EL PUNTO DE LA CARNE ──────────────────────────────────────
+        chequear(!r.pidePunto || r.principal.categoria === "parrilla",
+          `[${modo}] se pidió el punto de algo que no es de la parrilla`);
+        if (r.pidePunto){
+          conPunto++;
+          PUNTOS.forEach(pt => {
+            const copia = recomendar(resp, preguntas);
+            aplicarPunto(copia, pt.id);
+            chequear(copia.punto === pt.id, `[${modo}] el punto no quedó guardado`);
+            chequear(copia.total > 0, `[${modo}] la cuenta se rompió al elegir el punto`);
+            if (pt.id === "cocido" && SUFRE_COCIDO.indexOf(copia.principal.id) !== -1)
+              chequear(!!copia.cambioSugerido,
+                `[${modo}] "${copia.principal.nombre}" bien cocido y no avisó nada`);
+            if (copia.cambioSugerido)
+              chequear(SUFRE_COCIDO.indexOf(copia.cambioSugerido.plato.id) === -1,
+                `[${modo}] ofreció cambiar a otro corte que también sufre`);
+          });
+        }
+
+        // la cuenta es la suma de lo que se muestra, sin sorpresas
+        const suma = (r.entrada ? r.entrada.precio : 0) + r.principal.precio +
+                     r.bebida.precio + r.postre.precio;
+        chequear(r.total === suma, `[${modo}] la cuenta no cierra: ${r.total} vs ${suma}`);
       }
     });
-    return { corridas, distintos: principales.size };
+    return { corridas, distintos: principales.size, entradas: entradas.size, conVino, conPunto };
   }
 
-  const ex = correr("express", 26);
-  const co = correr("completo", 26);
+  const ex = correr("express", 22);
+  const co = correr("completo", 22);
+
+  // ── EL CHEF KID ──────────────────────────────────────────────────
+  // Dos reglas y las dos son duras: sólo recomienda del menú de niños, y
+  // respeta lo que el chico (o el padre) dijo que no puede comer.
+  const pReqN  = PREGUNTAS_NINOS.find(p => p.fija);
+  const iTodoN = pReqN.opciones.findIndex(o => o.exclusiva);
+  const noExclN = pReqN.opciones.map((o,i) => o.exclusiva ? -1 : i).filter(i => i >= 0);
+  const setsN = [[iTodoN]];
+  for (let m = 1; m < (1 << noExclN.length); m++)
+    setsN.push(noExclN.filter((_, b) => m & (1 << b)));
+
+  let corridasKid = 0;
+  const platosKid = new Set();
+  setsN.forEach(sr => {
+    for (let v = 0; v < 12; v++){
+      const preguntas = tandaNino(v);
+      const resp = { [pReqN.id]: sr };
+      preguntas.filter(p => !p.fija).forEach(p => { resp[p.id] = azar(p.opciones.length); });
+      const rk = recomendarNino(resp, preguntas);
+      corridasKid++;
+      chequear(!!rk, "[kid] el Chef Kid no devolvió nada");
+      if (!rk) return;
+      platosKid.add(rk.principal.id);
+
+      [rk.principal, rk.bebida, rk.postre].filter(Boolean).forEach(x => {
+        chequear(esNino(x), `[kid] "${x.nombre}" no es del menú de niños`);
+        chequear(x.contiene.indexOf("alcohol") === -1, `[kid] "${x.nombre}" tiene alcohol`);
+      });
+      chequear(rk.principal.rol === "principal", "[kid] el plato principal no es un principal");
+      // el filtro duro vale igual que con un adulto, y acá más
+      if (!rk.aviso) sr.forEach(i => {
+        const exN = pReqN.opciones[i].excluye;
+        if (!exN) return;
+        [rk.principal, rk.bebida, rk.postre].filter(Boolean).forEach(x => {
+          if (exN.requiere) chequear(x.apto[exN.requiere],
+            `[kid] "${x.nombre}" no cumple ${exN.requiere}`);
+          if (exN.contiene) exN.contiene.forEach(ing =>
+            chequear(!x.contiene.includes(ing), `[kid] "${x.nombre}" contiene ${ing}`));
+        });
+      });
+    }
+  });
 
   // ── la tanda no se repite: dos corridas seguidas casi no comparten ──
   const antes = MemoriaPreg.cache;
@@ -5115,11 +6015,12 @@ function bofoTest(){
   MemoriaPreg.cache = antes;
 
   // ── LA MESA ──────────────────────────────────────────────────────
-  // Lo que va al medio tiene que servirle a TODOS, y el plato de cada
-  // uno tiene que respetar lo suyo. Una mesa mixta es donde esto se
-  // rompe: un vegetariano y un celíaco sentados juntos.
+  // Lo que va al medio tiene que servirle a TODOS, y el plato de cada uno
+  // tiene que respetar lo suyo. Una mesa mixta es donde esto se rompe: un
+  // vegetariano y un celíaco sentados juntos, y ahora además dos chicos.
   const sabores = PREGUNTAS.filter(q => q.tipo === "sabor" && q.peso === "alto" && fmtDe(q) === "opciones");
-  let mesasProbadas = 0;
+  chequear(sabores.length >= 4, "quedan muy pocas preguntas para repartir en la mesa");
+  let mesasProbadas = 0, mesasConNinos = 0;
   setsRestriccion.forEach(sr => {
     for (let n = 2; n <= 6; n += 2){
       const comensales = [];
@@ -5135,17 +6036,30 @@ function bofoTest(){
           vector: vectorUsuario(respuestas, preguntas)
         });
       }
-      const m = recomendarMesa(comensales);
+      // la mitad de las mesas viene con chicos
+      const cuantosNinos = (n / 2) % 2 === 0 ? 2 : 0;
+      const ninos = Array.from({ length: cuantosNinos }, (_, k) => {
+        const preguntas = tandaNino(k).slice(0, 3);
+        const respuestas = { [pReqN.id]: setsN[azar(setsN.length)] };
+        preguntas.filter(p => !p.fija).forEach(p => { respuestas[p.id] = azar(p.opciones.length); });
+        return { nombre:"N" + k, respuestas, preguntas, salteado:false };
+      });
+
+      const m = recomendarMesa(comensales, ninos);
       mesasProbadas++;
+      if (cuantosNinos) mesasConNinos++;
 
       chequear(m.entradas.length >= 1, `[mesa ${n}] no hay nada para el medio`);
       chequear(!!m.bebida, `[mesa ${n}] la mesa se quedó sin bebida`);
       chequear(m.postres.length >= 1, `[mesa ${n}] la mesa se quedó sin postre`);
       chequear(m.platos.length === n, `[mesa ${n}] faltan platos individuales`);
       chequear(m.porCabeza > 0 && m.total > 0, `[mesa ${n}] la cuenta dio cero`);
+      chequear(m.platosNinos.length === cuantosNinos, `[mesa ${n}] faltan los platos de los chicos`);
 
       // lo compartido pasa los filtros de todos, sin excepción
-      const compartido = m.entradas.concat(m.postres).concat(m.bebida ? [m.bebida] : []);
+      const compartido = m.entradas.concat(m.postres)
+        .concat(m.bebida ? [m.bebida] : [])
+        .concat(m.vino ? [m.vino.plato] : []);
       comensales.forEach((c, k) => {
         compartido.forEach(x => chequear(pasaFiltrosDuros(x, c.filtros),
           `[mesa ${n}] "${x.nombre}" al medio y el comensal ${k} no lo puede comer`));
@@ -5153,11 +6067,20 @@ function bofoTest(){
         if (mio) chequear(pasaFiltrosDuros(mio, c.filtros),
           `[mesa ${n}] al comensal ${k} le tocó "${mio.nombre}", que no puede comer`);
       });
+      // nada del menú de niños al medio de la mesa de grandes
+      compartido.forEach(x => chequear(!esNino(x),
+        `[mesa ${n}] "${x.nombre}" es del menú de niños y está al medio`));
+      // y a cada chico, lo suyo y sólo lo suyo
+      m.platosNinos.forEach((x, k) => {
+        chequear(!!x.pedido, `[mesa ${n}] el chico ${k} se quedó sin plato`);
+        if (x.pedido) chequear(esNino(x.pedido.principal),
+          `[mesa ${n}] al chico ${k} le tocó "${x.pedido.principal.nombre}", que no es del menú de niños`);
+      });
     }
   });
 
   // ── dos personas muy distintas comen distinto ──
-  const tandaFija = PREGUNTAS.filter(p => p.modos.indexOf("completo") !== -1);
+  const tandaFija = PREGUNTAS.filter(p => p.modos && p.modos.indexOf("completo") !== -1);
   const A = {}, B = {};
   tandaFija.forEach(p => {
     A[p.id] = p.id === pReq.id ? [iTodo] : (fmtDe(p) === "duplas" ? p.pares.map(() => 0)
@@ -5169,12 +6092,34 @@ function bofoTest(){
   chequear(rA.principal.id !== rB.principal.id,
     "dos personas opuestas recibieron el mismo plato");
 
+  // ── el que pide carne recibe carne, y con queso adelante ──
+  const pProt = PREGUNTAS.find(p => p.id === "proteina");
+  const iCarne = pProt.opciones.findIndex(o => o.afin && o.afin.proteina === "carne");
+  const iPescado = pProt.opciones.findIndex(o => o.afin && o.afin.proteina === "pescado");
+  const base = { restricciones:[iTodo] };
+  const soloProt = [pReq, pProt];
+  const rCarne = recomendar(Object.assign({}, base, { proteina:iCarne }), soloProt);
+  const rPescado = recomendar(Object.assign({}, base, { proteina:iPescado }), soloProt);
+  chequear(rCarne.principal.proteina === "carne",
+    `el que dijo carne recibió ${rCarne.principal.proteina}`);
+  chequear(!rCarne.entrada || rCarne.entrada.proteina === "queso",
+    `antes de la carne no fue queso sino ${rCarne.entrada && rCarne.entrada.proteina}`);
+  chequear(!rCarne.esVino || rCarne.bebida.vino.color === "tinto",
+    "con carne el vino no salió tinto");
+  chequear(["pescado","mariscos"].indexOf(rPescado.principal.proteina) !== -1,
+    `el que dijo pescado recibió ${rPescado.principal.proteina}`);
+  chequear(!rPescado.esVino || rPescado.bebida.vino.color === "blanco",
+    "con pescado el vino no salió blanco");
+
   const linea = [
     `banco: ${PREGUNTAS.length} preguntas (${PREGUNTAS.filter(p => p.tipo !== "filtro").length} rotativas)`,
-    `rápido:   ${ex.corridas} tandas, ${ex.distintos} platos distintos`,
-    `completo: ${co.corridas} tandas, ${co.distintos} platos distintos`,
+    `carta: ${MENU.length} platos · ${MENU.filter(esVino).length} vinos · ${MENU.filter(esNino).length} del menú de niños`,
+    `rápido:   ${ex.corridas} tandas, ${ex.distintos} platos y ${ex.entradas} entradas distintas`,
+    `completo: ${co.corridas} tandas, ${co.distintos} platos y ${co.entradas} entradas distintas`,
+    `veredictos con vino: ${ex.conVino + co.conVino} · con punto de carne: ${ex.conPunto + co.conPunto}`,
+    `chef kid: ${corridasKid} corridas, ${platosKid.size} platos distintos`,
     `repetidas entre corridas seguidas: ${repetidas}`,
-    `mesas armadas: ${mesasProbadas}`,
+    `mesas armadas: ${mesasProbadas} (${mesasConNinos} con chicos)`,
     `checks OK: ${R.ok}`,
     R.fallas.length ? `FALLAS: ${R.fallas.length}` : "FALLAS: 0 — todo verde"
   ].join("\n");
@@ -5185,7 +6130,6 @@ function bofoTest(){
   return { ok: R.ok, fallas: R.fallas, resumen: linea };
 }
 window.bofoTest = bofoTest;
-
 /* ── ARRANQUE ──────────────────────────────────────────────────── */
 conectar();
 if (/[?&]test=1/.test(location.search)) bofoTest();
