@@ -41,6 +41,9 @@ COLUMNAS = [
 ] + [(n, 11) for _, n in ALERGENOS] + [("Picante", 10), ("Notas / correcciones", 34)]
 
 
+PROVISORIAS = {"vinos", "ninos"}
+
+
 def leer_menu():
     """Saca el array MENU de index.html sin ejecutar JavaScript."""
     src = FUENTE.read_text(encoding="utf-8")
@@ -61,7 +64,13 @@ def leer_menu():
     crudo = re.sub(r"(?m)//.*$", "", crudo)
     crudo = re.sub(r"([{,]\s*)([A-Za-z_][A-Za-z0-9_]*)\s*:", r'\1"\2":', crudo)  # claves con comillas
     crudo = re.sub(r",(\s*[}\]])", r"\1", crudo)              # comas colgadas
-    return json.loads(crudo)
+    menu = json.loads(crudo)
+    # Los vinos y el menú de niños que hay en el código son provisorios:
+    # nombres y precios inventados hasta que el local nos pase los suyos.
+    # Mandárselos en la planilla para que los "corrijan" sería pedirles que
+    # revisen algo que nos inventamos nosotros. Esas dos secciones se piden
+    # aparte, en el documento.
+    return [p for p in menu if p["categoria"] not in PROVISORIAS]
 
 
 def si_no(v):

@@ -1,0 +1,31 @@
+FOTOS DE LOS PLATOS
+===================
+
+Acá van las fotos. Una por plato, y el nombre del archivo tiene que ser el
+id del plato más .jpg:
+
+    img/platos/entrana.jpg
+    img/platos/pizza-muzza.jpg
+    img/platos/chaja.jpg
+
+Los ids están en index.html, en el campo `id:` de cada plato. La planilla
+de clasificación que se le manda al local los trae en la primera columna.
+
+No hay que tocar nada de código. La foto que está aparece; la que no está
+no deja ningún hueco: la carta se ve exactamente igual que sin fotos. Se
+pueden ir subiendo de a poco, en el orden que el local quiera.
+
+RECOMENDACIONES
+---------------
+· Horizontal, aproximadamente 4:3 o 16:10.
+· 1200 px de ancho alcanza y sobra. Más grande sólo hace que tarde.
+· Menos de 200 KB por foto. Son 137 platos: si cada una pesa 2 MB, la
+  carta no abre nunca con la señal que hay en la playa.
+· Luz natural y el plato de frente. La foto del plato real vende; la foto
+  de banco de imágenes se nota y resta.
+
+POR DÓNDE EMPEZAR
+-----------------
+No hacen falta las 137 para que se vea bien. Con estas alcanza para que la
+carta se sienta completa, y son justo las que conviene empujar:
+las entradas, los cortes de la parrilla, los vinos y los postres.
