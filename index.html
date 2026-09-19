@@ -4355,8 +4355,10 @@ function elegir(p, i){
       sel = sel.indexOf(i) !== -1 ? sel.filter(j => j !== i) : sel.concat(i);
     }
     S.respuestas[p.id] = sel;
-    $$(".opcion", panel()).forEach((b, j) => {
-      const on = sel.indexOf(j) !== -1;
+    // El índice sale del botón y no de su posición en el DOM: ahora que
+    // las opciones imposibles no se dibujan, las dos cosas ya no coinciden.
+    $$(".opcion", panel()).forEach(b => {
+      const on = sel.indexOf(parseInt(b.dataset.i, 10)) !== -1;
       b.setAttribute("aria-pressed", String(on));
       const m = $(".opcion__marca", b);
       if (m) m.textContent = on ? "✓" : "";
@@ -4572,8 +4574,8 @@ function elegirMultipleKid(p, i){
     sel = sel.indexOf(i) !== -1 ? sel.filter(j => j !== i) : sel.concat(i);
   }
   K.respuestas[p.id] = sel;
-  $$(".opcion", panel()).forEach((b, j) => {
-    const on = sel.indexOf(j) !== -1;
+  $$(".opcion", panel()).forEach(b => {
+    const on = sel.indexOf(parseInt(b.dataset.i, 10)) !== -1;
     b.setAttribute("aria-pressed", String(on));
     const m = $(".opcion__marca", b);
     if (m) m.textContent = on ? "✓" : "";
@@ -5204,8 +5206,8 @@ function pintarPreguntaNino(){
         s = s.indexOf(i) !== -1 ? s.filter(j => j !== i) : s.concat(i);
       }
       c.respuestas[p.id] = s;
-      $$(".opcion", panel()).forEach((x, j) => {
-        const on = s.indexOf(j) !== -1;
+      $$(".opcion", panel()).forEach(x => {
+        const on = s.indexOf(parseInt(x.dataset.i, 10)) !== -1;
         x.setAttribute("aria-pressed", String(on));
         const m = $(".opcion__marca", x);
         if (m) m.textContent = on ? "✓" : "";
@@ -5311,8 +5313,8 @@ function elegirMultiple(c, p, k){
     sel = sel.indexOf(k) !== -1 ? sel.filter(j => j !== k) : sel.concat(k);
   }
   c.respuestas[p.id] = sel;
-  $$(".opcion", panel()).forEach((b, j) => {
-    const on = sel.indexOf(j) !== -1;
+  $$(".opcion", panel()).forEach(b => {
+    const on = sel.indexOf(parseInt(b.dataset.i, 10)) !== -1;
     b.setAttribute("aria-pressed", String(on));
     const m = $(".opcion__marca", b);
     if (m) m.textContent = on ? "✓" : "";

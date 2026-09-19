@@ -1,57 +1,101 @@
 # BO | Fomento — carta digital + Chef recomendador
 
-Demo comercial. Un solo archivo: `index.html`. Se abre con doble clic, sin
-servidor, sin `npm install`, sin backend y sin llamadas a ninguna API.
-Lo único que sale a la red son las fuentes de Google Fonts, y si no cargan
-el sitio se ve igual de bien con las tipografías de sistema.
+Demo comercial. `index.html` se abre con doble clic, sin servidor, sin
+`npm install`, sin backend y sin llamadas a ninguna API. Al lado va la
+carpeta `img/`, que es donde vive lo único que no está adentro del archivo:
+las fotos de los platos. Lo demás que sale a la red son las fuentes de
+Google Fonts, y si no cargan el sitio se ve igual de bien con las
+tipografías de sistema.
 
 ## Qué hay adentro
 
 **La carta.** Categorías reales del local, búsqueda por texto y filtros
 rápidos (vegetariano, sin TACC, para compartir). Cada plato con nombre,
-descripción, precio en pesos uruguayos y sus etiquetas a la vista.
+descripción, precio en pesos uruguayos, sus etiquetas y su foto.
 
-**El Chef.** Una experiencia de chat que termina recomendando un plato
-principal, dos alternativas, una bebida y un postre. Ese combo es el que
-sube el ticket promedio.
+**El Chef.** Una experiencia de chat que termina armando la mesa entera:
+entrada, plato principal, dos alternativas, algo para tomar y el postre.
+El orden de la pantalla es el orden en que las cosas llegan a la mesa, y
+no es casualidad: una entrada que aparece abajo, al lado del postre, no se
+pide.
 
-No es un test que se hace una vez. El banco tiene 35 preguntas y cada
-corrida arma su propia tanda con las que la persona vio menos veces, así
-que dos corridas seguidas sólo comparten los tres filtros: las otras nueve
-son distintas. La rotación se guarda en el celular.
+No es un test que se hace una vez. El banco tiene 29 preguntas rotativas y
+cada corrida arma su propia tanda con las que la persona vio menos veces,
+así que dos corridas seguidas sólo comparten los tres filtros. La rotación
+se guarda en el celular.
 
 Hay seis formatos de pregunta: botones, grilla de emojis, deslizador con
 el chef comentando mientras arrastrás, "elegí rápido" con tres segundos de
 reloj, ráfagas de esto-o-aquello, y campos para escribir. Siempre entra al
 menos un juego por tanda.
 
-Casi ninguna pregunta es sobre comida: son situaciones absurdas en la
-arena, vivencias, y cosas que no le contás a cualquiera. Varias no puntúan
-nada —están para que la persona se abra y para que el chef tenga qué
-citarle— y eso es a propósito.
+**Todas las preguntas son sobre comida.** La mitad son directas —con qué
+te quedás si tenés que elegir una sola cosa, cómo te gusta que llegue la
+comida, hasta dónde llegás con el queso— y la otra mitad son sensoriales
+—qué olor te da hambre de golpe, el primer bocado o el último, cómo queda
+tu plato cuando terminás—. Las directas le dan al motor con qué acertar;
+las sensoriales son las que hacen que la persona se sienta leída.
 
-El nombre es opcional, se pide una sola vez y no sale del celular. Lo que
-la persona escribe el chef se lo devuelve textual en el veredicto, sin
-interpretarlo: es lo que más impacto tiene y lo que menos puede fallar.
+Quedan dos preguntas para escribir a mano. El chef las devuelve textual en
+el veredicto, sin interpretarlas: es lo que más impacto tiene y lo que
+menos puede fallar.
+
+El nombre es opcional, se pide una sola vez y no sale del celular.
 
 **El Vasco.** El chef tiene cara. Es un parrillero dibujado en SVG con la
 misma línea del sello —gorra, bigote, delantal, pinzas— y seis gestos que
-cambian solos según lo que está pasando: saluda, piensa, te guiña cuando
-te carga, se sorprende, duda y remata. Respira y parpadea; con
+cambian solos según lo que está pasando. Respira y parpadea; con
 `prefers-reduced-motion` se queda quieto. Va inline y no con `<use>`,
 porque `<use>` arma un shadow tree y `display` no se hereda: desde afuera
 no se podrían prender y apagar las capas de gesto.
 
-Te carga con tu nombre apenas se lo decís, y en la mesa se ríe de los
-nombres repetidos.
+Su voz es la de alguien que sabe de comida, no la de un comediante: tutea,
+usa tu nombre y es cálido, pero no carga a nadie. El criterio va adelante
+y el chiste, si cae, cae solo.
 
-**Armá la mesa.** Decís cuántos son y el celular da la vuelta: cada uno
-pone su nombre y contesta tres cosas. Al final El Vasco arma el pedido de
-todos —qué va al medio, un plato para cada uno, qué tomar y el postre— con
-el total y cuánto sale por cabeza. Lo que va al medio se filtra contra la
-intersección de las restricciones de la mesa entera: si hay un celíaco,
-nadie comparte algo con gluten. En una mesa de tres o más la bebida es
-para compartir, porque nadie pide cuatro vasos sueltos.
+**La entrada, elegida contra el plato.** No se elige contra la persona: se
+elige contra lo que viene después, que es como se arma una comida. Antes
+de una carne va queso —abre el apetito y aguanta los veinte minutos de
+parrilla—; antes de un pescado va algo del mar y con acidez, para no
+taparlo. El chef lo explica en una línea, que es lo que hace que se pida.
+
+**El punto de la carne.** Cuando el principal es un corte de la parrilla,
+el chef pregunta el punto *después* de recomendarlo. Con la respuesta
+reelige el vino —bien cocida la carne pierde el jugo que ablanda el tanino—
+y, si el corte sufre en ese punto, lo dice antes y ofrece el cambio. No lo
+cambia solo: el que decide qué come es el que se lo va a comer.
+
+**El vino.** Marida de verdad: mira cuerpo, tanino y acidez del vino contra
+lo que pide el plato según su proteína y lo graso que sea. Por eso resuelve
+los casos que "carne tinto, pescado blanco" no cubre. Pasa al frente sólo
+cuando el plato lo pide; si no, va la bebida de siempre y el vino queda al
+costado como sugerencia.
+
+**Armá la mesa.** Decís cuántos grandes son, si vienen chicos, y el celular
+da la vuelta. Al final El Vasco arma el pedido de todos con el total y
+cuánto sale por cabeza. Lo que va al medio se filtra contra la intersección
+de las restricciones de la mesa entera: si hay un celíaco, nadie comparte
+gluten. Y se elige contra la proteína dominante de la mesa: si la mayoría
+pidió carne, al medio va queso. Lo que está al medio no se le sirve además
+a alguien como plato propio.
+
+**Tito, el Chef Kid.** Un personaje aparte, ayudante del Vasco, para los
+chicos de 5 a 10. Recomienda **sólo** del menú de niños, y el Vasco no ve
+ese menú nunca: las dos reglas están verificadas en el autotest. Cinco
+preguntas con dibujos grandes que no exigen saber leer bien, y después tres
+juegos para la espera —pintá tu plato, memotest y el intruso—, sin
+librerías y sin internet.
+
+En la mesa, a cada chico se le pasa el celular para tres preguntas, con
+"elegile vos" siempre a mano. Que haya chicos además baja lo más raro de lo
+que va al medio.
+
+**Las fotos.** Una por plato, en `img/platos/<id>.jpg`. Sumar una foto es
+copiar un archivo. Mientras no está, no deja ningún hueco: la carta se ve
+exactamente como sin fotos. La lógica va al revés de lo obvio —la caja no
+ocupa nada hasta que la foto carga— porque con `loading="lazy"` las de más
+abajo no se piden hasta que alguien scrollea, así que nunca fallan y el
+hueco se quedaba para siempre.
 
 **La tarjeta.** El veredicto termina en una tarjeta pensada para que le
 saquen captura: sello, nombre, plato y una frase corta del Vasco. El botón
@@ -61,8 +105,7 @@ portapapeles.
 **Modo sol y carta hablada.** Un botón sube el contraste a tope y agranda
 el texto para leer con el sol de frente —el problema número uno de una
 carta digital en un parador— y otro hace que el navegador lea la carta en
-voz alta, para el que se olvidó los lentes de cerca. Los dos son locales:
-sin backend y sin costo.
+voz alta. Los dos son locales: sin backend y sin costo.
 
 ## El motor
 
@@ -70,15 +113,35 @@ No hay IA, no hay API, no hay backend. Es scoring local: costo cero por
 usuario, latencia cero, anda con mala señal y es determinístico, así que se
 puede testear y nunca improvisa una barbaridad delante del dueño.
 
-Cinco ejes de 0 a 10 —`contundencia`, `aventura`, `social`, `frescura`,
-`dulce`— que comparten platos, respuestas y persona.
+Seis ejes de 0 a 10 que comparten platos y personas, y que hablan de comida
+y no de estados de ánimo:
 
-1. Los filtros duros (vegetariano, sin gluten, algo que odie) **sacan platos
-   del pool** y no se negocian con ningún puntaje.
+| eje | 0 | 10 |
+|---|---|---|
+| `intensidad` | suave | te pega en la cara |
+| `untuosidad` | seco y limpio | graso, cremoso |
+| `acidez` | redondo | filoso, limpia la boca |
+| `aventura` | lo de siempre | sorprendeme |
+| `social` | mi plato es mío | al medio de la mesa |
+| `dulce` | salado | postre sí o sí |
+
+La `untuosidad` es la que hace el trabajo nuevo: es la que pide una entrada
+de queso antes de una carne y la que decide si el vino necesita tanino.
+
+Cada plato lleva además `proteina` —de eso cuelgan el maridaje y la
+entrada— y `empieza`, porque en una parrilla el provolone es una entrada
+aunque la carta lo imprima bajo parrilla.
+
+1. Los filtros duros (vegetariano, sin gluten, algo que no come) **sacan
+   platos del pool** y no se negocian con ningún puntaje. Además esconden
+   las opciones imposibles de las preguntas siguientes: a un vegetariano no
+   se le ofrece "carne roja".
 2. Los filtros blandos (hambre, presupuesto) no eliminan a nadie: penalizan.
 3. Las respuestas de sabor arman el vector del usuario.
 4. Cada plato se puntúa por distancia euclidiana invertida contra ese vector.
-5. Empate → gana el plato que menos veces salió recomendado; si sigue
+5. Las afinidades declaradas ("me quedo con la carne") suman sin sacar a
+   nadie del pool: es lo que hace que decirlo se note en el resultado.
+6. Empate → gana el plato que menos veces salió recomendado; si sigue
    empatado, aleatorio con semilla.
 
 Las preguntas de tipo `chamuyo` no puntúan nada. Como la tanda cambia en
@@ -86,35 +149,51 @@ cada corrida, el vector se calcula contra el promedio y el tope de las
 preguntas que efectivamente se hicieron, así que tandas distintas siguen
 dando vectores comparables.
 
-El signo, la música y el domingo ideal mueven un eje como máximo ±1 y sobre
-todo alimentan el copy. Si el signo definiera el plato, dos personas
-idénticas con distinto cumpleaños comerían distinto y el truco se cae solo.
-
-### Tres correcciones que no son obvias
+### Cuatro correcciones que no son obvias
 
 - **Centrado por datos.** El 5 de cada eje no está en el cero de la escala:
   está en el promedio de lo que ofrecen las preguntas. Si tres de cuatro
-  opciones suben `frescura`, cualquiera que conteste sale fresco y sólo
-  ganan los platos fríos. Se corrige contra el promedio real, así que sigue
-  andando si se reescriben las preguntas.
+  opciones suben `acidez`, cualquiera que conteste sale ácido y sólo ganan
+  los platos con tomate. Se corrige contra el promedio real, así que sigue
+  andando si se reescriben las preguntas. Medido: el usuario promedio sale
+  entre 4,85 y 5,11 en los seis ejes.
 - **Ganancia.** El tope de un eje es la suma de los máximos de cada
   pregunta, y para alcanzarlo habría que elegir la opción más extrema en
   todas. Sin ganancia el vector vive pegado al 5 y los platos fuertes, que
   viven en los extremos, no ganan nunca.
 - **Pesos por varianza.** Un eje en el que todos los candidatos valen lo
-  mismo no sirve para elegir entre ellos: si todas las milanesas son 0 de
-  dulce, `dulce` sólo agrega distancia muerta. Cada eje se pesa por lo que
-  ese pool realmente varía.
+  mismo no sirve para elegir entre ellos. Cada eje se pesa por lo que ese
+  pool realmente varía.
+- **La acidez pesa la mitad para elegir el plato fuerte.** Una persona no
+  "tiene" un nivel de acidez como lo tiene un plato: tiene una preferencia
+  sobre lo que la acompaña. Medida como distancia, la acidez castigaba
+  sistemáticamente a la parrilla —que es poco ácida por naturaleza— y
+  empujaba a todo el mundo a las pizzas. Donde vale entera es en la entrada
+  y en el vino, que es donde de verdad decide.
 
 ## Autotest
 
 Abrir `index.html?test=1`, o llamar `bofoTest()` desde la consola. Recorre
-1.664 tandas reales —armadas por el mismo selector que ve la gente— con
-respuestas al azar en los seis formatos, y verifica los criterios de
-aceptación: que un vegetariano nunca reciba carne, que ningún camino lleve
-a un veredicto incompleto, que las dos alternativas nunca sean de la misma
-categoría, que el veredicto siempre tenga respuestas concretas para citar,
-y que dos corridas seguidas no repitan ni una sola pregunta rotativa.
+1.408 tandas reales —armadas por el mismo selector que ve la gente—, 96
+mesas y 96 corridas del Chef Kid, con respuestas al azar en los seis
+formatos, y verifica más de 64.000 condiciones. Entre ellas:
+
+- que un vegetariano nunca reciba carne **ni se la vean ofrecer**;
+- que el Vasco nunca recomiende del menú de niños, y Tito nunca salga de él;
+- que siempre haya entrada cuando hay con qué;
+- que el vino maride con la proteína del plato, salvo que la persona haya
+  pedido un color con todas las letras;
+- que el punto de la carne sólo se pregunte sobre cortes de parrilla, y que
+  avise cuando el corte sufre;
+- que lo que va al medio de la mesa lo pueda comer todo el mundo y no se le
+  sirva además a alguien como plato propio;
+- que la cuenta cierre con lo que se muestra en pantalla;
+- que dos corridas seguidas no repitan ni una sola pregunta rotativa.
+
+Para correrlo fuera del navegador —el motor no toca el DOM, así que se
+puede— alcanza con simular `localStorage` y `document`. También hay una
+prueba de humo con Chromium que recorre las pantallas y falla ante
+cualquier excepción o error de consola.
 
 ## Clonarlo a otro restaurante
 
@@ -130,45 +209,62 @@ subsecciones. Tres roles tipográficos, los mismos tres que usa el papel:
 brush en mayúscula para las secciones, script para los remates, y una sans
 limpia para los platos y los precios.
 
-El Chef es la misma carta de noche: el mismo azul, invertido.
+El Chef es la misma carta de noche: el mismo azul, invertido. El mundo de
+Tito es el mismo azul con un acento propio, turquesa, y todo un punto más
+grande.
 
 El único color que no está en la carta impresa es el arena del acento, que
-existe porque un monocromo no puede dar jerarquía a un botón. Va donde hace
-falta y en ningún otro lado.
+existe porque un monocromo no puede dar jerarquía a un botón.
 
 ## Pendiente
 
-Estas secciones de la carta todavía no están cargadas porque no vinieron en
-las imágenes: **vinos** y **milanesas / burgers**. Se agregan al array
-`MENU` con la misma forma que el resto; no hay que tocar nada más.
+Tres cosas están cargadas con **datos inventados**, marcadas como tales en
+el código y en el documento que se le manda al local. No son trabajo
+pendiente nuestro: es material que sólo tiene el local.
+
+- **Vinos.** Once vinos uruguayos típicos con precios inventados. Para que
+  el maridaje sea real hace falta la carta con *nombre, precio por copa y
+  por botella, y cepa*. Sin la cepa no hay maridaje, hay adivinanza.
+- **Menú de niños.** Once platos inventados con precios inventados.
+- **Fotos.** Ninguna todavía. `img/platos/LEEME.txt` tiene las
+  instrucciones para el local.
+
+Falta además cargar la sección de **milanesas / burgers**, que nunca vino en
+las imágenes de la carta.
+
+El desempate por margen está implementado y **vacío a propósito**: cuando el
+local diga qué platos quiere empujar, se cargan en el campo `margen` de cada
+plato. Es una decisión comercial de ellos, no nuestra.
 
 ## docs — lo que se le manda al cliente
 
-`docs/siguientes-pasos-bo-fomento.pdf` es el documento que se entrega **después
-de la demo**: qué necesitamos de ellos para pasar de la demo al sitio andando
-—carta completa, descripciones, clasificación de los platos, logo, dominio,
-datos del local—, el cronograma relativo a la entrega del material, las
-funcionalidades que se pueden sumar a pedido y lo acordado. Tiene un recuadro
-en la portada para completar con lo que se defina en la reunión: nombre del
-genio, cómo habla, dominio y contacto para cambios.
+`docs/cambios-reunion-bo-fomento.pdf` es el documento que se entrega
+**después de la reunión de cambios**: qué se pidió, cómo quedó cada cosa,
+qué es provisorio y qué necesitamos de ellos para sacarlo de provisorio.
 
-Se escribe en `docs/siguientes-pasos-bo-fomento.html` —un solo archivo, con las
-fuentes incrustadas, así se imprime igual sin internet— y se convierte con:
+`docs/siguientes-pasos-bo-fomento.pdf` es el anterior, el de después de la
+demo: qué necesitamos para pasar de la demo al sitio andando, el cronograma
+y lo acordado.
+
+Los dos se escriben en HTML —un solo archivo, con las fuentes incrustadas,
+así se imprimen igual sin internet— y se convierten con:
 
 ```
 npm install puppeteer-core
-node docs/imprimir.js
+node docs/imprimir.js                          # todos
+node docs/imprimir.js cambios-reunion-bo-fomento   # uno solo
 ```
 
 `docs/planilla-clasificacion-bo-fomento.xlsx` es la planilla que se adjunta:
-los 137 platos ya cargados, con nuestra lectura preliminar de la carta impresa,
-para que el local corrija vegetariano, vegano, sin gluten, para compartir,
-alérgenos y precios. Se regenera desde el `MENU` de `index.html` con:
+los 137 platos ya cargados, con nuestra lectura preliminar de la carta
+impresa, para que el local corrija vegetariano, vegano, sin gluten, para
+compartir, alérgenos y precios. Se regenera desde el `MENU` de `index.html`
+con:
 
 ```
 pip install openpyxl
 python3 docs/planilla.py
 ```
 
-Lo que el local devuelva en la planilla vuelve al array `MENU`. Los cinco ejes
-de cada plato los cargamos nosotros y no van en la planilla.
+Lo que el local devuelva en la planilla vuelve al array `MENU`. Los seis
+ejes de cada plato los cargamos nosotros y no van en la planilla.
