@@ -238,6 +238,8 @@ Lo pendiente no es trabajo nuestro: son tres cosas que sólo ustedes tienen, y e
         <td>Marida por cepa, cuerpo y tanino, y explica por qué.</td></tr>
     <tr><td>Fotos de los platos en la carta y en el veredicto</td>
         <td>Listas. Se suben a una carpeta y aparecen solas.</td></tr>
+    <tr><td>Que se pueda marcar una alergia</td>
+        <td>Cinco alergias, filtradas duro y con aviso para confirmar en cocina.</td></tr>
     <tr><td>Sacar Candela</td>
         <td>Eliminado del proyecto.</td></tr>
   </tbody>
@@ -419,6 +421,54 @@ medida que las suben, en el orden que quieran.</p>
 <p>Si no van a sacar las 137 de una, conviene empezar por las entradas, los cortes de la parrilla,
 los vinos y los postres: son las que más se piden y las que el chef muestra en el veredicto.</p>
 
+<!-- ═══ ALERGIAS ═══ -->
+<h2 class="salto">Alergias</h2>
+<p class="bajada">Lo único de todo el sitio donde equivocarse tiene consecuencias de verdad.</p>
+<svg class="zigzag" aria-hidden="true"><use href="#zigzag"/></svg>
+
+<p>La primera pregunta ahora separa dos cosas que antes iban juntas: lo que la persona
+<strong>elige</strong> no comer y lo que <strong>no puede</strong> comer. Se marcan en la misma
+pantalla, porque el cliente las tiene en la misma cabeza, pero se ven distinto y el sitio las
+trata distinto.</p>
+
+<table>
+  <thead><tr><th>Se puede marcar</th><th class="num">Platos que saca de la carta</th></tr></thead>
+  <tbody>
+    <tr><td>Celiaquía o sin gluten</td><td class="num">todo lo que no esté marcado sin TACC</td></tr>
+    <tr><td>Alergia a los lácteos</td><td class="num">60 de 159</td></tr>
+    <tr><td>Alergia al huevo</td><td class="num">20 de 159</td></tr>
+    <tr><td>Alergia a los mariscos</td><td class="num">2 de 159</td></tr>
+    <tr><td>Alergia a los frutos secos</td><td class="num">2 de 159</td></tr>
+  </tbody>
+</table>
+
+<p>Con la celiaquía el criterio es el más estricto de todos: no se ofrece lo que <em>parece</em>
+no tener gluten, sino solamente lo que está marcado sin TACC. Es más barato perder una
+sugerencia que mandarle un plato con harina a un celíaco.</p>
+
+<h3>Y el sitio avisa que no alcanza con el sitio</h3>
+<p>Cuando alguien marca una alergia, el veredicto abre con un recuadro que dice qué se filtró y
+<strong>lo manda a confirmarlo con el mozo</strong>. No es una formalidad legal: nosotros sabemos
+lo que dice la carta que cargamos —que es nuestra lectura del papel impreso— y la cocina sabe lo
+que pasa adentro de la olla. Entre esas dos cosas hay una distancia que ningún filtro puede
+cerrar, así que se dice en vez de disimularla.</p>
+
+<p>En <em>Armá la mesa</em> el aviso dice otra cosa, porque la verdad es otra: lo que va al medio
+lo puede comer todo el mundo, pero el plato individual del de al lado no tiene por qué. Prometer
+que la mesa entera está limpia sería mentir.</p>
+
+<div class="caja caja--definir">
+  <p class="caja__titulo">Esto necesita una revisión de la cocina, y es lo más urgente de todo</p>
+  <p>En la carta que cargamos, <strong>los frutos secos figuran en 2 platos de 159</strong>. Eso
+  casi seguro está incompleto: los frutos secos aparecen en salsas, rellenos, ensaladas y postres
+  sin que el nombre del plato los nombre, y son justamente los que provocan las reacciones más
+  graves.</p>
+  <p style="margin-bottom:0">La planilla de clasificación que va adjunta tiene una columna para
+  cada alérgeno. <strong>Es la parte de la planilla que más importa.</strong> Lo que no marquen,
+  el sitio lo va a dar por ausente — y con una alergia, eso deja de ser un error de
+  recomendación.</p>
+</div>
+
 <!-- ═══ EL CHEF KID ═══ -->
 <h2 class="salto">Tito, el chef de los chicos</h2>
 <p class="bajada">Personaje propio, menú propio y juegos para la espera.</p>
@@ -433,6 +483,11 @@ de madera en vez de las pinzas. Mismo trazo y misma paleta, porque es de la mism
 escuchar con el botón de voz que la carta ya tenía. Hace cinco preguntas y ninguna requiere
 saber leer bien: qué es lo que más te gusta del mundo, cómo te gusta la comida, si probás cosas
 nuevas, qué tan grande tenés la panza hoy, y de qué color sería tu comida.</p>
+
+<p>La primera pregunta es la de siempre y es la que importa: qué no puede comer. Está escrita
+para un chico —«no puedo tomar leche», «no puedo comer nueces»— y con un recordatorio de que le
+pregunte al adulto que tiene al lado. Si marca una alergia, el aviso para confirmar con el mozo
+aparece igual, escrito para quien lo está acompañando.</p>
 
 <h3>Dos reglas que no se negocian</h3>
 <ul class="tildes">
@@ -545,15 +600,16 @@ combinaciones reales y verifica los criterios que no se pueden romper:</p>
 
 <table>
   <tbody>
-    <tr><td>Recorridos completos del chef verificados</td><td class="num">1.408</td></tr>
-    <tr><td>Mesas armadas de punta a punta</td><td class="num">96</td></tr>
-    <tr><td>Recorridos del Chef Kid</td><td class="num">96</td></tr>
-    <tr class="total"><td>Comprobaciones, todas en verde</td><td class="num">70.889</td></tr>
+    <tr><td>Recorridos completos del chef verificados</td><td class="num">4.096</td></tr>
+    <tr><td>Mesas armadas de punta a punta</td><td class="num">512</td></tr>
+    <tr><td>Recorridos del Chef Kid</td><td class="num">256</td></tr>
+    <tr class="total"><td>Comprobaciones, todas en verde</td><td class="num">244.213</td></tr>
   </tbody>
 </table>
 
-<p>Entre lo que se verifica en cada corrida: que un vegetariano nunca reciba carne ni se la vean
-ofrecer; que al que dijo que prefiere esquivar algo no se le sirva justo eso; que el Vasco nunca
+<p>Con las alergias, las combinaciones posibles de restricciones pasaron de 32 a 512, y se
+recorren todas. Entre lo que se verifica en cada corrida: que ningún alérgeno marcado aparezca en
+nada de lo recomendado; que un vegetariano nunca reciba carne ni se la vean ofrecer; que al que dijo que prefiere esquivar algo no se le sirva justo eso; que el Vasco nunca
 recomiende del menú de niños y Tito nunca salga de él; que siempre haya una entrada cuando hay
 con qué; que el vino maride con la proteína del plato; que ninguna alternativa sea el mismo
 plato con un agregado; que lo que va al medio de la mesa lo pueda comer todo el mundo y no se le
@@ -563,8 +619,9 @@ pantalla.</p>
 <!-- ═══ CIERRE ═══ -->
 <div class="caja caja--definir">
   <p class="caja__titulo">El próximo paso</p>
-  <p style="margin-bottom:0">Manden la carta de vinos con las cepas, el menú de niños y las
-  primeras fotos. Con eso sale de provisorio y queda listo para publicar.
+  <p style="margin-bottom:0">Manden la planilla con los alérgenos revisados por la cocina, la
+  carta de vinos con las cepas, el menú de niños y las primeras fotos. Con eso sale de
+  provisorio y queda listo para publicar.
   <em class="script">Y el que entra sabiendo lo que va a pedir, igual se lleva una entrada.</em></p>
 </div>
 

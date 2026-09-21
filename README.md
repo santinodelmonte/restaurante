@@ -98,6 +98,25 @@ ocupa nada hasta que la foto carga— porque con `loading="lazy"` las de más
 abajo no se piden hasta que alguien scrollea, así que nunca fallan y el
 hueco se quedaba para siempre.
 
+**Alergias.** La primera pregunta separa lo que la persona elige de lo que
+le hace mal: celiaquía, lácteos, huevo, frutos secos y mariscos se marcan
+aparte, se ven distinto y filtran igual de duro que el resto. Pero además
+encienden un aviso en el veredicto, y eso es lo que importa: el motor sabe
+lo que dice la carta que cargamos —que es nuestra lectura del papel
+impreso— y la cocina sabe lo que pasa adentro de la olla. Entre esas dos
+cosas hay una distancia que ningún filtro puede cerrar, así que se dice y
+se manda a confirmar con el mozo.
+
+En la mesa el aviso dice otra cosa, porque la verdad es otra: lo que va al
+medio pasa los filtros de todos, pero el plato individual del de al lado no
+tiene por qué. Prometer que la mesa entera está limpia sería mentir, y acá
+no se puede.
+
+Marcar una alergia también poda las preguntas que quedaron sin sentido:
+preguntarle a alguien alérgico a los lácteos hasta dónde llega con el queso
+no es sólo perder una pregunta, es decirle que no lo escuchaste dos
+pantallas atrás.
+
 **Lo que me dijiste.** El veredicto abre con las respuestas de la persona
 escritas, y debajo de cada una qué hizo el chef con ella: *«Que el olor a
 brasa te desarma — por eso te llevo a la parrilla y no al horno»*. Va
@@ -106,6 +125,12 @@ demuestra que escuchaste y recién después se dice qué pedir. Al revés
 suena a que la recomendación ya estaba elegida y las preguntas eran
 decorado. Es lo único de la pantalla que la persona no puede atribuir a la
 suerte.
+
+Las consecuencias que afirman un resultado llevan condición y se verifican
+contra el veredicto real: una frase escrita de antemano no sabe qué más
+marcó la persona dos pantallas atrás, así que "la entrada va con queso" no
+se muestra si la entrada no es de queso. Cuando la condición no se cumple,
+el eco se muestra igual, sin la segunda mitad.
 
 **La tarjeta.** El veredicto termina en una tarjeta pensada para que le
 saquen captura: sello, nombre, plato y una frase corta del Vasco. El botón
@@ -193,7 +218,10 @@ dando vectores comparables.
 Abrir `index.html?test=1`, o llamar `bofoTest()` desde la consola. Recorre
 1.408 tandas reales —armadas por el mismo selector que ve la gente—, 96
 mesas y 96 corridas del Chef Kid, con respuestas al azar en los seis
-formatos, y verifica más de 70.000 condiciones. Entre ellas:
+formatos, y verifica más de 240.000 condiciones. Con las alergias, los subconjuntos
+de restricciones posibles pasaron de 32 a 512: se recorren todos, con menos
+vueltas cada uno, para que siga tardando dos segundos y alguien pueda
+abrirlo en el celular. Entre lo que verifica:
 
 - que un vegetariano nunca reciba carne **ni se la vean ofrecer**;
 - que el Vasco nunca recomiende del menú de niños, y Tito nunca salga de él;
@@ -206,6 +234,9 @@ formatos, y verifica más de 70.000 condiciones. Entre ellas:
   sirva además a alguien como plato propio;
 - que ninguna alternativa sea el mismo plato del principal con un agregado;
 - que al que dijo que prefiere esquivar algo no se le sirva justo eso;
+- que ninguna consecuencia mostrada contradiga el veredicto: si el chef
+  dice "te puse queso adelante", la entrada tiene que ser de queso;
+- que nadie reciba como plato propio algo que ya está al medio de su mesa;
 - que de las respuestas citadas, al menos una diga qué hizo el chef con ella;
 - que la cuenta cierre con lo que se muestra en pantalla;
 - que dos corridas seguidas no repitan ni una sola pregunta rotativa.

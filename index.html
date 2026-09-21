@@ -761,6 +761,39 @@ button{ font:inherit; color:inherit; }
   font-size:.72rem; font-weight:700; letter-spacing:.16em; text-transform:uppercase;
 }
 
+/* ── EL AVISO DE ALERGIAS ─────────────────────────────────────────────
+   Esto no es decoración ni un detalle legal: es la única parte de la app
+   donde equivocarse manda a alguien al hospital. El motor sabe lo que
+   dice la carta que cargamos, que es nuestra lectura del papel impreso.
+   La cocina sabe lo que pasa adentro de la olla. Entre esas dos cosas hay
+   una distancia que ningún filtro puede cerrar, así que se dice.
+
+   Se ve distinto de todo lo demás a propósito: no comparte el color del
+   acento ni el de la marca. Si se pareciera a un bloque más del veredicto,
+   se leería como un bloque más del veredicto.                         */
+.alerta{
+  margin:18px 0 0; padding:15px 17px; border-radius:var(--r-md);
+  border:2px solid rgba(242,160,143,.65); background:rgba(242,160,143,.12);
+}
+.alerta__titulo{
+  margin:0 0 7px; font-size:.74rem; font-weight:700; letter-spacing:.14em;
+  text-transform:uppercase; color:#FFC2B4;
+}
+.alerta p{ margin:0; font-size:.94rem; line-height:1.5; color:var(--papel); }
+.alerta b{ color:#FFC2B4; }
+.vista--clara .alerta p{ color:var(--marino); }
+
+/* La misma distinción en la pregunta: una alergia no se marca igual que
+   un gusto, porque no es lo mismo. */
+.opcion--alergia{ border-color:rgba(242,160,143,.55); }
+.opcion--alergia:hover{ border-color:#FFC2B4; background:rgba(242,160,143,.14); }
+.opcion--alergia[aria-pressed="true"]{
+  border-color:#FFC2B4; background:rgba(242,160,143,.20);
+}
+.opcion--alergia[aria-pressed="true"] .opcion__marca{
+  background:#FFC2B4; border-color:#FFC2B4;
+}
+
 /* ── LO QUE ME DIJISTE ────────────────────────────────────────────────
    La evidencia. Cada línea es una respuesta de la persona y, debajo, qué
    hizo el chef con ella. El guion de la izquierda las encadena para que
@@ -1811,19 +1844,46 @@ const PREGUNTAS = [
 /* ══ FILTROS — estos sí se repiten siempre ══════════════════════════ */
 
   { id:"restricciones", tipo:"filtro", grupo:"filtro", modos:["express","completo"], multiple:true,
-    texto:"Antes de empezar: ¿hay algo que no comés?",
-    nota:"Marcá todo lo que corresponda. Esto no se negocia con ninguna recomendación después.",
+    texto:"Antes de empezar: ¿hay algo que no comés o que no podés comer?",
+    nota:"Marcá todo lo que corresponda. Arriba va lo que elegís; abajo, lo que te hace mal. Nada de esto se negocia con ninguna recomendación después.",
     opciones:[
       { texto:"Soy vegetariano", emo:"🥬", excluye:{ requiere:"vegetariano" }, eco:"que sos vegetariano",
+        lleva:"así que no aparece carne en ninguna parte de lo que te propongo",
         chiste:"Anotado. Y no te voy a ofrecer una guarnición haciéndola pasar por plato." },
-      { texto:"Sin gluten", emo:"🌾", excluye:{ requiere:"singluten" }, eco:"que el gluten no te cae",
-        chiste:"La parrilla entera es tuya, así que no vas a perder gran cosa." },
       { texto:"Pescado y mariscos no", emo:"🐟", excluye:{ contiene:["pescado","mariscos"] }, eco:"que del mar no comés nada",
         chiste:"Bien saberlo antes y no después." },
       { texto:"Achuras no", emo:"🫀", excluye:{ contiene:["achuras"] }, eco:"que las achuras no van",
         chiste:"Hay bastante parrilla afuera de las achuras. Seguimos." },
       { texto:"Hoy sin alcohol", emo:"💧", excluye:{ contiene:["alcohol"] }, eco:"que hoy no tomás alcohol",
         chiste:"Perfecto. Para acompañar hay cosas que no son agua sola." },
+
+      /* ── De acá para abajo no son gustos ────────────────────────────
+         Una alergia y una preferencia se marcan en el mismo lugar porque
+         la persona las tiene en la misma cabeza, pero el motor las trata
+         distinto: éstas encienden el aviso del veredicto, que le dice que
+         lo confirme con la cocina. Nosotros sabemos lo que dice la carta;
+         la cocina sabe lo que pasa adentro de la olla.               */
+      { texto:"Celiaquía o sin gluten", emo:"🌾", alergia:"gluten",
+        excluye:{ requiere:"singluten" }, eco:"que el gluten no te cae",
+        lleva:"así que me quedé sólo con lo que está marcado sin TACC, no con lo que parece no tenerlo",
+        chiste:"La parrilla entera es tuya, así que no vas a perder gran cosa." },
+      { texto:"Alergia a los lácteos", emo:"🥛", alergia:"lácteos",
+        excluye:{ contiene:["lacteos"] }, eco:"que sos alérgico a los lácteos",
+        lleva:"y eso saca sesenta platos de la carta, así que lo tuve en cuenta desde el principio",
+        chiste:"Eso cambia bastante la carta. Vamos a trabajar con lo que queda, que es mucho." },
+      { texto:"Alergia al huevo", emo:"🥚", alergia:"huevo",
+        excluye:{ contiene:["huevo"] }, eco:"que sos alérgico al huevo",
+        lleva:"así que quedaron afuera los rebozados y las salsas que lo llevan",
+        chiste:"Anotado. Los rebozados quedan afuera solos." },
+      { texto:"Alergia a los frutos secos", emo:"🥜", alergia:"frutos secos",
+        excluye:{ contiene:["frutos-secos"] }, eco:"que sos alérgico a los frutos secos",
+        lleva:"y con eso conviene que hables con el mozo igual, porque es el que más se esconde",
+        chiste:"Ese es de los que hay que confirmar con la cocina sí o sí. Te lo voy a recordar al final." },
+      { texto:"Alergia a los mariscos", emo:"🦐", alergia:"mariscos",
+        excluye:{ contiene:["mariscos"] }, eco:"que sos alérgico a los mariscos",
+        lleva:"así que no te va a aparecer nada del mar con caparazón",
+        chiste:"Entendido. Del mar hay más cosas que mariscos." },
+
       { texto:"Como de todo", emo:"🍽️", exclusiva:true, excluye:null, eco:"que comés de todo",
         chiste:"Entonces tengo la carta entera para trabajar." }
     ] },
@@ -1838,9 +1898,9 @@ const PREGUNTAS = [
     blandoEje:"intensidad", pesoBlando:0.45,
     marcas:[
       { hasta:1, txt:"Entonces vamos por algo corto y bien hecho.", eco:"que venías a picar y nada más", lleva:"así que fui a algo corto y bien hecho" },
-      { hasta:3, txt:"Picoteo largo. Eso lo resuelvo con la entrada.", eco:"que venías a picotear", lleva:"y eso lo resuelvo sobre todo con la entrada" },
+      { hasta:3, txt:"Picoteo largo. Eso lo resuelvo con la entrada.", eco:"que venías a picotear", lleva:"y eso lo resuelvo sobre todo con la entrada", si:{ hayEntrada:true } },
       { hasta:6, txt:"Hambre de gente normal. Con eso trabajo bien.",  eco:"que traías un hambre normal", lleva:"con eso trabajo cómodo" },
-      { hasta:8, txt:"Bien. Entonces la entrada no es opcional.",      eco:"que venías con hambre en serio", lleva:"entonces la entrada no era opcional" },
+      { hasta:8, txt:"Bien. Entonces la entrada no es opcional.",      eco:"que venías con hambre en serio", lleva:"entonces la entrada no era opcional", si:{ hayEntrada:true } },
       { hasta:10, txt:"Con ese hambre te armo la mesa entera.",        eco:"que te comías la carta entera", lleva:"y con ese hambre te armo la mesa entera" }
     ] },
 
@@ -1850,7 +1910,9 @@ const PREGUNTAS = [
     texto:"Si tuvieras que quedarte con una sola cosa, ¿cuál?",
     opciones:[
       { texto:"Carne roja", emo:"🥩", afin:{ proteina:"carne" },
-        pesos:{ intensidad:+3, untuosidad:+2, acidez:-1 }, eco:"que te quedabas con la carne", lleva:"así que el plato sale de la parrilla y la entrada va con queso",
+        pesos:{ intensidad:+3, untuosidad:+2, acidez:-1 }, eco:"que te quedabas con la carne",
+        lleva:"así que fui a la parrilla y te puse queso adelante",
+        si:{ categoria:"parrilla", entradaProteina:"queso" },
         chiste:"Entonces esto ya tiene dirección. Después te digo con qué la empezamos." },
       { texto:"Pescado", emo:"🐟", afin:{ proteina:"pescado" },
         pesos:{ intensidad:-1, untuosidad:-2, acidez:+3 }, eco:"que te quedabas con el pescado", lleva:"así que el trabajo fino está en lo que te pongo al lado",
@@ -1874,12 +1936,14 @@ const PREGUNTAS = [
     opciones:[
       { texto:"Algo al medio para todos", emo:"🫱", pesos:{ social:+3, untuosidad:+2, intensidad:+1 },
         eco:"que empezabas con algo al medio", lleva:"por eso la mesa arranca con algo para compartir",
+        si:{ hayEntrada:true },
         chiste:"Así se empieza. La cocina tarda y la mesa no puede estar vacía." },
       { texto:"Algo liviano para abrir", emo:"🥬", pesos:{ acidez:+3, untuosidad:-2 },
         eco:"que abrías con algo liviano", lleva:"así llegás con hambre al plato principal",
         chiste:"Bien pensado: así llegás con hambre al plato principal." },
       { texto:"Voy directo al plato", emo:"➡️", pesos:{ social:-2, intensidad:+1 },
         eco:"que ibas directo al plato", lleva:"igual te pongo una entrada al lado, y vas a entender por qué",
+        si:{ hayEntrada:true },
         chiste:"Lo respeto. Igual te voy a poner una entrada al lado, y vas a entender por qué." },
       { texto:"Lo que traigan primero", emo:"🤷", pesos:{ aventura:+2, social:+1 },
         eco:"que comías lo primero que llegara", lleva:"eso me deja elegir a mí, que es como sale mejor",
@@ -1887,17 +1951,19 @@ const PREGUNTAS = [
     ] },
 
   { id:"queso-hasta-donde", tipo:"sabor", peso:"alto", grupo:"grasa", modos:["express","completo"],
+    sobre:"lacteos",
     texto:"Queso: ¿hasta dónde llegás?",
     opciones:[
-      { texto:"Cuanto más derretido, mejor", emo:"🫕", pesos:{ untuosidad:+3, intensidad:+2 },
-        eco:"que el queso lo querías derretido", lleva:"con eso la entrada quedó decidida sola",
+      { texto:"Cuanto más derretido, mejor", emo:"🫕", afin:{ proteina:"queso" },
+        pesos:{ untuosidad:+3, intensidad:+2 },
+        eco:"que el queso lo querías derretido", lleva:"con eso la entrada quedó decidida sola", si:{ entradaProteina:"queso" },
         chiste:"Entonces la entrada ya la tengo elegida." },
       { texto:"Un poco, sin exagerar", emo:"🧀", pesos:{ untuosidad:+1 },
         eco:"que con el queso ibas de a poco", lleva:"así que lo uso para sumar y no para tapar",
         chiste:"Punto medio. Es donde vive casi toda la carta." },
       { texto:"Prefiero que no", emo:"🚫", evita:{ proteina:"queso" },
         pesos:{ untuosidad:-3, acidez:+2 },
-        eco:"que el queso no era lo tuyo", lleva:"así que lo saqué de la mesa, empezando por la entrada",
+        eco:"que el queso no era lo tuyo", lleva:"así que lo saqué de la mesa, empezando por la entrada", si:{ hayEntrada:true, entradaProteinaNo:"queso" },
         chiste:"Anotado. Hay otras maneras de empezar una comida." }
     ] },
 
@@ -2027,7 +2093,7 @@ const PREGUNTAS = [
   { id:"olor", tipo:"sabor", peso:"alto", grupo:"olfato", formato:"grilla", modos:["express","completo"],
     texto:"¿Qué olor te da hambre de golpe? El primero que te tire.",
     opciones:[
-      { emo:"🔥", texto:"Brasa encendida",  pesos:{ intensidad:+3, untuosidad:+1 }, eco:"que el olor a brasa te desarma", lleva:"por eso te llevo a la parrilla y no al horno",
+      { emo:"🔥", texto:"Brasa encendida",  pesos:{ intensidad:+3, untuosidad:+1 }, eco:"que el olor a brasa te desarma", lleva:"por eso te llevo a la parrilla y no al horno", si:{ categoria:"parrilla" },
         chiste:"Ese olor vende más que cualquier carta." },
       { emo:"🥖", texto:"Pan recién hecho", pesos:{ untuosidad:+2, intensidad:-1 }, eco:"que te gana el pan recién hecho", lleva:"entonces lo tuyo es masa y horno de barro",
         chiste:"No conozco a nadie que le diga que no a eso." },
@@ -2468,7 +2534,7 @@ function opcionesElegidas(p, resp){
       Object.keys(p.pesos).forEach(e => { pesos[e] = p.pesos[e] * (v - 5) / 5; });
     }
     return [{ pesos, eco: marca ? marca.eco : null, lleva: marca ? marca.lleva : null,
-              valor: v, marca }];
+              si: marca ? (marca.si || null) : null, valor: v, marca }];
   }
 
   if (f === "duplas"){
@@ -2520,7 +2586,7 @@ function perfilDe(p){
    Blandos: no sacan a nadie, penalizan fuerte.                       */
 function leerFiltros(respuestas, preguntas){
   const f = { requiere: [], excluyeContiene: [], blandos: [],
-              ecos: [], afin: [], evita: [], prefBebida: null };
+              ecos: [], afin: [], evita: [], alergias: [], prefBebida: null };
 
   /* Las afinidades no son filtros: no sacan un solo plato del pool. Son lo
      que hace que decir "carne roja" se note de verdad en el resultado sin
@@ -2552,6 +2618,7 @@ function leerFiltros(respuestas, preguntas){
 
     opcionesElegidas(p, el).forEach(o => {
       if (o.eco) f.ecos.push({ pregunta: p.id, eco: o.eco });
+      if (o.alergia) f.alergias.push(o.alergia);
       if (o.excluye){
         if (o.excluye.requiere) f.requiere.push(o.excluye.requiere);
         if (o.excluye.contiene) f.excluyeContiene.push(...o.excluye.contiene);
@@ -2570,12 +2637,20 @@ function leerFiltros(respuestas, preguntas){
    pregunta de gustos ya sabemos qué sacar de la pantalla. */
 const IMPOSIBLE_SIN_CARNE = ["carne","cerdo","pollo","pescado","mariscos","achuras"];
 
+/* De qué ingrediente depende cada proteína. Sin esta tabla, a alguien
+   alérgico a los lácteos el chef le seguía ofreciendo "queso" como su
+   comida favorita, y después no podía darle un solo plato con queso. */
+const PROTEINA_NECESITA = {
+  carne:["carne"], cerdo:["cerdo"], pollo:["pollo"], pescado:["pescado"],
+  mariscos:["mariscos"], achuras:["achuras"], queso:["lacteos"]
+};
+
 function opcionImposible(o, f){
   if (!f) return false;
   if (o.afin && o.afin.proteina){
     const p = o.afin.proteina;
     if (f.requiere.indexOf("vegetariano") !== -1 && IMPOSIBLE_SIN_CARNE.indexOf(p) !== -1) return true;
-    if (f.excluyeContiene.indexOf(p) !== -1) return true;   // pescado, mariscos, achuras
+    if ((PROTEINA_NECESITA[p] || [p]).some(ing => f.excluyeContiene.indexOf(ing) !== -1)) return true;
   }
   if (o.prefBebida && f.excluyeContiene.indexOf("alcohol") !== -1 &&
       ["tinto","blanco","cerveza"].indexOf(o.prefBebida) !== -1) return true;
@@ -2590,6 +2665,16 @@ function opcionesPosibles(p, f){
   const quedan = todas.filter(x => !opcionImposible(x.o, f));
   // con menos de dos no hay elección posible: mejor mostrarlas todas
   return quedan.length >= 2 ? quedan : todas;
+}
+
+/* Las restricciones abren siempre la tanda, así que en cuanto se
+   contestan se pueden sacar las preguntas que ya no vienen al caso.
+   Preguntarle a alguien alérgico a los lácteos hasta dónde llega con el
+   queso no es sólo perder una pregunta: es decirle que no lo escuchaste
+   dos pantallas atrás. */
+function preguntaSinSentido(p, f){
+  if (!p.sobre || !f) return false;
+  return f.excluyeContiene.indexOf(p.sobre) !== -1;
 }
 
 function pasaFiltrosDuros(plato, f){
@@ -3123,7 +3208,7 @@ function recolectarEcos(respuestas, preguntas){
 
     opcionesElegidas(p, el).forEach(o => {
       if (o.eco) out.push({ id: p.id, tipo: p.tipo, eco: o.eco, lleva: o.lleva || null,
-                            libre: fmtDe(p) === "texto" });
+                            si: o.si || null, libre: fmtDe(p) === "texto" });
     });
   });
   return out;
@@ -3675,7 +3760,7 @@ function recomendarMesa(comensales, ninos){
     vectorMesa[e] = comensales.reduce((a,c) => a + c.vector[e], 0) / comensales.length;
   });
   const filtrosMesa = { requiere:[], excluyeContiene:[], blandos:[],
-                        ecos:[], afin:[], evita:[], prefBebida:null };
+                        ecos:[], afin:[], evita:[], alergias:[], prefBebida:null };
 
   // 3. el principal es de cada uno, con sus propios filtros. Va en dos
   // pasadas: la primera es para saber qué está comiendo la mesa —de eso
@@ -3727,7 +3812,14 @@ function recomendarMesa(comensales, ninos){
   const idsMedio = entradas.map(p => p.id);
   platos = comensales.map((c, k) => {
     const r = recomendar(c.respuestas, c.preguntas, { excluir: idsMedio });
-    return { comensal: c, plato: r ? r.principal : (tentativos[k] ? tentativos[k].principal : null) };
+    if (r) return { comensal: c, plato: r.principal };
+    // Sacando lo del medio no le queda nada: es el caso del celíaco
+    // vegetariano en una parrilla, donde lo único que puede comer ya está
+    // servido al centro. No se le pide dos veces el mismo plato: come de
+    // ahí, y se dice con todas las letras.
+    const suyo = tentativos[k] ? tentativos[k].principal : null;
+    const yaEsta = !!suyo && idsMedio.indexOf(suyo.id) !== -1;
+    return { comensal: c, plato: yaEsta ? null : suyo, comeDelMedio: yaEsta };
   });
 
   // 4. LA BEBIDA. Si la mesa come mayoritariamente una cosa, el vino se
@@ -3795,8 +3887,16 @@ function recomendarMesa(comensales, ninos){
     (vino ? vino.plato.precio * cuantosVinos : 0) +
     postres.reduce((a,p) => a + p.precio, 0);
 
+  // Todas las alergias de la mesa, sin repetir, para el aviso del final.
+  const alergias = [];
+  comensales.concat(platosNinos.map(x => x.pedido ? { filtros: x.pedido.filtros } : null))
+    .filter(Boolean)
+    .forEach(c => (c.filtros.alergias || []).forEach(a => {
+      if (alergias.indexOf(a) === -1) alergias.push(a);
+    }));
+
   const bocas = comensales.length + ninos.length;
-  return { entradas, entradaRazon: perfilMedio.razon, platos, platosNinos,
+  return { entradas, entradaRazon: perfilMedio.razon, platos, platosNinos, alergias,
            bebida, cuantasBebidas, vino, cuantosVinos, postres, total,
            porCabeza: Math.round(total / Math.max(1, bocas)),
            vector: vectorMesa, compartir };
@@ -3835,16 +3935,26 @@ const KID = { nombre: "Tito", corto: "Tito", oficio: "el ayudante del Vasco" };
 const PREGUNTAS_NINOS = [
   { id:"n-restricciones", tipo:"filtro", grupo:"filtro", fija:true, multiple:true,
     texto:"¿Hay algo que no podés comer?",
-    nota:"Si no sabés, preguntale a quien está al lado tuyo.",
+    nota:"Si no sabés, preguntale a quien está al lado tuyo. Esto es importante.",
     opciones:[
       { texto:"Como de todo", emo:"😋", exclusiva:true, excluye:null, eco:"que comés de todo",
         chiste:"¡Así me gusta! Entonces te puedo dar lo mejor que tengo." },
       { texto:"No como carne", emo:"🥦", excluye:{ requiere:"vegetariano" }, eco:"que no comés carne",
         chiste:"Dale, tengo cosas ricas sin carne." },
-      { texto:"Sin harina", emo:"🌾", excluye:{ requiere:"singluten" }, eco:"que no podés comer harina",
-        chiste:"Tranqui, algo rico te voy a encontrar igual." },
       { texto:"Pescado no", emo:"🐠", excluye:{ contiene:["pescado"] }, eco:"que el pescado no te gusta",
-        chiste:"Ningún problema. Nos olvidamos del pescado." }
+        chiste:"Ningún problema. Nos olvidamos del pescado." },
+      { texto:"No puedo comer harina", emo:"🌾", alergia:"gluten",
+        excluye:{ requiere:"singluten" }, eco:"que no podés comer harina",
+        chiste:"Tranqui, algo rico te voy a encontrar igual." },
+      { texto:"No puedo tomar leche", emo:"🥛", alergia:"lácteos",
+        excluye:{ contiene:["lacteos"] }, eco:"que no podés comer nada con leche",
+        chiste:"Dale, lo tengo en cuenta para todo." },
+      { texto:"No puedo comer huevo", emo:"🥚", alergia:"huevo",
+        excluye:{ contiene:["huevo"] }, eco:"que no podés comer huevo",
+        chiste:"Anotado. Eso lo saco de todo." },
+      { texto:"No puedo comer nueces", emo:"🥜", alergia:"frutos secos",
+        excluye:{ contiene:["frutos-secos"] }, eco:"que no podés comer nueces",
+        chiste:"Bien avisado. Eso se lo decimos también al mozo." }
     ] },
 
   { id:"n-favorito", tipo:"sabor", grupo:"gusto", formato:"grilla",
@@ -4201,7 +4311,7 @@ function cuerpoOpciones(p, pie){
   return `<div class="opciones ${p.compacta ? "" : "opciones--largas"}" role="group" aria-label="${esc(p.texto)}">
       ${opcionesPosibles(p, S.f).map(({ o, i }) => {
         const on = p.multiple ? yaMult.indexOf(i) !== -1 : ya === i;
-        return `<button class="opcion" data-i="${i}" aria-pressed="${on}">
+        return `<button class="opcion ${o.alergia ? "opcion--alergia" : ""}" data-i="${i}" aria-pressed="${on}">
           ${p.multiple ? `<span class="opcion__marca" aria-hidden="true">${on ? "✓" : ""}</span>` : ""}
           ${o.emo ? `<span aria-hidden="true" style="flex:none;font-size:1.2rem;line-height:1">${o.emo}</span>` : ""}
           <span>${esc(o.texto)}</span>
@@ -4416,6 +4526,11 @@ async function avanzar(p){
     chat.appendChild(eco);
     await esperar(240);
   }
+
+  // Recién contestada una pregunta, lo que sigue puede haber quedado sin
+  // sentido. Se poda antes de avanzar, no después de mostrarla.
+  const fAhora = leerFiltros(S.respuestas, S.preguntas);
+  S.preguntas = S.preguntas.filter((q, k) => k <= S.i || !preguntaSinSentido(q, fAhora));
 
   S.i++;
   if (S.i >= S.preguntas.length){ await pintarVeredicto(); return; }
@@ -4643,6 +4758,7 @@ async function pintarVeredictoKid(){
 
   panel().innerHTML = `<div class="veredicto reveal">
     ${r.aviso ? `<p class="pregunta__nota" style="color:var(--acento)">${esc(r.aviso)}</p>` : ""}
+    ${bloqueAlergias(r.filtros.alergias, "nino")}
     <div class="presenta">
       ${titoHTML("tito--grande", "festeja")}
       <div class="presenta__globo">
@@ -5266,7 +5382,7 @@ function pintarPreguntaMesa(){
       ${opcionesPosibles(p, f).map(({ o, i: k }) => {
         const sel = Array.isArray(c.respuestas[p.id]) ? c.respuestas[p.id] : [];
         const on = p.multiple ? sel.indexOf(k) !== -1 : c.respuestas[p.id] === k;
-        return `<button class="opcion" data-i="${k}" aria-pressed="${on}">
+        return `<button class="opcion ${o.alergia ? "opcion--alergia" : ""}" data-i="${k}" aria-pressed="${on}">
           ${p.multiple ? `<span class="opcion__marca" aria-hidden="true">${on ? "✓" : ""}</span>` : ""}
           ${o.emo ? `<span aria-hidden="true" style="flex:none;font-size:1.2rem;line-height:1">${o.emo}</span>` : ""}
           <span>${esc(o.texto)}</span>
@@ -5333,6 +5449,9 @@ async function avanzarMesa(p, c){
     await esperar(220);
   }
 
+  const fComensal = leerFiltros(c.respuestas, c.preguntas);
+  c.preguntas = c.preguntas.filter((q, k) => k <= c.j || !preguntaSinSentido(q, fComensal));
+
   c.j++;
   if (c.j < c.preguntas.length){
     panel().innerHTML = `<div class="chat"></div>`;
@@ -5365,6 +5484,7 @@ async function pintarVeredicto(){
   const r = recomendar(S.respuestas, S.preguntas);
   if (!r){ pintarSinSalida(); return; }
   S.ultimo = r;
+  window.__ultimo = r;   // para que las pruebas puedan mirar el veredicto
   Memoria.sumar([r.entrada, r.principal, r.bebida, r.postre]
     .filter(Boolean).map(p => p.id));
   Memoria.guardarUltimo(r.principal);
@@ -5410,6 +5530,8 @@ function dibujarVeredicto(r, conReveal){
         ${esc(S.nombre ? S.nombre + ", esto es lo tuyo." : "Esto es lo tuyo.")}
       </div>
     </div>
+
+    ${bloqueAlergias(r.filtros.alergias)}
 
     ${bloqueLeido(r, titulo)}
 
@@ -5499,6 +5621,48 @@ function dibujarVeredicto(r, conReveal){
 
 const nombrePunto = id => (PUNTOS.find(p => p.id === id) || { texto:"" }).texto;
 
+/* Une una lista con comas y una "y" al final, como se escribe. */
+function enumerar(xs){
+  if (xs.length <= 1) return xs[0] || "";
+  return xs.slice(0, -1).join(", ") + " y " + xs[xs.length - 1];
+}
+
+/* El aviso de alergias. Va arriba de todo, antes que la recomendación y
+   antes que la evidencia: es lo primero que tiene que leer alguien que
+   marcó una alergia, no la última línea de una pantalla larga.
+
+   El texto no promete lo que no podemos saber. Decimos qué filtramos y
+   con qué dato, y mandamos a confirmar con la cocina. Los frutos secos
+   llevan una advertencia más fuerte porque son los que peor declarados
+   están en cualquier carta —en la nuestra figuran en 2 platos de 159— y
+   los que más se esconden adentro de una salsa o un postre.          */
+function bloqueAlergias(alergias, contexto){
+  const a = alergias || [];
+  if (!a.length) return "";
+  const lista = enumerar(a.map(esc));
+  const confirmar = a.indexOf("frutos secos") !== -1
+    ? "Con los frutos secos <b>avisale igual al mozo antes de pedir</b>: se esconden en salsas y postres, y la cocina es la única que puede confirmarlo."
+    : "Aun así, <b>decíselo al mozo antes de pedir</b>: la cocina es la única que puede confirmar lo que entra en cada plato.";
+
+  // En una mesa lo compartido pasa los filtros de todos, pero el plato
+  // individual del de al lado no: decir "nada de esta mesa lo lleva"
+  // sería mentir, y justo acá no se puede.
+  const cuerpo = contexto === "mesa"
+    ? `<p>Lo que va al medio no lleva ${lista}, según la carta que tenemos cargada.
+       Los platos individuales de los demás sí pueden llevarlo, así que si se pasan cosas, ojo.
+       ${confirmar}</p>`
+    : contexto === "nino"
+    ? `<p>Lo que le di no lleva ${lista}, según la carta que tenemos cargada.
+       ${confirmar}</p>`
+    : `<p>Nada de lo que te propongo lleva ${lista}, según la carta que tenemos cargada.
+       ${confirmar}</p>`;
+
+  return `<div class="alerta" role="note">
+    <p class="alerta__titulo">Alergias: ${lista}</p>
+    ${cuerpo}
+  </div>`;
+}
+
 /* ── LO QUE ME DIJISTE ────────────────────────────────────────────────
    Es lo único de toda la pantalla que la persona no puede atribuir a la
    suerte: son sus propias respuestas, escritas, y al lado qué hizo el
@@ -5506,10 +5670,26 @@ const nombrePunto = id => (PUNTOS.find(p => p.id === id) || { texto:"" }).texto;
    porque el orden importa: primero se demuestra que escuchaste y recién
    después se dice qué pedir. Al revés suena a que la recomendación ya
    estaba elegida y las preguntas eran decorado.                      */
+/* Una consecuencia que afirma un resultado sólo se muestra si el
+   resultado es ese. Sin esto el chef le decía "la entrada va con queso" a
+   alguien alérgico a los lácteos: una frase escrita de antemano no puede
+   saber qué más marcó la persona dos pantallas atrás. Cuando la condición
+   no se cumple, el eco se muestra igual, sin la segunda mitad. */
+function llevaVale(e, r){
+  const g = e.si;
+  if (!g) return true;
+  if (g.categoria && r.principal.categoria !== g.categoria) return false;
+  if (g.hayEntrada && !r.entrada) return false;
+  if (g.entradaProteina && (!r.entrada || r.entrada.proteina !== g.entradaProteina)) return false;
+  if (g.entradaProteinaNo && r.entrada && r.entrada.proteina === g.entradaProteinaNo) return false;
+  return true;
+}
+
 function bloqueLeido(r, titulo){
   const ecos = elegirEcosObj(r.ecos, 4);
   if (ecos.length < 2) return "";
   const arranca = t => t.charAt(0).toUpperCase() + t.slice(1);
+  ecos.forEach(e => { if (e.lleva && !llevaVale(e, r)) e.lleva = null; });
   return `<div class="bloque leido">
     ${titulo("Lo que me dijiste")}
     <ul class="leido__lista">
@@ -5618,6 +5798,8 @@ async function pintarVeredictoMesa(){
       </div>
     </div>
 
+    ${bloqueAlergias(r.alergias, "mesa")}
+
     <div class="bloque">
       ${titulo("Al medio, y va primero")}
       ${(() => { const u = new Set();
@@ -5628,10 +5810,13 @@ async function pintarVeredictoMesa(){
 
     <div class="bloque">
       ${titulo("Uno para cada uno")}
-      ${r.platos.map((x, k) => fila(
-          x.plato ? x.plato.nombre : "Hablalo conmigo",
-          (x.comensal.nombre || "Comensal " + (k + 1)) + (x.plato ? "" : " — no me quedó nada que le sirva"),
-          x.plato ? x.plato.precio : 0, x.plato)).join("")}
+      ${r.platos.map((x, k) => {
+        const quien = x.comensal.nombre || "Comensal " + (k + 1);
+        if (x.plato) return fila(x.plato.nombre, quien, x.plato.precio, x.plato);
+        if (x.comeDelMedio) return fila("Come de lo que va al medio",
+          quien + " — con lo que no come es lo único que le sirve, y ya está pedido", 0, null);
+        return fila("Hablalo conmigo", quien + " — no me quedó nada que le sirva", 0, null);
+      }).join("")}
     </div>
 
     ${r.platosNinos.length ? `<div class="bloque">
@@ -5938,7 +6123,10 @@ function bofoTest(){
         // La entrada es el cambio de esta versión: si falta, falló lo que
         // vinimos a hacer. Sólo se perdona cuando los filtros duros no
         // dejaron nada con qué empezar.
-        const hayConQue = MENU.some(p => !esNino(p) && empieza(p) && pasaFiltrosDuros(p, r.filtros));
+        // El plato fuerte no puede ser además su propia entrada: cuando los
+        // filtros dejan una sola cosa comestible, no hay entrada y está bien.
+        const hayConQue = MENU.some(p => !esNino(p) && empieza(p) &&
+          p.id !== r.principal.id && pasaFiltrosDuros(p, r.filtros));
         chequear(!!r.entrada || !hayConQue, `[${modo}] no hay entrada y sí había con qué`);
         if (r.entrada){
           chequear(empieza(r.entrada), `[${modo}] "${r.entrada.nombre}" no es algo con que empezar`);
@@ -5951,9 +6139,18 @@ function bofoTest(){
           `[${modo}] "${x.nombre}" es del menú de niños y salió para un adulto`));
 
         // Dos alternativas cuando la carta filtrada da para dos distintas;
-        // una sola cuando no. Ninguna es peor que una repetida.
-        chequear(r.alternativas.length >= 1 && r.alternativas.length <= 2,
-          `[${modo}] alternativas fuera de rango: ${r.alternativas.length}`);
+        // una sola cuando no; ninguna cuando la persona dejó el pool en un
+        // solo plato. Lo que no puede pasar es que haya con qué y no se
+        // ofrezca, ni que se ofrezcan tres.
+        const otrosPlatos = MENU.filter(x =>
+          !esNino(x) && pasaFiltrosDuros(x, r.filtros) &&
+          tipoDe(x) === tipoDe(r.principal) &&
+          x.id !== r.principal.id && (!r.entrada || x.id !== r.entrada.id) &&
+          !esVariante(x, r.principal));
+        chequear(r.alternativas.length <= 2,
+          `[${modo}] ${r.alternativas.length} alternativas, y son dos como mucho`);
+        chequear(otrosPlatos.length === 0 || r.alternativas.length >= 1,
+          `[${modo}] había ${otrosPlatos.length} platos para ofrecer y no ofreció ninguno`);
         chequear(r.alternativas.length < 2 ||
                  r.alternativas[0].categoria !== r.alternativas[1].categoria,
           `[${modo}] las dos alternativas son de la misma categoría`);
@@ -5973,6 +6170,24 @@ function bofoTest(){
         const citados = elegirEcosObj(r.ecos, 4);
         chequear(citados.some(e => e.lleva),
           `[${modo}] ninguna de las respuestas citadas dice qué hizo el chef con ella`);
+
+        // Y ninguna de las que se muestran puede contradecir el veredicto.
+        // Una frase escrita de antemano no sabe qué más marcó la persona,
+        // así que las que afirman un resultado llevan condición; esto
+        // verifica que la condición esté puesta y funcione.
+        const dicho = citados.filter(e => e.lleva && llevaVale(e, r))
+                             .map(e => e.lleva).join(" · ");
+        if (/entrada/.test(dicho))
+          chequear(!!r.entrada, `[${modo}] habla de la entrada y no hay entrada`);
+        if (/queso adelante|entrada quedó decidida/.test(dicho))
+          chequear(!!r.entrada && r.entrada.proteina === "queso",
+            `[${modo}] promete queso de entrada y la entrada es ${r.entrada && r.entrada.proteina}`);
+        if (/la parrilla y no al horno|fui a la parrilla/.test(dicho))
+          chequear(r.principal.categoria === "parrilla",
+            `[${modo}] dice parrilla y el plato salió de ${r.principal.categoria}`);
+        if (/lo saqué de la mesa/.test(dicho))
+          chequear(!r.entrada || r.entrada.proteina !== "queso",
+            `[${modo}] dice que sacó el queso y la entrada es de queso`);
         EJES.forEach(e => chequear(r.vector[e] >= 0 && r.vector[e] <= 10,
           `[${modo}] eje ${e} fuera de rango: ${r.vector[e]}`));
 
@@ -6035,8 +6250,12 @@ function bofoTest(){
     return { corridas, distintos: principales.size, entradas: entradas.size, conVino, conPunto };
   }
 
-  const ex = correr("express", 22);
-  const co = correr("completo", 22);
+  // Con las alergias, los subconjuntos de restricciones pasaron de 32 a
+  // 512. Se recorren todos —ahí están los casos raros que rompen— pero con
+  // menos vueltas cada uno, para que esto siga tardando un par de segundos
+  // y alguien pueda abrir ?test=1 en el celular sin colgar la pestaña.
+  const ex = correr("express", 4);
+  const co = correr("completo", 4);
 
   // ── EL CHEF KID ──────────────────────────────────────────────────
   // Dos reglas y las dos son duras: sólo recomienda del menú de niños, y
@@ -6051,7 +6270,7 @@ function bofoTest(){
   let corridasKid = 0;
   const platosKid = new Set();
   setsN.forEach(sr => {
-    for (let v = 0; v < 12; v++){
+    for (let v = 0; v < 4; v++){
       const preguntas = tandaNino(v);
       const resp = { [pReqN.id]: sr };
       preguntas.filter(p => !p.fija).forEach(p => { resp[p.id] = azar(p.opciones.length); });
@@ -6117,8 +6336,10 @@ function bofoTest(){
   const sabores = PREGUNTAS.filter(q => q.tipo === "sabor" && q.peso === "alto" && fmtDe(q) === "opciones");
   chequear(sabores.length >= 4, "quedan muy pocas preguntas para repartir en la mesa");
   let mesasProbadas = 0, mesasConNinos = 0;
-  setsRestriccion.forEach(sr => {
-    for (let n = 2; n <= 6; n += 2){
+  // Una mesa por subconjunto, rotando el tamaño: recorrer los 512
+  // subconjuntos importa más que probar tres tamaños de cada uno.
+  setsRestriccion.forEach((sr, idx) => {
+    for (let n = 2 + (idx % 3) * 2; n <= 2 + (idx % 3) * 2; n += 2){
       const comensales = [];
       for (let k = 0; k < n; k++){
         // el primero lleva las restricciones del set; el resto, al azar
