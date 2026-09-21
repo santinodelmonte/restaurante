@@ -14,20 +14,21 @@ rápidos (vegetariano, sin TACC, para compartir). Cada plato con nombre,
 descripción, precio en pesos uruguayos, sus etiquetas y su foto.
 
 **El Chef.** Una experiencia de chat que termina armando la mesa entera:
-entrada, plato principal, dos alternativas, algo para tomar y el postre.
+entrada, plato principal, alternativas, algo para tomar y el postre.
 El orden de la pantalla es el orden en que las cosas llegan a la mesa, y
 no es casualidad: una entrada que aparece abajo, al lado del postre, no se
 pide.
 
 No es un test que se hace una vez. El banco tiene 29 preguntas rotativas y
 cada corrida arma su propia tanda con las que la persona vio menos veces,
-así que dos corridas seguidas sólo comparten los tres filtros. La rotación
+así que dos corridas seguidas sólo comparten los dos filtros. La rotación
 se guarda en el celular.
 
-Hay seis formatos de pregunta: botones, grilla de emojis, deslizador con
-el chef comentando mientras arrastrás, "elegí rápido" con tres segundos de
-reloj, ráfagas de esto-o-aquello, y campos para escribir. Siempre entra al
-menos un juego por tanda.
+Hay cinco formatos: botones, grilla de opciones, deslizador con el chef
+comentando mientras arrastrás, una ronda de pares, y campos para escribir.
+Ninguno es un juego: el reloj de tres segundos se fue, y con él la regla
+que forzaba a que entrara un juego por tanda. Los juegos quedaron del lado
+de Tito, que es donde corresponden.
 
 **Todas las preguntas son sobre comida.** La mitad son directas —con qué
 te quedás si tenés que elegir una sola cosa, cómo te gusta que llegue la
@@ -97,6 +98,40 @@ ocupa nada hasta que la foto carga— porque con `loading="lazy"` las de más
 abajo no se piden hasta que alguien scrollea, así que nunca fallan y el
 hueco se quedaba para siempre.
 
+**Alergias.** La primera pregunta separa lo que la persona elige de lo que
+le hace mal: celiaquía, lácteos, huevo, frutos secos y mariscos se marcan
+aparte, se ven distinto y filtran igual de duro que el resto. Pero además
+encienden un aviso en el veredicto, y eso es lo que importa: el motor sabe
+lo que dice la carta que cargamos —que es nuestra lectura del papel
+impreso— y la cocina sabe lo que pasa adentro de la olla. Entre esas dos
+cosas hay una distancia que ningún filtro puede cerrar, así que se dice y
+se manda a confirmar con el mozo.
+
+En la mesa el aviso dice otra cosa, porque la verdad es otra: lo que va al
+medio pasa los filtros de todos, pero el plato individual del de al lado no
+tiene por qué. Prometer que la mesa entera está limpia sería mentir, y acá
+no se puede.
+
+Marcar una alergia también poda las preguntas que quedaron sin sentido:
+preguntarle a alguien alérgico a los lácteos hasta dónde llega con el queso
+no es sólo perder una pregunta, es decirle que no lo escuchaste dos
+pantallas atrás.
+
+**Lo que me dijiste.** El veredicto abre con las respuestas de la persona
+escritas, y debajo de cada una qué hizo el chef con ella: *«Que el olor a
+brasa te desarma — por eso te llevo a la parrilla y no al horno»*. Va
+arriba de la recomendación y no abajo, porque el orden importa: primero se
+demuestra que escuchaste y recién después se dice qué pedir. Al revés
+suena a que la recomendación ya estaba elegida y las preguntas eran
+decorado. Es lo único de la pantalla que la persona no puede atribuir a la
+suerte.
+
+Las consecuencias que afirman un resultado llevan condición y se verifican
+contra el veredicto real: una frase escrita de antemano no sabe qué más
+marcó la persona dos pantallas atrás, así que "la entrada va con queso" no
+se muestra si la entrada no es de queso. Cuando la condición no se cumple,
+el eco se muestra igual, sin la segunda mitad.
+
 **La tarjeta.** El veredicto termina en una tarjeta pensada para que le
 saquen captura: sello, nombre, plato y una frase corta del Vasco. El botón
 de compartir usa el menú del propio celular y, si no hay, copia al
@@ -136,12 +171,19 @@ aunque la carta lo imprima bajo parrilla.
    platos del pool** y no se negocian con ningún puntaje. Además esconden
    las opciones imposibles de las preguntas siguientes: a un vegetariano no
    se le ofrece "carne roja".
-2. Los filtros blandos (hambre, presupuesto) no eliminan a nadie: penalizan.
+2. El hambre no elimina a nadie: penaliza. No hay preguntas sobre dinero,
+   así que el precio no influye en la recomendación.
 3. Las respuestas de sabor arman el vector del usuario.
 4. Cada plato se puntúa por distancia euclidiana invertida contra ese vector.
 5. Las afinidades declaradas ("me quedo con la carne") suman sin sacar a
-   nadie del pool: es lo que hace que decirlo se note en el resultado.
-6. Empate → gana el plato que menos veces salió recomendado; si sigue
+   nadie del pool: es lo que hace que decirlo se note en el resultado. Su
+   espejo, `evita`, resta fuerte: "prefiero que no" no es una alergia, pero
+   el chef no puede citar esa respuesta y servir justo eso.
+6. Las variantes del mismo plato no compiten entre sí. "Queso provolone" y
+   "Queso provolone caprese" son el mismo plato con un agregado; ofrecer
+   los dos no es dar a elegir. Si al sacarlas no quedan dos alternativas
+   distintas, se ofrece una sola.
+7. Empate → gana el plato que menos veces salió recomendado; si sigue
    empatado, aleatorio con semilla.
 
 Las preguntas de tipo `chamuyo` no puntúan nada. Como la tanda cambia en
@@ -176,7 +218,10 @@ dando vectores comparables.
 Abrir `index.html?test=1`, o llamar `bofoTest()` desde la consola. Recorre
 1.408 tandas reales —armadas por el mismo selector que ve la gente—, 96
 mesas y 96 corridas del Chef Kid, con respuestas al azar en los seis
-formatos, y verifica más de 64.000 condiciones. Entre ellas:
+formatos, y verifica más de 240.000 condiciones. Con las alergias, los subconjuntos
+de restricciones posibles pasaron de 32 a 512: se recorren todos, con menos
+vueltas cada uno, para que siga tardando dos segundos y alguien pueda
+abrirlo en el celular. Entre lo que verifica:
 
 - que un vegetariano nunca reciba carne **ni se la vean ofrecer**;
 - que el Vasco nunca recomiende del menú de niños, y Tito nunca salga de él;
@@ -187,6 +232,12 @@ formatos, y verifica más de 64.000 condiciones. Entre ellas:
   avise cuando el corte sufre;
 - que lo que va al medio de la mesa lo pueda comer todo el mundo y no se le
   sirva además a alguien como plato propio;
+- que ninguna alternativa sea el mismo plato del principal con un agregado;
+- que al que dijo que prefiere esquivar algo no se le sirva justo eso;
+- que ninguna consecuencia mostrada contradiga el veredicto: si el chef
+  dice "te puse queso adelante", la entrada tiene que ser de queso;
+- que nadie reciba como plato propio algo que ya está al medio de su mesa;
+- que de las respuestas citadas, al menos una diga qué hizo el chef con ella;
 - que la cuenta cierre con lo que se muestra en pantalla;
 - que dos corridas seguidas no repitan ni una sola pregunta rotativa.
 
