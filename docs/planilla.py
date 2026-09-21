@@ -65,11 +65,10 @@ def leer_menu():
     crudo = re.sub(r"([{,]\s*)([A-Za-z_][A-Za-z0-9_]*)\s*:", r'\1"\2":', crudo)  # claves con comillas
     crudo = re.sub(r",(\s*[}\]])", r"\1", crudo)              # comas colgadas
     menu = json.loads(crudo)
-    # Los vinos y el menú de niños que hay en el código son provisorios:
-    # nombres y precios inventados hasta que el local nos pase los suyos.
-    # Mandárselos en la planilla para que los "corrijan" sería pedirles que
-    # revisen algo que nos inventamos nosotros. Esas dos secciones se piden
-    # aparte, en el documento.
+    # Los vinos quedan afuera porque no hay nada que clasificar: los 49 son
+    # vegetarianos, sin gluten y llevan alcohol. El menú de niños queda
+    # afuera porque todavía es inventado, y pedirle al local que corrija
+    # algo que nos inventamos nosotros no tiene sentido.
     return [p for p in menu if p["categoria"] not in PROVISORIAS]
 
 
@@ -126,8 +125,8 @@ def hoja_instrucciones(wb, total):
               "de la carta impresa. Cada fila se marca con sí o no en las columnas de color."),
         ("p", "Las casillas ya vienen con NUESTRA LECTURA de la carta. Es una propuesta, no un dato "
               "confirmado: lo que no corrijan, lo damos por bueno y sale publicado así."),
-        ("p", "En la hoja «Faltan» van los vinos y las milanesas / burgers, que no estaban en las "
-              "imágenes que recibimos. Se agregan ahí con el mismo formato."),
+        ("p", "En la hoja «Faltan» van las milanesas / burgers y el menú de niños, que no estaban en "
+              "las cartas que recibimos. Se agregan ahí con el mismo formato."),
         ("", ""),
         ("h", "Qué significa cada columna"),
         ("p", "Vegetariano · sin carne, pollo, pescado ni mariscos. Puede llevar lácteos y huevo."),
@@ -216,7 +215,9 @@ def main():
     # ── Hoja de lo que falta ────────────────────────────────────────
     wf = wb.create_sheet("Faltan")
     encabezado(wf)
-    pendientes = [("Vinos", 40), ("Milanesas y burgers", 25)]
+    # Los vinos ya llegaron y están cargados. Lo único que sigue sin
+    # aparecer en ninguna carta que nos pasaron son las milanesas y burgers.
+    pendientes = [("Milanesas y burgers", 25), ("Menú de niños", 15)]
     fila = 2
     for seccion, cuantos in pendientes:
         for _ in range(cuantos):

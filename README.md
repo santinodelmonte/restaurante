@@ -66,11 +66,36 @@ reelige el vino —bien cocida la carne pierde el jugo que ablanda el tanino—
 y, si el corte sufre en ese punto, lo dice antes y ofrece el cambio. No lo
 cambia solo: el que decide qué come es el que se lo va a comer.
 
-**El vino.** Marida de verdad: mira cuerpo, tanino y acidez del vino contra
-lo que pide el plato según su proteína y lo graso que sea. Por eso resuelve
-los casos que "carne tinto, pescado blanco" no cubre. Pasa al frente sólo
-cuando el plato lo pide; si no, va la bebida de siempre y el vino queda al
-costado como sugerencia.
+**El vino.** La carta real del local: 49 etiquetas, de $260 la copa de la
+casa a $8.400 el Cru d'Exception. Marida de verdad: mira cuerpo, tanino y
+acidez del vino contra lo que pide el plato según su proteína y lo graso
+que sea. Por eso resuelve los casos que "carne tinto, pescado blanco" no
+cubre. Pasa al frente sólo cuando el plato lo pide; si no, va la bebida de
+siempre y el vino queda al costado como sugerencia.
+
+Tres cosas que la carta real obligó a agregar y la inventada no:
+
+- **El precio del plato es la referencia.** Por perfil, el Cru d'Exception
+  marida una carne igual de bien que el Don Pascual —son los dos Tannat—
+  así que el desempate al azar mandaba la botella de $8.400 arriba de un
+  asado de $580 una de cada seis veces. Se penaliza el exceso contra el
+  precio del plato en vez de prohibirlo: si de verdad no hay nada mejor,
+  la botella cara puede salir; lo que no puede es salir por empate.
+- **La copa de la casa.** Una botella entera para alguien que vino solo y
+  no comparte es mucha botella. Cuando el eje `social` está bajo, la copa
+  gana; en una mesa de seis, pierde.
+- **No hay ningún rosado seco.** Los únicos rosados de esta carta son
+  cosecha tardía, dulces. El perfil de las verduras apuntaba a rosado, o
+  sea a algo que no existe: ahora el color lo decide cómo está hecho el
+  plato —una parmeggiana gratinada pide tinto liviano, una ensalada pide
+  blanco—.
+
+**El vino del postre.** La carta trae cuatro cosecha tardía y un demi sec
+que con el maridaje contra el plato fuerte no los recomendaba nadie: un
+vino dulce nunca gana contra una carne. Se calculan aparte, contra el
+postre, y el color lo decide el postre: chocolate y dulce de leche piden
+tinto, las frutas piden blanco o rosado, y lo que va al medio de la mesa
+pide burbuja. Sólo se ofrece a quien ya está tomando vino.
 
 **Armá la mesa.** Decís cuántos grandes son, si vienen chicos, y el celular
 da la vuelta. Al final El Vasco arma el pedido de todos con el total y
@@ -218,7 +243,7 @@ dando vectores comparables.
 Abrir `index.html?test=1`, o llamar `bofoTest()` desde la consola. Recorre
 1.408 tandas reales —armadas por el mismo selector que ve la gente—, 96
 mesas y 96 corridas del Chef Kid, con respuestas al azar en los seis
-formatos, y verifica más de 240.000 condiciones. Con las alergias, los subconjuntos
+formatos, y verifica más de 245.000 condiciones. Con las alergias, los subconjuntos
 de restricciones posibles pasaron de 32 a 512: se recorren todos, con menos
 vueltas cada uno, para que siga tardando dos segundos y alguien pueda
 abrirlo en el celular. Entre lo que verifica:
@@ -234,6 +259,8 @@ abrirlo en el celular. Entre lo que verifica:
   sirva además a alguien como plato propio;
 - que ninguna alternativa sea el mismo plato del principal con un agregado;
 - que al que dijo que prefiere esquivar algo no se le sirva justo eso;
+- que ninguna botella salga por empate a un precio absurdo contra el plato;
+- que a unas verduras no les toque un tinto áspero;
 - que ninguna consecuencia mostrada contradiga el veredicto: si el chef
   dice "te puse queso adelante", la entrada tiene que ser de queso;
 - que nadie reciba como plato propio algo que ya está al medio de su mesa;
@@ -269,13 +296,11 @@ existe porque un monocromo no puede dar jerarquía a un botón.
 
 ## Pendiente
 
-Tres cosas están cargadas con **datos inventados**, marcadas como tales en
+Dos cosas están cargadas con **datos inventados**, marcadas como tales en
 el código y en el documento que se le manda al local. No son trabajo
-pendiente nuestro: es material que sólo tiene el local.
+pendiente nuestro: es material que sólo tiene el local. Los vinos ya
+llegaron y están cargados de verdad.
 
-- **Vinos.** Once vinos uruguayos típicos con precios inventados. Para que
-  el maridaje sea real hace falta la carta con *nombre, precio por copa y
-  por botella, y cepa*. Sin la cepa no hay maridaje, hay adivinanza.
 - **Menú de niños.** Once platos inventados con precios inventados.
 - **Fotos.** Ninguna todavía. `img/platos/LEEME.txt` tiene las
   instrucciones para el local.

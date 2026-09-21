@@ -1646,85 +1646,290 @@ const MENU = [
     proteina:"dulce", contiene:["lacteos"], ejes:{intensidad:3,untuosidad:5,acidez:0,aventura:2,social:3,dulce:4} },
 
   /* ── VINOS ──────────────────────────────────────────────────────────
-     PROVISORIO. La carta de vinos no vino en las fotos del local y sin
-     ella no hay maridaje posible: lo que marida no es el nombre del vino
-     sino la cepa, el cuerpo y el tanino. Estos once son vinos uruguayos
-     típicos con precios inventados, puestos para que la funcionalidad se
-     pueda ver andando. Cuando llegue la carta real se reemplaza este
-     bloque y no hay que tocar una línea del motor.
+     La carta de vinos real del local. Lo que marida no es el nombre del
+     vino sino la cepa y tres números: cuerpo, tanino y acidez. Con eso el
+     motor resuelve los casos que "carne tinto, pescado blanco" no cubre.
 
        vino.color   tinto · blanco · rosado · espumante
        vino.cuerpo  0 liviano      → 10 pesado
        vino.tanino  0 sedoso       → 10 áspero (el que corta la grasa)
        vino.acidez  0 redondo      → 10 filoso (el que limpia la boca)
        vino.dulzor  0 seco         → 10 dulce
-       copa         null si el local no lo vende por copa            */
-  { id:"tannat-reserva", nombre:"Tannat Reserva", precio:1290, copa:320, categoria:"vinos", sub:"Tintos",
-    descripcion:"Provisorio hasta que llegue la carta de vinos del local.",
-    tags:["vino","tinto","de acá"], apto:{vegetariano:true,singluten:true,compartir:true},
-    proteina:"bebida", contiene:["alcohol"],
-    vino:{ color:"tinto", cepa:"Tannat", cuerpo:9, tanino:9, acidez:6, dulzor:0 },
-    ejes:{intensidad:8,untuosidad:3,acidez:6,aventura:4,social:8,dulce:0} },
-  { id:"tannat-roble", nombre:"Tannat Roble", precio:990, copa:260, categoria:"vinos", sub:"Tintos",
-    descripcion:"Provisorio hasta que llegue la carta de vinos del local.",
-    tags:["vino","tinto","de acá"], apto:{vegetariano:true,singluten:true,compartir:true},
+       porCopa      el vino de la casa, lo único que se sirve por copa
+
+     Los precios van de $260 a $8.400: 32 veces de diferencia. Por eso el
+     motor mira el precio del plato antes de elegir botella — ver
+     `elegirVino`—, porque sin eso mandaría el Cru d'Exception arriba de
+     un asado y eso no es una recomendación, es una humorada.          */
+
+  /* TANNAT */
+  { id:"don-pascual-tannat", nombre:"Don Pascual", precio:640, categoria:"vinos", sub:"Tannat",
+    descripcion:"", tags:["vino","tinto"], apto:{vegetariano:true,singluten:true,compartir:true},
     proteina:"bebida", contiene:["alcohol"],
     vino:{ color:"tinto", cepa:"Tannat", cuerpo:8, tanino:8, acidez:6, dulzor:0 },
-    ejes:{intensidad:7,untuosidad:3,acidez:6,aventura:3,social:8,dulce:0} },
-  { id:"cabernet", nombre:"Cabernet Sauvignon", precio:1090, copa:280, categoria:"vinos", sub:"Tintos",
-    descripcion:"Provisorio hasta que llegue la carta de vinos del local.",
-    tags:["vino","tinto"], apto:{vegetariano:true,singluten:true,compartir:true},
+    ejes:{intensidad:8,untuosidad:2,acidez:6,aventura:4,social:8,dulce:0} },
+  { id:"cuna-piedra-tannat", nombre:"Cuna de Piedra Cerros de San Juan", precio:890, categoria:"vinos", sub:"Tannat",
+    descripcion:"", tags:["vino","tinto"], apto:{vegetariano:true,singluten:true,compartir:true},
+    proteina:"bebida", contiene:["alcohol"],
+    vino:{ color:"tinto", cepa:"Tannat", cuerpo:9, tanino:9, acidez:6, dulzor:0 },
+    ejes:{intensidad:9,untuosidad:2,acidez:6,aventura:4,social:8,dulce:0} },
+  { id:"cuna-piedra-tannat-res", nombre:"Cuna de Piedra Cerros de San Juan Reserva", precio:1200, categoria:"vinos", sub:"Tannat",
+    descripcion:"", tags:["vino","tinto"], apto:{vegetariano:true,singluten:true,compartir:true},
+    proteina:"bebida", contiene:["alcohol"],
+    vino:{ color:"tinto", cepa:"Tannat", cuerpo:9, tanino:8, acidez:6, dulzor:0 },
+    ejes:{intensidad:9,untuosidad:2,acidez:6,aventura:4,social:8,dulce:0} },
+  { id:"atlantico-sur-tannat", nombre:"Atlántico Sur", precio:890, categoria:"vinos", sub:"Tannat",
+    descripcion:"", tags:["vino","tinto"], apto:{vegetariano:true,singluten:true,compartir:true},
+    proteina:"bebida", contiene:["alcohol"],
+    vino:{ color:"tinto", cepa:"Tannat", cuerpo:9, tanino:9, acidez:6, dulzor:0 },
+    ejes:{intensidad:9,untuosidad:2,acidez:6,aventura:4,social:8,dulce:0} },
+  { id:"massimo-deicas", nombre:"Massimo Deicas", precio:4900, categoria:"vinos", sub:"Tannat",
+    descripcion:"", tags:["vino","tinto"], apto:{vegetariano:true,singluten:true,compartir:true},
+    proteina:"bebida", contiene:["alcohol"],
+    vino:{ color:"tinto", cepa:"Tannat", cuerpo:10, tanino:8, acidez:6, dulzor:0 },
+    ejes:{intensidad:10,untuosidad:2,acidez:6,aventura:4,social:8,dulce:0} },
+  { id:"cru-exception-tannat", nombre:"Cru d'Exception 2004", precio:8400, categoria:"vinos", sub:"Tannat",
+    descripcion:"", tags:["vino","tinto"], apto:{vegetariano:true,singluten:true,compartir:true},
+    proteina:"bebida", contiene:["alcohol"],
+    vino:{ color:"tinto", cepa:"Tannat", cuerpo:10, tanino:7, acidez:6, dulzor:0 },
+    ejes:{intensidad:10,untuosidad:2,acidez:6,aventura:4,social:8,dulce:0} },
+
+  /* CABERNET SAUVIGNON */
+  { id:"cuna-piedra-cabernet", nombre:"Cuna de Piedra Cerros de San Juan", precio:890, categoria:"vinos", sub:"Cabernet Sauvignon",
+    descripcion:"", tags:["vino","tinto"], apto:{vegetariano:true,singluten:true,compartir:true},
     proteina:"bebida", contiene:["alcohol"],
     vino:{ color:"tinto", cepa:"Cabernet Sauvignon", cuerpo:8, tanino:7, acidez:6, dulzor:0 },
-    ejes:{intensidad:7,untuosidad:3,acidez:6,aventura:3,social:8,dulce:0} },
-  { id:"merlot", nombre:"Merlot", precio:890, copa:240, categoria:"vinos", sub:"Tintos",
-    descripcion:"Provisorio hasta que llegue la carta de vinos del local.",
-    tags:["vino","tinto"], apto:{vegetariano:true,singluten:true,compartir:true},
+    ejes:{intensidad:8,untuosidad:2,acidez:6,aventura:3,social:8,dulce:0} },
+  { id:"cuna-piedra-cabernet-res", nombre:"Cuna de Piedra Reserve", precio:1200, categoria:"vinos", sub:"Cabernet Sauvignon",
+    descripcion:"", tags:["vino","tinto"], apto:{vegetariano:true,singluten:true,compartir:true},
+    proteina:"bebida", contiene:["alcohol"],
+    vino:{ color:"tinto", cepa:"Cabernet Sauvignon", cuerpo:9, tanino:6, acidez:6, dulzor:0 },
+    ejes:{intensidad:9,untuosidad:2,acidez:6,aventura:3,social:8,dulce:0} },
+  { id:"concha-toro-cabernet", nombre:"Concha y Toro Reservado", precio:740, categoria:"vinos", sub:"Cabernet Sauvignon",
+    descripcion:"", tags:["vino","tinto"], apto:{vegetariano:true,singluten:true,compartir:true},
+    proteina:"bebida", contiene:["alcohol"],
+    vino:{ color:"tinto", cepa:"Cabernet Sauvignon", cuerpo:7, tanino:6, acidez:6, dulzor:0 },
+    ejes:{intensidad:7,untuosidad:2,acidez:6,aventura:3,social:8,dulce:0} },
+  { id:"casillero-cabernet", nombre:"Casillero del Diablo", precio:940, categoria:"vinos", sub:"Cabernet Sauvignon",
+    descripcion:"", tags:["vino","tinto"], apto:{vegetariano:true,singluten:true,compartir:true},
+    proteina:"bebida", contiene:["alcohol"],
+    vino:{ color:"tinto", cepa:"Cabernet Sauvignon", cuerpo:8, tanino:7, acidez:6, dulzor:0 },
+    ejes:{intensidad:8,untuosidad:2,acidez:6,aventura:3,social:8,dulce:0} },
+  { id:"atlantico-sur-cabernet", nombre:"Atlántico Sur", precio:890, categoria:"vinos", sub:"Cabernet Sauvignon",
+    descripcion:"", tags:["vino","tinto"], apto:{vegetariano:true,singluten:true,compartir:true},
+    proteina:"bebida", contiene:["alcohol"],
+    vino:{ color:"tinto", cepa:"Cabernet Sauvignon", cuerpo:8, tanino:7, acidez:6, dulzor:0 },
+    ejes:{intensidad:8,untuosidad:2,acidez:6,aventura:3,social:8,dulce:0} },
+  { id:"bianchi-cabernet", nombre:"Bianchi Don Valentín", precio:780, categoria:"vinos", sub:"Cabernet Sauvignon",
+    descripcion:"", tags:["vino","tinto"], apto:{vegetariano:true,singluten:true,compartir:true},
+    proteina:"bebida", contiene:["alcohol"],
+    vino:{ color:"tinto", cepa:"Cabernet Sauvignon", cuerpo:7, tanino:6, acidez:6, dulzor:0 },
+    ejes:{intensidad:7,untuosidad:2,acidez:6,aventura:3,social:8,dulce:0} },
+  { id:"don-pascual-cabernet", nombre:"Don Pascual", precio:640, categoria:"vinos", sub:"Cabernet Sauvignon",
+    descripcion:"", tags:["vino","tinto"], apto:{vegetariano:true,singluten:true,compartir:true},
+    proteina:"bebida", contiene:["alcohol"],
+    vino:{ color:"tinto", cepa:"Cabernet Sauvignon", cuerpo:7, tanino:6, acidez:6, dulzor:0 },
+    ejes:{intensidad:7,untuosidad:2,acidez:6,aventura:3,social:8,dulce:0} },
+  { id:"norton-cabernet", nombre:"Norton", precio:720, categoria:"vinos", sub:"Cabernet Sauvignon",
+    descripcion:"", tags:["vino","tinto"], apto:{vegetariano:true,singluten:true,compartir:true},
+    proteina:"bebida", contiene:["alcohol"],
+    vino:{ color:"tinto", cepa:"Cabernet Sauvignon", cuerpo:7, tanino:6, acidez:6, dulzor:0 },
+    ejes:{intensidad:7,untuosidad:2,acidez:6,aventura:3,social:8,dulce:0} },
+  { id:"penasol-cabernet", nombre:"Peñasol", precio:720, categoria:"vinos", sub:"Cabernet Sauvignon",
+    descripcion:"", tags:["vino","tinto"], apto:{vegetariano:true,singluten:true,compartir:true},
+    proteina:"bebida", contiene:["alcohol"],
+    vino:{ color:"tinto", cepa:"Cabernet Sauvignon", cuerpo:6, tanino:5, acidez:6, dulzor:0 },
+    ejes:{intensidad:6,untuosidad:2,acidez:6,aventura:3,social:8,dulce:0} },
+
+  /* MALBEC */
+  { id:"bianchi-malbec", nombre:"Bianchi Don Valentín", precio:640, categoria:"vinos", sub:"Malbec",
+    descripcion:"", tags:["vino","tinto"], apto:{vegetariano:true,singluten:true,compartir:true},
+    proteina:"bebida", contiene:["alcohol"],
+    vino:{ color:"tinto", cepa:"Malbec", cuerpo:7, tanino:5, acidez:5, dulzor:1 },
+    ejes:{intensidad:7,untuosidad:2,acidez:5,aventura:3,social:8,dulce:1} },
+  { id:"norton-malbec", nombre:"Norton", precio:820, categoria:"vinos", sub:"Malbec",
+    descripcion:"", tags:["vino","tinto"], apto:{vegetariano:true,singluten:true,compartir:true},
+    proteina:"bebida", contiene:["alcohol"],
+    vino:{ color:"tinto", cepa:"Malbec", cuerpo:7, tanino:6, acidez:5, dulzor:1 },
+    ejes:{intensidad:7,untuosidad:2,acidez:5,aventura:3,social:8,dulce:1} },
+  { id:"norton-sexy-fish", nombre:"Norton Sexy Fish", precio:920, categoria:"vinos", sub:"Malbec",
+    descripcion:"", tags:["vino","tinto"], apto:{vegetariano:true,singluten:true,compartir:true},
+    proteina:"bebida", contiene:["alcohol"],
+    vino:{ color:"tinto", cepa:"Malbec", cuerpo:7, tanino:5, acidez:5, dulzor:1 },
+    ejes:{intensidad:7,untuosidad:2,acidez:5,aventura:3,social:8,dulce:1} },
+  { id:"don-pascual-malbec", nombre:"Don Pascual", precio:640, categoria:"vinos", sub:"Malbec",
+    descripcion:"", tags:["vino","tinto"], apto:{vegetariano:true,singluten:true,compartir:true},
+    proteina:"bebida", contiene:["alcohol"],
+    vino:{ color:"tinto", cepa:"Malbec", cuerpo:6, tanino:5, acidez:5, dulzor:1 },
+    ejes:{intensidad:6,untuosidad:2,acidez:5,aventura:3,social:8,dulce:1} },
+  { id:"concha-toro-malbec", nombre:"Concha y Toro", precio:720, categoria:"vinos", sub:"Malbec",
+    descripcion:"", tags:["vino","tinto"], apto:{vegetariano:true,singluten:true,compartir:true},
+    proteina:"bebida", contiene:["alcohol"],
+    vino:{ color:"tinto", cepa:"Malbec", cuerpo:7, tanino:5, acidez:5, dulzor:1 },
+    ejes:{intensidad:7,untuosidad:2,acidez:5,aventura:3,social:8,dulce:1} },
+  { id:"cru-exception-malbec", nombre:"Cru d'Exception", precio:4590, categoria:"vinos", sub:"Malbec",
+    descripcion:"", tags:["vino","tinto"], apto:{vegetariano:true,singluten:true,compartir:true},
+    proteina:"bebida", contiene:["alcohol"],
+    vino:{ color:"tinto", cepa:"Malbec", cuerpo:9, tanino:7, acidez:5, dulzor:1 },
+    ejes:{intensidad:9,untuosidad:2,acidez:5,aventura:3,social:8,dulce:1} },
+  { id:"familia-deicas-malbec", nombre:"Familia Deicas", precio:1780, categoria:"vinos", sub:"Malbec",
+    descripcion:"", tags:["vino","tinto"], apto:{vegetariano:true,singluten:true,compartir:true},
+    proteina:"bebida", contiene:["alcohol"],
+    vino:{ color:"tinto", cepa:"Malbec", cuerpo:8, tanino:6, acidez:5, dulzor:1 },
+    ejes:{intensidad:8,untuosidad:2,acidez:5,aventura:3,social:8,dulce:1} },
+
+  /* SHIRAZ */
+  { id:"don-pascual-shiraz", nombre:"Don Pascual Shiraz / Tannat", precio:640, categoria:"vinos", sub:"Shiraz",
+    descripcion:"", tags:["vino","tinto"], apto:{vegetariano:true,singluten:true,compartir:true},
+    proteina:"bebida", contiene:["alcohol"],
+    vino:{ color:"tinto", cepa:"Shiraz", cuerpo:8, tanino:7, acidez:5, dulzor:1 },
+    ejes:{intensidad:8,untuosidad:2,acidez:5,aventura:5,social:8,dulce:1} },
+  { id:"casillero-shiraz", nombre:"Casillero del Diablo", precio:960, categoria:"vinos", sub:"Shiraz",
+    descripcion:"", tags:["vino","tinto"], apto:{vegetariano:true,singluten:true,compartir:true},
+    proteina:"bebida", contiene:["alcohol"],
+    vino:{ color:"tinto", cepa:"Shiraz", cuerpo:8, tanino:6, acidez:5, dulzor:1 },
+    ejes:{intensidad:8,untuosidad:2,acidez:5,aventura:5,social:8,dulce:1} },
+
+  /* CARMÉNÈRE */
+  { id:"casillero-carmenere", nombre:"Casillero del Diablo", precio:960, categoria:"vinos", sub:"Carménère",
+    descripcion:"", tags:["vino","tinto"], apto:{vegetariano:true,singluten:true,compartir:true},
+    proteina:"bebida", contiene:["alcohol"],
+    vino:{ color:"tinto", cepa:"Carménère", cuerpo:7, tanino:6, acidez:5, dulzor:1 },
+    ejes:{intensidad:7,untuosidad:2,acidez:5,aventura:6,social:8,dulce:1} },
+  { id:"frontera-carmenere", nombre:"Frontera", precio:850, categoria:"vinos", sub:"Carménère",
+    descripcion:"", tags:["vino","tinto"], apto:{vegetariano:true,singluten:true,compartir:true},
+    proteina:"bebida", contiene:["alcohol"],
+    vino:{ color:"tinto", cepa:"Carménère", cuerpo:6, tanino:5, acidez:5, dulzor:1 },
+    ejes:{intensidad:6,untuosidad:2,acidez:5,aventura:6,social:8,dulce:1} },
+
+  /* MERLOT */
+  { id:"concha-toro-merlot", nombre:"Concha y Toro", precio:720, categoria:"vinos", sub:"Merlot",
+    descripcion:"", tags:["vino","tinto"], apto:{vegetariano:true,singluten:true,compartir:true},
     proteina:"bebida", contiene:["alcohol"],
     vino:{ color:"tinto", cepa:"Merlot", cuerpo:6, tanino:4, acidez:5, dulzor:1 },
-    ejes:{intensidad:5,untuosidad:3,acidez:5,aventura:2,social:8,dulce:1} },
-  { id:"pinot-noir", nombre:"Pinot Noir", precio:1190, copa:300, categoria:"vinos", sub:"Tintos",
-    descripcion:"Provisorio hasta que llegue la carta de vinos del local.",
-    tags:["vino","tinto","distinto"], apto:{vegetariano:true,singluten:true,compartir:true},
+    ejes:{intensidad:6,untuosidad:2,acidez:5,aventura:2,social:8,dulce:1} },
+  { id:"don-pascual-merlot", nombre:"Don Pascual", precio:640, categoria:"vinos", sub:"Merlot",
+    descripcion:"", tags:["vino","tinto"], apto:{vegetariano:true,singluten:true,compartir:true},
     proteina:"bebida", contiene:["alcohol"],
-    vino:{ color:"tinto", cepa:"Pinot Noir", cuerpo:4, tanino:3, acidez:7, dulzor:0 },
-    ejes:{intensidad:4,untuosidad:2,acidez:7,aventura:6,social:7,dulce:0} },
-  { id:"sauvignon-blanc", nombre:"Sauvignon Blanc", precio:890, copa:240, categoria:"vinos", sub:"Blancos",
-    descripcion:"Provisorio hasta que llegue la carta de vinos del local.",
-    tags:["vino","blanco","fresco"], apto:{vegetariano:true,singluten:true,compartir:true},
+    vino:{ color:"tinto", cepa:"Merlot", cuerpo:6, tanino:4, acidez:5, dulzor:1 },
+    ejes:{intensidad:6,untuosidad:2,acidez:5,aventura:2,social:8,dulce:1} },
+  { id:"cru-exception-merlot", nombre:"Cru d'Exception", precio:4900, categoria:"vinos", sub:"Merlot",
+    descripcion:"", tags:["vino","tinto"], apto:{vegetariano:true,singluten:true,compartir:true},
+    proteina:"bebida", contiene:["alcohol"],
+    vino:{ color:"tinto", cepa:"Merlot", cuerpo:8, tanino:5, acidez:5, dulzor:1 },
+    ejes:{intensidad:8,untuosidad:2,acidez:5,aventura:2,social:8,dulce:1} },
+
+  /* SAUVIGNON BLANC */
+  { id:"don-pascual-sb", nombre:"Don Pascual", precio:640, categoria:"vinos", sub:"Sauvignon Blanc",
+    descripcion:"", tags:["vino","blanco"], apto:{vegetariano:true,singluten:true,compartir:true},
     proteina:"bebida", contiene:["alcohol"],
     vino:{ color:"blanco", cepa:"Sauvignon Blanc", cuerpo:3, tanino:0, acidez:9, dulzor:0 },
-    ejes:{intensidad:3,untuosidad:1,acidez:9,aventura:4,social:7,dulce:0} },
-  { id:"albarino", nombre:"Albariño", precio:1190, copa:300, categoria:"vinos", sub:"Blancos",
-    descripcion:"Provisorio hasta que llegue la carta de vinos del local.",
-    tags:["vino","blanco","de acá","distinto"], apto:{vegetariano:true,singluten:true,compartir:true},
+    ejes:{intensidad:3,untuosidad:2,acidez:9,aventura:4,social:8,dulce:0} },
+  { id:"atlantico-sur-sb", nombre:"Atlántico Sur", precio:890, categoria:"vinos", sub:"Sauvignon Blanc",
+    descripcion:"", tags:["vino","blanco"], apto:{vegetariano:true,singluten:true,compartir:true},
     proteina:"bebida", contiene:["alcohol"],
-    vino:{ color:"blanco", cepa:"Albariño", cuerpo:4, tanino:0, acidez:8, dulzor:0 },
-    ejes:{intensidad:4,untuosidad:1,acidez:8,aventura:6,social:7,dulce:0} },
-  { id:"chardonnay", nombre:"Chardonnay", precio:990, copa:260, categoria:"vinos", sub:"Blancos",
-    descripcion:"Provisorio hasta que llegue la carta de vinos del local.",
-    tags:["vino","blanco"], apto:{vegetariano:true,singluten:true,compartir:true},
+    vino:{ color:"blanco", cepa:"Sauvignon Blanc", cuerpo:3, tanino:0, acidez:9, dulzor:0 },
+    ejes:{intensidad:3,untuosidad:2,acidez:9,aventura:4,social:8,dulce:0} },
+  { id:"concha-toro-sb", nombre:"Concha y Toro", precio:720, categoria:"vinos", sub:"Sauvignon Blanc",
+    descripcion:"", tags:["vino","blanco"], apto:{vegetariano:true,singluten:true,compartir:true},
+    proteina:"bebida", contiene:["alcohol"],
+    vino:{ color:"blanco", cepa:"Sauvignon Blanc", cuerpo:3, tanino:0, acidez:8, dulzor:0 },
+    ejes:{intensidad:3,untuosidad:2,acidez:8,aventura:4,social:8,dulce:0} },
+
+  /* CHARDONNAY */
+  { id:"concha-toro-chardonnay", nombre:"Concha y Toro", precio:720, categoria:"vinos", sub:"Chardonnay",
+    descripcion:"", tags:["vino","blanco"], apto:{vegetariano:true,singluten:true,compartir:true},
     proteina:"bebida", contiene:["alcohol"],
     vino:{ color:"blanco", cepa:"Chardonnay", cuerpo:6, tanino:1, acidez:6, dulzor:1 },
-    ejes:{intensidad:5,untuosidad:3,acidez:6,aventura:4,social:7,dulce:1} },
-  { id:"rosado-tannat", nombre:"Rosado de Tannat", precio:890, copa:240, categoria:"vinos", sub:"Rosados",
-    descripcion:"Provisorio hasta que llegue la carta de vinos del local.",
-    tags:["vino","rosado","fresco","de acá"], apto:{vegetariano:true,singluten:true,compartir:true},
+    ejes:{intensidad:6,untuosidad:2,acidez:6,aventura:4,social:8,dulce:1} },
+  { id:"casillero-chardonnay", nombre:"Casillero del Diablo", precio:960, categoria:"vinos", sub:"Chardonnay",
+    descripcion:"", tags:["vino","blanco"], apto:{vegetariano:true,singluten:true,compartir:true},
     proteina:"bebida", contiene:["alcohol"],
-    vino:{ color:"rosado", cepa:"Tannat", cuerpo:4, tanino:2, acidez:7, dulzor:2 },
-    ejes:{intensidad:4,untuosidad:1,acidez:7,aventura:5,social:8,dulce:2} },
-  { id:"espumante-brut", nombre:"Espumante Extra Brut", precio:1290, copa:null, categoria:"vinos", sub:"Espumantes",
-    descripcion:"Provisorio hasta que llegue la carta de vinos del local.",
-    tags:["vino","espumante","fresco"], apto:{vegetariano:true,singluten:true,compartir:true},
+    vino:{ color:"blanco", cepa:"Chardonnay", cuerpo:6, tanino:1, acidez:6, dulzor:1 },
+    ejes:{intensidad:6,untuosidad:2,acidez:6,aventura:4,social:8,dulce:1} },
+  { id:"don-pascual-chardonnay", nombre:"Don Pascual", precio:640, categoria:"vinos", sub:"Chardonnay",
+    descripcion:"", tags:["vino","blanco"], apto:{vegetariano:true,singluten:true,compartir:true},
     proteina:"bebida", contiene:["alcohol"],
-    vino:{ color:"espumante", cepa:"Chardonnay y Pinot", cuerpo:3, tanino:0, acidez:9, dulzor:1 },
-    ejes:{intensidad:3,untuosidad:1,acidez:9,aventura:6,social:9,dulce:1} },
-  { id:"moscato", nombre:"Moscato dulce", precio:990, copa:260, categoria:"vinos", sub:"Espumantes",
-    descripcion:"Provisorio hasta que llegue la carta de vinos del local.",
-    tags:["vino","espumante","dulce"], apto:{vegetariano:true,singluten:true,compartir:true},
+    vino:{ color:"blanco", cepa:"Chardonnay", cuerpo:5, tanino:1, acidez:6, dulzor:1 },
+    ejes:{intensidad:5,untuosidad:2,acidez:6,aventura:4,social:8,dulce:1} },
+
+  /* PINOT NOIR */
+  { id:"casillero-pinot", nombre:"Casillero del Diablo", precio:960, categoria:"vinos", sub:"Pinot Noir",
+    descripcion:"", tags:["vino","tinto"], apto:{vegetariano:true,singluten:true,compartir:true},
     proteina:"bebida", contiene:["alcohol"],
-    vino:{ color:"espumante", cepa:"Moscato", cuerpo:3, tanino:0, acidez:6, dulzor:8 },
-    ejes:{intensidad:3,untuosidad:2,acidez:6,aventura:5,social:8,dulce:8} },
+    vino:{ color:"tinto", cepa:"Pinot Noir", cuerpo:4, tanino:3, acidez:7, dulzor:0 },
+    ejes:{intensidad:4,untuosidad:2,acidez:7,aventura:6,social:8,dulce:0} },
+  { id:"atlantico-sur-pinot", nombre:"Atlántico Sur Reserve", precio:1120, categoria:"vinos", sub:"Pinot Noir",
+    descripcion:"", tags:["vino","tinto"], apto:{vegetariano:true,singluten:true,compartir:true},
+    proteina:"bebida", contiene:["alcohol"],
+    vino:{ color:"tinto", cepa:"Pinot Noir", cuerpo:5, tanino:3, acidez:7, dulzor:0 },
+    ejes:{intensidad:5,untuosidad:2,acidez:7,aventura:6,social:8,dulce:0} },
+  { id:"don-pascual-pinot", nombre:"Don Pascual Reservado", precio:640, categoria:"vinos", sub:"Pinot Noir",
+    descripcion:"", tags:["vino","tinto"], apto:{vegetariano:true,singluten:true,compartir:true},
+    proteina:"bebida", contiene:["alcohol"],
+    vino:{ color:"tinto", cepa:"Pinot Noir", cuerpo:4, tanino:3, acidez:7, dulzor:0 },
+    ejes:{intensidad:4,untuosidad:2,acidez:7,aventura:6,social:8,dulce:0} },
+
+  /* COSECHA TARDÍA */
+  { id:"norton-ct-rosado", nombre:"Norton Rosado", precio:660, categoria:"vinos", sub:"Cosecha tardía",
+    descripcion:"", tags:["vino","rosado","dulce"], apto:{vegetariano:true,singluten:true,compartir:true},
+    proteina:"bebida", contiene:["alcohol"],
+    vino:{ color:"rosado", cepa:"Cosecha tardía", cuerpo:4, tanino:1, acidez:6, dulzor:8 },
+    ejes:{intensidad:4,untuosidad:2,acidez:6,aventura:6,social:8,dulce:8} },
+  { id:"norton-ct-blanco", nombre:"Norton Blanco", precio:660, categoria:"vinos", sub:"Cosecha tardía",
+    descripcion:"", tags:["vino","blanco","dulce"], apto:{vegetariano:true,singluten:true,compartir:true},
+    proteina:"bebida", contiene:["alcohol"],
+    vino:{ color:"blanco", cepa:"Cosecha tardía", cuerpo:5, tanino:0, acidez:6, dulzor:8 },
+    ejes:{intensidad:5,untuosidad:2,acidez:6,aventura:6,social:8,dulce:8} },
+  { id:"norton-ct-tinto", nombre:"Norton Tinto", precio:660, categoria:"vinos", sub:"Cosecha tardía",
+    descripcion:"", tags:["vino","tinto","dulce"], apto:{vegetariano:true,singluten:true,compartir:true},
+    proteina:"bebida", contiene:["alcohol"],
+    vino:{ color:"tinto", cepa:"Cosecha tardía", cuerpo:5, tanino:3, acidez:5, dulzor:8 },
+    ejes:{intensidad:5,untuosidad:2,acidez:5,aventura:6,social:8,dulce:8} },
+  { id:"lambrusco", nombre:"Cavicchioli Lambrusco Emilia", precio:1100, categoria:"vinos", sub:"Cosecha tardía",
+    descripcion:"", tags:["vino","espumante","dulce"], apto:{vegetariano:true,singluten:true,compartir:true},
+    proteina:"bebida", contiene:["alcohol"],
+    vino:{ color:"espumante", cepa:"Lambrusco", cuerpo:4, tanino:2, acidez:6, dulzor:8 },
+    ejes:{intensidad:4,untuosidad:1,acidez:6,aventura:7,social:8,dulce:8} },
+
+  /* ESPUMANTES */
+  { id:"freixenet-nevada", nombre:"Freixenet Carta Nevada", precio:1600, categoria:"vinos", sub:"Espumantes",
+    descripcion:"", tags:["vino","espumante"], apto:{vegetariano:true,singluten:true,compartir:true},
+    proteina:"bebida", contiene:["alcohol"],
+    vino:{ color:"espumante", cepa:"Espumante", cuerpo:3, tanino:0, acidez:8, dulzor:4 },
+    ejes:{intensidad:3,untuosidad:1,acidez:8,aventura:5,social:8,dulce:4} },
+  { id:"chandon-brut", nombre:"Chandon Brut", precio:1880, categoria:"vinos", sub:"Espumantes",
+    descripcion:"", tags:["vino","espumante"], apto:{vegetariano:true,singluten:true,compartir:true},
+    proteina:"bebida", contiene:["alcohol"],
+    vino:{ color:"espumante", cepa:"Espumante", cuerpo:3, tanino:0, acidez:9, dulzor:1 },
+    ejes:{intensidad:3,untuosidad:1,acidez:9,aventura:5,social:8,dulce:1} },
+  { id:"chandon-extra", nombre:"Chandon Extra Brut", precio:1880, categoria:"vinos", sub:"Espumantes",
+    descripcion:"", tags:["vino","espumante"], apto:{vegetariano:true,singluten:true,compartir:true},
+    proteina:"bebida", contiene:["alcohol"],
+    vino:{ color:"espumante", cepa:"Espumante", cuerpo:3, tanino:0, acidez:9, dulzor:0 },
+    ejes:{intensidad:3,untuosidad:1,acidez:9,aventura:6,social:8,dulce:0} },
+  { id:"chandon-demisec", nombre:"Chandon Demi Sec", precio:1880, categoria:"vinos", sub:"Espumantes",
+    descripcion:"", tags:["vino","espumante","dulce"], apto:{vegetariano:true,singluten:true,compartir:true},
+    proteina:"bebida", contiene:["alcohol"],
+    vino:{ color:"espumante", cepa:"Espumante", cuerpo:3, tanino:0, acidez:7, dulzor:6 },
+    ejes:{intensidad:3,untuosidad:1,acidez:7,aventura:5,social:8,dulce:6} },
+  { id:"chandon-rose", nombre:"Chandon Rosé", precio:1880, categoria:"vinos", sub:"Espumantes",
+    descripcion:"", tags:["vino","espumante"], apto:{vegetariano:true,singluten:true,compartir:true},
+    proteina:"bebida", contiene:["alcohol"],
+    vino:{ color:"espumante", cepa:"Espumante", cuerpo:3, tanino:1, acidez:8, dulzor:3 },
+    ejes:{intensidad:3,untuosidad:1,acidez:8,aventura:5,social:8,dulce:3} },
+
+  /* POR COPA */
+  { id:"copa-casa-tinto", nombre:"Copa de vino de la casa · tinto", precio:260, categoria:"vinos", sub:"Por copa",
+    descripcion:"", tags:["vino","tinto","por copa"], apto:{vegetariano:true,singluten:true,compartir:false},
+    proteina:"bebida", contiene:["alcohol"], porCopa:true,
+    vino:{ color:"tinto", cepa:"De la casa", cuerpo:6, tanino:5, acidez:5, dulzor:1 },
+    ejes:{intensidad:6,untuosidad:2,acidez:5,aventura:2,social:3,dulce:1} },
+  { id:"copa-casa-blanco", nombre:"Copa de vino de la casa · blanco", precio:260, categoria:"vinos", sub:"Por copa",
+    descripcion:"", tags:["vino","blanco","por copa"], apto:{vegetariano:true,singluten:true,compartir:false},
+    proteina:"bebida", contiene:["alcohol"], porCopa:true,
+    vino:{ color:"blanco", cepa:"De la casa", cuerpo:4, tanino:0, acidez:7, dulzor:1 },
+    ejes:{intensidad:4,untuosidad:2,acidez:7,aventura:2,social:3,dulce:1} },
 
   /* ── PARA LOS MÁS CHICOS ────────────────────────────────────────────
      PROVISORIO. El local todavía no nos pasó el menú infantil. Estos
@@ -2847,18 +3052,32 @@ const PERFIL_VINO = {
               razon:"con mariscos hay que ir a lo filoso y salino, nunca a lo pesado" },
   queso:    { color:"tinto",     cuerpo:6, tanino:5, acidez:7, dulzor:1,
               razon:"el queso derretido necesita algo que corte, si no se hace pesado enseguida" },
-  vegetal:  { color:"rosado",    cuerpo:4, tanino:2, acidez:7, dulzor:1,
-              razon:"con verduras no hace falta artillería: un rosado fresco las acompaña mejor" },
-  dulce:    { color:"espumante", cuerpo:3, tanino:0, acidez:6, dulzor:8,
+  vegetal:  { color:"blanco",    cuerpo:4, tanino:2, acidez:7, dulzor:0,
+              razon:"con verduras no hace falta artillería: algo fresco las acompaña mejor" },
+  dulce:    { color:"blanco",    cuerpo:5, tanino:0, acidez:6, dulzor:8,
               razon:"con el postre el vino tiene que ser más dulce que el plato, si no sabe a vinagre" }
 };
 
 /* Un vino se puntúa contra el perfil, no contra la persona. La persona ya
    decidió antes si quería vino y de qué color. */
-function puntuarVino(p, objetivo){
+/* La carta va de $260 a $8.400: treinta y dos veces de diferencia. Por
+   perfil, el Cru d'Exception marida una carne tan bien como el Don Pascual
+   —son los dos Tannat— así que entre dos que empatan el desempate al azar
+   mandaba la botella de $8.400 una de cada seis veces, arriba de un asado
+   de $580. Eso no es una recomendación, es una humorada.
+
+   La referencia es el plato. El exceso se penaliza en vez de prohibirse,
+   así que si de verdad no hay nada mejor la botella cara igual puede
+   salir; lo que no puede es salir por empate. */
+function techoDeVino(plato){
+  return Math.max(900, plato.precio * 1.8);
+}
+
+function puntuarVino(p, objetivo, techo){
   const v = p.vino;
   if (!v) return -99;
   let s = 0;
+  if (techo && p.precio > techo) s -= Math.min(8, 4 * (p.precio - techo) / techo);
   s -= Math.abs(v.cuerpo - objetivo.cuerpo) * 1.0;
   s -= Math.abs(v.tanino - objetivo.tanino) * 1.2;   // el que más decide
   s -= Math.abs(v.acidez - objetivo.acidez) * 0.6;
@@ -2885,18 +3104,45 @@ function objetivoVino(plato, punto, colorForzado){
   // áspera a ella. Una jugosa aguanta —y pide— bastante más.
   if (punto === "cocido")  o.tanino = clamp(o.tanino - 3, 0, 10);
   if (punto === "jugoso")  o.tanino = clamp(o.tanino + 1, 0, 10);
+
+  // Con verduras el color no lo decide la proteína sino cómo está hecho
+  // el plato: una ensalada pide blanco y una parmeggiana gratinada pide un
+  // tinto liviano. Además, en esta carta no hay ningún rosado seco —los
+  // únicos rosados son cosecha tardía, dulces—, así que apuntar a rosado
+  // era apuntar a algo que no existe.
+  if (plato.proteina === "vegetal")
+    o.color = plato.ejes.untuosidad >= 7 ? "tinto" : "blanco";
+
+  // Con los postres pasa lo mismo y por eso la carta tiene cuatro cosecha
+  // tardía de colores distintos: un flan de dulce de leche y un lemon pie
+  // no piden el mismo dulce. El que va al medio de la mesa pide burbuja,
+  // que es lo que hace que un postre compartido se sienta un brindis.
+  if (plato.proteina === "dulce"){
+    o.color = plato.apto.compartir ? "espumante"
+            : plato.ejes.acidez >= 6 ? "blanco"
+            : plato.ejes.acidez >= 4 ? "rosado"
+            : "tinto";
+  }
+
   if (colorForzado) o.color = colorForzado;
   return o;
 }
 
-function elegirVino(plato, f, rnd, punto, colorForzado){
+function elegirVino(plato, f, rnd, punto, colorForzado, vector){
   let pool = MENU.filter(p => esVino(p) && pasaFiltrosDuros(p, f));
   if (!pool.length) return null;
   const o = objetivoVino(plato, punto, colorForzado);
+  const techo = techoDeVino(plato);
+  // Una botella entera para alguien que vino solo y no comparte es mucha
+  // botella; una copa suelta en una mesa de seis no le alcanza a nadie.
+  // El vino de la casa por copa existe justamente para el primer caso, y
+  // sin esto no ganaba nunca: el motor sólo sabía pensar en botellas.
+  const social = vector && typeof vector.social === "number" ? vector.social : 6;
   const ruido = {};
   pool.slice().sort((a,b) => a.id < b.id ? -1 : 1).forEach(p => { ruido[p.id] = rnd(); });
   const rank = pool
-    .map(p => ({ plato:p, score: puntuarVino(p, o) }))
+    .map(p => ({ plato:p,
+                 score: puntuarVino(p, o, techo) + (p.porCopa ? (social < 4.5 ? 3 : -4) : 0) }))
     .sort((a,b) => {
       if (Math.abs(a.score - b.score) > 0.01) return b.score - a.score;
       const va = Memoria.veces(a.plato.id), vb = Memoria.veces(b.plato.id);
@@ -3076,7 +3322,7 @@ function recomendar(respuestas, preguntas, opciones){
       colorForzado !== null || f.prefBebida === "maridaje" ||
       (f.prefBebida !== "cerveza" && meritaVino));
 
-  const maridaje = tomaAlcohol ? elegirVino(principal, f, rnd, null, colorForzado) : null;
+  const maridaje = tomaAlcohol ? elegirVino(principal, f, rnd, null, colorForzado, v) : null;
 
   // La bebida que no es vino: se mide contra el plato, no contra la
   // persona. Cuanto más graso lo que vas a comer, más filo necesita lo
@@ -3118,6 +3364,15 @@ function recomendar(respuestas, preguntas, opciones){
     { pesosEje:{ intensidad:0.5, untuosidad:0.7, aventura:0.6, social:0.4, acidez:0.9, dulce:1.6 },
       sinHambre:true, sinAfin:true })[0].plato;
 
+  // La carta trae cuatro vinos de cosecha tardía y un demi sec, que con
+  // el motor anterior no los recomendaba nadie: el maridaje se calculaba
+  // contra el plato fuerte y ahí un vino dulce nunca gana. Se calculan
+  // aparte, contra el postre, y sólo se ofrecen a quien ya está tomando
+  // vino — proponerle una botella dulce a alguien que pidió una limonada
+  // es vender, no recomendar.
+  const vinoPostre = (quiereVino && maridaje && postre)
+    ? elegirVino(postre, f, rnd, null, null, v) : null;
+
   // ¿Corresponde preguntar el punto? Sólo si lo que sale es un corte de
   // carne de la parrilla. Preguntarle el punto a una pizza es ridículo.
   const pidePunto = principal.categoria === "parrilla" &&
@@ -3127,7 +3382,7 @@ function recomendar(respuestas, preguntas, opciones){
     entrada, entradaRazon: ent ? ent.razon : null,
     principal, alternativas,
     bebida, razonBebida, esVino: bebida ? esVino(bebida) : false, vinoSugerido,
-    postre,
+    postre, vinoPostre,
     vector: v, filtros: f, aviso,
     pidePunto, punto: null, cambioSugerido: null,
     pool: rankPrincipal.map(x => x.plato),
@@ -3159,7 +3414,7 @@ function aplicarPunto(r, punto){
     const rnd = mulberry32(semillaDe(r.vector) ^ 0x5EED);
     const colorForzado = r.filtros.prefBebida === "tinto" ? "tinto"
                        : r.filtros.prefBebida === "blanco" ? "blanco" : null;
-    const m = elegirVino(r.principal, r.filtros, rnd, punto, colorForzado);
+    const m = elegirVino(r.principal, r.filtros, rnd, punto, colorForzado, r.vector);
     if (m){
       r.total = r.total - r.bebida.precio + m.plato.precio;
       r.bebida = m.plato;
@@ -3455,13 +3710,21 @@ function fotoHTML(p, variante){
 
 function tarjetaPlato(p){
   const chips = [];
-  if (p.apto.vegetariano) chips.push('<span class="tag tag--veg">Vegetariano</span>');
-  if (p.apto.singluten)   chips.push('<span class="tag tag--stacc">Sin TACC</span>');
-  if (p.apto.compartir)   chips.push('<span class="tag tag--comp">Para compartir</span>');
+  // Un vino no necesita que le aclaren que es vegetariano y sin TACC: lo
+  // son los cuarenta y nueve. Repetir cinco etiquetas por botella es ruido
+  // que tapa lo único que importa, que es la cepa y el color.
+  if (!p.vino){
+    if (p.apto.vegetariano) chips.push('<span class="tag tag--veg">Vegetariano</span>');
+    if (p.apto.singluten)   chips.push('<span class="tag tag--stacc">Sin TACC</span>');
+    if (p.apto.compartir)   chips.push('<span class="tag tag--comp">Para compartir</span>');
+  }
   p.tags
     .filter(t => YA_DICHO.indexOf(t.toLowerCase()) === -1)
+    .filter(t => !p.vino || t === "dulce")
     .forEach(t => chips.push(`<span class="tag">${esc(t)}</span>`));
-  const cepa = p.vino ? `<p class="plato__desc" style="margin-top:2px"><b>${esc(p.vino.cepa)}</b> · ${esc(p.vino.color)}${p.copa ? " · copa $" + p.copa.toLocaleString("es-UY") : ""}</p>` : "";
+  const cepa = p.vino
+    ? `<p class="plato__desc" style="margin-top:2px"><b>${esc(p.vino.cepa)}</b> · ${esc(p.vino.color)}${p.porCopa ? " · por copa" : ""}</p>`
+    : "";
   return `<article class="plato">
     ${fotoHTML(p, "thumb")}
     <div class="plato__cuerpo">
@@ -3828,7 +4091,7 @@ function recomendarMesa(comensales, ninos){
                    || platos.map(x => x.plato).find(Boolean);
   const tomaAlcohol = comensales.every(c => c.filtros.excluyeContiene.indexOf("alcohol") === -1);
   const maridaje = (tomaAlcohol && platoPatron)
-    ? elegirVino(platoPatron, filtrosMesa, rnd, null, null) : null;
+    ? elegirVino(platoPatron, filtrosMesa, rnd, null, null, vectorMesa) : null;
   const meritaVino = platoPatron &&
     ["carne","achuras","cerdo","pescado","mariscos","pollo","queso"].indexOf(platoPatron.proteina) !== -1 &&
     (platoPatron.ejes.untuosidad >= 6 || platoPatron.ejes.intensidad >= 7);
@@ -5515,7 +5778,8 @@ function dibujarVeredicto(r, conReveal){
         ${p.vino ? `<p class="mini__cepa">${esc(p.vino.cepa)} · ${esc(p.vino.color)}</p>` : ""}
         <p class="mini__nombre">${esc(p.nombre)}</p>
         <p class="mini__linea">${esc(linea)}</p>
-        ${p.copa ? `<p class="mini__copa">Por copa ${precioTxt(p.copa)} · botella ${precioTxt(p.precio)}</p>` : ""}
+        ${p.porCopa ? `<p class="mini__copa">Se sirve por copa.</p>`
+          : p.vino ? `<p class="mini__copa">Botella.</p>` : ""}
       </div>
       <p class="mini__precio">${precioTxt(p.precio)}</p>
     </div>`;
@@ -5580,6 +5844,11 @@ function dibujarVeredicto(r, conReveal){
     <div class="bloque bloque--tenue">
       ${titulo("Y si llegás con lugar")}
       ${mini(r.postre, vozPostre(r))}
+      ${r.vinoPostre && r.vinoPostre.plato.id !== r.bebida.id
+        ? mini(r.vinoPostre.plato,
+               "Y si seguís con vino: éste es más dulce que el postre, que es la única manera de que no sepa a vinagre.",
+               "mini--vino")
+        : ""}
     </div>
 
     <div class="ticket">
@@ -5741,7 +6010,7 @@ function cambiarPrincipal(r, plato){
   r.cambioSugerido = null;
   r.alternativas = r.alternativas.filter(p => p.id !== plato.id);
   if (r.esVino){
-    const m = elegirVino(plato, r.filtros, rnd, r.punto, null);
+    const m = elegirVino(plato, r.filtros, rnd, r.punto, null, r.vector);
     if (m){ r.bebida = m.plato; r.razonBebida = m.razon; }
   }
   r.total = (r.entrada ? r.entrada.precio : 0) + r.principal.precio +
@@ -6090,9 +6359,13 @@ function bofoTest(){
   // Qué color de vino corresponde a cada proteína. Es el titular de la
   // regla de maridaje; el motor afina adentro de eso, pero de acá no se
   // puede salir: un tinto con tanino sobre unas rabas es un error.
+  // "vegetal" no está: en esta carta el color de un plato de verduras
+  // depende de cómo esté hecho —gratinado pide tinto liviano, fresco pide
+  // blanco— así que en vez del color se verifica lo que no puede pasar,
+  // que es un tinto áspero arriba de unas verduras.
   const COLOR_ESPERADO = {
     carne:"tinto", achuras:"tinto", cerdo:"tinto", queso:"tinto",
-    pescado:"blanco", mariscos:"blanco", pollo:"blanco", vegetal:"rosado"
+    pescado:"blanco", mariscos:"blanco", pollo:"blanco"
   };
 
   function correr(modo, vueltas){
@@ -6210,9 +6483,15 @@ function bofoTest(){
           const forzado = r.filtros.prefBebida === "tinto" || r.filtros.prefBebida === "blanco";
           const esperado = COLOR_ESPERADO[r.principal.proteina];
           if (!forzado && esperado)
-            chequear(r.bebida.vino.color === esperado ||
-                     (esperado === "rosado" && r.bebida.vino.color !== "tinto"),
+            chequear(r.bebida.vino.color === esperado,
               `[${modo}] a "${r.principal.nombre}" (${r.principal.proteina}) le tocó un ${r.bebida.vino.color}`);
+          if (!forzado && r.principal.proteina === "vegetal")
+            chequear(r.bebida.vino.tanino <= 5,
+              `[${modo}] a "${r.principal.nombre}" le tocó un tinto de ${r.bebida.vino.tanino} de tanino`);
+          // Y ninguna botella puede salir por empate a un precio absurdo
+          // contra lo que se está comiendo.
+          chequear(r.bebida.precio <= Math.max(2600, r.principal.precio * 4),
+            `[${modo}] botella de $${r.bebida.precio} sobre un plato de $${r.principal.precio}`);
         }
         // nadie que dijo que no toma se lleva alcohol
         if (sr.some(i => (pReq.opciones[i].excluye || {}).contiene &&
