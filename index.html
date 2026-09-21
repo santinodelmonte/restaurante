@@ -677,20 +677,6 @@ button{ font:inherit; color:inherit; }
 .grilla__txt{ font-size:.76rem; font-weight:600; text-align:center; line-height:1.15; }
 .grilla[aria-busy] .grilla__item[aria-pressed="true"]{ border-color:var(--arena); background:rgba(224,169,74,.22); }
 
-/* elegí rápido */
-.reloj{ height:6px; border-radius:999px; background:rgba(255,255,255,.16); overflow:hidden; margin:0 0 14px; }
-.reloj__barra{
-  height:100%; width:100%; background:var(--arena); border-radius:999px;
-  transform-origin:left center;
-  animation:reloj-corre 3s linear forwards;
-}
-@keyframes reloj-corre{ from{ transform:scaleX(1); } to{ transform:scaleX(0); } }
-/* cuando se acaba el tiempo la pista queda encendida en vez de vacía:
-   así se lee "se te pasó" y no "esto no funcionó" */
-.reloj--fin{ background:rgba(224,169,74,.28); }
-.reloj--fin .reloj__barra{ animation:none; transform:scaleX(0); }
-.tarde{ font-family:var(--f-script); font-size:1.2rem; color:var(--arena); margin:12px 0 0; }
-
 /* esto o aquello */
 .duplas__puntos{ display:flex; gap:6px; justify-content:center; margin:0 0 16px; }
 .duplas__punto{ width:8px; height:8px; border-radius:50%; background:rgba(255,255,255,.22); }
@@ -774,6 +760,19 @@ button{ font:inherit; color:inherit; }
   text-align:center; margin:0 0 14px; color:var(--tinta-clara);
   font-size:.72rem; font-weight:700; letter-spacing:.16em; text-transform:uppercase;
 }
+
+/* ── LO QUE ME DIJISTE ────────────────────────────────────────────────
+   La evidencia. Cada línea es una respuesta de la persona y, debajo, qué
+   hizo el chef con ella. El guion de la izquierda las encadena para que
+   se lean como una lista de razones y no como un resumen de formulario. */
+.leido__lista{ list-style:none; padding:0; margin:0; }
+.leido__lista li{
+  position:relative; padding:0 0 0 16px; margin:0 0 11px;
+  border-left:2px solid rgba(224,169,74,.45);
+  padding-left:14px;
+}
+.leido__dijo{ display:block; font-size:.97rem; font-weight:600; color:var(--papel); }
+.leido__hice{ display:block; margin-top:2px; font-size:.9rem; color:var(--tinta-clara); }
 
 /* el postre ya no es el remate: es una línea al final */
 .bloque--tenue{ opacity:.82; }
@@ -1070,7 +1069,7 @@ button{ font:inherit; color:inherit; }
       <div class="pie__olas olas olas--noche" aria-hidden="true"></div>
       <div class="envoltura">
         <p class="pie__marca">¿Y si no sabés qué pedir?</p>
-        <p style="margin-bottom:16px">El Chef te hace unas preguntas raras y te lo dice él.</p>
+        <p style="margin-bottom:16px">Contale cómo comés y te arma la mesa entera, desde la entrada hasta con qué bajarla.</p>
         <button class="btn btn--sol" data-ir="chef">Que te lea el Chef</button>
       </div>
     </footer>
@@ -1792,7 +1791,6 @@ const MENU = [
    ║                                                                  ║
    ║  formato "opciones"  botones (por defecto)                       ║
    ║          "grilla"    grilla de emojis                            ║
-   ║          "rapido"    dos opciones y tres segundos de reloj       ║
    ║          "duplas"    ráfaga de esto-o-aquello                    ║
    ║          "deslizador" de 0 a 10, con el chef comentando          ║
    ║          "texto"     escribe la persona; el chef lo cita textual ║
@@ -1839,23 +1837,11 @@ const PREGUNTAS = [
     izq:"Vengo a picar", der:"Vengo a comer en serio",
     blandoEje:"intensidad", pesoBlando:0.45,
     marcas:[
-      { hasta:1, txt:"Entonces vamos por algo corto y bien hecho.", eco:"que venías a picar y nada más" },
-      { hasta:3, txt:"Picoteo largo. Eso lo resuelvo con la entrada.", eco:"que venías a picotear" },
-      { hasta:6, txt:"Hambre de gente normal. Con eso trabajo bien.",  eco:"que traías un hambre normal" },
-      { hasta:8, txt:"Bien. Entonces la entrada no es opcional.",      eco:"que venías con hambre en serio" },
-      { hasta:10, txt:"Con ese hambre te armo la mesa entera.",        eco:"que te comías la carta entera" }
-    ] },
-
-  { id:"presupuesto", tipo:"filtro", grupo:"filtro", modos:["completo"],
-    texto:"¿Y hasta dónde querés ir hoy?",
-    nota:"Se come bárbaro en los tres. Cambia el camino, no el resultado.",
-    opciones:[
-      { texto:"Sin estirarme", emo:"🪙", blandoPrecio:{ techo:400, peso:0.55 }, eco:"que no te querías estirar",
-        chiste:"Se come muy bien sin estirarse. Dejame a mí." },
-      { texto:"Ni tanto ni tan poco", emo:"💵", blandoPrecio:{ techo:640, peso:0.20 }, eco:"que ibas por el medio",
-        chiste:"El lugar donde está lo mejor de la carta, para serte honesto." },
-      { texto:"Hoy me doy el gusto", emo:"🔥", blandoPrecio:null, eco:"que hoy te dabas el gusto",
-        chiste:"Entonces te voy a mandar a lo que yo pediría." }
+      { hasta:1, txt:"Entonces vamos por algo corto y bien hecho.", eco:"que venías a picar y nada más", lleva:"así que fui a algo corto y bien hecho" },
+      { hasta:3, txt:"Picoteo largo. Eso lo resuelvo con la entrada.", eco:"que venías a picotear", lleva:"y eso lo resuelvo sobre todo con la entrada" },
+      { hasta:6, txt:"Hambre de gente normal. Con eso trabajo bien.",  eco:"que traías un hambre normal", lleva:"con eso trabajo cómodo" },
+      { hasta:8, txt:"Bien. Entonces la entrada no es opcional.",      eco:"que venías con hambre en serio", lleva:"entonces la entrada no era opcional" },
+      { hasta:10, txt:"Con ese hambre te armo la mesa entera.",        eco:"que te comías la carta entera", lleva:"y con ese hambre te armo la mesa entera" }
     ] },
 
 /* ══ LO DIRECTO — de comida, sin vueltas ════════════════════════════ */
@@ -1864,22 +1850,22 @@ const PREGUNTAS = [
     texto:"Si tuvieras que quedarte con una sola cosa, ¿cuál?",
     opciones:[
       { texto:"Carne roja", emo:"🥩", afin:{ proteina:"carne" },
-        pesos:{ intensidad:+3, untuosidad:+2, acidez:-1 }, eco:"que te quedabas con la carne",
+        pesos:{ intensidad:+3, untuosidad:+2, acidez:-1 }, eco:"que te quedabas con la carne", lleva:"así que el plato sale de la parrilla y la entrada va con queso",
         chiste:"Entonces esto ya tiene dirección. Después te digo con qué la empezamos." },
       { texto:"Pescado", emo:"🐟", afin:{ proteina:"pescado" },
-        pesos:{ intensidad:-1, untuosidad:-2, acidez:+3 }, eco:"que te quedabas con el pescado",
+        pesos:{ intensidad:-1, untuosidad:-2, acidez:+3 }, eco:"que te quedabas con el pescado", lleva:"así que el trabajo fino está en lo que te pongo al lado",
         chiste:"Bien. Ahí el trabajo fino está en lo que tomás al lado." },
       { texto:"Pollo", emo:"🍗", afin:{ proteina:"pollo" },
-        pesos:{ intensidad:-1, untuosidad:0, acidez:+1 }, eco:"que ibas por el pollo",
+        pesos:{ intensidad:-1, untuosidad:0, acidez:+1 }, eco:"que ibas por el pollo", lleva:"que es suave, así que el sabor fuerte lo pongo antes",
         chiste:"La opción que nadie defiende y todos terminan comiendo contentos." },
       { texto:"Cerdo", emo:"🥓", afin:{ proteina:"cerdo" },
-        pesos:{ intensidad:+2, untuosidad:+3 }, eco:"que te quedabas con el cerdo",
+        pesos:{ intensidad:+2, untuosidad:+3 }, eco:"que te quedabas con el cerdo", lleva:"que ya trae su grasa, así que no la duplico",
         chiste:"El cerdo bien hecho es de lo mejor que sale de esa parrilla." },
       { texto:"Queso", emo:"🧀", afin:{ proteina:"queso" },
-        pesos:{ untuosidad:+3, intensidad:+1, social:+2 }, eco:"que te quedabas con el queso",
+        pesos:{ untuosidad:+3, intensidad:+1, social:+2 }, eco:"que te quedabas con el queso", lleva:"y sobre eso arma media carta esta cocina",
         chiste:"Con eso me alcanza para saber cómo arranca tu mesa." },
       { texto:"Verduras", emo:"🥗", afin:{ proteina:"vegetal" },
-        pesos:{ untuosidad:-3, acidez:+2, intensidad:-1 }, eco:"que ibas por las verduras",
+        pesos:{ untuosidad:-3, acidez:+2, intensidad:-1 }, eco:"que ibas por las verduras", lleva:"y acá eso no es un plato de consuelo",
         chiste:"Acá eso no es un castigo. Hay cosas que valen la pena." }
     ] },
 
@@ -1887,16 +1873,16 @@ const PREGUNTAS = [
     texto:"Antes del plato fuerte, ¿qué pasa en tu mesa?",
     opciones:[
       { texto:"Algo al medio para todos", emo:"🫱", pesos:{ social:+3, untuosidad:+2, intensidad:+1 },
-        eco:"que empezabas con algo al medio",
+        eco:"que empezabas con algo al medio", lleva:"por eso la mesa arranca con algo para compartir",
         chiste:"Así se empieza. La cocina tarda y la mesa no puede estar vacía." },
       { texto:"Algo liviano para abrir", emo:"🥬", pesos:{ acidez:+3, untuosidad:-2 },
-        eco:"que abrías con algo liviano",
+        eco:"que abrías con algo liviano", lleva:"así llegás con hambre al plato principal",
         chiste:"Bien pensado: así llegás con hambre al plato principal." },
       { texto:"Voy directo al plato", emo:"➡️", pesos:{ social:-2, intensidad:+1 },
-        eco:"que ibas directo al plato",
+        eco:"que ibas directo al plato", lleva:"igual te pongo una entrada al lado, y vas a entender por qué",
         chiste:"Lo respeto. Igual te voy a poner una entrada al lado, y vas a entender por qué." },
       { texto:"Lo que traigan primero", emo:"🤷", pesos:{ aventura:+2, social:+1 },
-        eco:"que comías lo primero que llegara",
+        eco:"que comías lo primero que llegara", lleva:"eso me deja elegir a mí, que es como sale mejor",
         chiste:"Esa respuesta me deja trabajar tranquilo." }
     ] },
 
@@ -1904,13 +1890,14 @@ const PREGUNTAS = [
     texto:"Queso: ¿hasta dónde llegás?",
     opciones:[
       { texto:"Cuanto más derretido, mejor", emo:"🫕", pesos:{ untuosidad:+3, intensidad:+2 },
-        eco:"que el queso lo querías derretido",
+        eco:"que el queso lo querías derretido", lleva:"con eso la entrada quedó decidida sola",
         chiste:"Entonces la entrada ya la tengo elegida." },
       { texto:"Un poco, sin exagerar", emo:"🧀", pesos:{ untuosidad:+1 },
-        eco:"que con el queso ibas de a poco",
+        eco:"que con el queso ibas de a poco", lleva:"así que lo uso para sumar y no para tapar",
         chiste:"Punto medio. Es donde vive casi toda la carta." },
-      { texto:"Prefiero que no", emo:"🚫", pesos:{ untuosidad:-3, acidez:+2 },
-        eco:"que el queso no era lo tuyo",
+      { texto:"Prefiero que no", emo:"🚫", evita:{ proteina:"queso" },
+        pesos:{ untuosidad:-3, acidez:+2 },
+        eco:"que el queso no era lo tuyo", lleva:"así que lo saqué de la mesa, empezando por la entrada",
         chiste:"Anotado. Hay otras maneras de empezar una comida." }
     ] },
 
@@ -1918,16 +1905,16 @@ const PREGUNTAS = [
     texto:"¿Cómo te gusta que llegue la comida?",
     opciones:[
       { texto:"Bien dorada por fuera", emo:"🔥", pesos:{ intensidad:+3, untuosidad:+1 },
-        eco:"que la querías bien dorada",
+        eco:"que la querías bien dorada", lleva:"ahí está el sabor, y el corte que te doy lo aguanta",
         chiste:"Ahí está el sabor. El que pide todo pálido no sabe lo que se pierde." },
       { texto:"Jugosa por dentro", emo:"💧", pesos:{ untuosidad:+2, intensidad:+1 },
-        eco:"que la querías jugosa",
+        eco:"que la querías jugosa", lleva:"por eso el corte es de los que viven del jugo",
         chiste:"Con vos el parrillero se va a entender bien." },
       { texto:"Cocida del todo", emo:"⏲️", pesos:{ intensidad:-1, untuosidad:-1 },
-        eco:"que la querías cocida del todo",
+        eco:"que la querías cocida del todo", lleva:"entonces elegí un corte que no se pone duro",
         chiste:"Está bien, se hace. Sólo hay que elegir el corte correcto." },
       { texto:"Como salga, confío", emo:"🙌", pesos:{ aventura:+2 },
-        eco:"que confiabas en la cocina",
+        eco:"que confiabas en la cocina", lleva:"y así es como mejor se come",
         chiste:"Esa es la mejor manera de comer, la verdad." }
     ] },
 
@@ -1935,16 +1922,16 @@ const PREGUNTAS = [
     texto:"La salsa, ¿dónde va?",
     opciones:[
       { texto:"Encima y sin miedo", emo:"🥣", pesos:{ untuosidad:+3, intensidad:+2 },
-        eco:"que la salsa la querías encima",
+        eco:"que la salsa la querías encima", lleva:"así que no te mando nada seco",
         chiste:"Entonces no te voy a mandar nada seco." },
       { texto:"Aparte, yo me arreglo", emo:"🥄", pesos:{ untuosidad:0, aventura:+1 },
-        eco:"que la salsa la querías aparte",
+        eco:"que la salsa la querías aparte", lleva:"vos manejás el plato, yo pongo el producto",
         chiste:"El que controla la salsa controla el plato. Bien." },
       { texto:"El plato solo, sin nada", emo:"🍖", pesos:{ untuosidad:-3, intensidad:+1 },
-        eco:"que preferías el plato solo",
+        eco:"que preferías el plato solo", lleva:"producto puro, que es donde se nota si la cocina es buena",
         chiste:"Producto puro. Ahí se nota si la cocina es buena o no." },
       { texto:"Que se bañe entero", emo:"🌊", pesos:{ untuosidad:+3, social:+1 },
-        eco:"que querías el plato bañado",
+        eco:"que querías el plato bañado", lleva:"vas a necesitar pan, te aviso desde ahora",
         chiste:"Vas a necesitar pan. Ya te lo aviso." }
     ] },
 
@@ -1967,7 +1954,7 @@ const PREGUNTAS = [
       { texto:"Ensalada", emo:"🥗", pesos:{ acidez:+3, untuosidad:-2 },
         eco:"que querías ensalada al lado", chiste:"Y ahí el plato se equilibra solo." },
       { texto:"Puré", emo:"🥔", pesos:{ untuosidad:+2, intensidad:-1 },
-        eco:"que querías puré", chiste:"Comida de las que abrazan. No lo digo como crítica." },
+        eco:"que querías puré", chiste:"Comida de las que abrazan. Tiene su lugar y no es menor." },
       { texto:"Nada, el plato solo", emo:"🍽️", pesos:{ intensidad:+2, untuosidad:-1 },
         eco:"que querías el plato solo", chiste:"El que sabe lo que vino a comer." }
     ] },
@@ -1987,28 +1974,28 @@ const PREGUNTAS = [
     texto:"Para tomar, ¿con qué te sentís cómodo?",
     opciones:[
       { texto:"Vino tinto", emo:"🍷", prefBebida:"tinto", pesos:{ intensidad:+2, untuosidad:+1 },
-        eco:"que ibas por un tinto", chiste:"Entonces el plato lo voy a elegir pensando también en la copa." },
+        eco:"que ibas por un tinto", lleva:"y el plato lo elegí pensando también en la copa", chiste:"Entonces el plato lo voy a elegir pensando también en la copa." },
       { texto:"Vino blanco", emo:"🥂", prefBebida:"blanco", pesos:{ acidez:+3, untuosidad:-1 },
-        eco:"que ibas por un blanco", chiste:"Buena decisión con el calor que hace acá afuera." },
+        eco:"que ibas por un blanco", lleva:"y con el calor de acá afuera es la decisión correcta", chiste:"Buena decisión con el calor que hace acá afuera." },
       { texto:"Cerveza", emo:"🍺", prefBebida:"cerveza", pesos:{ social:+2, acidez:+1 },
-        eco:"que ibas por la cerveza", chiste:"La que nunca se pelea con nada de esta carta." },
+        eco:"que ibas por la cerveza", lleva:"que es la que no se pelea con nada de esta carta", chiste:"La que nunca se pelea con nada de esta carta." },
       { texto:"Algo sin alcohol", emo:"🧃", prefBebida:"sin-alcohol", pesos:{ acidez:+1 },
-        eco:"que ibas sin alcohol", chiste:"Hay con qué. No te voy a dar agua y listo." },
+        eco:"que ibas sin alcohol", lleva:"y para acompañar tengo bastante más que agua", chiste:"Hay con qué. No te voy a dar agua y listo." },
       { texto:"Lo que vaya con el plato", emo:"🙇", prefBebida:"maridaje", pesos:{ aventura:+2 },
-        eco:"que te dejabas llevar con la bebida", chiste:"Esa es la respuesta que me deja hacer mi trabajo." }
+        eco:"que te dejabas llevar con la bebida", lleva:"así que elegí lo que de verdad va con el plato", chiste:"Esa es la respuesta que me deja hacer mi trabajo." }
     ] },
 
   { id:"postre-si-no", tipo:"sabor", peso:"bajo", grupo:"dulce", modos:["completo"],
     texto:"¿Y el final dulce?",
     opciones:[
       { texto:"Siempre hay lugar", emo:"🍰", pesos:{ dulce:+3 },
-        eco:"que siempre te quedaba lugar para el postre", chiste:"Anotado, aunque yo hoy te voy a empujar más para el principio de la comida." },
+        eco:"que siempre te quedaba lugar para el postre", chiste:"Anotado. Igual hoy te voy a poner el acento al principio de la comida." },
       { texto:"Si me queda lugar", emo:"🤔", pesos:{ dulce:+1 },
         eco:"que el postre dependía de cómo vinieras", chiste:"Sinceridad. Lo dejo anotado por si acaso." },
       { texto:"Prefiero un café", emo:"☕", pesos:{ dulce:-1, intensidad:+1 },
         eco:"que preferías cerrar con un café", chiste:"Cerrar con café es de gente que comió bien." },
       { texto:"No soy de dulce", emo:"🧂", pesos:{ dulce:-3 },
-        eco:"que de dulce no eras", chiste:"Entonces la plata la ponemos toda antes del postre." }
+        eco:"que de dulce no eras", chiste:"Entonces el peso de la comida va todo antes del postre." }
     ] },
 
   { id:"limon", tipo:"sabor", peso:"bajo", grupo:"acidez", modos:["completo"],
@@ -2026,7 +2013,7 @@ const PREGUNTAS = [
     texto:"Ajo y cebolla, ¿cómo andamos?",
     opciones:[
       { texto:"Cuanto más mejor", emo:"🧄", pesos:{ intensidad:+3, aventura:+1 },
-        eco:"que el ajo cuanto más mejor", chiste:"Me caés bien. Eso es cocinar en serio." },
+        eco:"que el ajo cuanto más mejor", chiste:"Así se cocina. El ajo bien hecho no tapa nada, levanta." },
       { texto:"Con moderación", emo:"🧅", pesos:{ intensidad:+1 },
         eco:"que el ajo con moderación", chiste:"El punto donde queda bien para todos." },
       { texto:"Mejor que no", emo:"🚫", pesos:{ intensidad:-2, acidez:+1 },
@@ -2040,30 +2027,30 @@ const PREGUNTAS = [
   { id:"olor", tipo:"sabor", peso:"alto", grupo:"olfato", formato:"grilla", modos:["express","completo"],
     texto:"¿Qué olor te da hambre de golpe? El primero que te tire.",
     opciones:[
-      { emo:"🔥", texto:"Brasa encendida",  pesos:{ intensidad:+3, untuosidad:+1 }, eco:"que el olor a brasa te desarma",
+      { emo:"🔥", texto:"Brasa encendida",  pesos:{ intensidad:+3, untuosidad:+1 }, eco:"que el olor a brasa te desarma", lleva:"por eso te llevo a la parrilla y no al horno",
         chiste:"Ese olor vende más que cualquier carta." },
-      { emo:"🥖", texto:"Pan recién hecho", pesos:{ untuosidad:+2, intensidad:-1 }, eco:"que te gana el pan recién hecho",
+      { emo:"🥖", texto:"Pan recién hecho", pesos:{ untuosidad:+2, intensidad:-1 }, eco:"que te gana el pan recién hecho", lleva:"entonces lo tuyo es masa y horno de barro",
         chiste:"No conozco a nadie que le diga que no a eso." },
-      { emo:"🧄", texto:"Ajo en la sartén", pesos:{ intensidad:+3, aventura:+1 }, eco:"que el ajo en la sartén te llama",
+      { emo:"🧄", texto:"Ajo en la sartén", pesos:{ intensidad:+3, aventura:+1 }, eco:"que el ajo en la sartén te llama", lleva:"así que te doy algo con carácter y no tibio",
         chiste:"Eso es olor a que alguien está cocinando de verdad." },
-      { emo:"🌊", texto:"El mar",           pesos:{ acidez:+3, untuosidad:-2 }, eco:"que te tira el olor del mar",
+      { emo:"🌊", texto:"El mar",           pesos:{ acidez:+3, untuosidad:-2 }, eco:"que te tira el olor del mar", lleva:"de ahí sale medio veredicto",
         chiste:"Estás en el lugar indicado, entonces." },
-      { emo:"🧈", texto:"Manteca derretida",pesos:{ untuosidad:+3 }, eco:"que la manteca derretida te puede",
+      { emo:"🧈", texto:"Manteca derretida",pesos:{ untuosidad:+3 }, eco:"que la manteca derretida te puede", lleva:"por eso el plato va para el lado graso",
         chiste:"Con eso ya sé para qué lado va tu plato." },
-      { emo:"☕", texto:"Café recién hecho", pesos:{ intensidad:+1, dulce:+1 }, eco:"que el café recién hecho te para",
-        chiste:"Sos de los que se quedan en la sobremesa. Lo veo venir." },
-      { emo:"🍋", texto:"Cítrico recién cortado", pesos:{ acidez:+3 }, eco:"que te despierta un cítrico recién cortado",
+      { emo:"☕", texto:"Café recién hecho", pesos:{ intensidad:+1, dulce:+1 }, eco:"que el café recién hecho te para", lleva:"sos de los que se quedan en la sobremesa, y eso cambia el final",
+        chiste:"Sos de los que se quedan en la sobremesa. Eso cambia cómo cierro la comida." },
+      { emo:"🍋", texto:"Cítrico recién cortado", pesos:{ acidez:+3 }, eco:"que te despierta un cítrico recién cortado", lleva:"así que busqué algo que limpie la boca",
         chiste:"Nariz fina. Eso me sirve." },
-      { emo:"🧅", texto:"Cebolla dorándose", pesos:{ intensidad:+2, untuosidad:+2 }, eco:"que la cebolla dorándose te gana",
+      { emo:"🧅", texto:"Cebolla dorándose", pesos:{ intensidad:+2, untuosidad:+2 }, eco:"que la cebolla dorándose te gana", lleva:"es olor a cocina de verdad, y para ahí fui",
         chiste:"El olor que hace que uno entre a un lugar sin haber leído la carta." },
-      { emo:"🌿", texto:"Hierbas frescas",   pesos:{ acidez:+2, aventura:+2 }, eco:"que te llevan las hierbas frescas",
-        chiste:"Paladar más fino de lo que aparentabas." }
+      { emo:"🌿", texto:"Hierbas frescas",   pesos:{ acidez:+2, aventura:+2 }, eco:"que te llevan las hierbas frescas", lleva:"tenés mejor paladar del que aparentás",
+        chiste:"Buen detalle. Eso me orienta bastante." }
     ] },
 
-  { id:"textura", tipo:"sabor", peso:"alto", grupo:"juego-duplas", formato:"duplas",
+  { id:"textura", tipo:"sabor", peso:"alto", grupo:"preferencias", formato:"duplas",
     modos:["express","completo"],
-    texto:"Sin pensar. Lo primero que te salga.",
-    nota:"No hay respuesta correcta. Hay respuestas que me dicen más que otras.",
+    texto:"Elegí de a pares. Con esto entiendo cómo te gusta comer.",
+    nota:"No hay apuro y no hay respuesta correcta. Contestá lo que sea cierto.",
     pares:[
       { a:{ texto:"Crocante", emo:"🥖", pesos:{ intensidad:+2, untuosidad:+1 } },
         b:{ texto:"Cremoso",  emo:"🥄", pesos:{ untuosidad:+3, intensidad:-1 } } },
@@ -2081,22 +2068,30 @@ const PREGUNTAS = [
         b:{ texto:"Con cuchara",  emo:"🥄", pesos:{ untuosidad:+2, intensidad:-2 } } }
     ] },
 
-  { id:"primer-bocado", tipo:"sabor", peso:"bajo", grupo:"juego-rapido", formato:"rapido", modos:["completo"],
-    texto:"Rápido: ¿el primer bocado o el último?",
+  { id:"primer-bocado", tipo:"sabor", peso:"bajo", grupo:"ritmo", modos:["completo"],
+    texto:"¿Con qué bocado te quedás: el primero o el último?",
     opciones:[
-      { texto:"El primero, sin dudar", emo:"⚡", pesos:{ intensidad:+3, aventura:+1 },
-        eco:"que vivís para el primer bocado", chiste:"Por eso te tiene que llegar algo fuerte de entrada." },
-      { texto:"El último, con calma", emo:"🐢", pesos:{ untuosidad:+2, dulce:+2 },
-        eco:"que te quedás con el último bocado", chiste:"Sos de los que terminan el plato prolijo. Lo respeto." }
+      { texto:"El primero", emo:"⚡", pesos:{ intensidad:+3, aventura:+1 },
+        eco:"que vivís para el primer bocado",
+        lleva:"así que lo que te llegue tiene que pegar de entrada",
+        chiste:"Entonces el plato tiene que pegar desde el primer bocado, no a la mitad." },
+      { texto:"El último", emo:"🐢", pesos:{ untuosidad:+2, dulce:+2 },
+        eco:"que te quedás con el último bocado",
+        lleva:"así que lo tuyo es un plato que aguante hasta el final",
+        chiste:"Sos de los que terminan el plato prolijo. Eso se nota en lo que conviene darte." }
     ] },
 
-  { id:"frito-parrilla", tipo:"sabor", peso:"bajo", grupo:"juego-rapido", formato:"rapido", modos:["express","completo"],
-    texto:"Tres segundos: ¿frito o a la parrilla?",
+  { id:"frito-parrilla", tipo:"sabor", peso:"bajo", grupo:"coccion", modos:["express","completo"],
+    texto:"Entre frito y a la parrilla, ¿cuál preferís?",
     opciones:[
       { texto:"Frito", emo:"🍟", pesos:{ untuosidad:+3, intensidad:+1 },
-        eco:"que elegiste frito sin pensarlo", chiste:"Honestidad brutal. Me sirve más que cualquier discurso." },
+        eco:"que preferís lo frito",
+        lleva:"y eso pide algo que corte la grasa al lado",
+        chiste:"Sin vueltas. Con eso sé por dónde ir." },
       { texto:"A la parrilla", emo:"🔥", pesos:{ intensidad:+3, untuosidad:-1 },
-        eco:"que elegiste la parrilla sin pensarlo", chiste:"Es la casa. No te voy a contradecir." }
+        eco:"que preferís la parrilla",
+        lleva:"que es donde esta cocina hace su mejor trabajo",
+        chiste:"Es la casa. No te voy a contradecir." }
     ] },
 
   { id:"ruido", tipo:"sabor", peso:"bajo", grupo:"sensorial", modos:["completo"],
@@ -2120,7 +2115,7 @@ const PREGUNTAS = [
       { texto:"Algo siempre queda", emo:"🥲", pesos:{ untuosidad:-1, intensidad:-1 },
         eco:"que siempre te queda algo en el plato", chiste:"Entonces te voy a mandar algo a tu medida y no una montaña." },
       { texto:"Prolijo, todo ordenado", emo:"📐", pesos:{ aventura:-2, acidez:+1 },
-        eco:"que dejás el plato prolijo", chiste:"Gente ordenada. También come, pero de otra manera." }
+        eco:"que dejás el plato prolijo", chiste:"Comés con método. Eso también dice algo del plato que te conviene." }
     ] },
 
   { id:"sobremesa", tipo:"sabor", peso:"bajo", grupo:"tiempo", modos:["completo"],
@@ -2140,26 +2135,26 @@ const PREGUNTAS = [
     texto:"¿Con quién estás comiendo hoy?",
     opciones:[
       { texto:"Solo, y está bien", emo:"🧍", pesos:{ social:-3, intensidad:+1 },
-        eco:"que comías solo", chiste:"Comer solo bien comido es un placer subestimado." },
+        eco:"que comías solo", lleva:"entonces este plato es tuyo y no se comparte", chiste:"Comer solo bien comido es un placer subestimado." },
       { texto:"De a dos", emo:"👫", pesos:{ social:+1, aventura:+1 },
-        eco:"que estaban de a dos", chiste:"De a dos se puede pedir dos cosas y probar las dos." },
+        eco:"que estaban de a dos", lleva:"así se puede pedir una cosa cada uno y probar las dos", chiste:"De a dos se puede pedir dos cosas y probar las dos." },
       { texto:"Con amigos", emo:"👥", pesos:{ social:+3, untuosidad:+1 },
-        eco:"que venías con amigos", chiste:"Entonces la comida va al medio. Es otra manera de pedir." },
+        eco:"que venías con amigos", lleva:"por eso lo que abre la mesa va al medio", chiste:"Entonces la comida va al medio. Es otra manera de pedir." },
       { texto:"Con la familia entera", emo:"👨‍👩‍👧‍👦", pesos:{ social:+3, aventura:-1 },
-        eco:"que venías con la familia", chiste:"Ahí hay que conformar a todos. Es lo mío." }
+        eco:"que venías con la familia", lleva:"hay que conformar a todos, y para eso estoy", chiste:"Ahí hay que conformar a todos. Es lo mío." }
     ] },
 
   { id:"lugar-nuevo", tipo:"sabor", peso:"alto", grupo:"aventura", modos:["express","completo"],
     texto:"En un lugar que no conocés, ¿qué pedís?",
     opciones:[
       { texto:"Lo que no probé nunca", emo:"🎲", pesos:{ aventura:+3, intensidad:+1 },
-        eco:"que en un lugar nuevo pedís lo que no conocés", chiste:"Con vos me puedo dar el gusto de mandarte lo bueno de verdad." },
+        eco:"que en un lugar nuevo pedís lo que no conocés", lleva:"con vos me puedo dar el gusto de mandar lo bueno de verdad", chiste:"Con vos me puedo dar el gusto de mandarte lo bueno de verdad." },
       { texto:"Lo que hace famoso al lugar", emo:"⭐", pesos:{ aventura:+1, intensidad:+2 },
-        eco:"que pedís lo que hace famoso al lugar", chiste:"Criterio. Acá eso es la parrilla, para que sepas." },
+        eco:"que pedís lo que hace famoso al lugar", lleva:"acá eso es la parrilla, para que sepas", chiste:"Criterio. Acá eso es la parrilla, para que sepas." },
       { texto:"Lo que sé que me gusta", emo:"🔁", pesos:{ aventura:-3 },
-        eco:"que pedís lo que ya sabés que te gusta", chiste:"Nada que objetar. Te voy a dar algo que no falle." },
+        eco:"que pedís lo que ya sabés que te gusta", lleva:"así que te di algo que no falla", chiste:"Nada que objetar. Te voy a dar algo que no falle." },
       { texto:"Lo que está comiendo el de al lado", emo:"👀", pesos:{ aventura:+2, social:+2 },
-        eco:"que mirás el plato del de al lado", chiste:"Todos lo hacemos. Pocos lo admiten." }
+        eco:"que mirás el plato del de al lado", lleva:"te doy el que hace girar cabezas", chiste:"Es la mejor carta que tiene un restaurante: lo que ya está servido." }
     ] },
 
   { id:"mano", tipo:"sabor", peso:"bajo", grupo:"social", modos:["completo"],
@@ -2168,7 +2163,7 @@ const PREGUNTAS = [
       { texto:"Es la mejor manera", emo:"🤚", pesos:{ social:+3, aventura:+2, untuosidad:+1 },
         eco:"que comés con la mano sin culpa", chiste:"Hay cosas que con cubiertos pierden la gracia." },
       { texto:"Si nadie me mira", emo:"👀", pesos:{ social:+1, aventura:+1 },
-        eco:"que comés con la mano cuando nadie mira", chiste:"Acá nadie mira. Es una playa." },
+        eco:"que comés con la mano cuando nadie mira", chiste:"Acá eso no es un problema. Estamos en la playa." },
       { texto:"Nunca", emo:"🍴", pesos:{ social:-2, aventura:-2 },
         eco:"que con la mano nunca", chiste:"Entendido. Te voy a mandar algo que se corte bien." }
     ] },
@@ -2177,16 +2172,16 @@ const PREGUNTAS = [
     texto:"¿A qué hora comés mejor?",
     opciones:[
       { texto:"Mediodía, con sol", emo:"☀️", pesos:{ acidez:+3, untuosidad:-1 },
-        eco:"que comés mejor al mediodía", chiste:"Con sol la comida tiene que ser otra. Eso lo tengo en cuenta." },
+        eco:"que comés mejor al mediodía", lleva:"con sol la comida tiene que ser otra, y lo tuve en cuenta", chiste:"Con sol la comida tiene que ser otra. Eso lo tengo en cuenta." },
       { texto:"Media tarde, sin horario", emo:"🌤️", pesos:{ social:+2, acidez:+1 },
-        eco:"que comés a media tarde", chiste:"La mejor hora de este lugar, dicho sea de paso." },
+        eco:"que comés a media tarde", lleva:"la mejor hora de este lugar, dicho sea de paso", chiste:"La mejor hora de este lugar, dicho sea de paso." },
       { texto:"Cuando cae el sol", emo:"🌅", pesos:{ intensidad:+2, untuosidad:+1 },
-        eco:"que comés cuando cae el sol", chiste:"Ahí la parrilla ya está en su punto." },
+        eco:"que comés cuando cae el sol", lleva:"ahí la parrilla ya está en su punto", chiste:"Ahí la parrilla ya está en su punto." },
       { texto:"De noche, tarde", emo:"🌙", pesos:{ intensidad:+3, untuosidad:+2, acidez:-1 },
-        eco:"que comés de noche y tarde", chiste:"De noche se come más fuerte. Es así y no lo discuto." }
+        eco:"que comés de noche y tarde", lleva:"de noche se come más fuerte, y eso pesó", chiste:"De noche se come más fuerte. Es así y no lo discuto." }
     ] },
 
-  { id:"paciencia", tipo:"sabor", peso:"bajo", grupo:"juego-slider", formato:"deslizador", modos:["completo"],
+  { id:"paciencia", tipo:"sabor", peso:"bajo", grupo:"espera", formato:"deslizador", modos:["completo"],
     texto:"¿Cuánto estás dispuesto a esperar por un plato que vale la pena?",
     izq:"Lo quiero ya", der:"Lo que haga falta",
     pesos:{ intensidad:+2, aventura:+2, untuosidad:+1 },
@@ -2248,9 +2243,10 @@ const PREGUNTAS = [
    cae solo. */
 const VOZ = {
   esperas:[
-    "Dejame ver.", "Ajá.", "Eso me sirve.", "Bien.",
+    "Dejame ver.", "Anotado.", "Eso me sirve.", "Bien.",
     "Ya sé por dónde va esto.", "Esperá, que lo pienso bien.",
-    "Tal cual.", "Eso me cambia la entrada.", "Anotado.", "Seguimos."
+    "Eso me cambia la entrada.", "Entiendo por dónde vas.",
+    "Con eso afino más.", "Seguimos."
   ],
   cierres:[
     "Cualquier cosa me preguntás. Para eso estoy.",
@@ -2258,11 +2254,6 @@ const VOZ = {
     "Pedilo tranquilo.",
     "Después me contás qué tal salió.",
     "Si te gustó, la próxima ya sé por dónde arrancar."
-  ],
-  tarde:[
-    "Te lo pensaste. No era un examen.",
-    "Dudaste. Eso también es un dato.",
-    "Dale, elegí igual, que no pasa nada."
   ]
 };
 /* ═══════════════════════════════════════════════════════════════════
@@ -2414,11 +2405,7 @@ function armarTanda(modo){
     });
   };
   const altas  = banco.filter(p => p.peso === "alto");
-  const juegos = banco.filter(p => p.grupo.indexOf("juego-") === 0);
 
-  // Siempre entra al menos un juego. Librado al azar puede tocar una
-  // tanda entera de botones, y entonces esto vuelve a ser un formulario.
-  pasada(juegos, false, false, 1);
   pasada(altas, false, false, minAlto);   // 1. alto, sin repetir grupo ni tanda
   pasada(banco, false, false, cupo);      // 2. lo que sea, sin repetir grupo ni tanda
   pasada(banco, true,  false, cupo);      // 3. se afloja el grupo antes que la tanda
@@ -2429,13 +2416,13 @@ function armarTanda(modo){
 }
 
 /* Ritmo: las restricciones abren porque son el contrato. Después se
-   reparte para que no caigan dos juegos ni dos preguntas de escribir
-   pegadas, y los otros filtros quedan en el medio y sobre el final. */
+   reparte para que no caigan dos preguntas del mismo formato pegadas
+   —dos de escribir seguidas cansan— y el hambre queda en el medio. */
 function ordenarTanda(fijas, elegidas){
   const restricciones = fijas.filter(p => p.id === "restricciones");
   const otrosFiltros  = fijas.filter(p => p.id !== "restricciones");
 
-  const pesado = p => ["texto","duplas","grilla","rapido","deslizador"].indexOf(fmtDe(p)) !== -1;
+  const pesado = p => ["texto","duplas","grilla","deslizador"].indexOf(fmtDe(p)) !== -1;
   const sueltas = [], especiales = [];
   elegidas.forEach(p => (pesado(p) ? especiales : sueltas).push(p));
 
@@ -2480,7 +2467,8 @@ function opcionesElegidas(p, resp){
       pesos = {};
       Object.keys(p.pesos).forEach(e => { pesos[e] = p.pesos[e] * (v - 5) / 5; });
     }
-    return [{ pesos, eco: marca ? marca.eco : null, valor: v, marca }];
+    return [{ pesos, eco: marca ? marca.eco : null, lleva: marca ? marca.lleva : null,
+              valor: v, marca }];
   }
 
   if (f === "duplas"){
@@ -2489,11 +2477,6 @@ function opcionesElegidas(p, resp){
       const par = p.pares[k];
       return par ? (lado ? par.b : par.a) : null;
     }).filter(Boolean);
-  }
-
-  if (f === "rapido"){
-    const i = (resp && typeof resp === "object") ? resp.i : resp;
-    return p.opciones[i] ? [p.opciones[i]] : [];
   }
 
   const idxs = Array.isArray(resp) ? resp : [resp];
@@ -2536,8 +2519,8 @@ function perfilDe(p){
    Duros: sacan platos del pool y no se discuten con ningún puntaje.
    Blandos: no sacan a nadie, penalizan fuerte.                       */
 function leerFiltros(respuestas, preguntas){
-  const f = { requiere: [], excluyeContiene: [], blandos: [], blandoPrecio: null,
-              ecos: [], afin: [], prefBebida: null };
+  const f = { requiere: [], excluyeContiene: [], blandos: [],
+              ecos: [], afin: [], evita: [], prefBebida: null };
 
   /* Las afinidades no son filtros: no sacan un solo plato del pool. Son lo
      que hace que decir "carne roja" se note de verdad en el resultado sin
@@ -2548,6 +2531,7 @@ function leerFiltros(respuestas, preguntas){
     if (el === undefined || el === null || el === "") return;
     opcionesElegidas(p, el).forEach(o => {
       if (o.afin && o.afin.proteina) f.afin.push(o.afin.proteina);
+      if (o.evita && o.evita.proteina) f.evita.push(o.evita.proteina);
       if (o.prefBebida) f.prefBebida = o.prefBebida;
     });
   });
@@ -2573,7 +2557,6 @@ function leerFiltros(respuestas, preguntas){
         if (o.excluye.contiene) f.excluyeContiene.push(...o.excluye.contiene);
       }
       if (o.blando) f.blandos.push(o.blando);
-      if (o.blandoPrecio) f.blandoPrecio = o.blandoPrecio;
     });
   });
   return f;
@@ -2686,17 +2669,20 @@ function puntuar(plato, v, f, opts){
       s -= b.peso * Math.abs(plato.ejes[b.eje] - b.objetivo) / 10;
     });
   }
-  if (!opts.sinPrecio && f.blandoPrecio && plato.precio > f.blandoPrecio.techo){
-    const exceso = (plato.precio - f.blandoPrecio.techo) / f.blandoPrecio.techo;
-    s -= f.blandoPrecio.peso * Math.min(1, exceso);
-  }
-
   // Si la persona dijo con todas las letras que quería carne, el plato de
   // carne arranca con ventaja. No es un filtro —no saca a nadie— pero es
   // lo que evita que alguien conteste "carne roja" y reciba una fainá.
   if (!opts.sinAfin && f.afin && f.afin.length && plato.proteina){
     if (f.afin.indexOf(plato.proteina) !== -1) s += 0.22;
   }
+
+  // Lo que la persona pidió esquivar. No es un filtro duro —"prefiero que
+  // no" no es "no puedo"— pero pesa lo suficiente como para que no gane
+  // nunca teniendo alternativa. Y a diferencia de la afinidad, esto se
+  // aplica siempre: decirle a alguien "el queso no era lo tuyo" y ponerle
+  // un provolone de entrada tira abajo todo lo que el chef venía diciendo.
+  if (f.evita && f.evita.length && plato.proteina &&
+      f.evita.indexOf(plato.proteina) !== -1) s -= 0.50;
 
   // Empuje comercial: el local marca qué quiere vender y eso sólo mueve
   // la aguja entre platos que ya empataron por afinidad. Hoy va vacío a
@@ -2865,6 +2851,20 @@ const PERFIL_ENTRADA = {
               razon:"arrancamos por algo salado, que lo dulce viene después" }
 };
 
+/* Dos platos que arrancan con las mismas palabras son el mismo plato con
+   un agregado: "Queso provolone" y "Queso provolone caprese", "Salmón" y
+   "Salmón con salsa de camarones", "Fainá con muzza" y "Fainá con
+   espinaca". Ofrecerlos como si fueran opciones distintas no es dar a
+   elegir, y encima deja al chef pareciendo que no miró la carta. */
+function esVariante(a, b){
+  const partes = t => t.toLowerCase().normalize("NFD")
+    .replace(/[̀-ͯ]/g, "").split(/\s+/);
+  const x = partes(a.nombre), y = partes(b.nombre);
+  if (x[0] !== y[0]) return false;
+  if (x.length < 2 || y.length < 2) return true;
+  return x[1] === y[1];
+}
+
 function elegirEntrada(principal, permitidos, v, f, rnd){
   const perfil = PERFIL_ENTRADA[principal.proteina] || PERFIL_ENTRADA.vegetal;
   const pool = permitidos.filter(p => empieza(p) && p.id !== principal.id);
@@ -2886,6 +2886,7 @@ function elegirEntrada(principal, permitidos, v, f, rnd){
     if (x.plato.proteina === perfil.proteina) x.score += 0.30;
     if (x.plato.proteina === principal.proteina && principal.proteina !== "queso") x.score -= 0.25;
     if (x.plato.categoria === principal.categoria) x.score -= 0.10;
+    if (esVariante(x.plato, principal)) x.score -= 0.60;   // no es una entrada, es el mismo plato
   });
   rank.sort((a,b) => b.score - a.score);
   return { plato: rank[0].plato, razon: perfil.razon };
@@ -2946,17 +2947,26 @@ function recomendar(respuestas, preguntas, opciones){
   // fuera de la categoría del principal para que el combo no sean tres
   // milanesas seguidas — ofrecer "Salmón" y "Salmón con camarones" no es
   // dar a elegir.
-  const resto = ordenar(
-    poolPrincipal.filter(p => p !== principal && (!entrada || p.id !== entrada.id)),
-    v, f, rnd);
+  const candidatos = poolPrincipal.filter(p =>
+    p !== principal && (!entrada || p.id !== entrada.id));
+  // Las variantes del mismo plato se sacan de las alternativas, salvo que
+  // al sacarlas no quede nada: antes que no ofrecer nada, se ofrece.
+  const sinVariantes = candidatos.filter(p => !esVariante(p, principal));
+  const resto = ordenar(sinVariantes.length >= 2 ? sinVariantes : candidatos, v, f, rnd);
+
   const alternativas = [];
   if (resto[0]) alternativas.push(resto[0].plato);
+  // La segunda alternativa tiene que sonar a otra cosa: ni la misma
+  // categoría que la primera, ni una variante de nada de lo ya ofrecido.
+  // Si el pool filtrado no da para eso, se ofrece una sola. Dos opciones
+  // que son casi el mismo plato no son dos opciones, y quedan peor que
+  // una sola bien elegida.
   const cat0 = alternativas[0] ? alternativas[0].categoria : null;
-  const libre = r => !alternativas.includes(r.plato);
-  const otra = resto.find(r => libre(r) && r.plato.categoria !== principal.categoria && r.plato.categoria !== cat0)
-            || resto.find(r => libre(r) && r.plato.categoria !== cat0)
-            || resto.find(r => libre(r) && r.plato.categoria !== principal.categoria)
-            || resto.find(libre);
+  const sirve = r => !alternativas.includes(r.plato) &&
+                     !alternativas.some(a => esVariante(r.plato, a)) &&
+                     r.plato.categoria !== cat0;
+  const otra = resto.find(r => sirve(r) && r.plato.categoria !== principal.categoria)
+            || resto.find(sirve);
   if (otra) alternativas.push(otra.plato);
 
   // ── LA BEBIDA ──────────────────────────────────────────────────────
@@ -3021,7 +3031,7 @@ function recomendar(respuestas, preguntas, opciones){
   });
   const postre = ordenar(poolPostre, objPostre, f, rnd,
     { pesosEje:{ intensidad:0.5, untuosidad:0.7, aventura:0.6, social:0.4, acidez:0.9, dulce:1.6 },
-      sinHambre:true, sinPrecio:true, sinAfin:true })[0].plato;
+      sinHambre:true, sinAfin:true })[0].plato;
 
   // ¿Corresponde preguntar el punto? Sólo si lo que sale es un corte de
   // carne de la parrilla. Preguntarle el punto a una pizza es ridículo.
@@ -3099,22 +3109,20 @@ function recolectarEcos(respuestas, preguntas){
     const el = respuestas[p.id];
     if (el === undefined || el === null || el === "") return;
 
-    // La tanda de duplas daría seis ecos sueltos; se junta en uno solo
-    // que suena a lo que fue: una ráfaga.
+    // La ronda de pares daría siete ecos sueltos; se junta en uno solo,
+    // que además es el que mejor se lee de todo el veredicto.
     if (fmtDe(p) === "duplas"){
       const elegidas = opcionesElegidas(p, el).map(o => o.texto.toLowerCase());
       if (elegidas.length >= 3){
         out.push({ id: p.id, tipo: p.tipo,
-          eco: "que sin pensar dijiste " + elegidas.slice(0,3).join(", ") });
+          eco: "que elegiste " + elegidas.slice(0,3).join(", "),
+          lleva: "y esas tres juntas describen bastante bien cómo comés" });
       }
       return;
     }
 
-    // El deslizador de un filtro ya dejó su eco en leerFiltros
-    if (fmtDe(p) === "deslizador" && p.tipo === "filtro") return;
-
     opcionesElegidas(p, el).forEach(o => {
-      if (o.eco) out.push({ id: p.id, tipo: p.tipo, eco: o.eco,
+      if (o.eco) out.push({ id: p.id, tipo: p.tipo, eco: o.eco, lleva: o.lleva || null,
                             libre: fmtDe(p) === "texto" });
     });
   });
@@ -3144,7 +3152,10 @@ function prioridadEco(e){
   return i === -1 ? 50 : i;
 }
 
-function elegirEcos(ecos, n){
+/* Devuelve los ecos enteros —lo que la persona dijo y qué hizo el chef
+   con eso—, no sólo el texto. Es lo que permite mostrarlo como evidencia
+   y no como una frase suelta adentro de un párrafo. */
+function elegirEcosObj(ecos, n){
   const vistos = new Set();
   const limpios = ecos.filter(e => {
     if (e.eco === "que comés de todo") return false;   // eso no es un dato
@@ -3156,7 +3167,8 @@ function elegirEcos(ecos, n){
   const deFiltro = limpios.filter(e => e.tipo === "filtro").sort(porPrioridad);
 
   // Se alternan, arrancando por lo que la persona contó de cómo come.
-  // Puro filtro suena a formulario.
+  // Puro filtro suena a formulario: saber que alguien no come gluten no
+  // dice nada sobre su paladar.
   const out = []; let si = 0, fi = 0;
   while (out.length < n && (si < deSabor.length || fi < deFiltro.length)){
     const cupoFiltro = out.filter(e => e.tipo === "filtro").length < 2;
@@ -3168,8 +3180,10 @@ function elegirEcos(ecos, n){
       out.push(deSabor[si++]);
     } else break;
   }
-  return out.map(e => e.eco);
+  return out;
 }
+
+function elegirEcos(ecos, n){ return elegirEcosObj(ecos, n).map(e => e.eco); }
 
 /* El eje más marcado, dicho en criterio de cocina y no en psicología. */
 function lineaDeEje(v){
@@ -3196,34 +3210,51 @@ function lineaDeEje(v){
    La apertura cita a la persona, el cierre dice el plato y la última
    línea da el criterio. Nunca al revés: primero se escucha, después se
    recomienda, y recién al final se explica. */
+/* El veredicto se defiende en dos partes y en este orden: primero la
+   evidencia —lo que la persona dijo, escrito y con lo que el chef hizo con
+   cada cosa— y después el argumento. Antes las dos iban apretadas en un
+   párrafo y la evidencia se leía como relleno. Separadas, la persona ve
+   que la escucharon antes de que le digan qué pedir, que es exactamente
+   lo que hay que demostrar. */
 function vozPrincipal(r, rnd){
-  const ecos = elegirEcos(r.ecos, 3).map(esc);
   const nombre = "<b>" + esc(r.principal.nombre) + "</b>";
   const vos = S.nombre ? esc(S.nombre) + ", " : "";
-  let apertura;
-  if (ecos.length >= 3){
-    const abre = [
-      `${vos}me dijiste tres cosas y con eso alcanza: ${ecos[0]}, ${ecos[1]} y ${ecos[2]}.`,
-      `Vamos por partes${vos ? ", " + esc(S.nombre) : ""}: ${ecos[0]}, ${ecos[1]}, ${ecos[2]}.`,
-      `Me dijiste ${ecos[0]}. Después ${ecos[1]}. Y encima ${ecos[2]}.`
-    ];
-    apertura = abre[Math.floor(rnd() * abre.length)];
-    if (vos && apertura.indexOf(vos) !== 0 && apertura.indexOf(esc(S.nombre)) === -1)
-      apertura = vos.charAt(0).toUpperCase() + vos.slice(1) + apertura.charAt(0).toLowerCase() + apertura.slice(1);
-  } else if (ecos.length === 2){
-    apertura = `${vos}me dijiste ${ecos[0]} y además ${ecos[1]}.`;
-  } else if (ecos.length === 1){
-    apertura = `Con eso de ${ecos[0]} ya tengo por dónde ir.`;
-  } else {
-    apertura = "Me diste poco, pero con poco también se trabaja.";
-  }
+  const eco = elegirEcosObj(r.ecos, 1)[0];
+  const suelto = eco ? esc(eco.eco.replace(/^que /, "")) : null;
+
+  const aperturas = suelto ? [
+    `${vos}con eso de que ${suelto} ya no tengo mucho que pensar.`,
+    `${vos}lo que me contaste apunta todo para el mismo lado.`,
+    `${vos}no es corazonada: me dijiste que ${suelto}, y de ahí sale esto.`
+  ] : [
+    `${vos}me diste poco, pero con poco también se trabaja.`
+  ];
   const cierres = [
-    `Para mí va ${nombre}.`,
+    `Va ${nombre}.`,
     `Te toca ${nombre}, y lo firmo.`,
     `${nombre}. Es lo que yo pediría en tu lugar.`,
     `Con eso, ${nombre}.`
   ];
-  return [apertura, cierres[Math.floor(rnd() * cierres.length)], lineaDeEje(r.vector)].join(" ");
+  return [
+    aperturas[Math.floor(rnd() * aperturas.length)],
+    cierres[Math.floor(rnd() * cierres.length)],
+    razonDelPlato(r),
+    lineaDeEje(r.vector)
+  ].filter(Boolean).join(" ");
+}
+
+/* Una frase sobre el plato en sí, no sobre la persona. Sin esto el chef
+   explica a quién le habla pero nunca qué le está dando. */
+function razonDelPlato(r){
+  const e = r.principal.ejes;
+  if (e.intensidad >= 9)  return "Es de lo más sabroso que sale de esa parrilla.";
+  if (e.untuosidad >= 9)  return "Es graso en el buen sentido, y por eso lo que va al lado tiene que cortar.";
+  if (e.aventura >= 8)    return "No lo pide casi nadie, y ahí está la gracia.";
+  if (e.acidez >= 7)      return "Limpio y fresco, que con el sol de afuera se agradece.";
+  if (e.social >= 8)      return "De los que se ponen en el medio y desaparecen en cinco minutos.";
+  if (r.principal.categoria === "parrilla") return "Sale de la brasa, que es lo que mejor hace esta cocina.";
+  if (r.principal.categoria === "horno")    return "Sale del horno de barro, que acá no es un detalle.";
+  return "Es de los que no fallan.";
 }
 
 /* La entrada tiene que justificarse sola: es lo primero que llega, lo que
@@ -3643,8 +3674,8 @@ function recomendarMesa(comensales, ninos){
   EJES.forEach(e => {
     vectorMesa[e] = comensales.reduce((a,c) => a + c.vector[e], 0) / comensales.length;
   });
-  const filtrosMesa = { requiere:[], excluyeContiene:[], blandos:[], blandoPrecio:null,
-                        ecos:[], afin:[], prefBebida:null };
+  const filtrosMesa = { requiere:[], excluyeContiene:[], blandos:[],
+                        ecos:[], afin:[], evita:[], prefBebida:null };
 
   // 3. el principal es de cada uno, con sus propios filtros. Va en dos
   // pasadas: la primera es para saber qué está comiendo la mesa —de eso
@@ -3752,7 +3783,7 @@ function recomendarMesa(comensales, ninos){
   });
   const rankPostre = ordenar(poolPostre, objPostre, filtrosMesa, rnd,
     { pesosEje:{ intensidad:0.5, untuosidad:0.7, aventura:0.6, social:0.4, acidez:0.9, dulce:1.6 },
-      sinHambre:true, sinPrecio:true, sinAfin:true });
+      sinHambre:true, sinAfin:true });
   const cuantosPostres = Math.max(1, Math.round(comensales.length / 3));
   const postres = rankPostre.slice(0, cuantosPostres).map(x => x.plato);
 
@@ -3943,7 +3974,7 @@ function recomendarNino(respuestas, preguntas){
   const postre = postres.length
     ? ordenar(postres, objPostre, f, rnd,
         { pesosEje:{ dulce:1.6, untuosidad:1, intensidad:0.4, acidez:0.6, aventura:0.6, social:0.3 },
-          sinHambre:true, sinPrecio:true, sinAfin:true })[0].plato : null;
+          sinHambre:true, sinAfin:true })[0].plato : null;
 
   return {
     principal, bebida, postre, aviso,
@@ -4120,9 +4151,9 @@ async function pensando(forzada){
 }
 
 /* El chef no pregunta siempre igual: según el formato dibuja botones,
-   una grilla de emojis, un deslizador, un campo para escribir, un reloj
-   de tres segundos o una ráfaga de duplas. Todo termina llamando a
-   avanzar(), así que el resto del flujo no se entera.               */
+   una grilla de opciones, un deslizador, un campo para escribir o una
+   ráfaga de pares. Todo termina llamando a avanzar(), así que el resto
+   del flujo no se entera.                                          */
 function pintarPregunta(){
   const p = S.preguntas[S.i];
   pintarProgreso();
@@ -4143,13 +4174,13 @@ function pintarPregunta(){
     </div>`;
 
   const cuerpo = { texto:cuerpoTexto, deslizador:cuerpoDesliz, grilla:cuerpoGrilla,
-                   rapido:cuerpoRapido, duplas:cuerpoDuplas }[fmtDe(p)] || cuerpoOpciones;
+                   duplas:cuerpoDuplas }[fmtDe(p)] || cuerpoOpciones;
 
   panel().innerHTML = `<div class="chat chat--pregunta">${cabecera}${cuerpo(p, pie)}</div>`;
   decir(p.texto);
 
   ({ texto:conectarTexto, deslizador:conectarDesliz, grilla:conectarGrilla,
-     rapido:conectarRapido, duplas:conectarDuplas }[fmtDe(p)] || conectarOpciones)(p);
+     duplas:conectarDuplas }[fmtDe(p)] || conectarOpciones)(p);
 
   const atrasBtn = $("#b-atras");
   if (atrasBtn) atrasBtn.addEventListener("click", atras);
@@ -4259,40 +4290,6 @@ function conectarGrilla(p){
   if (primera && S.i > 0) primera.focus({ preventScroll:true });
 }
 
-/* ── elegí rápido: tres segundos de reloj ──────────────────────────
-   Si se pasa no elige por vos: el chef te chicanea y seguís eligiendo.
-   Un juego que te contesta mal no puede además decidir por vos.     */
-function cuerpoRapido(p, pie){
-  return `<div class="reloj" id="reloj" aria-hidden="true"><div class="reloj__barra"></div></div>
-    <div class="opciones opciones--largas" role="group" aria-label="${esc(p.texto)}">
-      ${opcionesPosibles(p, S.f).map(({ o, i }) => `<button class="opcion" data-i="${i}">
-          ${o.emo ? `<span aria-hidden="true" style="flex:none;font-size:1.2rem;line-height:1">${o.emo}</span>` : ""}
-          <span>${esc(o.texto)}</span>
-        </button>`).join("")}
-    </div>
-    <p class="tarde" id="tarde" hidden></p>` + pie("");
-}
-function conectarRapido(p){
-  let tardo = false;
-  const reloj = setTimeout(() => {
-    tardo = true;
-    const r = $("#reloj"); if (r) r.classList.add("reloj--fin");
-    const t = $("#tarde");
-    if (t){ t.textContent = VOZ.tarde[Math.floor(Math.random() * VOZ.tarde.length)]; t.hidden = false; }
-  }, reducido() ? 100000 : 3000);
-
-  $$(".opcion", panel()).forEach(b => {
-    b.addEventListener("click", () => {
-      clearTimeout(reloj);
-      S.respuestas[p.id] = { i: parseInt(b.dataset.i, 10), tardo };
-      avanzar(p);
-    });
-    b.addEventListener("keydown", ev => moverFoco(ev, b, ".opcion"));
-  });
-  const primera = $(".opcion", panel());
-  if (primera && S.i > 0) primera.focus({ preventScroll:true });
-}
-
 /* ── esto o aquello: una ráfaga que cuenta como una sola pregunta ── */
 function cuerpoDuplas(p, pie){
   return `<div id="duplas-caja"></div>` + pie("");
@@ -4392,7 +4389,6 @@ function chisteDe(p, resp){
     return p.chiste ? p.chiste.replace(/\{\}/g, txt) : null;
   }
   if (f === "duplas") return "Rapidísimo. Eso también me dice algo.";
-  if (f === "rapido" && resp && resp.tardo) return null;   // ya te chicaneó el reloj
   if (f === "deslizador"){
     const m = marcaDe(p, clamp(Number(resp), 0, 10));
     return m ? m.txt : null;
@@ -5415,8 +5411,10 @@ function dibujarVeredicto(r, conReveal){
       </div>
     </div>
 
+    ${bloqueLeido(r, titulo)}
+
     ${r.entrada ? `
-    <div class="bloque" style="margin-top:22px">
+    <div class="bloque">
       ${titulo("Para arrancar")}
       <article class="ficha ficha--entrada">
         ${fotoHTML(r.entrada, "ficha")}
@@ -5501,6 +5499,28 @@ function dibujarVeredicto(r, conReveal){
 
 const nombrePunto = id => (PUNTOS.find(p => p.id === id) || { texto:"" }).texto;
 
+/* ── LO QUE ME DIJISTE ────────────────────────────────────────────────
+   Es lo único de toda la pantalla que la persona no puede atribuir a la
+   suerte: son sus propias respuestas, escritas, y al lado qué hizo el
+   chef con cada una. Va arriba de todo, antes de la recomendación,
+   porque el orden importa: primero se demuestra que escuchaste y recién
+   después se dice qué pedir. Al revés suena a que la recomendación ya
+   estaba elegida y las preguntas eran decorado.                      */
+function bloqueLeido(r, titulo){
+  const ecos = elegirEcosObj(r.ecos, 4);
+  if (ecos.length < 2) return "";
+  const arranca = t => t.charAt(0).toUpperCase() + t.slice(1);
+  return `<div class="bloque leido">
+    ${titulo("Lo que me dijiste")}
+    <ul class="leido__lista">
+      ${ecos.map(e => `<li>
+        <span class="leido__dijo">${esc(arranca(e.eco))}${e.lleva ? "" : "."}</span>${
+          e.lleva ? `<span class="leido__hice">${esc(arranca(e.lleva))}.</span>` : ""
+        }</li>`).join("")}
+    </ul>
+  </div>`;
+}
+
 /* El punto se pregunta sólo cuando lo que salió es un corte de carne, y
    se pregunta DESPUÉS de recomendarlo: antes no tendría sentido, porque
    la persona todavía no sabe qué va a comer. */
@@ -5551,10 +5571,10 @@ function cambiarPrincipal(r, plato){
 /* Para las que no traen descripción propia: una frase distinta cada vez,
    que si repiten las dos se ve la plantilla. */
 const FRASES_MEDIO = [
-  "Va al medio y que se arreglen.",
-  "Esto se come con la mano, avisales.",
-  "Poné esto primero, que la parrilla tarda.",
-  "De esto siempre falta. Pedí dos si son muchos."
+  "Va al medio, para todos.",
+  "De esto conviene pedir dos si son muchos.",
+  "Que salga primero, que la parrilla tarda.",
+  "Para picar mientras se hace el resto."
 ];
 function lineaMedio(usadas){
   const libre = FRASES_MEDIO.find(t => !usadas.has(t)) || FRASES_MEDIO[0];
@@ -5671,9 +5691,9 @@ function pintarSinSalida(){
   panel().innerHTML = `<div class="veredicto reveal">
     <div class="vacio" style="background:transparent;border-color:rgba(255,255,255,.35)">
       <div class="vacio__sello"><svg class="sello sello--chico" style="color:rgba(255,255,255,.5)" aria-hidden="true"><use href="#sello"/></svg></div>
-      <h3 style="color:var(--papel)">Acá me ganaste</h3>
+      <h3 style="color:var(--papel)">Esto lo resolvemos hablando</h3>
       <p style="color:var(--tinta-clara)">Con todo lo que no comés no me queda nada escrito en la carta.
-         Vení, hablá conmigo y te armamos algo que no está.</p>
+         Pedile al mozo que me llame y te armamos algo que no figura.</p>
       <button class="btn btn--sol" id="b-rehacer">Probar de nuevo</button>
     </div>
   </div>`;
@@ -5878,7 +5898,6 @@ function bofoTest(){
       case "texto":      return azar(4) === 0 ? "" : ["milanesa de mi abuela","un asado en Colonia","los fideos del domingo","pescado frito"][azar(4)];
       case "deslizador": return azar(11);
       case "duplas":     return p.pares.map(() => azar(2));
-      case "rapido":     return { i: azar(p.opciones.length), tardo: azar(2) === 1 };
       default:           return p.multiple ? [azar(p.opciones.length)] : azar(p.opciones.length);
     }
   }
@@ -5931,12 +5950,29 @@ function bofoTest(){
         todos.forEach(x => chequear(!esNino(x),
           `[${modo}] "${x.nombre}" es del menú de niños y salió para un adulto`));
 
-        chequear(r.alternativas.length === 2, `[${modo}] faltan alternativas`);
+        // Dos alternativas cuando la carta filtrada da para dos distintas;
+        // una sola cuando no. Ninguna es peor que una repetida.
+        chequear(r.alternativas.length >= 1 && r.alternativas.length <= 2,
+          `[${modo}] alternativas fuera de rango: ${r.alternativas.length}`);
         chequear(r.alternativas.length < 2 ||
                  r.alternativas[0].categoria !== r.alternativas[1].categoria,
           `[${modo}] las dos alternativas son de la misma categoría`);
+        chequear(r.alternativas.length < 2 ||
+                 !esVariante(r.alternativas[0], r.alternativas[1]),
+          `[${modo}] las dos alternativas son el mismo plato con un agregado`);
+        // Ofrecer el mismo plato con un agregado no es ofrecer una opción
+        r.alternativas.forEach(a => chequear(!esVariante(a, r.principal),
+          `[${modo}] "${a.nombre}" es una variante de "${r.principal.nombre}"`));
+        if (r.entrada) chequear(!esVariante(r.entrada, r.principal),
+          `[${modo}] la entrada "${r.entrada.nombre}" es una variante del plato`);
         chequear(r.ecos.filter(e => e.eco !== "que comés de todo").length >= 2,
           `[${modo}] el veredicto no tiene respuestas concretas que citar`);
+        // Citar la respuesta demuestra que escuchó; decir qué hizo con ella
+        // demuestra que la usó. Sin lo segundo el bloque es una lista de
+        // cosas que la persona ya sabe que dijo.
+        const citados = elegirEcosObj(r.ecos, 4);
+        chequear(citados.some(e => e.lleva),
+          `[${modo}] ninguna de las respuestas citadas dice qué hizo el chef con ella`);
         EJES.forEach(e => chequear(r.vector[e] >= 0 && r.vector[e] <= 10,
           `[${modo}] eje ${e} fuera de rango: ${r.vector[e]}`));
 
@@ -6190,6 +6226,18 @@ function bofoTest(){
       });
     });
   });
+  // ── al que dijo que prefiere esquivar algo, no se le pone adelante ──
+  // "Prefiero que no" no es una alergia, así que no saca nada del pool.
+  // Pero el chef no puede citarle esa respuesta y servirle justo eso.
+  const pQueso = PREGUNTAS.find(q => q.id === "queso-hasta-donde");
+  const iNoQueso = pQueso.opciones.findIndex(o => o.evita && o.evita.proteina === "queso");
+  const tandaQueso = [pReq, pQueso];
+  const rSinQueso = recomendar({ restricciones:[iTodo], "queso-hasta-donde": iNoQueso }, tandaQueso);
+  chequear(!rSinQueso.entrada || rSinQueso.entrada.proteina !== "queso",
+    `al que dijo que prefiere no comer queso le entró de entrada "${rSinQueso.entrada && rSinQueso.entrada.nombre}"`);
+  chequear(rSinQueso.principal.proteina !== "queso",
+    `al que dijo que prefiere no comer queso le tocó "${rSinQueso.principal.nombre}"`);
+
   const iVeg = pReq.opciones.findIndex(o => o.excluye && o.excluye.requiere === "vegetariano");
   const fVeg = leerFiltros({ restricciones:[iVeg] }, [pReq]);
   chequear(opcionesPosibles(pProt, fVeg).every(x =>
