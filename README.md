@@ -352,8 +352,9 @@ llegaron y están cargados de verdad.
 - **Fotos.** Hay **una sola y es de muestra**: `img/platos/ojo-bife.jpg`,
   de banco de imágenes, puesta para que se vea el mecanismo andando de
   punta a punta. No es una foto del local y no debería sobrevivir a la
-  primera tanda de fotos reales. Las otras 136 las tiene que sacar el
-  local; `img/platos/LEEME.txt` tiene las instrucciones.
+  primera tanda de fotos reales. Las otras 136 salen de una sesión nuestra
+  en el local —quedaron de nuestro lado, no del de ellos— y
+  `img/platos/LEEME.txt` es el instructivo para cargarlas.
 
 Falta además cargar la sección de **milanesas / burgers**, que nunca vino en
 las imágenes de la carta.
