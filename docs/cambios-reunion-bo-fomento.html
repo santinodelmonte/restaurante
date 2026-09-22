@@ -62,7 +62,11 @@ h2{
   letter-spacing:.4pt; margin:15pt 0 2pt; color:var(--marino);
   break-after:avoid;
 }
-h2 + .bajada{ color:var(--tinta-suave); font-size:9.4pt; margin:0 0 9pt; }
+/* El `break-after` del h2 solo no alcanza: entre el título y el primer
+   párrafo hay una bajada y un zigzag, y el corte se iba ahí. Así el
+   título se lleva las dos cosas a la página siguiente. */
+h2 + .bajada{ color:var(--tinta-suave); font-size:9.4pt; margin:0 0 9pt; break-after:avoid; }
+.bajada + .zigzag{ break-after:avoid; }
 h3{
   font-size:10.4pt; font-weight:700; margin:12pt 0 4pt; color:var(--marino-hondo);
   break-after:avoid;
@@ -198,7 +202,7 @@ tr.total td{ border-bottom:none; border-top:1.2pt solid var(--marino); font-weig
 se pueden abrir y probar ahora mismo, en el mismo archivo de siempre.</p>
 
 <p>Este documento cuenta <strong>qué cambió, por qué se resolvió así y qué quedó pendiente</strong>.
-Lo pendiente no es trabajo nuestro: son tres cosas que sólo ustedes tienen, y están al final.</p>
+Lo pendiente no es trabajo nuestro: es material que sólo ustedes tienen, y está al final.</p>
 
 <!-- ═══ EL RESUMEN ═══ -->
 <div class="juntos">
@@ -237,7 +241,7 @@ Lo pendiente no es trabajo nuestro: son tres cosas que sólo ustedes tienen, y e
     <tr><td>Recomendación de vinos inteligente</td>
         <td>Marida por cepa, cuerpo y tanino, y explica por qué.</td></tr>
     <tr><td>Fotos de los platos en la carta y en el veredicto</td>
-        <td>Listas. Se suben a una carpeta y aparecen solas.</td></tr>
+        <td>Andando. Chica en la carta, se toca y se abre; grande en el veredicto.</td></tr>
     <tr><td>Que se pueda marcar una alergia</td>
         <td>Cinco alergias, filtradas duro y con aviso para confirmar en cocina.</td></tr>
     <tr><td>Sacar Candela</td>
@@ -440,11 +444,30 @@ una limonada es vender, no recomendar.</p>
 
 <!-- ═══ LAS FOTOS ═══ -->
 <h2>Las fotos de los platos</h2>
-<p class="bajada">Listas para recibirlas. No hay que tocar nada del sitio.</p>
+<p class="bajada">Listas para recibirlas, y ahora también adentro de lo que la gente sube.</p>
 <svg class="zigzag" aria-hidden="true"><use href="#zigzag"/></svg>
 
-<p>Las fotos aparecen en la carta, al lado de cada plato, y grandes en el veredicto del chef.
-Para sumar una foto se copia el archivo a una carpeta y listo: no hay que tocar código ni
+<p>Cada foto aparece en tres lugares, y en cada uno hace un trabajo distinto:</p>
+
+<table>
+  <thead><tr><th>Dónde</th><th>Cómo aparece</th></tr></thead>
+  <tbody>
+    <tr><td>En la carta</td>
+        <td>Chica, al costado del plato. Si la tocan, se abre en grande con el nombre y el precio.</td></tr>
+    <tr><td>En el veredicto del chef</td>
+        <td>Grande, arriba del plato que recomienda y de la entrada.</td></tr>
+    <tr><td>En la tarjeta para compartir</td>
+        <td>Arriba de todo, adentro de la imagen que la persona sube a Instagram.</td></tr>
+  </tbody>
+</table>
+
+<p>En la carta la foto es chica <strong>a propósito</strong>. El que está leyendo una carta está
+comparando platos y precios, y una foto a todo el ancho por plato convierte 137 renglones en un
+scroll interminable: se ven menos platos por pantalla y se vende menos. El que quiere ver el
+plato la toca, y ahí sí la ve entera, con el precio abajo —porque el que abre la foto de un
+plato está a un paso de pedirlo y no hay que mandarlo de vuelta a buscar cuánto sale—.</p>
+
+<p>Para sumar una foto se copia el archivo a una carpeta y listo: no hay que tocar código ni
 esperarnos a nosotros. Las instrucciones están adentro de esa carpeta, y los nombres de archivo
 son los mismos códigos que ya trae la planilla de clasificación en la primera columna.</p>
 
@@ -454,6 +477,35 @@ medida que las suben, en el orden que quieran.</p>
 
 <p>Si no van a sacar las 137 de una, conviene empezar por las entradas, los cortes de la parrilla,
 los vinos y los postres: son las que más se piden y las que el chef muestra en el veredicto.</p>
+
+<p>Con el <strong>modo sol</strong> prendido —el botón de alto contraste para leer con el sol de
+frente— las fotos ahora se quedan. Lo que cambia es que se les marca el borde, porque sobre el
+blanco a full de ese modo una foto clara se desarma.</p>
+
+<!-- ═══ LA TARJETA ═══ -->
+<h2>La tarjeta ahora se comparte como imagen</h2>
+<p class="bajada">Antes copiaba un texto. Instagram no recibe texto: recibe una imagen.</p>
+<svg class="zigzag" aria-hidden="true"><use href="#zigzag"/></svg>
+
+<p>El veredicto termina en una tarjeta con el sello del local, el nombre del plato —con el punto
+de la carne, si lo hubo— y una frase corta del Vasco. Eso ya estaba, pensado para que le sacaran
+captura. Ahora lleva además <strong>la foto del plato</strong>, y el botón hace otra cosa.</p>
+
+<p>El botón <strong>arma una imagen</strong>: la tarjeta se dibuja de nuevo en el tamaño vertical
+que Instagram no recorta, y eso es lo que sale por el menú de compartir del propio celular, donde
+Instagram aparece como una opción más. Un toque y la están subiendo.</p>
+
+<p>Es la diferencia entre que alguien suba <em>una</em> foto de su plato y que suba la foto de su
+plato <strong>con la marca del local puesta</strong>, el nombre de lo que está comiendo y una
+frase de la casa. La gente sube lo que come igual: esto le da algo mejor, y de paso dice de
+dónde salió.</p>
+
+<div class="caja caja--nota">
+  <p style="margin-bottom:0">Una aclaración técnica, por si lo prueban antes de que el sitio esté
+  publicado: abierto desde el archivo suelto, el navegador no deja armar la imagen con la foto
+  adentro y la tarjeta sale sin ella —sello, nombre y frase, como era antes—. Servido desde su
+  dirección en internet, que es como va a estar, sale completa. No hay nada que arreglar.</p>
+</div>
 
 <!-- ═══ ALERGIAS ═══ -->
 <h2 class="salto">Alergias</h2>
@@ -566,9 +618,11 @@ uno, y el total por cabeza cuenta a todos.</p>
   <p class="caja__titulo">Importante antes de mostrárselo a alguien</p>
   <ul class="tildes" style="margin-top:0">
     <li><strong>Los once platos del menú de niños son inventados</strong>, con precios inventados.</li>
-    <li><strong>No hay ninguna foto real todavía.</strong></li>
+    <li><strong>Las fotos de los platos todavía no son de ustedes.</strong> La única que hay es
+    de banco de imágenes y está puesta para que se vea el mecanismo andando de punta a punta.
+    Sale apenas llegue la primera tanda de fotos de verdad.</li>
   </ul>
-  <p style="margin-bottom:0">Ninguna de las tres cosas es trabajo nuestro pendiente: el motor ya
+  <p style="margin-bottom:0">Ninguna de las dos cosas es trabajo nuestro pendiente: el motor ya
   está hecho y probado. Es material que sólo ustedes tienen. En cuanto llegue, se reemplaza y
   queda listo, sin tocar una línea del resto.</p>
 </div>
@@ -588,10 +642,14 @@ uno, y el total por cabeza cuenta a todos.</p>
 
   <li>
     <h3>Las fotos <span class="quien">Ustedes</span></h3>
-    <p>Horizontales, con luz de día y el plato de frente. Con celular está bien. No hacen falta
-    las 137 para arrancar: con las entradas, los cortes de parrilla, los vinos y los postres, la
-    carta ya se siente completa.</p>
-    <p>La foto del plato real vende; la foto de banco de imágenes se nota y resta.</p>
+    <p>Horizontales, con luz de día y el plato de frente. Con celular está bien —mejor si sale
+    de 1.200 píxeles de ancho para arriba, porque la misma foto es la que se agranda cuando la
+    tocan y la que entra en la imagen que se comparte—. No hacen falta las 137 para arrancar: con
+    las entradas, los cortes de parrilla, los vinos y los postres, la carta ya se siente
+    completa.</p>
+    <p>La foto del plato real vende; la foto de banco de imágenes se nota y resta. Y ahora eso
+    pesa el doble, porque la foto no se queda en la carta: se va a Instagram con el sello del
+    local al lado.</p>
   </li>
 
   <li>
@@ -627,7 +685,7 @@ combinaciones reales y verifica los criterios que no se pueden romper:</p>
     <tr><td>Recorridos completos del chef verificados</td><td class="num">4.096</td></tr>
     <tr><td>Mesas armadas de punta a punta</td><td class="num">512</td></tr>
     <tr><td>Recorridos del Chef Kid</td><td class="num">256</td></tr>
-    <tr class="total"><td>Comprobaciones, todas en verde</td><td class="num">245.106</td></tr>
+    <tr class="total"><td>Comprobaciones, todas en verde</td><td class="num">245.133</td></tr>
   </tbody>
 </table>
 
