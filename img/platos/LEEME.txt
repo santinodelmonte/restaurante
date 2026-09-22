@@ -1,31 +1,65 @@
-FOTOS DE LOS PLATOS
-===================
+FOTOS DE LOS PLATOS — CÓMO SE CARGAN
+====================================
 
-Acá van las fotos. Una por plato, y el nombre del archivo tiene que ser el
-id del plato más .jpg:
+Instructivo nuestro: las fotos las saca Aura, en el local, y las
+cargamos acá. El local no toca esta carpeta.
+
+Una foto por plato. El nombre del archivo es el id del plato más .jpg:
 
     img/platos/entrana.jpg
     img/platos/pizza-muzza.jpg
     img/platos/chaja.jpg
 
-Los ids están en index.html, en el campo `id:` de cada plato. La planilla
-de clasificación que se le manda al local los trae en la primera columna.
+Los ids salen de index.html, del campo `id:` de cada plato, y son los
+mismos que la planilla de clasificación trae en la primera columna. Para
+sacar la lista entera:
 
-No hay que tocar nada de código. La foto que está aparece; la que no está
-no deja ningún hueco: la carta se ve exactamente igual que sin fotos. Se
-pueden ir subiendo de a poco, en el orden que el local quiera.
+    grep -o 'id:"[^"]*"' index.html
 
-RECOMENDACIONES
----------------
-· Horizontal, aproximadamente 4:3 o 16:10.
-· 1200 px de ancho alcanza y sobra. Más grande sólo hace que tarde.
-· Menos de 200 KB por foto. Son 137 platos: si cada una pesa 2 MB, la
+No hay que tocar código. La foto que está aparece sola; la que no está no
+deja ningún hueco: la carta se ve exactamente igual que sin fotos. Se
+cargan de a poco, en el orden que convenga.
+
+OJO — ojo-bife.jpg es una foto de banco de imágenes, puesta de muestra
+para ver el mecanismo andando. Hay que borrarla apenas entre la primera
+tanda de fotos reales: es de las cosas que el documento del cliente
+promete que salen.
+
+DÓNDE SE USA CADA FOTO
+----------------------
+Una sola foto alimenta tres lugares, y el más exigente manda:
+
+· Miniatura en la carta, 86 px (104 px de 760 px de pantalla para
+  arriba). Se toca y se abre en grande con el nombre y el precio.
+· Ficha del veredicto del chef, al ancho de la pantalla, recortada 16:10.
+· La imagen que se comparte, de 1080 × 1350: la foto ocupa la franja de
+  arriba, 1080 px de ancho. Ésta es la que fija el mínimo.
+
+CÓMO SACARLAS Y CÓMO GUARDARLAS
+-------------------------------
+· Horizontal, 4:3 o 16:10. El recorte de la app es al centro: lo que
+  importa va al medio, no en un borde.
+· 1.200 px de ancho o más. Abajo de 1.000 se nota en la imagen que se
+  comparte, que es la más grande de las tres.
+· Menos de 200 KB por archivo, JPEG. Son 137 platos: con fotos de 2 MB la
   carta no abre nunca con la señal que hay en la playa.
-· Luz natural y el plato de frente. La foto del plato real vende; la foto
-  de banco de imágenes se nota y resta.
+· Luz de día y el plato de frente.
 
 POR DÓNDE EMPEZAR
 -----------------
-No hacen falta las 137 para que se vea bien. Con estas alcanza para que la
-carta se sienta completa, y son justo las que conviene empujar:
-las entradas, los cortes de la parrilla, los vinos y los postres.
+No hacen falta las 137 para que la carta se sienta completa. Conviene
+arrancar por las entradas, los cortes de la parrilla, los vinos y los
+postres: son los que más se piden y los que el chef muestra en el
+veredicto.
+
+DESPUÉS DE CARGAR
+-----------------
+Correr la prueba de humo, que verifica que la foto cargada aparezca y que
+la que falta no deje hueco:
+
+    node docs/humo.js                       # como el doble clic
+    node docs/humo.js http://localhost:8000/index.html
+
+Servido por http hay que ver la tarjeta compartible salir con la foto
+adentro. Desde el archivo suelto sale sin ella y está bien: el navegador
+no deja exportar un canvas con una imagen traída de file://.
