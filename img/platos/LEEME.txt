@@ -15,10 +15,24 @@ No hay que tocar nada de código. La foto que está aparece; la que no está
 no deja ningún hueco: la carta se ve exactamente igual que sin fotos. Se
 pueden ir subiendo de a poco, en el orden que el local quiera.
 
+OJO: ojo-bife.jpg es una foto de muestra, de banco de imágenes. Está para
+que se vea el mecanismo andando y hay que pisarla con la foto real del
+plato. No es del local.
+
+DÓNDE APARECE CADA FOTO
+-----------------------
+· En la carta, como miniatura al costado del plato. Si la tocan, se abre
+  en grande con el nombre y el precio.
+· En el veredicto del chef, grande, cuando recomienda ese plato.
+· En la tarjeta que la gente comparte en Instagram, que se arma como una
+  imagen de 1080 × 1350 con la foto arriba.
+
 RECOMENDACIONES
 ---------------
 · Horizontal, aproximadamente 4:3 o 16:10.
-· 1200 px de ancho alcanza y sobra. Más grande sólo hace que tarde.
+· 1200 px de ancho alcanza y sobra. Más grande sólo hace que tarde. Menos
+  de 1000 px se nota en la imagen que se comparte, que es la más grande de
+  todas.
 · Menos de 200 KB por foto. Son 137 platos: si cada una pesa 2 MB, la
   carta no abre nunca con la señal que hay en la playa.
 · Luz natural y el plato de frente. La foto del plato real vende; la foto

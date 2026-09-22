@@ -123,6 +123,20 @@ ocupa nada hasta que la foto carga— porque con `loading="lazy"` las de más
 abajo no se piden hasta que alguien scrollea, así que nunca fallan y el
 hueco se quedaba para siempre.
 
+En la carta la foto es una miniatura al costado y nada más: el que lee una
+carta está comparando platos y precios, y una foto por plato a todo el
+ancho convierte 137 renglones en un scroll de media hora. La que quiera
+verla la toca y se abre en grande, con el nombre y el precio abajo —el que
+abre la foto de un plato está a un paso de pedirlo y no hay que mandarlo de
+vuelta a buscar cuánto sale—. La lupa aparece sólo sobre las fotos que
+existen: un afordance sobre una caja vacía es una promesa que no se cumple.
+
+Donde la foto sí va grande es en el veredicto del chef, que es una sola
+recomendación y no una lista, y en la tarjeta para compartir.
+
+Con el modo sol prendido las fotos se quedan; lo que cambia es que se les
+marca el borde, porque sobre blanco puro una foto clara se desarma.
+
 **Alergias.** La primera pregunta separa lo que la persona elige de lo que
 le hace mal: celiaquía, lácteos, huevo, frutos secos y mariscos se marcan
 aparte, se ven distinto y filtran igual de duro que el resto. Pero además
@@ -157,10 +171,30 @@ marcó la persona dos pantallas atrás, así que "la entrada va con queso" no
 se muestra si la entrada no es de queso. Cuando la condición no se cumple,
 el eco se muestra igual, sin la segunda mitad.
 
-**La tarjeta.** El veredicto termina en una tarjeta pensada para que le
-saquen captura: sello, nombre, plato y una frase corta del Vasco. El botón
-de compartir usa el menú del propio celular y, si no hay, copia al
-portapapeles.
+**La tarjeta.** El veredicto termina en una tarjeta con la foto del plato,
+el sello, el nombre —con el punto de la carne, si lo hubo— y una frase
+corta del Vasco.
+
+El botón no comparte texto: **arma una imagen**. La tarjeta se vuelve a
+dibujar en un `canvas` de 1080 × 1350 —el vertical que Instagram no
+recorta— y eso es lo que sale por el menú de compartir del celular, donde
+Instagram es una opción más. Compartir texto no servía para lo único que la
+gente hace con esto, que es subirlo: Instagram no recibe texto, recibe una
+imagen. Publicar directo desde una página web, sin que la persona pase por
+la app, no se puede —ninguna web puede— y está bien que sea así; lo que sí
+se puede es dejarle la imagen hecha y que el paso que le queda sea elegir el
+ícono.
+
+En la compu no hay menú de compartir con archivos: ahí se baja el JPEG, que
+es lo que esa persona iba a hacer igual. Y si la imagen no se puede armar,
+el botón se esconde en vez de fallar: ofrecer compartir y después no poder
+es peor que no ofrecerlo.
+
+Un detalle del `canvas`: una foto traída de `file://` lo *mancha* y el
+navegador no deja exportarlo. Así que si el archivo se abre con doble clic,
+la imagen compartida sale sin la foto del plato —sello, nombre y frase, que
+es la tarjeta de antes—. Servido desde una URL, que es como va a estar el
+día que salga, sale completa. El reintento sin foto es automático.
 
 **Modo sol y carta hablada.** Un botón sube el contraste a tope y agranda
 el texto para leer con el sol de frente —el problema número uno de una
@@ -270,8 +304,21 @@ abrirlo en el celular. Entre lo que verifica:
 
 Para correrlo fuera del navegador —el motor no toca el DOM, así que se
 puede— alcanza con simular `localStorage` y `document`. También hay una
-prueba de humo con Chromium que recorre las pantallas y falla ante
-cualquier excepción o error de consola.
+prueba de humo con Chromium en `docs/humo.js`, que recorre las pantallas y
+falla ante cualquier excepción o error de consola:
+
+```
+npm install puppeteer-core
+node docs/humo.js                       # sobre file://, como el doble clic
+node docs/humo.js http://localhost:8000/index.html
+```
+
+Conviene correr las dos formas, porque no prueban lo mismo: con `file://` la
+foto mancha el canvas de la tarjeta y la imagen compartida sale sin ella, que
+es exactamente lo que pasa cuando la demo se abre con doble clic. Además del
+autotest del motor verifica que la foto que está aparezca, que la que no está
+no deje hueco, que el visor tome el foco y que el Escape cierre la foto sin
+llevarse la carta puesta.
 
 ## Clonarlo a otro restaurante
 
@@ -302,8 +349,11 @@ pendiente nuestro: es material que sólo tiene el local. Los vinos ya
 llegaron y están cargados de verdad.
 
 - **Menú de niños.** Once platos inventados con precios inventados.
-- **Fotos.** Ninguna todavía. `img/platos/LEEME.txt` tiene las
-  instrucciones para el local.
+- **Fotos.** Hay **una sola y es de muestra**: `img/platos/ojo-bife.jpg`,
+  de banco de imágenes, puesta para que se vea el mecanismo andando de
+  punta a punta. No es una foto del local y no debería sobrevivir a la
+  primera tanda de fotos reales. Las otras 136 las tiene que sacar el
+  local; `img/platos/LEEME.txt` tiene las instrucciones.
 
 Falta además cargar la sección de **milanesas / burgers**, que nunca vino en
 las imágenes de la carta.

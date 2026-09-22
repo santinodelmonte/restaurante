@@ -738,16 +738,72 @@ button{ font:inherit; color:inherit; }
   position:relative; overflow:hidden; border-radius:var(--r-md);
   background:var(--espuma); flex:none;
   display:block; width:0; height:0;
+  /* la miniatura de la carta es un botón: de botón no hereda nada */
+  -webkit-appearance:none; appearance:none; border:0; padding:0; margin:0;
+  font:inherit; color:inherit; text-align:inherit;
 }
 .foto--ok{ display:grid; place-items:center; }
 .foto img{ position:absolute; inset:0; width:100%; height:100%; object-fit:cover; }
 .foto--ok.foto--thumb{ width:86px; height:86px; }
 .foto--ok.foto--ficha{ width:100%; height:auto; aspect-ratio:16/10; border-radius:0; }
 .foto--ok.foto--mini{ width:58px; height:58px; }
+.foto--ok.foto--tarjeta{ width:100%; height:auto; aspect-ratio:16/10; border-radius:0; }
+.foto--tarjeta{ position:relative; }   /* por encima de la trama de olas */
+
+/* La lupa dice que la foto se toca. Sale recién con `.foto--ok`, o sea
+   cuando hay foto: un afórdance sobre una caja vacía es una promesa que
+   no se cumple. */
+button.foto--ok{ cursor:zoom-in; }
+button.foto--ok::after{
+  content:""; position:absolute; right:5px; bottom:5px; width:19px; height:19px;
+  border-radius:50%; pointer-events:none; background:rgba(16,38,59,.66)
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23FFFFFF' stroke-width='2.4' stroke-linecap='round'%3E%3Ccircle cx='10.5' cy='10.5' r='6.5'/%3E%3Cpath d='M15.4 15.4 L21 21'/%3E%3C/svg%3E")
+    center/11px 11px no-repeat;
+}
+button.foto--ok.foto--ficha::after{ right:11px; bottom:11px; width:29px; height:29px; background-size:16px 16px; }
+button.foto--ok:focus-visible{ outline:3px solid var(--arena); outline-offset:2px; }
 
 .plato{ display:flex; gap:13px; align-items:flex-start; }
 .plato__cuerpo{ flex:1; min-width:0; }
-:root[data-sol="1"] .foto{ display:none !important; }   /* con el sol de frente, texto y nada más */
+/* Con el sol de frente la foto se queda: lo que cambia es que se le marca
+   el borde, porque sobre blanco puro una foto clara se desarma. */
+:root[data-sol="1"] .foto--ok{ outline:2px solid var(--marino); outline-offset:-2px; }
+
+/* ── LA FOTO EN GRANDE ─────────────────────────────────────────────────
+   La carta no se toca: la miniatura sigue siendo una miniatura y el que
+   quiere ver el plato lo toca. Así la foto no le gana al texto —que es
+   lo que se lee para pedir— y igual está a un toque de distancia.   */
+html.visor-abierto{ overflow:hidden; }
+.visor{
+  position:fixed; inset:0; z-index:80; display:grid; place-items:center;
+  padding:18px; background:rgba(16,38,59,.93);
+  animation:visor-entra calc(.18s * var(--dur)) ease-out both;
+}
+@keyframes visor-entra{ from{ opacity:0; } to{ opacity:1; } }
+.visor__caja{
+  position:relative; width:min(540px,100%); max-height:100%; overflow:auto;
+  background:var(--papel); color:var(--tinta);
+  border-radius:var(--r-lg); box-shadow:0 30px 60px -28px rgba(0,0,0,.9);
+  animation:visor-sube calc(.24s * var(--dur)) cubic-bezier(.16,.9,.24,1) both;
+}
+@keyframes visor-sube{ from{ transform:translateY(14px); } to{ transform:none; } }
+.visor__img{ display:block; width:100%; aspect-ratio:16/10; object-fit:cover; background:var(--espuma); }
+.visor__cerrar{
+  position:absolute; top:9px; right:9px; width:38px; height:38px; cursor:pointer;
+  -webkit-appearance:none; appearance:none; border:0; border-radius:50%;
+  background:rgba(16,38,59,.72); color:#FFFFFF; font-size:1.05rem; line-height:1;
+}
+.visor__cerrar:hover{ background:var(--marino); }
+.visor__cuerpo{ padding:15px 18px 19px; }
+.visor__cat{
+  margin:0 0 4px; font-size:.7rem; font-weight:700; letter-spacing:.16em;
+  text-transform:uppercase; color:var(--tinta-suave);
+}
+.visor__fila{ display:flex; gap:12px; align-items:baseline; justify-content:space-between; }
+.visor__nombre{ font-family:var(--f-brush); font-size:1.3rem; line-height:1.1; margin:0; }
+.visor__precio{ margin:0; font-weight:700; white-space:nowrap; }
+.visor__desc{ margin:8px 0 0; color:var(--tinta-suave); line-height:1.45; }
+.visor__pie{ margin:10px 0 0; font-size:.8rem; color:var(--tinta-clara); }
 
 /* ── EL VEREDICTO: LA ENTRADA VA PRIMERO ──────────────────────────────
    Es lo primero que llega a la mesa, así que es lo primero que se ve. No
@@ -984,7 +1040,7 @@ button{ font:inherit; color:inherit; }
   .opciones{ grid-template-columns:1fr 1fr; }
   .opciones--largas{ grid-template-columns:1fr; }
   .riel{ flex-wrap:wrap; overflow-x:visible; margin-inline:0; padding-inline:0; }
-  .foto--thumb{ width:104px; height:104px; }
+  .foto--ok.foto--thumb{ width:104px; height:104px; }   /* con `--ok`: si no, la caja vacía volvía a ocupar lugar */
 }
 </style>
 </head>
@@ -3700,12 +3756,89 @@ const YA_DICHO = ["vegetariano","sin tacc","para compartir","para la mesa"];
 const FOTOS = "img/platos/";
 const fotoDe = p => p.foto || (FOTOS + p.id + ".jpg");
 
+/* La miniatura de la carta y la foto de la ficha se pueden tocar para
+   verlas en grande. Las de `mini` no: son de 58 px al lado de una línea
+   de texto, y en una lista de cuatro cosas cada una con su lupa, la
+   pantalla se llena de afórdances que nadie pidió. La de la tarjeta
+   tampoco: esa es una postal para sacarle captura. */
+const FOTO_AMPLIABLE = { thumb:true, ficha:true };
+
 function fotoHTML(p, variante){
-  return `<div class="foto foto--${variante}">
+  const ampliable = FOTO_AMPLIABLE[variante] === true;
+  const t = ampliable ? "button" : "div";
+  /* Hasta que la foto no carga, el botón no existe para nadie: no está
+     en el orden de tabulación ni lo lee un lector de pantalla. Un botón
+     de 0 × 0 px que abre una foto que no está es peor que no tenerlo. */
+  const attrs = ampliable
+    ? ` type="button" data-ampliar="${esc(p.id)}" tabindex="-1" aria-hidden="true"`
+      + ` aria-label="Ver la foto de ${esc(p.nombre)}"`
+    : "";
+  return `<${t} class="foto foto--${variante}"${attrs}>
       <img src="${esc(fotoDe(p))}" alt="" loading="lazy" decoding="async"
-           onload="this.parentNode.classList.add('foto--ok');"
+           onload="fotoOk(this);"
            onerror="this.remove();">
+    </${t}>`;
+}
+
+/* Inline y global por la misma razón que el `onerror`: enganchar 137
+   nodos después de pintar la carta es recorrerla entera en cada tecla
+   del buscador. */
+function fotoOk(img){
+  const caja = img.parentNode;
+  if (!caja) return;
+  caja.classList.add("foto--ok");
+  if (caja.dataset && caja.dataset.ampliar){
+    caja.removeAttribute("tabindex");
+    caja.removeAttribute("aria-hidden");
+  }
+}
+window.fotoOk = fotoOk;
+
+/* ── EL VISOR ──────────────────────────────────────────────────────────
+   La foto grande con el nombre y el precio abajo. Lleva el precio a
+   propósito: el que abre la foto de un plato está a un paso de pedirlo
+   y no lo queremos mandar de vuelta a buscar cuánto sale.            */
+let visorVuelve = null;
+
+function abrirFoto(id){
+  const p = MENU.find(x => x.id === id);
+  if (!p) return;
+  cerrarFoto();
+  visorVuelve = document.activeElement;
+
+  const cap = document.createElement("div");
+  cap.className = "visor";
+  cap.id = "visor";
+  cap.innerHTML = `<div class="visor__caja" role="dialog" aria-modal="true"
+        aria-label="${esc(p.nombre)}">
+      <img class="visor__img" src="${esc(fotoDe(p))}" alt="${esc(p.nombre)}">
+      <button class="visor__cerrar" type="button" id="visor-cerrar" aria-label="Cerrar la foto">✕</button>
+      <div class="visor__cuerpo">
+        <p class="visor__cat">${esc(catDe(p.categoria).nombre)}</p>
+        <div class="visor__fila">
+          <h3 class="visor__nombre">${esc(p.nombre)}</h3>
+          <p class="visor__precio">${precioTxt(p.precio)}</p>
+        </div>
+        ${p.descripcion ? `<p class="visor__desc">${esc(p.descripcion)}</p>` : ""}
+        <p class="visor__pie">Foto del plato. Lo que llega a la mesa puede variar según el día.</p>
+      </div>
     </div>`;
+
+  document.body.appendChild(cap);
+  document.documentElement.classList.add("visor-abierto");
+  cap.addEventListener("click", e => {
+    if (e.target.closest("#visor-cerrar") || !e.target.closest(".visor__caja")) cerrarFoto();
+  });
+  $("#visor-cerrar").focus({ preventScroll:true });
+}
+
+function cerrarFoto(){
+  const cap = $("#visor");
+  if (!cap) return;
+  cap.remove();
+  document.documentElement.classList.remove("visor-abierto");
+  if (visorVuelve && document.contains(visorVuelve)) visorVuelve.focus({ preventScroll:true });
+  visorVuelve = null;
 }
 
 function tarjetaPlato(p){
@@ -5869,6 +6002,7 @@ function dibujarVeredicto(r, conReveal){
   $("#chef-volver").onclick = () => pantallaModo();
   $("#b-rehacer").addEventListener("click", pantallaModo);
   $("#b-compartir").addEventListener("click", () => compartirTarjeta(r));
+  setTimeout(() => prepararTarjeta(r), 0);   // que esté lista antes del primer toque
   $$("[data-ir]", panel()).forEach(b => b.addEventListener("click", () => ir(b.dataset.ir)));
 
   $$(".punto__op", panel()).forEach(b => b.addEventListener("click", () => {
@@ -6173,24 +6307,30 @@ function lineaAlternativa(p, r, usadas){
 }
 
 /* ── LA TARJETA ───────────────────────────────────────────────────────
-   Pensada para que le saquen captura. La gente sube lo que come igual;
-   esto les da algo mejor que la foto del plato, y con la marca puesta.
-   Compartir usa lo del propio celular; si no hay, copia al portapapeles. */
+   Pensada para que le saquen captura, o para compartirla como imagen. La
+   gente sube lo que come igual: esto es la foto del plato con la marca
+   puesta, el nombre y una frase del Vasco —lo mismo que iba a subir, pero
+   que además dice de dónde salió—.                                    */
+function nombreTarjeta(r){
+  return r.principal.nombre + (r.punto ? " · " + nombrePunto(r.punto).toLowerCase() : "");
+}
+
 function tarjetaHTML(r){
   const quien = S.nombre ? esc(S.nombre) : "Alguien";
   return `<section class="tarjeta" id="tarjeta">
     <div class="tarjeta__olas olas" aria-hidden="true"></div>
+    ${fotoHTML(r.principal, "tarjeta")}
     <div class="tarjeta__cuerpo">
       <svg class="sello sello--chico" style="color:var(--marino)" aria-hidden="true"><use href="#sello"/></svg>
       <p class="tarjeta__sobre">${quien}, según El Vasco</p>
-      <h3 class="tarjeta__plato">${esc(r.principal.nombre)}</h3>
+      <h3 class="tarjeta__plato">${esc(nombreTarjeta(r))}</h3>
       <p class="tarjeta__frase">${esc(frasePostal(r))}</p>
       <p class="tarjeta__pie">BO · FOMENTO — Estamos en la playa</p>
     </div>
   </section>
   <div class="tarjeta__acciones">
-    <button class="btn btn--sol btn--chico" id="b-compartir">Compartirlo</button>
-    <span class="tarjeta__tip" id="tarjeta-tip">o sacale una captura</span>
+    <button class="btn btn--sol btn--chico" id="b-compartir">Compartir la imagen</button>
+    <span class="tarjeta__tip" id="tarjeta-tip">se comparte como foto, lista para subir</span>
   </div>`;
 }
 
@@ -6202,18 +6342,235 @@ function frasePostal(r){
   return eco ? "Me dijiste " + eco + ". Con eso me alcanzó." : "Veinte años atrás de la parrilla no se discuten.";
 }
 
-async function compartirTarjeta(r){
-  const texto = `${S.nombre ? S.nombre + ", según" : "Según"} El Vasco de Bo Fomento: `
-    + `${r.principal.nombre}. ${frasePostal(r)}`;
-  const tip = $("#tarjeta-tip");
+/* ── LA TARJETA, CONVERTIDA EN IMAGEN ──────────────────────────────────
+   Compartir un texto no sirve para lo único que la gente hace con esto,
+   que es subirlo. Instagram no recibe texto: recibe una imagen. Así que
+   la tarjeta se vuelve a dibujar en un canvas de 1080 × 1350 —el vertical
+   que Instagram no recorta— y eso es lo que sale por el menú de compartir
+   del propio celular, donde Instagram aparece como una opción más.
+
+   No hay forma de publicar en Instagram desde una página web sin que la
+   persona pase por la app, y está bien que sea así. Lo que sí se puede es
+   dejarle la imagen hecha y que el paso que le queda sea elegir el ícono.
+
+   En la compu no hay menú de compartir con archivos: ahí se baja el
+   archivo, que es lo que esa persona iba a hacer igual.
+
+   Sale en JPEG y no en PNG: con una foto adentro, el PNG pesa cuatro
+   veces más y por el aire de un parador eso se nota.                 */
+const TARJETA_W = 1080, TARJETA_H = 1350;
+const OLAS_SVG =
+  "<svg xmlns='http://www.w3.org/2000/svg' width='240' height='84' viewBox='0 0 240 84'>"
+  + "<g fill='none' stroke='#CBD9E3' stroke-width='1.5' stroke-linecap='round'>"
+  + "<path d='M0 8 Q30 3 60 8 T120 8 T180 8 T240 8'/><path d='M0 22 Q30 28 60 22 T120 22 T180 22 T240 22'/>"
+  + "<path d='M0 36 Q30 31 60 36 T120 36 T180 36 T240 36'/><path d='M0 50 Q30 57 60 50 T120 50 T180 50 T240 50'/>"
+  + "<path d='M0 64 Q30 59 60 64 T120 64 T180 64 T240 64'/><path d='M0 78 Q30 84 60 78 T120 78 T180 78 T240 78'/>"
+  + "</g></svg>";
+
+/* El mismo sello del sitio, suelto: adentro de una imagen no existe el
+   `<use>` que apunta al `<symbol>` de la página. */
+const SELLO_SVG =
+  "<svg xmlns='http://www.w3.org/2000/svg' width='100' height='100' viewBox='0 0 100 100'>"
+  + "<defs><path id='ar' d='M 50,50 m -37,0 a 37,37 0 1,1 74,0'/>"
+  + "<path id='ab' d='M 12,50 A 38,38 0 0,0 88,50'/></defs>"
+  + "<g fill='#1B3A57' stroke='none'>"
+  + "<circle cx='50' cy='50' r='48' fill='none' stroke='#1B3A57' stroke-width='2.4'/>"
+  + "<circle cx='50' cy='50' r='30' fill='none' stroke='#1B3A57' stroke-width='1.4'/>"
+  + "<text font-family='Archivo, Helvetica, Arial, sans-serif' font-size='9.5' font-weight='700' letter-spacing='1.6'>"
+  + "<textPath href='#ar' startOffset='50%' text-anchor='middle'>BO &#8226; FOMENTO</textPath></text>"
+  + "<text font-family='Archivo, Helvetica, Arial, sans-serif' font-size='7' font-weight='700' letter-spacing='.9'>"
+  + "<textPath href='#ab' startOffset='50%' text-anchor='middle'>ESTAMOS EN LA PLAYA</textPath></text>"
+  + "<text x='11' y='52' font-family='Archivo, Helvetica, Arial, sans-serif' font-size='5.5' font-weight='700' text-anchor='middle'>PF</text>"
+  + "<text x='89' y='52' font-family='Archivo, Helvetica, Arial, sans-serif' font-size='5.5' font-weight='700' text-anchor='middle'>UY</text>"
+  + "<circle cx='50' cy='42' r='8.5'/>"
+  + "<g fill='none' stroke='#1B3A57' stroke-width='3' stroke-linecap='round'>"
+  + "<path d='M32 55 q 6 -5 12 0 t 12 0 t 12 0'/><path d='M34 63 q 5.5 -5 11 0 t 11 0 t 11 0'/></g>"
+  + "</g></svg>";
+
+const svgURL = txt => "data:image/svg+xml;charset=utf-8," + encodeURIComponent(txt);
+
+function cargarImagen(src){
+  return new Promise((ok, mal) => {
+    const im = new Image();
+    im.onload  = () => ok(im);
+    im.onerror = () => mal(new Error("no carga: " + src));
+    im.src = src;
+  });
+}
+
+/* Corta el texto en líneas que entren en `ancho`, con la fuente que ya
+   esté puesta en el contexto. */
+function partirLineas(ctx, txt, ancho){
+  const lineas = [];
+  let linea = "";
+  /* Corta sólo en espacios comunes: el espacio duro es justamente lo que
+     se usa para que «· jugoso» no quede colgando al final de un renglón. */
+  String(txt).trim().split(/ +/).forEach(w => {
+    const prueba = linea ? linea + " " + w : w;
+    if (linea && ctx.measureText(prueba).width > ancho){ lineas.push(linea); linea = w; }
+    else linea = prueba;
+  });
+  if (linea) lineas.push(linea);
+  return lineas;
+}
+
+/* El nombre del plato se achica hasta entrar en dos líneas: "Costillas de
+   cerdo ahumadas Kassler" no entra al mismo cuerpo que "Vacío". */
+function ajustarTitulo(ctx, txt, ancho, desde, hasta){
+  for (let px = desde; px >= hasta; px -= 4){
+    ctx.font = `400 ${px}px "Permanent Marker", "Archivo", system-ui, sans-serif`;
+    const l = partirLineas(ctx, txt, ancho);
+    if (l.length <= 2) return { px, lineas:l };
+  }
+  ctx.font = `400 ${hasta}px "Permanent Marker", "Archivo", system-ui, sans-serif`;
+  return { px:hasta, lineas:partirLineas(ctx, txt, ancho).slice(0, 2) };
+}
+
+async function tarjetaImagen(r, conFoto){
+  const c = document.createElement("canvas");
+  c.width = TARJETA_W; c.height = TARJETA_H;
+  const ctx = c.getContext("2d");
+
+  /* Sin esto la imagen sale con las tipografías de sistema aunque las de
+     Google ya estén cargadas en la pantalla de atrás. */
+  try { if (document.fonts && document.fonts.ready) await document.fonts.ready; } catch (e) {}
+
+  const F_SOBRE = '700 30px Archivo, Helvetica, Arial, sans-serif';
+  const F_FRASE = '400 52px Yellowtail, "Segoe Script", cursive';
+  const F_PIE   = '700 26px Archivo, Helvetica, Arial, sans-serif';
+  const espaciar = px => { try { ctx.letterSpacing = px; } catch (e) {} };
+
+  /* Se mide todo antes de dibujar nada: el nombre de un plato puede
+     ocupar una línea o dos, y de eso depende si la foto entra entera o
+     hay que recortarle altura. Dibujar de arriba para abajo a ojo es lo
+     que hace que un título largo se monte sobre la línea de arriba. */
+  const sobre = ((S.nombre ? S.nombre : "Alguien") + ", según El Vasco").toUpperCase();
+  espaciar("5px"); ctx.font = F_SOBRE;
+  const hSobre = 34 + 26;
+
+  const tit = ajustarTitulo(ctx,
+    nombreTarjeta(r).toUpperCase().replace(/ · /g, "\u00A0·\u00A0"),
+    TARJETA_W - 150, 82, 46);
+  const hTit = tit.lineas.length * tit.px * 1.18 + 26;
+
+  espaciar("0px"); ctx.font = F_FRASE;
+  const frase = partirLineas(ctx, frasePostal(r), TARJETA_W - 210);
+  const hFrase = frase.length * 66;
+
+  const hSello = 132 + 30;
+  const bloque = hSello + hSobre + hTit + hFrase;
+  const pisoPie = TARJETA_H - 118;          // de acá para abajo va el pie
+
+  /* La foto se lleva lo que sobra, hasta 16:10. Con un nombre de dos
+     líneas y una frase larga, cede altura en vez de empujar el texto
+     afuera de la imagen. */
+  let hFoto = 0;
+  if (conFoto){
+    hFoto = Math.min(Math.round(TARJETA_W * 10 / 16), pisoPie - bloque - 48);
+    if (hFoto < 360) hFoto = 0;             // una foto en franja no es una foto
+  }
+
+  ctx.fillStyle = "#FFFFFF";
+  ctx.fillRect(0, 0, TARJETA_W, TARJETA_H);
   try {
-    if (navigator.share){ await navigator.share({ title:"BO | Fomento", text: texto }); return; }
-    await navigator.clipboard.writeText(texto);
-    if (tip) tip.textContent = "Copiado. Pegalo donde quieras.";
+    const olas = await cargarImagen(svgURL(OLAS_SVG));
+    const pat = ctx.createPattern(olas, "repeat");
+    ctx.save(); ctx.globalAlpha = .55; ctx.fillStyle = pat;
+    ctx.fillRect(0, 0, TARJETA_W, TARJETA_H); ctx.restore();
+  } catch (e) { /* sin trama, la tarjeta sigue siendo la tarjeta */ }
+
+  if (hFoto){
+    const foto = await cargarImagen(fotoDe(r.principal));   // si no hay, tira y se reintenta sin foto
+    const k = Math.max(TARJETA_W / foto.width, hFoto / foto.height);
+    const w = foto.width * k, h = foto.height * k;
+    ctx.save();
+    ctx.beginPath(); ctx.rect(0, 0, TARJETA_W, hFoto); ctx.clip();
+    ctx.drawImage(foto, (TARJETA_W - w) / 2, (hFoto - h) / 2, w, h);
+    ctx.restore();
+  }
+
+  ctx.textAlign = "center";
+  ctx.textBaseline = "top";
+  let y = hFoto + Math.max(34, (pisoPie - hFoto - bloque) / 2);
+
+  const sello = await cargarImagen(svgURL(SELLO_SVG)).catch(() => null);
+  if (sello) ctx.drawImage(sello, (TARJETA_W - 132) / 2, y, 132, 132);
+  y += hSello;
+
+  ctx.fillStyle = "#4A6379";
+  espaciar("5px"); ctx.font = F_SOBRE;
+  ctx.fillText(sobre, TARJETA_W / 2, y);
+  y += hSobre;
+
+  ctx.fillStyle = "#1B3A57";
+  espaciar("0px");
+  ctx.font = `400 ${tit.px}px "Permanent Marker", "Archivo", system-ui, sans-serif`;
+  tit.lineas.forEach(l => { ctx.fillText(l, TARJETA_W / 2, y); y += tit.px * 1.18; });
+  y += 26;
+
+  ctx.font = F_FRASE;
+  frase.forEach(l => { ctx.fillText(l, TARJETA_W / 2, y); y += 66; });
+
+  ctx.fillStyle = "#4A6379";
+  ctx.font = F_PIE;
+  espaciar("5px");
+  ctx.fillText("BO · FOMENTO — ESTAMOS EN LA PLAYA", TARJETA_W / 2, TARJETA_H - 96);
+
+  return await new Promise((ok, mal) => {
+    /* Un canvas con una foto traída de `file://` queda manchado y esto
+       tira SecurityError. Por eso el que llama reintenta sin la foto. */
+    try { c.toBlob(b => b ? ok(b) : mal(new Error("sin blob")), "image/jpeg", .92); }
+    catch (e) { mal(e); }
+  });
+}
+
+/* Se arma apenas se pinta el veredicto y queda guardada: cuando la
+   persona toca "compartir", el menú del celular tiene que abrirse en el
+   acto o el navegador lo considera un pop-up y lo bloquea. */
+let tarjetaHecha = { clave:null, promesa:null };
+
+function prepararTarjeta(r){
+  const clave = [r.principal.id, r.punto || "", S.nombre].join("|");
+  if (tarjetaHecha.clave === clave) return tarjetaHecha.promesa;
+  const promesa = tarjetaImagen(r, true)
+    .catch(() => tarjetaImagen(r, false))
+    .catch(() => null);
+  tarjetaHecha = { clave, promesa };
+  return promesa;
+}
+
+function bajarImagen(blob, nombre){
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement("a");
+  a.href = url; a.download = nombre;
+  document.body.appendChild(a); a.click(); a.remove();
+  setTimeout(() => URL.revokeObjectURL(url), 5000);
+}
+
+async function compartirTarjeta(r){
+  const btn = $("#b-compartir"), tip = $("#tarjeta-tip");
+  const texto = btn ? btn.textContent : "";
+  if (btn){ btn.disabled = true; btn.textContent = "Armando la imagen…"; }
+  try {
+    const blob = await prepararTarjeta(r);
+    if (!blob) throw new Error("no se pudo armar la imagen");
+    const archivo = new File([blob], "bo-fomento-" + r.principal.id + ".jpg", { type:"image/jpeg" });
+
+    if (navigator.share && navigator.canShare && navigator.canShare({ files:[archivo] })){
+      await navigator.share({ files:[archivo] });
+      return;
+    }
+    bajarImagen(blob, archivo.name);
+    if (tip) tip.textContent = "Te la guardé como imagen. Ya la podés subir.";
   } catch (e) {
-    // el usuario canceló el menú de compartir: no es un error que mostrar
+    // cerró el menú del celular: no es un error que haya que mostrar
     if (e && e.name === "AbortError") return;
-    if (tip) tip.textContent = "No pude copiarlo. Sacale una captura, queda mejor igual.";
+    /* Si la imagen no se pudo armar, el botón se va. Ofrecer compartir y
+       después no poder es peor que no ofrecerlo: la captura sigue ahí. */
+    if (btn) btn.hidden = true;
+    if (tip) tip.textContent = "Sacale una captura, que queda igual de bien.";
+  } finally {
+    if (btn && !btn.hidden){ btn.disabled = false; btn.textContent = texto; }
   }
 }
 
@@ -6317,8 +6674,19 @@ function conectar(){
     }
   } catch (e) {}
 
+  /* Una sola escucha para las 137 miniaturas de la carta y para las
+     fichas del veredicto, que se repintan a cada rato. */
+  document.addEventListener("click", e => {
+    const b = e.target.closest("[data-ampliar]");
+    if (b) abrirFoto(b.dataset.ampliar);
+  });
+
   document.addEventListener("keydown", e => {
-    if (e.key === "Escape" && S.vista !== "landing"){
+    if (e.key !== "Escape") return;
+    /* La foto abierta se come el Escape: si no, cerrarla te saca además
+       de la carta y volvés al inicio sin haberlo pedido. */
+    if ($("#visor")){ cerrarFoto(); return; }
+    if (S.vista !== "landing"){
       if ("speechSynthesis" in window) speechSynthesis.cancel();
       ir("landing");
     }
