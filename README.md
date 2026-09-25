@@ -27,8 +27,8 @@ se guarda en el celular.
 Hay cinco formatos: botones, grilla de opciones, deslizador con el chef
 comentando mientras arrastrás, una ronda de pares, y campos para escribir.
 Ninguno es un juego: el reloj de tres segundos se fue, y con él la regla
-que forzaba a que entrara un juego por tanda. Los juegos quedaron del lado
-de Tito, que es donde corresponden.
+que forzaba a que entrara un juego por tanda. Lo lúdico quedó del lado de
+Tito, que es donde corresponde.
 
 **Todas las preguntas son sobre comida.** La mitad son directas —con qué
 te quedás si tenés que elegir una sola cosa, cómo te gusta que llegue la
@@ -107,14 +107,38 @@ a alguien como plato propio.
 
 **Tito, el Chef Kid.** Un personaje aparte, ayudante del Vasco, para los
 chicos de 5 a 10. Recomienda **sólo** del menú de niños, y el Vasco no ve
-ese menú nunca: las dos reglas están verificadas en el autotest. Cinco
-preguntas con dibujos grandes que no exigen saber leer bien, y después tres
-juegos para la espera —pintá tu plato, memotest y el intruso—, sin
-librerías y sin internet.
+ese menú nunca: las dos reglas están verificadas en el autotest.
 
-En la mesa, a cada chico se le pasa el celular para tres preguntas, con
-"elegile vos" siempre a mano. Que haya chicos además baja lo más raro de lo
-que va al medio.
+No hay juegos para la espera: el juego es pedir. El chico **cocina con
+Tito**, y cada respuesta es algo que hace en la cocina:
+
+- lo que más le gusta lo tira a la olla, tocándolo o arrastrándolo, y queda
+  flotando;
+- crocante o blandita sube o baja el fuego; "¿probás cosas nuevas?" le
+  echa polvo mágico; el hambre agranda o achica la olla; el color pinta la
+  salsa;
+- la bebida y el postre van a la mesada, al lado;
+- "¿hay algo que no podés comer?" no va a la olla: es una lista que se
+  marca, porque es un contrato y no un ingrediente. Recién al cerrarla se
+  prende el fuego.
+
+Arriba, una receta con un casillero por pregunta se va llenando con lo que
+eligió. Con todo adentro, revuelve tocando la olla, entra al horno, cuenta
+3-2-1, suena la campanita y sale su plato con confeti. Las preguntas y los
+pesos son los mismos de antes: sólo cambió cómo se contestan.
+
+Tiene sonido —sintetizado en el navegador, sin archivos—, vibración suave
+y Tito lee en voz alta cada pregunta, para el que todavía no lee bien. Un
+botón arriba lo apaga todo, y queda apagado para la próxima visita. Con
+`prefers-reduced-motion` no hay vuelos, temblores ni confeti.
+
+Mientras atiende Tito, **la carta muestra sólo la de los chicos**, con un
+aviso y un botón para que un grande vea la carta entera.
+
+En la mesa, a cada chico se le pasa el celular y cocina lo mismo, con tres
+preguntas y menos vueltas de cuchara, y "elegile vos" siempre a mano. Lo
+que sale de su horno es exactamente lo que después aparece en el pedido de
+la mesa. Que haya chicos además baja lo más raro de lo que va al medio.
 
 **Las fotos.** Una por plato, en `img/platos/<id>.jpg`. Sumar una foto es
 copiar un archivo. Mientras no está, no deja ningún hueco: la carta se ve
