@@ -1,0 +1,4 @@
+# dependencias de las herramientas de docs/ y de las pruebas
+node_modules/
+package-lock.json
+package.json
