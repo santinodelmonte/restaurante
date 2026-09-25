@@ -420,6 +420,25 @@ entrada va con qué principal, en lugar de dejarlo a la regla general. Eso
 también incluye decidir qué cuenta como entrada, qué se comparte y qué
 pasa en la mesa. Lo vamos a definir cuando tengamos la carta.
 
+Un caso real que muestra por qué la regla general no alcanza: el chef
+recomendó *Caliente de jamón y queso* con *Queso provolone* de entrada y
+copa de tinto de la casa.
+
+- Es queso antes de queso. El caliente está cargado con `proteina:"cerdo"`
+  por el jamón, así que recibe la regla del cerdo («queso adelante, que
+  acompaña en vez de duplicar»). El motor no ve que el plato ya trae queso,
+  y la entrada termina duplicando.
+- Un sándwich no pide entrada. El provolone cuesta casi lo mismo que el
+  caliente y es para compartir. Hoy el motor pone entrada siempre que haya
+  con qué, y el autotest lo exige. Con la carta oficial hay que decidir qué
+  platos llevan entrada y cuáles no, en vez de ponerla siempre.
+- La copa de tinto pasa, pero con un caliente va más natural una cerveza o
+  algo más liviano. Si salió porque la persona contestó «vino tinto» al
+  principio, es el mismo problema del punto 1.
+- El caliente tiene `untuosidad:10`, igual que el provolone con jamón
+  crudo. Hay que revisar los ejes de todos los platos contra la carta
+  oficial, empezando por los sándwiches.
+
 **3. Horno de barro o parrilla, sin preguntarlo.** El chef tiene que
 averiguar para qué lado va la persona (horno de barro, parrilla o lo que
 traiga la carta oficial) sin preguntarlo de frente, y recomendar en base a
