@@ -961,78 +961,226 @@ html.visor-abierto{ overflow:hidden; }
   .tito, .k-parpadeo, .k-cuchara{ animation:none !important; }
 }
 
-/* la tira de estrellitas del progreso: un chico no lee "3 de 5" */
-.kid-pasos{ display:flex; gap:8px; justify-content:center; margin:0 0 18px; font-size:1.3rem; }
-.kid-pasos span{ opacity:.28; }
-.kid-pasos span.hecho{ opacity:1; }
+/* ── LA COCINA DE TITO ────────────────────────────────────────────────
+   No hay juegos para la espera: el juego es pedir. El chico cocina con
+   Tito y cada cosa que tira a la olla es una respuesta. La olla guarda
+   todo lo que eligió —lo que flota, el color de la salsa, el fuego, el
+   tamaño— así que al final ve su receta entera antes de que entre al
+   horno. Todo se toca: a los cinco años no se arrastra con precisión,
+   así que arrastrar es un extra y tocar alcanza.                      */
+.cocina{ flex:1; display:flex; flex-direction:column; padding:8px 0 22px; }
+.cocina .dice{ margin-bottom:8px; }
+.kid .cocina .burbuja{ font-size:1.42rem; }
+.cocina > .acciones-chat{ margin-top:auto; padding-top:14px; }
 
-/* ── LOS JUEGOS DE LA ESPERA ──────────────────────────────────────────
-   No están de adorno: un chico entretenido es una mesa que se queda más
-   rato y pide otra vuelta. Son tres, sin librerías y sin internet.    */
-.juegos{ margin-top:26px; }
-.juegos__riel{ display:grid; gap:10px; }
-@media (min-width:560px){ .juegos__riel{ grid-template-columns:repeat(3,1fr); } }
-.juego-btn{
-  -webkit-appearance:none; appearance:none; cursor:pointer; text-align:left;
+/* la receta: un casillero por pregunta, que se llena con lo que eligió */
+.receta{ list-style:none; display:flex; gap:8px; justify-content:center; margin:0 0 12px; padding:0; }
+.receta li{
+  width:40px; height:40px; border-radius:50%; display:grid; place-items:center;
+  font-size:1.25rem; line-height:1; color:var(--tinta-clara);
+  border:2px dashed rgba(255,255,255,.3);
+}
+.receta li.hecho{ border:2px solid var(--acento); background:rgba(55,194,177,.18); }
+.receta li.ahora{ border-color:var(--acento); animation:k-late calc(1.2s * var(--dur)) ease-in-out infinite; }
+.receta li.recien{ animation:k-pop calc(.45s * var(--dur)) cubic-bezier(.2,1.6,.4,1); }
+@keyframes k-late{ 50%{ transform:scale(1.12); } }
+@keyframes k-pop{ from{ transform:scale(.3); } to{ transform:none; } }
+
+/* la escena: la olla al fuego y la mesada al costado */
+.escena{
+  position:relative; display:grid; grid-template-columns:1fr auto;
+  align-items:end; gap:8px; margin:2px 0 6px; min-height:170px;
+}
+.escena--sola{ grid-template-columns:1fr; }
+.olla{
+  position:relative; width:min(220px, 56vw); justify-self:center;
+  transform:scale(var(--tam, 1)); transform-origin:50% 100%;
+  transition:transform calc(.55s * var(--dur)) cubic-bezier(.2,1.6,.4,1);
+  -webkit-tap-highlight-color:transparent;
+}
+.cocina--lista .olla{ width:min(150px, 40vw); }
+.olla svg{ width:100%; height:auto; display:block; overflow:visible; }
+.olla__salsa{ fill:var(--salsa, #E8B45A); transition:fill calc(.7s * var(--dur)) ease; }
+.olla[data-salsa="arcoiris"] .olla__salsa{ animation:k-arcoiris calc(3s * var(--dur)) linear infinite; }
+@keyframes k-arcoiris{
+  0%,100%{ fill:#E2574C; } 20%{ fill:#F2C94C; } 40%{ fill:#5DBB63; } 60%{ fill:#4B9BD6; } 80%{ fill:#B07CD8; }
+}
+.olla[data-fuego="0"] .olla__salsa{ fill:#5A7890; }
+
+.olla__fuego{
+  transform-box:fill-box; transform-origin:50% 100%;
+  transform:scaleY(0); opacity:0;
+  transition:transform calc(.5s * var(--dur)) cubic-bezier(.2,1.5,.4,1), opacity calc(.3s * var(--dur)) ease;
+}
+.olla[data-fuego="1"] .olla__fuego{ transform:scaleY(.55); opacity:1; }
+.olla[data-fuego="2"] .olla__fuego{ transform:scaleY(.85); opacity:1; }
+.olla[data-fuego="3"] .olla__fuego{ transform:scaleY(1.2); opacity:1; }
+.olla__llama{ transform-box:fill-box; transform-origin:50% 100%; animation:k-llama calc(.45s * var(--dur)) ease-in-out infinite alternate; }
+.olla__llama:nth-child(2){ animation-delay:-.2s; }
+.olla__llama:nth-child(3){ animation-delay:-.33s; }
+@keyframes k-llama{ from{ transform:scale(1,1); } to{ transform:scale(.88,1.12); } }
+
+.olla__burbuja{ opacity:0; transform-box:fill-box; transform-origin:center; }
+.olla:is([data-fuego="2"],[data-fuego="3"]) .olla__burbuja{ animation:k-burbuja calc(1.5s * var(--dur)) ease-in infinite; }
+.olla__burbuja:nth-of-type(2){ animation-delay:-.5s !important; }
+.olla__burbuja:nth-of-type(3){ animation-delay:-1s !important; }
+@keyframes k-burbuja{
+  0%{ opacity:0; transform:scale(.3); } 40%{ opacity:1; transform:scale(1); }
+  100%{ opacity:0; transform:scale(1.4) translateY(-6px); }
+}
+.olla__vapor{ opacity:0; }
+.olla:is([data-vapor="1"],[data-fuego="3"]) .olla__vapor{ animation:k-vapor calc(2.4s * var(--dur)) ease-out infinite; }
+.olla__vapor:nth-of-type(2){ animation-delay:-.8s !important; }
+.olla__vapor:nth-of-type(3){ animation-delay:-1.6s !important; }
+@keyframes k-vapor{ 0%{ opacity:0; transform:translateY(8px); } 40%{ opacity:.8; } 100%{ opacity:0; transform:translateY(-22px); } }
+
+/* lo que flota en la olla: el favorito, y lo que se tire después */
+.olla__flota{
+  position:absolute; left:16%; right:16%; top:16%; height:20%;
+  display:flex; justify-content:center; align-items:center; gap:2px; pointer-events:none;
+}
+.olla__flota span{ font-size:clamp(1.4rem, 7vw, 1.9rem); line-height:1; animation:k-flota calc(2.4s * var(--dur)) ease-in-out infinite; }
+.olla__flota span:nth-child(2){ animation-delay:-.8s; }
+.olla__flota span:nth-child(3){ animation-delay:-1.6s; }
+@keyframes k-flota{ 50%{ transform:translateY(-5px) rotate(9deg); } }
+
+/* el polvo mágico del "¿probás cosas nuevas?" */
+.olla__chispas{ position:absolute; inset:-6% 4% 40%; pointer-events:none; }
+.olla__chispas span{ position:absolute; font-size:1rem; opacity:0; }
+.olla[data-chispas="1"] .olla__chispas span:nth-child(-n+2),
+.olla[data-chispas="2"] .olla__chispas span:nth-child(-n+4),
+.olla[data-chispas="3"] .olla__chispas span{ animation:k-brilla calc(1.6s * var(--dur)) ease-in-out infinite; }
+.olla__chispas span:nth-child(1){ left:6%;  top:40%; }
+.olla__chispas span:nth-child(2){ left:84%; top:30%; animation-delay:-.5s !important; }
+.olla__chispas span:nth-child(3){ left:30%; top:0;   animation-delay:-1s !important; }
+.olla__chispas span:nth-child(4){ left:64%; top:6%;  animation-delay:-.3s !important; }
+.olla__chispas span:nth-child(5){ left:46%; top:-14%; animation-delay:-1.2s !important; }
+.olla__chispas span:nth-child(6){ left:94%; top:62%; animation-delay:-.8s !important; }
+@keyframes k-brilla{ 0%,100%{ opacity:0; transform:scale(.4) rotate(0); } 50%{ opacity:1; transform:scale(1.15) rotate(40deg); } }
+
+/* la olla también reacciona cuando le cae algo */
+.olla.plop{ animation:k-plop calc(.42s * var(--dur)) cubic-bezier(.2,1.6,.4,1); }
+@keyframes k-plop{ 30%{ transform:scale(calc(var(--tam,1) * 1.06), calc(var(--tam,1) * .92)); } }
+.olla.destino .olla__boca{ stroke:var(--acento); }
+
+/* revolver: la olla se vuelve un botón enorme */
+.olla--revolver{ cursor:pointer; touch-action:manipulation; border-radius:var(--r-lg); }
+.olla--revolver:focus-visible{ outline:3px solid var(--acento); outline-offset:6px; }
+.olla__cuchara{ transform-box:view-box; transform-origin:120px 82px; transform:rotate(var(--giro, 0deg)); transition:transform calc(.3s * var(--dur)) cubic-bezier(.2,1.4,.4,1); }
+.olla:not(.olla--revolver) .olla__cuchara{ display:none; }
+.revolver__cuenta{ display:flex; gap:10px; justify-content:center; margin:10px 0 0; font-size:1.6rem; }
+.revolver__cuenta span{ opacity:.25; transition:opacity .2s ease, transform .2s cubic-bezier(.2,1.6,.4,1); }
+.revolver__cuenta span.hecho{ opacity:1; transform:scale(1.15); }
+
+/* la mesada: lo que no va en la olla (la bebida y el postre) */
+.mesada{ display:grid; gap:22px; align-self:center; padding-bottom:18px; }
+.mesada__slot{
+  position:relative; width:56px; height:56px; border-radius:var(--r-md);
+  border:2px dashed rgba(255,255,255,.3); display:grid; place-items:center;
+  font-size:1.8rem; line-height:1;
+}
+.mesada__slot::after{
+  content:attr(data-nombre); position:absolute; top:100%; margin-top:3px; left:50%; transform:translateX(-50%);
+  font-size:.6rem; font-weight:700; letter-spacing:.08em; text-transform:uppercase; color:var(--tinta-clara); white-space:nowrap;
+}
+.mesada__slot.lleno{ border-style:solid; border-color:var(--acento); background:rgba(55,194,177,.14); }
+.mesada__slot.destino{ border-color:var(--acento); animation:k-late calc(1.2s * var(--dur)) ease-in-out infinite; }
+
+.cocina__pide{ text-align:center; font-weight:700; color:var(--acento); margin:8px 0 10px; font-size:.98rem; }
+
+/* los ingredientes */
+.ingredientes{ display:grid; grid-template-columns:repeat(3, 1fr); gap:10px; }
+.ingredientes--dos{ grid-template-columns:repeat(2, 1fr); }
+.ingrediente{
+  -webkit-appearance:none; appearance:none; position:relative; cursor:pointer;
+  touch-action:none; user-select:none; -webkit-user-select:none; -webkit-touch-callout:none;
   background:rgba(255,255,255,.07); color:var(--papel);
-  border:2px solid rgba(255,255,255,.2); border-radius:var(--r-lg);
-  padding:16px; display:grid; gap:6px;
-  transition:border-color .15s ease, background-color .15s ease, transform .15s cubic-bezier(.2,.8,.3,1);
+  border:3px solid rgba(255,255,255,.24); border-radius:var(--r-lg);
+  padding:12px 6px 10px; min-height:92px; display:grid; gap:5px; justify-items:center; align-content:center;
+  transition:border-color .15s ease, background-color .15s ease, transform .15s cubic-bezier(.2,.8,.3,1), opacity .15s ease;
 }
-.juego-btn:hover{ border-color:var(--acento); background:rgba(55,194,177,.14); }
-.juego-btn:active{ transform:scale(.98); }
-.juego-btn__emo{ font-size:1.9rem; line-height:1; }
-.juego-btn__txt{ font-family:var(--f-brush); text-transform:uppercase; font-size:1rem; }
-.juego-btn__sub{ font-size:.84rem; color:var(--tinta-clara); }
+.ingrediente:hover{ border-color:var(--acento); background:rgba(55,194,177,.16); }
+.ingrediente:active{ transform:scale(.95); }
+.ingrediente__emo{ font-size:2.4rem; line-height:1; transition:transform .2s cubic-bezier(.2,1.6,.4,1); }
+.ingrediente:hover .ingrediente__emo{ transform:rotate(-8deg) scale(1.1); }
+.ingrediente__txt{ font-size:.86rem; font-weight:700; text-align:center; line-height:1.15; }
+.ingrediente.arrastrando{ opacity:.3; }
+.ingrediente[disabled]{ cursor:default; }
+.ingrediente[disabled]:not(.elegido){ opacity:.4; }
+.ingrediente.elegido{ border-color:var(--acento); background:rgba(55,194,177,.22); }
 
-.juego{ margin-top:8px; }
-.juego__cabeza{ display:flex; align-items:center; gap:12px; margin-bottom:14px; flex-wrap:wrap; }
-.juego__titulo{ font-family:var(--f-brush); text-transform:uppercase; font-size:1.2rem; margin:0; }
-.juego__marcador{ margin-left:auto; font-weight:700; color:var(--acento); }
-.juego__dice{ font-family:var(--f-script); font-size:1.3rem; color:var(--papel); min-height:1.8em; margin:14px 0 0; }
+/* "¿hay algo que no podés comer?": esto no es juego, es un contrato.
+   Se marca con un cartel que no se confunde con nada. */
+.ingredientes--lista{ grid-template-columns:1fr 1fr; }
+.ingredientes--lista .ingrediente{ touch-action:manipulation; min-height:84px; }
+.ingrediente__marca{
+  position:absolute; top:6px; right:8px; font-size:1.15rem; line-height:1;
+  opacity:0; transform:scale(.3); transition:opacity .15s ease, transform .2s cubic-bezier(.2,1.6,.4,1);
+}
+.ingrediente[aria-pressed="true"]{ border-color:var(--acento); background:rgba(55,194,177,.22); }
+.ingrediente[aria-pressed="true"] .ingrediente__marca{ opacity:1; transform:none; }
 
-/* pintá el plato */
-.pintar{ display:grid; gap:14px; }
-.pintar__lienzo{
-  background:var(--papel); border-radius:var(--r-lg); padding:10px;
-  display:grid; place-items:center;
+/* el ingrediente que vuela a la olla, y el que se lleva con el dedo */
+.fantasma{
+  position:fixed; left:0; top:0; z-index:80; pointer-events:none;
+  font-size:2.6rem; line-height:1; will-change:transform;
+  filter:drop-shadow(0 8px 6px rgba(0,0,0,.35));
 }
-.pintar__lienzo svg{ width:100%; height:auto; max-width:320px; display:block; touch-action:manipulation; }
-.pintar__zona{ cursor:pointer; transition:fill .16s ease; }
-.pintar__paleta{ display:flex; flex-wrap:wrap; gap:9px; justify-content:center; }
-.pintar__color{
-  -webkit-appearance:none; appearance:none; cursor:pointer;
-  width:44px; height:44px; border-radius:50%; border:3px solid rgba(255,255,255,.35);
-  transition:transform .14s cubic-bezier(.2,.8,.3,1), border-color .14s ease;
-}
-.pintar__color[aria-pressed="true"]{ border-color:var(--papel); transform:scale(1.16); }
+.gota{ position:fixed; z-index:79; pointer-events:none; width:10px; height:10px; border-radius:50%; }
 
-/* memotest */
-.memo{ display:grid; grid-template-columns:repeat(4,1fr); gap:9px; }
-.memo__carta{
-  -webkit-appearance:none; appearance:none; cursor:pointer; position:relative;
-  aspect-ratio:1; border-radius:var(--r-md); border:2px solid rgba(255,255,255,.24);
-  background:rgba(255,255,255,.07); color:var(--papel);
-  font-size:1.9rem; line-height:1; display:grid; place-items:center;
-  transition:background-color .16s ease, border-color .16s ease, transform .16s cubic-bezier(.2,.8,.3,1);
+/* el horno */
+.horno{ position:relative; width:min(220px, 58vw); margin:6px auto 0; }
+.horno svg{ width:100%; height:auto; display:block; overflow:visible; }
+.horno__luz{ fill:var(--marino-hondo); transition:fill calc(.5s * var(--dur)) ease; }
+.horno.prendido .horno__luz{ fill:#E0A94A; animation:k-brasa calc(.5s * var(--dur)) ease-in-out infinite alternate; }
+@keyframes k-brasa{ to{ fill:#F2C94C; } }
+.horno__puerta{ transform-box:fill-box; transform-origin:50% 100%; transition:transform calc(.5s * var(--dur)) cubic-bezier(.3,1.5,.5,1); }
+.horno.abierto .horno__puerta{ transform:scaleY(.12); }
+.horno.tiembla{ animation:k-tiembla calc(.14s * var(--dur)) linear infinite; }
+@keyframes k-tiembla{ 25%{ transform:translate(-2px, 1px) rotate(-.6deg); } 75%{ transform:translate(2px, -1px) rotate(.6deg); } }
+.horno__numero{
+  position:absolute; left:0; right:0; top:42%; height:31%; display:grid; place-items:center; pointer-events:none;
+  font-family:var(--f-brush); font-size:3.6rem; line-height:1; color:var(--marino-hondo);
 }
-.memo__carta[data-estado="tapada"] span{ visibility:hidden; }
-.memo__carta[data-estado="tapada"]::after{ content:"🍴"; opacity:.45; position:absolute; }
-.memo__carta[data-estado="hecha"]{ background:rgba(55,194,177,.22); border-color:var(--acento); }
-.memo__carta:active{ transform:scale(.95); }
+.horno__numero span{ animation:k-numero calc(.62s * var(--dur)) ease-out both; }
+@keyframes k-numero{ 0%{ transform:scale(2.2); opacity:0; } 30%{ transform:scale(1); opacity:1; } 100%{ transform:scale(.85); opacity:0; } }
+.olla.al-horno{ animation:k-al-horno calc(.5s * var(--dur)) ease-in forwards; }
+@keyframes k-al-horno{ to{ transform:translateY(30px) scale(.4); opacity:0; } }
 
-/* el intruso */
-.intruso{ display:grid; grid-template-columns:repeat(4,1fr); gap:9px; }
-.intruso__item{
-  -webkit-appearance:none; appearance:none; cursor:pointer;
-  aspect-ratio:1; border-radius:var(--r-md); border:2px solid rgba(255,255,255,.24);
-  background:rgba(255,255,255,.07); font-size:1.9rem; line-height:1;
-  display:grid; place-items:center;
-  transition:background-color .16s ease, border-color .16s ease, transform .16s cubic-bezier(.2,.8,.3,1);
+/* el confeti del final */
+.confeti{ position:fixed; inset:0; z-index:90; pointer-events:none; overflow:hidden; }
+.confeti i{ position:absolute; top:-16px; width:9px; height:14px; border-radius:2px; }
+
+/* la revelación: el plato sale del horno */
+.sale-del-horno{ animation:k-sale calc(.8s * var(--dur)) cubic-bezier(.2,1.4,.4,1) both; }
+@keyframes k-sale{ from{ transform:translateY(50px) scale(.6); opacity:0; } to{ transform:none; opacity:1; } }
+.kid .ficha__cat{ color:#23907F; }
+
+/* el botón de sonido: sólo existe en la cocina de Tito */
+.noche .icono{ background:transparent; border-color:rgba(255,255,255,.3); color:var(--papel); }
+.noche .icono:hover{ background:rgba(255,255,255,.12); }
+.noche .icono[aria-pressed="false"]{ opacity:.7; }
+
+/* la carta de los chicos: mientras Tito atiende, la carta es sólo eso */
+.solo-ninos{
+  display:flex; align-items:center; gap:8px 12px; flex-wrap:wrap;
+  margin:0 0 12px; padding:12px 14px; border-radius:var(--r-md);
+  background:#E9FBF8; border:2px solid #37C2B1; color:#05312C; font-weight:700;
 }
-.intruso__item:active{ transform:scale(.95); }
-.intruso__item.bien{ background:rgba(55,194,177,.3); border-color:var(--acento); }
-.intruso__item.mal{ background:rgba(255,120,120,.22); border-color:#FF9A9A; }
+.solo-ninos[hidden]{ display:none; }
+.solo-ninos__emo{ font-size:1.4rem; line-height:1; }
+.solo-ninos__ver{
+  margin-left:auto; background:none; border:0; cursor:pointer; padding:6px 4px;
+  color:#05312C; font-weight:700; font-size:.86rem; text-decoration:underline; text-underline-offset:3px;
+}
+.carta-ninos #riel-cats, .carta-ninos #riel-filtros{ display:none; }
+
+@media (prefers-reduced-motion: reduce){
+  .olla__llama, .olla__burbuja, .olla__vapor, .olla__flota span, .olla__chispas span,
+  .receta li, .horno, .horno__luz, .mesada__slot{ animation:none !important; }
+  .olla:is([data-fuego="2"],[data-fuego="3"]) .olla__burbuja{ opacity:1; }
+  .olla:not([data-chispas="0"]) .olla__chispas span{ opacity:1; }
+}
 
 @media (min-width:760px){
   .hero__cuerpo{ padding-block:56px 62px; }
@@ -1141,6 +1289,11 @@ html.visor-abierto{ overflow:hidden; }
     </div>
 
     <div class="envoltura">
+      <div class="solo-ninos" id="solo-ninos" hidden>
+        <span class="solo-ninos__emo" aria-hidden="true">&#129489;&#8205;&#127859;</span>
+        <span>La carta de los chicos</span>
+        <button class="solo-ninos__ver" id="b-carta-toda">Ver la carta entera</button>
+      </div>
       <div class="buscador">
         <span class="buscador__lupa" aria-hidden="true">&#9906;</span>
         <label class="solo-lectores" for="q">Buscar en la carta</label>
@@ -1172,6 +1325,8 @@ html.visor-abierto{ overflow:hidden; }
         <div class="barra-top__fila">
           <button class="volver" id="chef-volver" aria-label="Volver">&larr; Volver</button>
           <h2 class="barra-top__titulo" id="h-chef">El Chef</h2>
+          <button class="icono" id="b-sonido" hidden aria-pressed="true"
+                  aria-label="Sonido de la cocina de Tito" title="Sonido">&#128266;</button>
           <button class="btn btn--chico btn--linea" data-ir="carta">Ver carta</button>
         </div>
         <div class="progreso" id="progreso" hidden>
@@ -3689,7 +3844,8 @@ const esc = s => String(s).replace(/[&<>"']/g, m =>
 const reducido = () => window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
 const S = { vista:"landing", modo:null, i:0, respuestas:{}, preguntas:[],
-            cat:"todas", filtros:new Set(), q:"", ultimo:null, nombre:"" };
+            cat:"todas", filtros:new Set(), q:"", ultimo:null, nombre:"",
+            soloNinos:false };
 
 /* El nombre es opcional y no sale del celular: se usa para que el chef
    te hable a vos y nada más. */
@@ -3727,8 +3883,11 @@ function chipsCarta(){
 function platosVisibles(){
   const q = S.q.trim().toLowerCase();
   return MENU.filter(p => {
-    if (S.cat !== "todas" && p.categoria !== S.cat) return false;
-    for (const id of S.filtros){
+    // Mientras atiende Tito, la carta es la de los chicos y nada más: sin
+    // categorías ni filtros de grandes, que en esa pantalla ni se ven.
+    if (S.soloNinos){ if (!esNino(p)) return false; }
+    else if (S.cat !== "todas" && p.categoria !== S.cat) return false;
+    for (const id of (S.soloNinos ? [] : S.filtros)){
       const f = FILTROS_CARTA.find(x => x.id === id);
       if (f && !f.test(p)) return false;
     }
@@ -3884,6 +4043,9 @@ function bloqueSub(nombre){
 }
 
 function pintarCarta(){
+  $("#v-carta").classList.toggle("carta-ninos", S.soloNinos);
+  $("#solo-ninos").hidden = !S.soloNinos;
+  $("#h-carta").textContent = S.soloNinos ? "La carta de los chicos" : "La carta";
   const vis = platosVisibles();
   const cont = $("#lista-carta");
   $("#conteo").textContent = vis.length === 1 ? "1 cosa para pedir" : vis.length + " cosas para pedir";
@@ -3909,7 +4071,8 @@ function pintarCarta(){
     return;
   }
 
-  const orden = S.cat === "todas" ? CATEGORIAS : CATEGORIAS.filter(c => c.id === S.cat);
+  const orden = S.soloNinos ? CATEGORIAS.filter(c => c.tipo === "nino")
+    : S.cat === "todas" ? CATEGORIAS : CATEGORIAS.filter(c => c.id === S.cat);
   cont.innerHTML = orden.map(c => {
     const items = vis.filter(p => p.categoria === c.id);
     if (!items.length) return "";
@@ -4355,6 +4518,7 @@ const PREGUNTAS_NINOS = [
 
   { id:"n-favorito", tipo:"sabor", grupo:"gusto", formato:"grilla",
     texto:"¿Qué es lo que más te gusta del mundo?",
+    cocina:{ pide:"Tocalo o arrastralo a la olla", flota:true },
     opciones:[
       { emo:"🍟", texto:"Papas fritas", afin:{ proteina:"vegetal" }, pesos:{ untuosidad:+3, intensidad:+1 }, eco:"que amás las papas fritas",
         chiste:"¡Buenísimo! Yo también." },
@@ -4372,37 +4536,41 @@ const PREGUNTAS_NINOS = [
 
   { id:"n-textura", tipo:"sabor", grupo:"como",
     texto:"¿Cómo te gusta más la comida?",
+    cocina:{ pide:"Elegí y Tito le sube o le baja el fuego" },
     opciones:[
-      { texto:"Crocante, que haga ¡crac!", emo:"🥨", pesos:{ intensidad:+2, untuosidad:+2 },
+      { texto:"Crocante, que haga ¡crac!", emo:"🥨", pesos:{ intensidad:+2, untuosidad:+2 }, olla:{ fuego:3 },
         eco:"que te gusta que haga crac", chiste:"¡El mejor ruido de la cocina!" },
-      { texto:"Blandita y calentita", emo:"☁️", pesos:{ intensidad:-2, untuosidad:+2 },
+      { texto:"Blandita y calentita", emo:"☁️", pesos:{ intensidad:-2, untuosidad:+2 }, olla:{ fuego:1, vapor:1 },
         eco:"que te gusta blandita", chiste:"De esas que se comen con cuchara. Anotado." }
     ] },
 
   { id:"n-nuevo", tipo:"sabor", grupo:"animo",
     texto:"¿Probás comidas nuevas?",
+    cocina:{ pide:"¿Cuánto polvo mágico le echamos?" },
     opciones:[
-      { texto:"¡Sí, todas!", emo:"🚀", pesos:{ aventura:+3 },
+      { texto:"¡Sí, todas!", emo:"🚀", pesos:{ aventura:+3 }, olla:{ chispas:3 },
         eco:"que probás todo lo nuevo", chiste:"Sos valiente. Eso en la cocina se nota." },
-      { texto:"Sólo lo que ya conozco", emo:"🧸", pesos:{ aventura:-3 },
+      { texto:"Sólo lo que ya conozco", emo:"🧸", pesos:{ aventura:-3 }, olla:{ chispas:0 },
         eco:"que preferís lo que ya conocés", chiste:"Está perfecto. Lo conocido también es rico." },
-      { texto:"Si me dan a probar, pruebo", emo:"🤏", pesos:{ aventura:+1 },
+      { texto:"Si me dan a probar, pruebo", emo:"🤏", pesos:{ aventura:+1 }, olla:{ chispas:1 },
         eco:"que probás un poquito", chiste:"Un poquito alcanza para saber. Bien pensado." }
     ] },
 
   { id:"n-hambre", tipo:"sabor", grupo:"panza",
     texto:"¿Qué tan grande tenés la panza hoy?",
+    cocina:{ pide:"Así de grande hacemos la olla" },
     opciones:[
-      { texto:"Enorme, me como todo", emo:"🦖", pesos:{ intensidad:+3, untuosidad:+2 },
+      { texto:"Enorme, me como todo", emo:"🦖", pesos:{ intensidad:+3, untuosidad:+2 }, olla:{ tam:1.14 },
         eco:"que tenías un hambre enorme", chiste:"¡Avisamos en la cocina!" },
-      { texto:"Normal", emo:"🙂", pesos:{},
+      { texto:"Normal", emo:"🙂", pesos:{}, olla:{ tam:1 },
         eco:"que tenías un hambre normal", chiste:"Perfecto, así está bien." },
-      { texto:"Chiquita, poquito", emo:"🐭", pesos:{ intensidad:-2, untuosidad:-2 },
+      { texto:"Chiquita, poquito", emo:"🐭", pesos:{ intensidad:-2, untuosidad:-2 }, olla:{ tam:.84 },
         eco:"que hoy comías poquito", chiste:"Entonces algo chiquito y rico." }
     ] },
 
   { id:"n-postre", tipo:"sabor", grupo:"dulce",
     texto:"Y de postre, ¿qué querés?",
+    cocina:{ pide:"Va a la mesada, que es para el final", destino:"postre" },
     opciones:[
       { texto:"Helado", emo:"🍦", pesos:{ dulce:+3, untuosidad:+2 },
         eco:"que el postre era helado", chiste:"La respuesta correcta." },
@@ -4414,6 +4582,7 @@ const PREGUNTAS_NINOS = [
 
   { id:"n-tomar", tipo:"sabor", grupo:"tomar",
     texto:"¿Qué tomás mientras esperás?",
+    cocina:{ pide:"Va a la mesada, al lado de la olla", destino:"bebida" },
     opciones:[
       { texto:"Jugo", emo:"🧃", pesos:{ acidez:+3, dulce:+1 },
         eco:"que ibas por el jugo", chiste:"Fresquito. Buena idea con este calor." },
@@ -4423,13 +4592,14 @@ const PREGUNTAS_NINOS = [
 
   { id:"n-color", tipo:"sabor", grupo:"juego",
     texto:"Si tu comida fuera un color, ¿cuál sería?", formato:"grilla",
+    cocina:{ pide:"Tocá un color y pintamos la salsa" },
     opciones:[
-      { emo:"🔴", texto:"Rojo",     pesos:{ intensidad:+2 }, eco:"que tu comida era roja", chiste:"Color de comida con carácter." },
-      { emo:"🟡", texto:"Amarillo", pesos:{ untuosidad:+2 }, eco:"que tu comida era amarilla", chiste:"Amarillo es color de papas fritas. Lo sé." },
-      { emo:"🟢", texto:"Verde",    pesos:{ acidez:+2, untuosidad:-2 }, eco:"que tu comida era verde", chiste:"¡Mirá vos! No todos dicen verde." },
-      { emo:"🟤", texto:"Marrón",   pesos:{ intensidad:+2, untuosidad:+2 }, eco:"que tu comida era marrón", chiste:"Marrón es color de cosas doradas en la sartén." },
-      { emo:"⚪", texto:"Blanco",   pesos:{ intensidad:-2 }, eco:"que tu comida era blanca", chiste:"Suave y tranquila. Entendido." },
-      { emo:"🌈", texto:"Todos",    pesos:{ aventura:+3 }, eco:"que tu comida era de todos los colores", chiste:"¡Esa es la mejor respuesta de todas!" }
+      { emo:"🔴", texto:"Rojo",     olla:{ salsa:"#E2574C" }, pesos:{ intensidad:+2 }, eco:"que tu comida era roja", chiste:"Color de comida con carácter." },
+      { emo:"🟡", texto:"Amarillo", olla:{ salsa:"#F2C94C" }, pesos:{ untuosidad:+2 }, eco:"que tu comida era amarilla", chiste:"Amarillo es color de papas fritas. Lo sé." },
+      { emo:"🟢", texto:"Verde",    olla:{ salsa:"#5DBB63" }, pesos:{ acidez:+2, untuosidad:-2 }, eco:"que tu comida era verde", chiste:"¡Mirá vos! No todos dicen verde." },
+      { emo:"🟤", texto:"Marrón",   olla:{ salsa:"#9A6A3F" }, pesos:{ intensidad:+2, untuosidad:+2 }, eco:"que tu comida era marrón", chiste:"Marrón es color de cosas doradas en la sartén." },
+      { emo:"⚪", texto:"Blanco",   olla:{ salsa:"#F3F1EA" }, pesos:{ intensidad:-2 }, eco:"que tu comida era blanca", chiste:"Suave y tranquila. Entendido." },
+      { emo:"🌈", texto:"Todos",    olla:{ salsa:"arcoiris" }, pesos:{ aventura:+3 }, eco:"que tu comida era de todos los colores", chiste:"¡Esa es la mejor respuesta de todas!" }
     ] }
 ];
 
@@ -4493,12 +4663,11 @@ function recomendarNino(respuestas, preguntas){
 /* La voz de Tito: frases cortas, sin ironía y sin diminutivos falsos.
    A un chico de ocho años se le habla bien, no en bebé. */
 const VOZ_KID = {
-  esperas:[ "Dejame pensar…", "¡Ya sé!", "Mmm…", "Esperá que lo tengo.", "¡Buenísimo!" ],
   cierres:[
     "¡Que lo disfrutes!",
     "Contame después si estaba rico.",
     "Si te sobra, me guardás un poquito.",
-    "Ahora a esperar. Pero mirá lo que te dejo para hacer mientras tanto."
+    "La próxima cocinamos otra cosa, ¿dale?"
   ]
 };
 
@@ -4520,7 +4689,7 @@ function preguntasDe(modo){ return PREGUNTAS.filter(p => p.modos.indexOf(modo) !
 function pantallaModo(){
   S.modo = null; S.i = 0; S.respuestas = {}; S.preguntas = [];
   $("#progreso").hidden = true;
-  $("#v-chef").classList.remove("kid");
+  modoKid(false);
   $("#chef-volver").onclick = () => ir("landing");
 
   // Lo primero que ve la persona es la cara del Vasco, no un título.
@@ -4581,7 +4750,7 @@ function pantallaModo(){
         <h3>Para los más chicos</h3>
         <span class="tarjeta-modo__meta">Con Tito</span>
       </span>
-      <p>Pasale el celular al más chico de la mesa. Lo atiende ${esc(KID.nombre)}, mi ayudante, con el menú de niños y unos juegos para la espera.</p>
+      <p>Pasale el celular al más chico de la mesa. Cocina su plato con ${esc(KID.nombre)}, mi ayudante: a la olla, al horno, y sale algo del menú de niños.</p>
     </button>
 
     <p class="modo__texto" style="margin:18px 0 0;font-size:.84rem;opacity:.72">
@@ -4943,20 +5112,148 @@ function atras(){
 }
 
 /* ═══════════════════════════════════════════════════════════════════
-   LAS PANTALLAS DEL CHEF KID
-   Mismo esqueleto que el del Vasco, con tres diferencias que importan:
-   todo es más grande, el progreso son estrellitas y no "3 de 5", y
-   después del veredicto hay juegos, porque el rato entre que se pide y
-   llega la comida es exactamente el problema que tiene una familia con
-   chicos en un parador.
+   LAS PANTALLAS DEL CHEF KID — LA COCINA DE TITO
+   Mismas preguntas y mismo motor que antes; lo que cambió es cómo se
+   contestan. El chico no llena un cuestionario: cocina con Tito. Cada
+   respuesta es algo que tira a la olla o deja en la mesada, la olla se
+   va pareciendo a lo que eligió, y al final la revuelve, va al horno y
+   de adentro sale su plato. No hay juegos para la espera porque el
+   juego es pedir.
    ═══════════════════════════════════════════════════════════════════ */
-const K = { nombre:"", i:0, respuestas:{}, preguntas:[], vuelta:0, ultimo:null };
+const K = { nombre:"", respuestas:{}, preguntas:[], vuelta:0 };
 
-const modoKid = on => $("#v-chef").classList.toggle("kid", !!on);
+/* Entrar al mundo de Tito cambia tres cosas a la vez: el color, el botón
+   de sonido y la carta, que mientras atiende Tito muestra sólo la de los
+   chicos. Salir las devuelve juntas. */
+function modoKid(on){
+  $("#v-chef").classList.toggle("kid", !!on);
+  $("#b-sonido").hidden = !on;
+  S.soloNinos = !!on;
+  Cocina.gen++;
+  if (!on) Tito.callar();
+}
 
+/* ── EL SONIDO DE LA COCINA ───────────────────────────────────────────
+   Todo sintetizado en el momento con Web Audio: no hay archivos ni
+   internet. Arranca prendido porque es la mitad de la gracia, y el botón
+   de arriba lo apaga para esta visita y las que vengan. Apagado quiere
+   decir apagado: tampoco vibra ni habla.                              */
+const Sonido = {
+  clave: "bofomento.sonido.v1",
+  prendido: null, ctx: null, ruido: null,
+  on(){
+    if (this.prendido === null){
+      try { this.prendido = localStorage.getItem(this.clave) !== "0"; }
+      catch (e) { this.prendido = true; }
+    }
+    return this.prendido;
+  },
+  poner(v){
+    this.prendido = !!v;
+    try { localStorage.setItem(this.clave, v ? "1" : "0"); } catch (e) {}
+    if (!v) Tito.callar();
+  },
+  audio(){
+    if (!this.on()) return null;
+    const AC = window.AudioContext || window.webkitAudioContext;
+    if (!AC) return null;
+    try {
+      if (!this.ctx) this.ctx = new AC();
+      if (this.ctx.state === "suspended") this.ctx.resume();
+    } catch (e) { return null; }
+    return this.ctx;
+  },
+  // una nota con una envolvente corta; `hasta` la hace deslizar
+  nota(f, dur, o){
+    const a = this.audio();
+    if (!a) return;
+    o = o || {};
+    const t = a.currentTime + (o.en || 0);
+    const osc = a.createOscillator(), g = a.createGain();
+    osc.type = o.tipo || "sine";
+    osc.frequency.setValueAtTime(f, t);
+    if (o.hasta) osc.frequency.exponentialRampToValueAtTime(o.hasta, t + dur);
+    g.gain.setValueAtTime(0.0001, t);
+    g.gain.exponentialRampToValueAtTime(o.vol || 0.2, t + 0.012);
+    g.gain.exponentialRampToValueAtTime(0.0001, t + dur);
+    osc.connect(g); g.connect(a.destination);
+    osc.start(t); osc.stop(t + dur + 0.03);
+  },
+  // ruido filtrado: el fuego que se prende
+  soplo(dur, o){
+    const a = this.audio();
+    if (!a) return;
+    o = o || {};
+    if (!this.ruido){
+      this.ruido = a.createBuffer(1, a.sampleRate, a.sampleRate);
+      const d = this.ruido.getChannelData(0);
+      for (let i = 0; i < d.length; i++) d[i] = Math.random() * 2 - 1;
+    }
+    const t = a.currentTime;
+    const src = a.createBufferSource(), fil = a.createBiquadFilter(), g = a.createGain();
+    src.buffer = this.ruido;
+    fil.type = "bandpass";
+    fil.frequency.setValueAtTime(o.desde || 300, t);
+    fil.frequency.exponentialRampToValueAtTime(o.hasta || 2400, t + dur);
+    g.gain.setValueAtTime(0.0001, t);
+    g.gain.exponentialRampToValueAtTime(o.vol || 0.22, t + dur * 0.3);
+    g.gain.exponentialRampToValueAtTime(0.0001, t + dur);
+    src.connect(fil); fil.connect(g); g.connect(a.destination);
+    src.start(t); src.stop(t + dur + 0.03);
+  },
+  toc(){     this.nota(520, 0.06, { tipo:"triangle", vol:0.12 }); },
+  vuela(){   this.nota(300, 0.38, { hasta:900, vol:0.07 }); },
+  plop(){    this.nota(700, 0.16, { hasta:160, vol:0.28 }); this.nota(240, 0.1, { en:0.05, tipo:"triangle", vol:0.1 }); },
+  burbuja(){ const f = 380 + Math.random() * 500; this.nota(f, 0.09, { hasta:f * 1.8, vol:0.14 }); },
+  fuego(){   this.soplo(0.7); },
+  chispas(){ [0,1,2,3,4].forEach(k => this.nota(1800 + Math.random() * 1600, 0.12, { en:k * 0.06, tipo:"triangle", vol:0.06 })); },
+  tic(){     this.nota(880, 0.08, { tipo:"square", vol:0.05 }); },
+  ding(){    this.nota(1318, 1.4, { vol:0.22 }); this.nota(1976, 1.1, { vol:0.09 }); },
+  fanfarria(){ [523, 659, 784, 1047].forEach((f, k) =>
+    this.nota(f, k === 3 ? 0.6 : 0.16, { en:k * 0.12, tipo:"triangle", vol:0.15 })); }
+};
+
+function vibrar(patron){
+  if (!Sonido.on() || reducido() || !navigator.vibrate) return;
+  try { navigator.vibrate(patron); } catch (e) {}
+}
+
+/* Tito lee en voz alta lo que pregunta: a los cinco años no todos leen,
+   y así el chico no depende de que un grande le lea la pantalla. Usa la
+   voz en español del celular, un poco más aguda. Si no hay, no pasa
+   nada: el texto está igual en la burbuja. */
+const Tito = {
+  voz: null, hablo: false,
+  hablar(txt, enCola){
+    if (!txt || !Sonido.on() || !("speechSynthesis" in window)) return;
+    try {
+      if (!enCola) speechSynthesis.cancel();
+      const u = new SpeechSynthesisUtterance(txt);
+      const v = this.elegirVoz();
+      u.lang = v ? v.lang : "es-UY";
+      if (v) u.voice = v;
+      u.pitch = 1.45; u.rate = 1.02;
+      speechSynthesis.speak(u);
+      this.hablo = true;
+    } catch (e) {}
+  },
+  elegirVoz(){
+    if (this.voz) return this.voz;
+    const vs = speechSynthesis.getVoices() || [];
+    this.voz = vs.find(v => /^es[-_](UY|AR)/i.test(v.lang)) || vs.find(v => /^es/i.test(v.lang)) || null;
+    return this.voz;
+  },
+  callar(){
+    if (!this.hablo || !("speechSynthesis" in window)) return;
+    try { speechSynthesis.cancel(); } catch (e) {}
+    this.hablo = false;
+  }
+};
+
+/* ── LA PORTADA DE TITO ───────────────────────────────────────────── */
 function pantallaKid(){
   modoKid(true);
-  K.i = 0; K.respuestas = {}; K.preguntas = [];
+  K.respuestas = {}; K.preguntas = [];
   S.modo = "kid";
   $("#progreso").hidden = true;
   $("#chef-volver").onclick = () => { modoKid(false); pantallaModo(); };
@@ -4966,18 +5263,18 @@ function pantallaKid(){
       ${titoHTML("tito--grande", "saludo")}
       <div class="presenta__globo">
         <span class="presenta__nombre">${esc(KID.nombre)}</span>
-        ¡Hola! Soy ${esc(KID.nombre)} y ayudo al Vasco en la cocina. ¿Querés que te elija la comida?
+        ¡Hola! Soy ${esc(KID.nombre)} y ayudo al Vasco en la cocina. ¿Me ayudás a cocinar tu comida?
       </div>
     </div>
 
-    <h2 class="modo__titulo">Contestame cinco cosas<br>y te digo qué pedir.</h2>
-    <p class="modo__texto">Y después te dejo juegos para hacer mientras se cocina.</p>
+    <h2 class="modo__titulo">¡Cocinemos<br>juntos!</h2>
+    <p class="modo__texto">Tirás cosas a la olla, revolvés, va al horno… y sale tu plato.</p>
 
     <div class="nombre">
       <label class="nombre__label" for="kid-nombre">¿Cómo te llamás?</label>
       <div class="campo">
         <input id="kid-nombre" type="text" maxlength="20" placeholder="Tu nombre" enterkeyhint="go">
-        <button class="btn btn--sol" id="b-kid-nombre">¡Dale!</button>
+        <button class="btn btn--sol" id="b-kid-nombre">¡A cocinar!</button>
       </div>
       <button class="saltear" id="b-kid-anon">No quiero decirlo</button>
     </div>
@@ -4987,6 +5284,7 @@ function pantallaKid(){
   const seguir = () => {
     const v = inp.value.replace(/[^\p{L}\p{M}\s'’-]/gu, "").replace(/\s+/g, " ").trim().slice(0, 20);
     K.nombre = v ? v.charAt(0).toUpperCase() + v.slice(1) : "";
+    Sonido.toc();                     // el primer toque destraba el audio del celular
     arrancarKid();
   };
   $("#b-kid-nombre").addEventListener("click", seguir);
@@ -4997,149 +5295,561 @@ function pantallaKid(){
 
 function arrancarKid(){
   K.preguntas = tandaNino(K.vuelta++);
-  K.i = 0; K.respuestas = {};
-  $("#chef-volver").onclick = () => atrasKid();
-  pintarPreguntaKid();
+  K.respuestas = {};
+  cocinar({
+    preguntas: K.preguntas, respuestas: K.respuestas, nombre: K.nombre, vueltas: 5,
+    alSalir: pantallaKid, alTerminar: veredictoKid
+  });
 }
 
-function atrasKid(){
-  if (K.i === 0){ pantallaKid(); return; }
-  K.i--;
-  pintarPreguntaKid();
+/* ── LA COCINA ────────────────────────────────────────────────────────
+   Una sesión es un chico cocinando: sus preguntas, sus respuestas, en
+   qué paso va, y qué hacer al salir y al terminar. La usan el modo niños
+   y el turno de cada chico en "Armá la mesa", así que es la misma
+   experiencia en los dos lados.
+
+   `gen` es la vuelta de pintura. Todo lo que espera una animación
+   pregunta al volver si sigue siendo la pantalla de ahora: si el chico
+   tocó "Volver" en el medio, la animación vieja no pinta encima.     */
+const Cocina = { s:null, gen:0 };
+
+function cocinar(s){
+  s.i = 0;
+  Cocina.s = s;
+  pintarEstacion();
 }
 
-/* Las estrellitas: a los seis años "pregunta 3 de 5" no dice nada, pero
-   tres estrellas prendidas de cinco se entienden sin leer. */
-function pasosKid(){
-  return `<p class="kid-pasos" aria-hidden="true">${
-    K.preguntas.map((_, j) => `<span class="${j <= K.i ? "hecho" : ""}">⭐</span>`).join("")
-  }</p>`;
+const vigente = (s, gen) => Cocina.s === s && Cocina.gen === gen;
+
+function atrasCocina(){
+  const s = Cocina.s;
+  if (!s) return;
+  if (s.i === 0){ s.alSalir(); return; }
+  s.i--;
+  pintarEstacion();
 }
 
-function pintarPreguntaKid(){
-  const p = K.preguntas[K.i];
-  const f = leerFiltros(K.respuestas, K.preguntas);
-  const quien = K.nombre && K.i === 0 ? K.nombre + ", " : "";
-  const texto = quien ? quien + p.texto.charAt(0).toLowerCase() + p.texto.slice(1) : p.texto;
-  const esGrilla = fmtDe(p) === "grilla";
+/* Lo que hay en la olla, leído de las respuestas hasta el paso `hasta`
+   (sin incluirlo). Se arma siempre de cero: volver atrás es pintar con
+   una respuesta menos, y la olla queda igual a lo que se eligió. */
+function ollaDe(preguntas, respuestas, hasta){
+  const o = { fuego:0, salsa:"", tam:1, chispas:0, vapor:0, flotan:[], bebida:"", postre:"" };
+  preguntas.slice(0, hasta).forEach(p => {
+    const r = respuestas[p.id];
+    if (r === undefined) return;
+    if (p.multiple){ o.fuego = Math.max(o.fuego, 2); return; }
+    const op = p.opciones[r];
+    if (!op) return;
+    const c = p.cocina || {};
+    if (c.destino === "bebida") o.bebida = op.emo;
+    else if (c.destino === "postre") o.postre = op.emo;
+    else if (c.flota) o.flotan.push(op.emo);
+    Object.assign(o, op.olla || {});
+  });
+  if (!o.fuego && hasta > 0) o.fuego = 2;
+  return o;
+}
 
-  panel().innerHTML = `<div class="chat chat--pregunta">
-    ${pasosKid()}
+// una llama con la base en y=206, centrada en cx
+const llama = cx => `<path class="olla__llama" d="M${cx - 13} 206 Q${cx - 20} 190 ${cx - 7} 178
+  Q${cx - 6} 190 ${cx} 188 Q${cx - 3} 174 ${cx + 6} 164 Q${cx + 9} 182 ${cx + 15} 190 Q${cx + 17} 206 ${cx - 13} 206 Z"/>`;
+
+function ollaHTML(){
+  return `<div class="olla" id="olla" data-fuego="0" data-chispas="0" data-vapor="0">
+    <svg viewBox="0 0 240 212" aria-hidden="true" focusable="false">
+      <g fill="none" stroke="currentColor" stroke-width="4" stroke-linecap="round" opacity=".7">
+        <path class="olla__vapor" d="M88 56 q-8 -10 0 -20 t0 -20"/>
+        <path class="olla__vapor" d="M120 50 q-8 -10 0 -20 t0 -20"/>
+        <path class="olla__vapor" d="M152 56 q-8 -10 0 -20 t0 -20"/>
+      </g>
+      <path d="M36 102 h-16 a9 9 0 0 0 0 18 h18" fill="none" stroke="currentColor" stroke-width="6" stroke-linejoin="round"/>
+      <path d="M204 102 h16 a9 9 0 0 1 0 18 h-18" fill="none" stroke="currentColor" stroke-width="6" stroke-linejoin="round"/>
+      <path d="M32 82 L208 82 L201 156 Q199 176 178 176 L62 176 Q41 176 39 156 Z"
+            fill="var(--marino-hondo)" stroke="currentColor" stroke-width="6" stroke-linejoin="round"/>
+      <path d="M44 124 L196 124" stroke="var(--acento,#37C2B1)" stroke-width="6" stroke-linecap="round"/>
+      <ellipse class="olla__boca" cx="120" cy="82" rx="90" ry="17" fill="var(--marino-hondo)" stroke="currentColor" stroke-width="6"/>
+      <ellipse class="olla__salsa" cx="120" cy="84" rx="78" ry="11"/>
+      <g fill="none" stroke="#fff" stroke-width="2.5">
+        <circle class="olla__burbuja" cx="92" cy="84" r="4"/>
+        <circle class="olla__burbuja" cx="132" cy="82" r="5"/>
+        <circle class="olla__burbuja" cx="158" cy="86" r="3.5"/>
+      </g>
+      <g class="olla__cuchara">
+        <path d="M120 84 L172 10" stroke="currentColor" stroke-width="8" stroke-linecap="round"/>
+        <ellipse cx="120" cy="86" rx="13" ry="6" fill="var(--acento,#37C2B1)" stroke="currentColor" stroke-width="4"/>
+      </g>
+      <g class="olla__fuego" fill="#E0A94A" stroke="currentColor" stroke-width="3.5" stroke-linejoin="round">
+        ${llama(88)}${llama(120)}${llama(152)}
+      </g>
+    </svg>
+    <div class="olla__flota"></div>
+    <div class="olla__chispas" aria-hidden="true">${"<span>✨</span>".repeat(6)}</div>
+  </div>`;
+}
+
+/* La mesada aparece sólo si en la tanda hay algo que va ahí. */
+function escenaHTML(s){
+  const destinos = s.preguntas.map(p => p.cocina && p.cocina.destino).filter(Boolean);
+  const slot = (d, nombre) => destinos.indexOf(d) === -1 ? "" :
+    `<div class="mesada__slot" id="slot-${d}" data-nombre="${nombre}" aria-hidden="true"></div>`;
+  return `<div class="escena${destinos.length ? "" : " escena--sola"}">
+    ${ollaHTML()}
+    ${destinos.length ? `<div class="mesada">${slot("bebida", "Para tomar")}${slot("postre", "Postre")}</div>` : ""}
+  </div>`;
+}
+
+function pintarOlla(o){
+  const el = $("#olla");
+  if (!el) return;
+  el.dataset.fuego = o.fuego;
+  el.dataset.chispas = o.chispas;
+  el.dataset.vapor = o.vapor ? 1 : 0;
+  el.dataset.salsa = o.salsa === "arcoiris" ? "arcoiris" : "";
+  el.style.setProperty("--salsa", o.salsa && o.salsa !== "arcoiris" ? o.salsa : "#E8B45A");
+  el.style.setProperty("--tam", o.tam);
+  $(".olla__flota", el).innerHTML = o.flotan.map(e => `<span>${e}</span>`).join("");
+  [["bebida", o.bebida], ["postre", o.postre]].forEach(([d, emo]) => {
+    const slot = $("#slot-" + d);
+    if (!slot) return;
+    slot.textContent = emo;
+    slot.classList.toggle("lleno", !!emo);
+  });
+}
+
+/* La receta: un casillero por pregunta, que se llena con lo elegido. A
+   los seis años "pregunta 3 de 5" no dice nada; tres dibujitos ya
+   puestos y un casillero que late, sí. */
+function recetaHTML(s, hasta){
+  return `<ol class="receta" aria-hidden="true">${s.preguntas.map((p, j) => {
+    let emo = "";
+    if (j < hasta){
+      const r = s.respuestas[p.id];
+      emo = p.multiple ? "✅" : (p.opciones[r] ? p.opciones[r].emo : "");
+    }
+    return `<li class="${j < hasta ? "hecho" : j === hasta ? "ahora" : ""}">${emo}</li>`;
+  }).join("")}</ol>`;
+}
+
+function destinoDe(p){
+  const d = p.cocina && p.cocina.destino;
+  return (d && $("#slot-" + d)) || $("#olla");
+}
+
+function pintarEstacion(){
+  const s = Cocina.s, gen = ++Cocina.gen;
+  const p = s.preguntas[s.i];
+  const f = leerFiltros(s.respuestas, s.preguntas);
+  const quien = s.nombre && s.i === 0 ? s.nombre + ", " : "";
+  // "Sofi, ¿hay algo…": la minúscula va en la letra, no en el signo
+  const texto = quien ? quien + p.texto.replace(/^([¿¡]?)(\p{L})/u, (_, a, l) => a + l.toLowerCase()) : p.texto;
+  const posibles = opcionesPosibles(p, f);
+  const lista = !!p.multiple;
+  const sel = lista && Array.isArray(s.respuestas[p.id]) ? s.respuestas[p.id] : [];
+  const grilla = lista ? " ingredientes--lista"
+    : (posibles.length === 2 || posibles.length === 4) ? " ingredientes--dos" : "";
+  const pide = lista ? "Tocá todo lo que corresponda"
+    : (p.cocina && p.cocina.pide) || "Tocalo y va a la olla";
+
+  $("#chef-volver").onclick = atrasCocina;
+  panel().innerHTML = `<div class="cocina${lista ? " cocina--lista" : ""}">
+    ${recetaHTML(s, s.i)}
     <div class="dice">
       <div class="dice__vasco">${titoHTML("tito--chico", "saludo")}</div>
-      <div class="burbuja">${esc(texto)}</div>
+      <div class="burbuja" id="tito-dice">${esc(texto)}</div>
     </div>
-    <h3 class="solo-lectores">${esc(p.texto)}</h3>
+    <h3 class="solo-lectores">Pregunta ${s.i + 1} de ${s.preguntas.length}: ${esc(p.texto)}</h3>
     ${p.nota ? `<p class="pregunta__nota">${esc(p.nota)}</p>` : ""}
-    ${esGrilla
-      ? `<div class="grilla" role="group" aria-label="${esc(p.texto)}">
-          ${opcionesPosibles(p, f).map(({ o, i }) => `<button class="grilla__item" data-i="${i}">
-              <span class="grilla__emo" aria-hidden="true">${o.emo}</span>
-              <span class="grilla__txt">${esc(o.texto)}</span>
-            </button>`).join("")}
-        </div>`
-      : `<div class="opciones opciones--largas" role="group" aria-label="${esc(p.texto)}">
-          ${opcionesPosibles(p, f).map(({ o, i }) => {
-            const sel = Array.isArray(K.respuestas[p.id]) ? K.respuestas[p.id] : [];
-            const on = p.multiple ? sel.indexOf(i) !== -1 : K.respuestas[p.id] === i;
-            return `<button class="opcion" data-i="${i}" aria-pressed="${on}">
-              ${p.multiple ? `<span class="opcion__marca" aria-hidden="true">${on ? "✓" : ""}</span>` : ""}
-              <span aria-hidden="true" style="flex:none;font-size:1.7rem;line-height:1">${o.emo}</span>
-              <span>${esc(o.texto)}</span>
-            </button>`;
-          }).join("")}
-        </div>`}
+    ${escenaHTML(s)}
+    <p class="cocina__pide">${esc(pide)}</p>
+    <div class="ingredientes${grilla}" role="group" aria-label="${esc(p.texto)}">
+      ${posibles.map(({ o, i }) => `<button class="ingrediente" data-i="${i}"${
+          lista ? ` aria-pressed="${sel.indexOf(i) !== -1}"` : ""}>
+          ${lista ? `<span class="ingrediente__marca" aria-hidden="true">${o.exclusiva ? "✅" : "🚫"}</span>` : ""}
+          <span class="ingrediente__emo" aria-hidden="true">${o.emo}</span>
+          <span class="ingrediente__txt">${esc(o.texto)}</span>
+        </button>`).join("")}
+    </div>
     <div class="acciones-chat">
-      <button class="link-atras" id="b-atras" ${K.i === 0 ? "disabled" : ""}>← Volver</button>
-      ${p.multiple ? `<button class="btn btn--sol" id="b-seguir">Seguir</button>` : ""}
+      <button class="link-atras" id="b-atras">← Volver</button>
+      ${lista ? `<button class="btn btn--sol" id="b-seguir">¡A cocinar!</button>` : ""}
     </div>
   </div>`;
 
-  decir(p.texto);
-  const sel = esGrilla ? ".grilla__item" : ".opcion";
-  $$(sel, panel()).forEach(b => {
-    b.addEventListener("click", () => {
-      const i = parseInt(b.dataset.i, 10);
-      if (p.multiple){ elegirMultipleKid(p, i); return; }
-      K.respuestas[p.id] = i;
-      avanzarKid(p);
-    });
-    b.addEventListener("keydown", ev => moverFoco(ev, b, sel));
+  pintarOlla(ollaDe(s.preguntas, s.respuestas, s.i));
+  if (!lista) destinoDe(p).classList.add("destino");
+
+  $$(".ingrediente", panel()).forEach(b => {
+    const i = parseInt(b.dataset.i, 10);
+    if (lista) b.addEventListener("click", () => marcarLista(s, p, i));
+    else conectarIngrediente(b, s, p, i, gen);
+    b.addEventListener("keydown", ev => moverFoco(ev, b, ".ingrediente"));
   });
-  if (p.multiple) $("#b-seguir").addEventListener("click", () => avanzarKid(p));
-  const atras = $("#b-atras");
-  if (atras) atras.addEventListener("click", atrasKid);
+  if (lista) $("#b-seguir").addEventListener("click", () => cerrarLista(s, p, gen));
+  $("#b-atras").addEventListener("click", atrasCocina);
+
+  window.scrollTo(0, 0);
+  decir(p.texto);
+  Tito.hablar(texto, true);
 }
 
-function elegirMultipleKid(p, i){
+/* ── tocar o arrastrar ────────────────────────────────────────────────
+   Tocar alcanza siempre. Arrastrar es un extra para el que lo intenta:
+   si lo suelta arriba, sobre la cocina, cuenta; si lo suelta en otro
+   lado, el ingrediente vuelve a su lugar.                            */
+function conectarIngrediente(b, s, p, i, gen){
+  let ini = null, fantasma = null;
+  b.addEventListener("pointerdown", e => {
+    if (b.disabled || e.button > 0) return;
+    ini = { x:e.clientX, y:e.clientY, id:e.pointerId, arrastra:false };
+  });
+  b.addEventListener("pointermove", e => {
+    if (!ini || e.pointerId !== ini.id) return;
+    if (!ini.arrastra){
+      if (Math.hypot(e.clientX - ini.x, e.clientY - ini.y) < 12) return;
+      ini.arrastra = true;
+      try { b.setPointerCapture(e.pointerId); } catch (_) {}
+      b.classList.add("arrastrando");
+      fantasma = crearFantasma(p.opciones[i].emo);
+    }
+    moverFantasma(fantasma, e.clientX, e.clientY);
+    e.preventDefault();
+  });
+  const soltar = e => {
+    if (!ini || e.pointerId !== ini.id) return;
+    const arrastro = ini.arrastra;
+    ini = null;
+    if (!arrastro) return;
+    b.classList.remove("arrastrando");
+    b.soltadoEn = performance.now();          // el click que viene atrás no cuenta
+    const r = $(".escena", panel()).getBoundingClientRect();
+    const f = fantasma;
+    fantasma = null;
+    if (e.type === "pointerup" && e.clientY < r.bottom + 24) elegirIngrediente(s, p, i, gen, f);
+    else devolverFantasma(f, b);
+  };
+  b.addEventListener("pointerup", soltar);
+  b.addEventListener("pointercancel", soltar);
+  b.addEventListener("click", () => {
+    if (b.soltadoEn && performance.now() - b.soltadoEn < 500) return;
+    elegirIngrediente(s, p, i, gen, null);
+  });
+}
+
+function crearFantasma(emo){
+  const f = document.createElement("span");
+  f.className = "fantasma";
+  f.setAttribute("aria-hidden", "true");
+  f.textContent = emo;
+  document.body.appendChild(f);
+  return f;
+}
+function moverFantasma(f, x, y){
+  f.x = x; f.y = y;
+  f.style.transform = `translate(${x}px, ${y}px) translate(-50%, -50%) scale(1.15)`;
+}
+function centroDe(el, alto){
+  const r = el.getBoundingClientRect();
+  return { x: r.left + r.width / 2, y: r.top + r.height * (alto === undefined ? .5 : alto) };
+}
+
+/* El vuelo es una parábola de verdad, no dos rectas: sube, gira y cae
+   en la olla achicándose. */
+async function volar(f, x0, y0, x1, y1){
+  if (reducido() || !f.animate){ f.remove(); return; }
+  const cx = (x0 + x1) / 2, cy = Math.min(y0, y1) - 110;
+  const cuadros = [];
+  for (let k = 0; k <= 14; k++){
+    const t = k / 14, u = 1 - t;
+    const x = u * u * x0 + 2 * u * t * cx + t * t * x1;
+    const y = u * u * y0 + 2 * u * t * cy + t * t * y1;
+    cuadros.push({ transform: `translate(${x}px, ${y}px) translate(-50%, -50%) scale(${1.15 - t * .6}) rotate(${t * 330}deg)` });
+  }
+  const a = f.animate(cuadros, { duration: 560, easing: "cubic-bezier(.35,.1,.55,1)", fill: "forwards" });
+  try { await a.finished; } catch (e) {}
+  f.remove();
+}
+
+async function devolverFantasma(f, b){
+  const c = centroDe(b);
+  if (!reducido() && f.animate){
+    const a = f.animate([
+      { transform: f.style.transform },
+      { transform: `translate(${c.x}px, ${c.y}px) translate(-50%, -50%) scale(1)` }
+    ], { duration: 260, easing: "ease-out", fill: "forwards" });
+    try { await a.finished; } catch (e) {}
+  }
+  f.remove();
+}
+
+/* Unas gotitas de salsa cuando algo cae. */
+function salpicar(el, color){
+  if (reducido() || !document.body.animate) return;
+  const c = centroDe(el, el.id === "olla" ? .36 : .5);
+  for (let k = 0; k < 9; k++){
+    const g = document.createElement("span");
+    g.className = "gota";
+    g.style.background = color;
+    g.style.left = c.x + "px"; g.style.top = c.y + "px";
+    document.body.appendChild(g);
+    const ang = Math.PI * (1.1 + .8 * (k / 8)) + (Math.random() - .5) * .3;
+    const d = 34 + Math.random() * 30;
+    const dx = Math.cos(ang) * d, dy = Math.sin(ang) * d;
+    g.animate([
+      { transform: "translate(-50%, -50%) scale(1)", opacity: 1 },
+      { transform: `translate(calc(-50% + ${dx}px), calc(-50% + ${dy}px)) scale(.8)`, opacity: 1, offset: .55 },
+      { transform: `translate(calc(-50% + ${dx * 1.3}px), calc(-50% + ${dy + 34}px)) scale(.4)`, opacity: 0 }
+    ], { duration: 560, easing: "ease-out" }).onfinish = () => g.remove();
+  }
+}
+
+function sacudir(el){
+  el.classList.remove("plop");
+  void el.offsetWidth;                 // reinicia la animación si ya estaba
+  el.classList.add("plop");
+}
+
+async function elegirIngrediente(s, p, i, gen, fantasma){
+  if (!vigente(s, gen) || s.ocupado === gen){ if (fantasma) fantasma.remove(); return; }
+  s.ocupado = gen;
   const o = p.opciones[i];
-  let sel = Array.isArray(K.respuestas[p.id]) ? K.respuestas[p.id].slice() : [];
+  const boton = $(`.ingrediente[data-i="${i}"]`, panel());
+  $$(".ingrediente", panel()).forEach(x => {
+    x.disabled = true;
+    x.classList.toggle("elegido", x === boton);
+  });
+  s.respuestas[p.id] = i;
+  Tito.callar();
+  Sonido.vuela();
+  vibrar(12);
+
+  const destino = destinoDe(p);
+  const f = fantasma || crearFantasma(o.emo);
+  if (!fantasma){ const c = centroDe(boton); moverFantasma(f, c.x, c.y); }
+  const llega = centroDe(destino, destino.id === "olla" ? .36 : .5);
+  await volar(f, f.x, f.y, llega.x, llega.y);
+  if (!vigente(s, gen)) return;
+
+  const antes = getComputedStyle(destino).getPropertyValue("--salsa").trim();
+  pintarOlla(ollaDe(s.preguntas, s.respuestas, s.i + 1));
+  destino.classList.remove("destino");
+  if (destino.id === "olla") sacudir(destino);
+  const ef = o.olla || {};
+  if (ef.chispas) Sonido.chispas();
+  else if (ef.fuego === 3) Sonido.fuego();
+  else Sonido.plop();
+  vibrar(ef.fuego === 3 ? [20, 40, 30] : 25);
+  salpicar(destino, destino.id === "olla" ? (ef.salsa && ef.salsa !== "arcoiris" ? ef.salsa : antes || "#E8B45A") : "#37C2B1");
+
+  const li = $$(".receta li", panel())[s.i];
+  if (li){ li.className = "hecho recien"; li.textContent = o.emo; }
+  const chiste = chisteDe(p, i) || "¡Buenísimo!";
+  $("#tito-dice").textContent = chiste;
+  gestoKid("festeja");
+  decir(chiste);
+  Tito.hablar(chiste);
+
+  await esperar(1250);
+  if (!vigente(s, gen)) return;
+  s.i++;
+  if (s.i >= s.preguntas.length) revolver();
+  else pintarEstacion();
+}
+
+/* "¿Hay algo que no podés comer?" no se tira a la olla: es un contrato,
+   no un ingrediente. Se marca como una lista y recién después de
+   cerrarla se prende el fuego. */
+function marcarLista(s, p, i){
+  const o = p.opciones[i];
+  let sel = Array.isArray(s.respuestas[p.id]) ? s.respuestas[p.id].slice() : [];
   if (o.exclusiva) sel = sel.indexOf(i) !== -1 ? [] : [i];
   else {
-    const excl = p.opciones.map((x,j) => x.exclusiva ? j : -1).filter(j => j >= 0);
+    const excl = p.opciones.map((x, j) => x.exclusiva ? j : -1).filter(j => j >= 0);
     sel = sel.filter(j => excl.indexOf(j) === -1);
     sel = sel.indexOf(i) !== -1 ? sel.filter(j => j !== i) : sel.concat(i);
   }
-  K.respuestas[p.id] = sel;
-  $$(".opcion", panel()).forEach(b => {
-    const on = sel.indexOf(parseInt(b.dataset.i, 10)) !== -1;
-    b.setAttribute("aria-pressed", String(on));
-    const m = $(".opcion__marca", b);
-    if (m) m.textContent = on ? "✓" : "";
-  });
+  s.respuestas[p.id] = sel;
+  $$(".ingrediente", panel()).forEach(b =>
+    b.setAttribute("aria-pressed", String(sel.indexOf(parseInt(b.dataset.i, 10)) !== -1)));
+  Sonido.toc();
+  vibrar(10);
 }
 
-async function pensandoKid(frase){
-  const f = frase || VOZ_KID.esperas[Math.floor(Math.random() * VOZ_KID.esperas.length)];
-  const div = document.createElement("div");
-  div.className = "puntitos";
-  div.innerHTML = `<div class="dice__vasco">${titoHTML("tito--chico", "piensa")}</div>
-                   <div class="puntitos__caja"><i></i><i></i><i></i></div>
-                   <span class="puntitos__frase">${esc(f)}</span>`;
-  panel().appendChild(div);
-  await esperar(620 + Math.random() * 300);
-  div.remove();
-}
-
-async function avanzarKid(p){
-  if (p.multiple && (!K.respuestas[p.id] || K.respuestas[p.id].length === 0)){
+async function cerrarLista(s, p, gen){
+  if (!vigente(s, gen) || s.ocupado === gen) return;
+  s.ocupado = gen;
+  if (!Array.isArray(s.respuestas[p.id]) || !s.respuestas[p.id].length){
     const i = p.opciones.findIndex(o => o.exclusiva);
-    K.respuestas[p.id] = i >= 0 ? [i] : [];
+    s.respuestas[p.id] = i >= 0 ? [i] : [];
   }
-  const dicho = opcionesElegidas(p, K.respuestas[p.id]).map(o => o.texto).join(" · ");
-  const chat = $(".chat", panel());
-  if (chat && dicho){
-    $$("button", panel()).forEach(b => b.disabled = true);
-    const eco = document.createElement("div");
-    eco.className = "burbuja burbuja--yo";
-    eco.textContent = dicho;
-    chat.appendChild(eco);
-    await esperar(240);
-  }
+  $$("button", panel()).forEach(b => b.disabled = true);
+  Tito.callar();
 
-  K.i++;
-  if (K.i >= K.preguntas.length){ await pintarVeredictoKid(); return; }
-  panel().innerHTML = `<div class="chat"></div>`;
-  await pensandoKid(chisteDe(p, K.respuestas[p.id]));
-  pintarPreguntaKid();
+  pintarOlla(ollaDe(s.preguntas, s.respuestas, s.i + 1));
+  Sonido.fuego();
+  vibrar([20, 40, 30]);
+  const li = $$(".receta li", panel())[s.i];
+  if (li){ li.className = "hecho recien"; li.textContent = "✅"; }
+  const chiste = chisteDe(p, s.respuestas[p.id]);
+  const dice = (chiste ? chiste + " " : "") + "¡Prendo el fuego!";
+  $("#tito-dice").textContent = dice;
+  gestoKid("festeja");
+  decir(dice);
+  Tito.hablar(dice);
+
+  await esperar(1400);
+  if (!vigente(s, gen)) return;
+  s.i++;
+  if (s.i >= s.preguntas.length) revolver();
+  else pintarEstacion();
 }
 
-async function pintarVeredictoKid(){
-  panel().innerHTML = `<div class="chat"></div>`;
-  await pensandoKid("Ya lo tengo…");
+/* ── REVOLVER ─────────────────────────────────────────────────────────
+   Con todo adentro, la olla entera se vuelve un botón. Cada toque mueve
+   la cuchara, hace burbujas y llena una cucharita de la cuenta.       */
+function revolver(){
+  const s = Cocina.s, gen = ++Cocina.gen;
+  const N = s.vueltas || 5;
+  let n = 0, lado = 1;
+  const dice = (s.nombre ? `¡Todo adentro, ${s.nombre}!` : "¡Todo adentro!") + " Ahora revolvé: tocá la olla.";
 
-  const r = recomendarNino(K.respuestas, K.preguntas);
-  if (!r){ pintarSinSalida(); return; }
-  K.ultimo = r;
-  Memoria.sumar([r.principal, r.bebida, r.postre].filter(Boolean).map(p => p.id));
+  $("#chef-volver").onclick = atrasCocina;
+  panel().innerHTML = `<div class="cocina">
+    ${recetaHTML(s, s.preguntas.length)}
+    <div class="dice">
+      <div class="dice__vasco">${titoHTML("tito--chico", "festeja")}</div>
+      <div class="burbuja" id="tito-dice">${esc(dice)}</div>
+    </div>
+    ${escenaHTML(s)}
+    <p class="revolver__cuenta" aria-hidden="true">${"<span>🥄</span>".repeat(N)}</p>
+    <div class="acciones-chat"><button class="link-atras" id="b-atras">← Volver</button></div>
+  </div>`;
 
-  if (!reducido()){
-    const m = document.createElement("div");
-    m.className = "marea";
-    m.innerHTML = '<div class="marea__olas olas olas--noche"></div><div class="marea__borde"></div>';
-    document.body.appendChild(m);
-    setTimeout(() => m.remove(), 1100);
+  pintarOlla(ollaDe(s.preguntas, s.respuestas, s.preguntas.length));
+  const olla = $("#olla");
+  olla.classList.add("olla--revolver");
+  olla.setAttribute("role", "button");
+  olla.tabIndex = 0;
+  const etiqueta = () => olla.setAttribute("aria-label",
+    `Revolver la olla. ${N - n === 1 ? "Falta una vuelta" : "Faltan " + (N - n) + " vueltas"}.`);
+  etiqueta();
+
+  const tocar = () => {
+    if (!vigente(s, gen) || n >= N) return;
+    n++;
+    lado = -lado;
+    olla.style.setProperty("--giro", (lado * 26) + "deg");
+    sacudir(olla);
+    Sonido.burbuja();
+    setTimeout(() => Sonido.burbuja(), 90);
+    vibrar(15);
+    const cuenta = $$(".revolver__cuenta span", panel());
+    if (cuenta[n - 1]) cuenta[n - 1].classList.add("hecho");
+    etiqueta();
+    if (n >= N) alHorno(s);
+  };
+  olla.addEventListener("click", tocar);
+  olla.addEventListener("keydown", e => {
+    if (e.key === "Enter" || e.key === " "){ e.preventDefault(); tocar(); }
+  });
+  $("#b-atras").addEventListener("click", atrasCocina);
+
+  window.scrollTo(0, 0);
+  decir(dice);
+  Tito.hablar(dice, true);
+}
+
+/* ── EL HORNO ─────────────────────────────────────────────────────────
+   La olla entra, el horno se prende y tiembla, cuenta 3-2-1, suena la
+   campanita, se abre la puerta y sale el plato. Tarda menos de cuatro
+   segundos: es suspenso, no espera.                                   */
+function hornoHTML(){
+  return `<div class="horno" aria-hidden="true">
+    <svg viewBox="0 0 240 200" focusable="false">
+      <rect x="18" y="18" width="204" height="172" rx="18" fill="var(--marino-hondo)" stroke="currentColor" stroke-width="6"/>
+      <path d="M18 54 H222" stroke="currentColor" stroke-width="5"/>
+      <circle cx="50" cy="36" r="8" fill="var(--acento,#37C2B1)" stroke="currentColor" stroke-width="4"/>
+      <circle cx="80" cy="36" r="8" fill="var(--acento,#37C2B1)" stroke="currentColor" stroke-width="4"/>
+      <rect x="148" y="29" width="50" height="14" rx="7" fill="currentColor" opacity=".3"/>
+      <rect class="horno__luz" x="38" y="68" width="164" height="108" rx="10" stroke="currentColor" stroke-width="4"/>
+      <g class="horno__puerta">
+        <path d="M34 64 H206 V180 H34 Z M56 84 V146 H184 V84 Z" fill-rule="evenodd"
+              fill="var(--marino-hondo)" stroke="currentColor" stroke-width="5" stroke-linejoin="round"/>
+        <rect x="80" y="160" width="80" height="10" rx="5" fill="currentColor"/>
+      </g>
+    </svg>
+    <div class="horno__numero"></div>
+  </div>`;
+}
+
+async function alHorno(s){
+  const gen = ++Cocina.gen;
+  const atras = $("#b-atras");
+  if (atras) atras.remove();
+  $("#tito-dice").textContent = "¡Al horno!";
+  decir("¡Al horno!");
+  Tito.hablar("¡Al horno!");
+  const olla = $("#olla");
+  olla.classList.add("al-horno");
+  Sonido.vuela();
+
+  await esperar(480);
+  if (!vigente(s, gen)) return;
+  const escena = $(".escena", panel());
+  escena.className = "escena escena--sola";
+  escena.innerHTML = hornoHTML();
+  const cuenta = $(".revolver__cuenta", panel());
+  if (cuenta) cuenta.remove();
+  const h = $(".horno", panel());
+  h.classList.add("prendido", "tiembla");
+  Sonido.fuego();
+
+  const num = $(".horno__numero", h);
+  for (const n of [3, 2, 1]){
+    num.innerHTML = `<span>${n}</span>`;
+    Sonido.tic();
+    vibrar(10);
+    await esperar(650);
+    if (!vigente(s, gen)) return;
   }
+  num.innerHTML = "";
+  h.classList.remove("tiembla");
+  h.classList.add("abierto");
+  Sonido.ding();
+  vibrar([30, 60, 30]);
+  confeti();
+
+  await esperar(450);
+  if (!vigente(s, gen)) return;
+  Sonido.fanfarria();
+  s.alTerminar(recomendarNino(s.respuestas, s.preguntas));
+}
+
+function confeti(){
+  if (reducido() || !document.body.animate) return;
+  const c = document.createElement("div");
+  c.className = "confeti";
+  c.setAttribute("aria-hidden", "true");
+  const colores = ["#37C2B1", "#E0A94A", "#FFFFFF", "#E2574C", "#F2C94C", "#4B9BD6"];
+  const alto = window.innerHeight + 40;
+  document.body.appendChild(c);
+  for (let k = 0; k < 64; k++){
+    const i = document.createElement("i");
+    i.style.left = (Math.random() * 100) + "%";
+    i.style.background = colores[k % colores.length];
+    c.appendChild(i);
+    i.animate([
+      { transform: "translate(0, 0) rotate(0deg)" },
+      { transform: `translate(${(Math.random() - .5) * 180}px, ${alto}px) rotate(${Math.random() * 900 - 450}deg)` }
+    ], { duration: 1500 + Math.random() * 1300, delay: Math.random() * 350,
+         easing: "cubic-bezier(.25,.6,.45,1)", fill: "forwards" });
+  }
+  setTimeout(() => c.remove(), 3400);
+}
+
+/* ── LO QUE SALIÓ DEL HORNO ───────────────────────────────────────── */
+function veredictoKid(r){
+  if (!r){ pintarSinSalida(); return; }
+  Memoria.sumar([r.principal, r.bebida, r.postre].filter(Boolean).map(p => p.id));
 
   const mini = (p, linea) => `<div class="mini">
       ${fotoHTML(p, "mini")}
@@ -5152,7 +5862,8 @@ async function pintarVeredictoKid(){
   const titulo = t => `<p class="bloque__titulo"><span class="bloque__txt">${esc(t)}</span><span class="zigzag zigzag--claro" aria-hidden="true"></span></p>`;
   const cierre = VOZ_KID.cierres[Math.floor(Math.random() * VOZ_KID.cierres.length)];
 
-  panel().innerHTML = `<div class="veredicto reveal">
+  $("#chef-volver").onclick = () => { modoKid(false); pantallaModo(); };
+  panel().innerHTML = `<div class="veredicto">
     ${r.aviso ? `<p class="pregunta__nota" style="color:var(--acento)">${esc(r.aviso)}</p>` : ""}
     ${bloqueAlergias(r.filtros.alergias, "nino")}
     <div class="presenta">
@@ -5163,10 +5874,10 @@ async function pintarVeredictoKid(){
       </div>
     </div>
 
-    <article class="ficha">
+    <article class="ficha sale-del-horno">
       ${fotoHTML(r.principal, "ficha")}
       <div class="ficha__cuerpo">
-        <p class="ficha__cat">Para vos</p>
+        <p class="ficha__cat">¡Salió del horno!</p>
         <h2 class="ficha__nombre">${esc(r.principal.nombre)}</h2>
         <p class="ficha__precio">${precioTxt(r.principal.precio)}</p>
         ${r.principal.descripcion ? `<p class="ficha__desc">${esc(r.principal.descripcion)}</p>` : ""}
@@ -5174,11 +5885,11 @@ async function pintarVeredictoKid(){
       </div>
     </article>
 
-    <div class="bloque">
-      ${titulo("Y además")}
+    ${r.bebida || r.postre ? `<div class="bloque">
+      ${titulo("De la mesada")}
       ${r.bebida ? mini(r.bebida, "Para tomar mientras esperás.") : ""}
       ${r.postre ? mini(r.postre, "Esto es para el final. Ganátelo.") : ""}
-    </div>
+    </div>` : ""}
 
     <div class="ticket">
       <p class="ticket__txt">Todo junto</p>
@@ -5187,303 +5898,20 @@ async function pintarVeredictoKid(){
 
     <p class="burbuja" style="margin-top:22px">${esc(cierre)}</p>
 
-    ${bloqueJuegos()}
-
     <div class="veredicto__acciones">
-      <button class="btn btn--sol" id="b-kid-otra">Elegir de nuevo</button>
+      <button class="btn btn--sol" id="b-kid-otra">Cocinar otra vez</button>
+      <button class="btn btn--linea" id="b-kid-carta">Ver la carta de los chicos</button>
       <button class="btn btn--linea" id="b-kid-salir">Devolver el celular</button>
     </div>
   </div>`;
 
-  $("#chef-volver").onclick = () => { modoKid(false); pantallaModo(); };
   $("#b-kid-otra").addEventListener("click", pantallaKid);
+  $("#b-kid-carta").addEventListener("click", () => ir("carta"));
   $("#b-kid-salir").addEventListener("click", () => { modoKid(false); pantallaModo(); });
-  conectarJuegos();
-  decir("Listo. Te toca " + r.principal.nombre + ".");
-}
-
-/* ═══════════════════════════════════════════════════════════════════
-   LOS JUEGOS DE LA ESPERA
-   El rato entre que se pide y llega la comida es el problema real de una
-   familia con chicos en un parador. Tres juegos que andan sin internet,
-   sin librerías y sin sacar a nadie de la carta.
-   ═══════════════════════════════════════════════════════════════════ */
-const JUEGOS = [
-  { id:"pintar",  emo:"🎨", nombre:"Pintá tu plato", sub:"Elegí un color y tocá" },
-  { id:"memo",    emo:"🧠", nombre:"Memotest",       sub:"Encontrá las parejas" },
-  { id:"intruso", emo:"🔍", nombre:"El intruso",     sub:"¿Cuál no va con los otros?" }
-];
-
-function bloqueJuegos(){
-  return `<div class="juegos">
-    <p class="bloque__titulo"><span class="bloque__txt">Mientras se cocina</span><span class="zigzag zigzag--claro" aria-hidden="true"></span></p>
-    <div class="juegos__riel" id="juegos-riel">
-      ${JUEGOS.map(j => `<button class="juego-btn" data-juego="${j.id}">
-          <span class="juego-btn__emo" aria-hidden="true">${j.emo}</span>
-          <span class="juego-btn__txt">${esc(j.nombre)}</span>
-          <span class="juego-btn__sub">${esc(j.sub)}</span>
-        </button>`).join("")}
-    </div>
-  </div>`;
-}
-
-function conectarJuegos(){
-  $$("[data-juego]", panel()).forEach(b =>
-    b.addEventListener("click", () => abrirJuego(b.dataset.juego)));
-}
-
-function cabezaJuego(titulo, marcador){
-  return `<div class="juego__cabeza">
-    <button class="link-atras" id="b-juego-salir">← Volver</button>
-    <h3 class="juego__titulo">${esc(titulo)}</h3>
-    <span class="juego__marcador" id="juego-marcador">${esc(marcador || "")}</span>
-  </div>`;
-}
-
-function abrirJuego(id){
-  ({ pintar: juegoPintar, memo: juegoMemo, intruso: juegoIntruso }[id] || juegoPintar)();
-}
-
-function volverAlVeredicto(){
-  if (K.ultimo) pintarVeredictoKidYaCalculado();
-  else pantallaKid();
-}
-
-/* Se repinta el veredicto sin volver a calcular ni a animar la marea:
-   el chico ya vio el momento una vez y repetirlo lo aburre. */
-function pintarVeredictoKidYaCalculado(){
-  const r = K.ultimo;
-  const mini = (p, linea) => `<div class="mini">
-      ${fotoHTML(p, "mini")}
-      <div class="mini__txt">
-        <p class="mini__nombre">${esc(p.nombre)}</p>
-        <p class="mini__linea">${esc(linea)}</p>
-      </div>
-      <p class="mini__precio">${precioTxt(p.precio)}</p>
-    </div>`;
-  panel().innerHTML = `<div class="veredicto">
-    <div class="presenta">
-      ${titoHTML("tito--grande", "saludo")}
-      <div class="presenta__globo">
-        <span class="presenta__nombre">${esc(KID.nombre)}</span>
-        ${esc(K.nombre ? K.nombre + ", esto es lo tuyo." : "Esto es lo tuyo.")}
-      </div>
-    </div>
-    <article class="ficha">
-      ${fotoHTML(r.principal, "ficha")}
-      <div class="ficha__cuerpo">
-        <p class="ficha__cat">Para vos</p>
-        <h2 class="ficha__nombre">${esc(r.principal.nombre)}</h2>
-        <p class="ficha__precio">${precioTxt(r.principal.precio)}</p>
-      </div>
-    </article>
-    <div class="bloque">
-      ${r.bebida ? mini(r.bebida, "Para tomar mientras esperás.") : ""}
-      ${r.postre ? mini(r.postre, "Esto es para el final.") : ""}
-    </div>
-    ${bloqueJuegos()}
-    <div class="veredicto__acciones">
-      <button class="btn btn--sol" id="b-kid-otra">Elegir de nuevo</button>
-      <button class="btn btn--linea" id="b-kid-salir">Devolver el celular</button>
-    </div>
-  </div>`;
-  $("#b-kid-otra").addEventListener("click", pantallaKid);
-  $("#b-kid-salir").addEventListener("click", () => { modoKid(false); pantallaModo(); });
-  conectarJuegos();
-}
-
-/* ── PINTÁ TU PLATO ───────────────────────────────────────────────────
-   Un plato dibujado en SVG por zonas. Se elige un color y se tocan las
-   zonas. No hay que saber dibujar ni arrastrar el dedo con precisión,
-   que a los cinco años todavía no pasa.                               */
-const COLORES = ["#E0A94A","#E2574C","#5DBB63","#4B9BD6","#8E5BB5","#F0F0F0","#7A4B2A","#2B2B2B"];
-
-function juegoPintar(){
-  const zona = (d, fill, nombre) =>
-    `<path class="pintar__zona" data-zona d="${d}" fill="${fill}" stroke="#1B3A57" stroke-width="3"
-           stroke-linejoin="round" role="button" tabindex="0" aria-label="${nombre}"/>`;
-
-  panel().innerHTML = `<div class="juego">
-    ${cabezaJuego("Pintá tu plato", "")}
-    <div class="pintar">
-      <div class="pintar__lienzo">
-        <svg viewBox="0 0 320 260" aria-label="Un plato para pintar">
-          <ellipse class="pintar__zona" data-zona cx="160" cy="150" rx="140" ry="95"
-                   fill="#FFFFFF" stroke="#1B3A57" stroke-width="4" role="button" tabindex="0" aria-label="El plato"/>
-          <ellipse cx="160" cy="150" rx="118" ry="78" fill="none" stroke="#CBD9E3" stroke-width="3"/>
-          ${zona("M70 150 Q70 112 112 110 L150 110 Q186 114 184 150 Q182 186 148 188 L110 188 Q70 188 70 150 Z", "#F3E2C7", "La milanesa")}
-          ${zona("M200 104 L232 96 L240 124 L208 132 Z", "#F6D97A", "Una papa frita")}
-          ${zona("M214 138 L248 132 L254 160 L220 166 Z", "#F6D97A", "Otra papa frita")}
-          ${zona("M206 170 L242 168 L244 196 L208 196 Z", "#F6D97A", "La última papa frita")}
-          <circle class="pintar__zona" data-zona cx="112" cy="206" r="20" fill="#EFA6A0"
-                  stroke="#1B3A57" stroke-width="3" role="button" tabindex="0" aria-label="El tomate"/>
-          <circle class="pintar__zona" data-zona cx="160" cy="214" r="14" fill="#BFE3B5"
-                  stroke="#1B3A57" stroke-width="3" role="button" tabindex="0" aria-label="Una hojita"/>
-        </svg>
-      </div>
-      <div class="pintar__paleta" id="paleta" role="group" aria-label="Colores">
-        ${COLORES.map((c, i) => `<button class="pintar__color" data-color="${c}"
-            style="background:${c}" aria-pressed="${i === 0}" aria-label="Color ${i + 1}"></button>`).join("")}
-      </div>
-      <p class="juego__dice" id="juego-dice">Elegí un color y tocá el dibujo.</p>
-      <button class="btn btn--linea btn--chico" id="b-pintar-limpiar">Empezar de nuevo</button>
-    </div>
-  </div>`;
-
-  let color = COLORES[0];
-  const original = $$(".pintar__zona", panel()).map(z => z.getAttribute("fill"));
-
-  $$(".pintar__color", panel()).forEach(b => b.addEventListener("click", () => {
-    color = b.dataset.color;
-    $$(".pintar__color", panel()).forEach(x => x.setAttribute("aria-pressed", String(x === b)));
-    $("#juego-dice").textContent = "Ahora tocá el dibujo.";
-  }));
-
-  const pintar = z => { z.setAttribute("fill", color); $("#juego-dice").textContent = "¡Quedó bárbaro!"; };
-  $$(".pintar__zona", panel()).forEach(z => {
-    z.addEventListener("click", () => pintar(z));
-    z.addEventListener("keydown", e => {
-      if (e.key === "Enter" || e.key === " "){ e.preventDefault(); pintar(z); }
-    });
-  });
-
-  $("#b-pintar-limpiar").addEventListener("click", () => {
-    $$(".pintar__zona", panel()).forEach((z, i) => z.setAttribute("fill", original[i]));
-    $("#juego-dice").textContent = "Listo, de nuevo en blanco.";
-  });
-  $("#b-juego-salir").addEventListener("click", volverAlVeredicto);
-  decir("Juego para pintar un plato.");
-}
-
-/* ── MEMOTEST ─────────────────────────────────────────────────────── */
-const MEMO_EMOJIS = ["🍕","🍟","🍦","🍔","🍌","🍓","🧀","🌽","🍉","🥑"];
-
-function mezclar(a){
-  const x = a.slice();
-  for (let i = x.length - 1; i > 0; i--){
-    const j = Math.floor(Math.random() * (i + 1));
-    const t = x[i]; x[i] = x[j]; x[j] = t;
-  }
-  return x;
-}
-
-function juegoMemo(){
-  const elegidos = mezclar(MEMO_EMOJIS).slice(0, 6);
-  const cartas = mezclar(elegidos.concat(elegidos));
-  let abierta = null, bloqueado = false, hechas = 0, intentos = 0;
-
-  panel().innerHTML = `<div class="juego">
-    ${cabezaJuego("Memotest", "0 de 6")}
-    <div class="memo" id="memo" role="group" aria-label="Memotest de comidas">
-      ${cartas.map((e, i) => `<button class="memo__carta" data-i="${i}" data-emo="${e}"
-          data-estado="tapada" aria-label="Carta ${i + 1}"><span>${e}</span></button>`).join("")}
-    </div>
-    <p class="juego__dice" id="juego-dice">Tocá dos cartas y buscá las iguales.</p>
-  </div>`;
-
-  const marcador = () => { $("#juego-marcador").textContent = hechas + " de 6"; };
-
-  $$(".memo__carta", panel()).forEach(b => b.addEventListener("click", () => {
-    if (bloqueado || b.dataset.estado !== "tapada") return;
-    b.dataset.estado = "abierta";
-    if (!abierta){ abierta = b; return; }
-
-    intentos++;
-    if (abierta.dataset.emo === b.dataset.emo){
-      abierta.dataset.estado = b.dataset.estado = "hecha";
-      abierta = null; hechas++; marcador();
-      $("#juego-dice").textContent = hechas === 6
-        ? `¡Las encontraste todas! En ${intentos} intentos.`
-        : "¡Muy bien! Seguí.";
-      if (hechas === 6) decir("Ganaste el memotest.");
-      return;
-    }
-    bloqueado = true;
-    $("#juego-dice").textContent = "Esas dos no eran. Probá otra vez.";
-    const a = abierta; abierta = null;
-    setTimeout(() => {
-      a.dataset.estado = b.dataset.estado = "tapada";
-      bloqueado = false;
-    }, reducido() ? 200 : 750);
-  }));
-
-  $("#b-juego-salir").addEventListener("click", volverAlVeredicto);
-  decir("Memotest de comidas.");
-}
-
-/* ── EL INTRUSO ───────────────────────────────────────────────────────
-   Siete cosas de la misma familia y una que no va. Es el juego que mejor
-   funciona a los cinco años porque no hay que leer nada.              */
-const RONDAS_INTRUSO = [
-  { familia:["🍎","🍌","🍓","🍇","🍊","🍐","🍉"], intruso:"🥕", dice:"La zanahoria es una verdura, no una fruta." },
-  { familia:["🥕","🥦","🌽","🥬","🍆","🫑","🥒"], intruso:"🍪", dice:"La galletita no es una verdura, aunque sea rica." },
-  { familia:["🍕","🍔","🌭","🍟","🥪","🌮","🍝"], intruso:"⚽", dice:"¡La pelota no se come!" },
-  { familia:["🍦","🍰","🍩","🍪","🧁","🍫","🍮"], intruso:"🥩", dice:"El bife no es un postre. Eso es cosa del Vasco." },
-  { familia:["🥛","🧃","☕","🍵","🥤","🧉","🍶"], intruso:"🍞", dice:"El pan no se toma, se come." }
-];
-
-function juegoIntruso(){
-  const orden = mezclar(RONDAS_INTRUSO.map((_, i) => i));
-  let k = 0, puntos = 0;
-
-  const pintar = () => {
-    const r = RONDAS_INTRUSO[orden[k]];
-    const items = mezclar(r.familia.slice(0, 7).concat(r.intruso));
-    panel().innerHTML = `<div class="juego">
-      ${cabezaJuego("El intruso", puntos + " de " + RONDAS_INTRUSO.length)}
-      <p class="burbuja">¿Cuál no va con los demás?</p>
-      <div class="intruso" role="group" aria-label="Encontrá el intruso">
-        ${items.map((e, i) => `<button class="intruso__item" data-emo="${e}"
-            aria-label="Opción ${i + 1}">${e}</button>`).join("")}
-      </div>
-      <p class="juego__dice" id="juego-dice">Tocá el que sobra.</p>
-    </div>`;
-
-    $$(".intruso__item", panel()).forEach(b => b.addEventListener("click", () => {
-      if (b.classList.contains("bien") || b.classList.contains("mal")) return;
-      const acerto = b.dataset.emo === r.intruso;
-      b.classList.add(acerto ? "bien" : "mal");
-      if (acerto){
-        puntos++;
-        $("#juego-marcador").textContent = puntos + " de " + RONDAS_INTRUSO.length;
-        $("#juego-dice").textContent = "¡Eso! " + r.dice;
-        $$(".intruso__item", panel()).forEach(x => x.disabled = true);
-        setTimeout(() => {
-          k++;
-          if (k < orden.length) pintar();
-          else final();
-        }, reducido() ? 200 : 1100);
-      } else {
-        $("#juego-dice").textContent = "Ese no. Mirá bien.";
-      }
-    }));
-    $("#b-juego-salir").addEventListener("click", volverAlVeredicto);
-  };
-
-  const final = () => {
-    panel().innerHTML = `<div class="juego">
-      ${cabezaJuego("El intruso", puntos + " de " + RONDAS_INTRUSO.length)}
-      <div class="presenta">
-        ${titoHTML("tito--grande", "festeja")}
-        <div class="presenta__globo">
-          <span class="presenta__nombre">${esc(KID.nombre)}</span>
-          ${puntos === RONDAS_INTRUSO.length
-            ? "¡Todas! Vos de comida sabés tanto como yo."
-            : `Sacaste ${puntos} de ${RONDAS_INTRUSO.length}. ¿Jugamos otra?`}
-        </div>
-      </div>
-      <div class="veredicto__acciones">
-        <button class="btn btn--sol" id="b-otra-vez">Jugar de nuevo</button>
-        <button class="btn btn--linea" id="b-juego-salir2">Volver</button>
-      </div>
-    </div>`;
-    $("#b-otra-vez").addEventListener("click", juegoIntruso);
-    $("#b-juego-salir2").addEventListener("click", volverAlVeredicto);
-    decir("Terminaste el juego con " + puntos + " de " + RONDAS_INTRUSO.length + ".");
-  };
-
-  pintar();
-  decir("Juego: encontrá el intruso.");
+  window.scrollTo(0, 0);
+  const dicho = "¡Salió del horno! Te toca " + r.principal.nombre + ".";
+  decir(dicho);
+  Tito.hablar(dicho, true);
 }
 
 /* ── ARMÁ LA MESA: la pantalla ─────────────────────────────────────── */
@@ -5493,7 +5921,7 @@ function pantallaMesa(){
   M.total = 0; M.i = 0; M.comensales = []; M.ninos = []; M.ni = 0; M.paso = "cuantos";
   S.modo = "mesa";
   $("#progreso").hidden = true;
-  $("#v-chef").classList.remove("kid");
+  modoKid(false);
   $("#chef-volver").onclick = () => pantallaModo();
 
   panel().innerHTML = `<div class="modo">
@@ -5609,9 +6037,11 @@ function pintarPasa(i){
 
 /* ── EL TURNO DE LOS CHICOS ───────────────────────────────────────────
    El momento que vende la funcionalidad: el celular le llega al nene y
-   lo atiende otro personaje, con otra cara y otro tono. Siempre con
-   "saltear" a mano, porque un chico de cuatro no va a contestar y el
-   padre no tiene que quedar trabado.                                  */
+   lo atiende otro personaje, con otra cara y otro tono. Cocina con Tito
+   igual que en el modo niños, con menos preguntas y menos vueltas de
+   cuchara para no tener a los grandes esperando. Siempre con "saltear"
+   a mano, porque un chico de cuatro no va a contestar y el padre no
+   tiene que quedar trabado.                                           */
 function turnoNino(k){
   M.paso = "ninos-turno";
   M.ni = k;
@@ -5635,125 +6065,70 @@ function turnoNino(k){
       <label class="nombre__label" for="nino-nombre">¿Cómo te llamás?</label>
       <div class="campo">
         <input id="nino-nombre" type="text" maxlength="20" placeholder="Tu nombre" enterkeyhint="go">
-        <button class="btn btn--sol" id="b-nino-nombre">¡Dale!</button>
+        <button class="btn btn--sol" id="b-nino-nombre">¡A cocinar!</button>
       </div>
       <button class="saltear" id="b-nino-saltear">Elegile vos, ${esc(KID.nombre)}</button>
     </div>
   </div>`;
 
+  const c = M.ninos[k];
   const inp = $("#nino-nombre");
   const seguir = () => {
     const v = inp.value.replace(/[^\p{L}\p{M}\s'’-]/gu, "").replace(/\s+/g, " ").trim().slice(0, 20);
-    M.ninos[k].nombre = v ? v.charAt(0).toUpperCase() + v.slice(1) : "";
-    M.ninos[k].j = 0;
-    pintarPreguntaNino();
+    c.nombre = v ? v.charAt(0).toUpperCase() + v.slice(1) : "";
+    c.salteado = false;
+    Sonido.toc();
+    cocinar({
+      preguntas: c.preguntas, respuestas: c.respuestas, nombre: c.nombre, vueltas: 3,
+      alSalir: () => turnoNino(k), alTerminar: r => listoNino(r, k)
+    });
   };
   $("#b-nino-nombre").addEventListener("click", seguir);
   inp.addEventListener("keydown", e => { if (e.key === "Enter"){ e.preventDefault(); seguir(); } });
   // Saltear no deja al chico sin plato: deja que Tito elija con lo que hay.
   $("#b-nino-saltear").addEventListener("click", () => {
-    M.ninos[k].salteado = true;
-    M.ninos[k].respuestas = {};
+    c.salteado = true;
+    c.respuestas = {};
     siguienteNino();
   });
   inp.focus({ preventScroll:true });
   decir("Le toca al chico " + (k + 1) + " de " + M.ninos.length);
 }
 
-function pintarPreguntaNino(){
-  const c = M.ninos[M.ni];
-  const p = c.preguntas[c.j];
-  const f = leerFiltros(c.respuestas, c.preguntas);
-  const quien = c.nombre && c.j === 0 ? c.nombre + ", " : "";
-  const esGrilla = fmtDe(p) === "grilla";
-  const texto = quien ? quien + p.texto.charAt(0).toLowerCase() + p.texto.slice(1) : p.texto;
+/* Lo que sale del horno en la mesa es lo mismo que después aparece en
+   el pedido de todos: mismas respuestas, mismo motor, y no se anota en
+   la memoria hasta el veredicto de la mesa, así que no puede cambiar. */
+function listoNino(r, k){
+  const c = M.ninos[k];
+  const ultimo = k + 1 >= M.ninos.length;
+  const dice = (c.nombre ? c.nombre + ", ¡salió" : "¡Salió") + " del horno! Esto es lo tuyo.";
+  $("#chef-volver").onclick = () => turnoNino(k);
 
-  panel().innerHTML = `<div class="chat chat--pregunta">
-    <p class="kid-pasos" aria-hidden="true">${
-      c.preguntas.map((_, j) => `<span class="${j <= c.j ? "hecho" : ""}">⭐</span>`).join("")}</p>
-    <div class="dice">
-      <div class="dice__vasco">${titoHTML("tito--chico", "saludo")}</div>
-      <div class="burbuja">${esc(texto)}</div>
+  panel().innerHTML = `<div class="veredicto">
+    <div class="presenta">
+      ${titoHTML("tito--grande", "festeja")}
+      <div class="presenta__globo">
+        <span class="presenta__nombre">${esc(KID.nombre)}</span>${esc(dice)}
+      </div>
     </div>
-    ${p.nota ? `<p class="pregunta__nota">${esc(p.nota)}</p>` : ""}
-    ${esGrilla
-      ? `<div class="grilla" role="group" aria-label="${esc(p.texto)}">
-          ${opcionesPosibles(p, f).map(({ o, i }) => `<button class="grilla__item" data-i="${i}">
-              <span class="grilla__emo" aria-hidden="true">${o.emo}</span>
-              <span class="grilla__txt">${esc(o.texto)}</span>
-            </button>`).join("")}
-        </div>`
-      : `<div class="opciones opciones--largas" role="group" aria-label="${esc(p.texto)}">
-          ${opcionesPosibles(p, f).map(({ o, i }) => {
-            const sel = Array.isArray(c.respuestas[p.id]) ? c.respuestas[p.id] : [];
-            const on = p.multiple ? sel.indexOf(i) !== -1 : c.respuestas[p.id] === i;
-            return `<button class="opcion" data-i="${i}" aria-pressed="${on}">
-              ${p.multiple ? `<span class="opcion__marca" aria-hidden="true">${on ? "✓" : ""}</span>` : ""}
-              <span aria-hidden="true" style="flex:none;font-size:1.7rem;line-height:1">${o.emo}</span>
-              <span>${esc(o.texto)}</span>
-            </button>`;
-          }).join("")}
-        </div>`}
-    <div class="acciones-chat">
-      <button class="link-atras" id="b-atras">← Volver</button>
-      ${p.multiple ? `<button class="btn btn--sol" id="b-seguir">Seguir</button>` : ""}
+    ${r ? `<article class="ficha sale-del-horno">
+      ${fotoHTML(r.principal, "ficha")}
+      <div class="ficha__cuerpo">
+        <p class="ficha__cat">Para vos</p>
+        <h2 class="ficha__nombre">${esc(r.principal.nombre)}</h2>
+        ${r.postre ? `<p class="ficha__desc">Y de postre, ${esc(r.postre.nombre.toLowerCase())}.</p>` : ""}
+        <p class="ficha__voz">Ya se lo paso al Vasco para el pedido de la mesa.</p>
+      </div>
+    </article>` : ""}
+    <div class="veredicto__acciones">
+      <button class="btn btn--sol" id="b-nino-listo">${ultimo ? "Ver el pedido de la mesa" : "Listo, que cocine otro chico"}</button>
     </div>
   </div>`;
 
-  decir(p.texto);
-  const sel = esGrilla ? ".grilla__item" : ".opcion";
-  $$(sel, panel()).forEach(b => b.addEventListener("click", () => {
-    const i = parseInt(b.dataset.i, 10);
-    if (p.multiple){
-      const o = p.opciones[i];
-      let s = Array.isArray(c.respuestas[p.id]) ? c.respuestas[p.id].slice() : [];
-      if (o.exclusiva) s = s.indexOf(i) !== -1 ? [] : [i];
-      else {
-        const excl = p.opciones.map((x,j) => x.exclusiva ? j : -1).filter(j => j >= 0);
-        s = s.filter(j => excl.indexOf(j) === -1);
-        s = s.indexOf(i) !== -1 ? s.filter(j => j !== i) : s.concat(i);
-      }
-      c.respuestas[p.id] = s;
-      $$(".opcion", panel()).forEach(x => {
-        const on = s.indexOf(parseInt(x.dataset.i, 10)) !== -1;
-        x.setAttribute("aria-pressed", String(on));
-        const m = $(".opcion__marca", x);
-        if (m) m.textContent = on ? "✓" : "";
-      });
-      return;
-    }
-    c.respuestas[p.id] = i;
-    avanzarNino(p, c);
-  }));
-  if (p.multiple) $("#b-seguir").addEventListener("click", () => avanzarNino(p, c));
-  $("#b-atras").addEventListener("click", () => {
-    if (c.j > 0){ c.j--; pintarPreguntaNino(); } else turnoNino(M.ni);
-  });
-}
-
-async function avanzarNino(p, c){
-  if (p.multiple && (!c.respuestas[p.id] || c.respuestas[p.id].length === 0)){
-    const i = p.opciones.findIndex(o => o.exclusiva);
-    c.respuestas[p.id] = i >= 0 ? [i] : [];
-  }
-  $$("button", panel()).forEach(b => b.disabled = true);
-  const dicho = opcionesElegidas(p, c.respuestas[p.id]).map(o => o.texto).join(" · ");
-  const chat = $(".chat", panel());
-  if (chat && dicho){
-    const eco = document.createElement("div");
-    eco.className = "burbuja burbuja--yo";
-    eco.textContent = dicho;
-    chat.appendChild(eco);
-    await esperar(220);
-  }
-  c.j++;
-  if (c.j < c.preguntas.length){
-    panel().innerHTML = `<div class="chat"></div>`;
-    await pensandoKid(chisteDe(p, c.respuestas[p.id]));
-    pintarPreguntaNino();
-    return;
-  }
-  siguienteNino();
+  $("#b-nino-listo").addEventListener("click", siguienteNino);
+  window.scrollTo(0, 0);
+  decir(dice);
+  Tito.hablar(r ? dice + " " + r.principal.nombre + "." : dice, true);
 }
 
 async function siguienteNino(){
@@ -5761,6 +6136,7 @@ async function siguienteNino(){
   modoKid(false);
   await pintarVeredictoMesa();
 }
+
 function pintarPreguntaMesa(){
   const c = M.comensales[M.i];
   const p = c.preguntas[c.j];
@@ -6622,6 +6998,23 @@ function conectar(){
   // El modo niños tiene su propia puerta en la portada: si estuviera sólo
   // adentro del Chef, el padre que viene con dos chicos no lo encuentra.
   $("#b-landing-kid").addEventListener("click", () => { ir("chef"); pantallaKid(); });
+
+  const bSonido = $("#b-sonido");
+  const pintarSonido = () => {
+    const on = Sonido.on();
+    bSonido.setAttribute("aria-pressed", String(on));
+    bSonido.textContent = on ? "🔊" : "🔇";
+    bSonido.title = on ? "Apagar el sonido" : "Prender el sonido";
+  };
+  bSonido.addEventListener("click", () => {
+    Sonido.poner(!Sonido.on());
+    pintarSonido();
+    Sonido.toc();
+  });
+  pintarSonido();
+
+  // Para el grande que agarra el celular: la carta entera sigue a un toque.
+  $("#b-carta-toda").addEventListener("click", () => { S.soloNinos = false; pintarCarta(); });
 
   $("#riel-landing").addEventListener("click", e => {
     const b = e.target.closest("[data-cat-ir]");
