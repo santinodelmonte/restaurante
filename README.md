@@ -387,6 +387,56 @@ El desempate por margen está implementado y **vacío a propósito**: cuando el
 local diga qué platos quiere empujar, se cargan en el campo `margen` de cada
 plato. Es una decisión comercial de ellos, no nuestra.
 
+## Cuando llegue el menú oficial
+
+Estos cambios quedan para cuando tengamos el menú oficial, y no antes. El
+menú va a ser el mismo toda la temporada: no vamos a tocar el sitio
+mientras se usa. Así que el motor no necesita adivinar una carta que
+cambia: se puede ajustar a mano contra la carta que va a estar, plato por
+plato, y hacerlo una sola vez. Afinar esto contra la carta de muestra es
+trabajo que se tira.
+
+**1. Cada pregunta, cuando hace falta.** El chef pregunta algo sólo cuando
+la respuesta va a cambiar lo que recomienda.
+
+- *El punto de la carne:* ya funciona así. Se pregunta después de
+  recomendar y sólo si el principal es un corte de parrilla. Con el menú
+  oficial hay que revisar qué platos cuentan como corte (hoy decide la
+  `categoria`/`proteina`) y en qué punto sufre cada uno.
+- *El vino:* hoy **no** funciona así. `bebida-pref` («Para tomar, ¿con
+  qué te sentís cómodo?») entra en la tanda, en express y en completo,
+  antes de que el chef sepa qué plato va a recomendar. Hay que sacarla de
+  la tanda y preguntar por el vino igual que por el punto: después de
+  elegir el plato y sólo si el plato pide vino (lo que hoy decide
+  `meritaVino`). Si el plato no lo pide, va la bebida de siempre sin
+  preguntar. Hay que tener en cuenta que esa pregunta también suma a
+  `intensidad`, `untuosidad` y `acidez`. Al sacarla, esos pesos se pierden
+  o pasan a otra pregunta, y el centrado por datos se recalcula solo.
+
+**2. Entradas inteligentes.** Hoy la entrada se elige contra el plato: se
+mira la `proteina` y la `untuosidad` del principal y el campo `empieza`.
+Con el menú oficial la idea es analizar la carta real y definir a mano qué
+entrada va con qué principal, en lugar de dejarlo a la regla general. Eso
+también incluye decidir qué cuenta como entrada, qué se comparte y qué
+pasa en la mesa. Lo vamos a definir cuando tengamos la carta.
+
+**3. Horno de barro o parrilla, sin preguntarlo.** El chef tiene que
+averiguar para qué lado va la persona (horno de barro, parrilla o lo que
+traiga la carta oficial) sin preguntarlo de frente, y recomendar en base a
+eso. Hoy hay señales sueltas que empujan para un lado o el otro, pero
+ninguna está pensada para esto: el olor a brasa o a pan recién hecho, frito
+o a la parrilla, el ruido de la carne cayendo. Hay que diseñar preguntas
+sensoriales que midan esa preferencia sin que se note, que sumen afinidad
+a la categoría con el mismo mecanismo que `afin`, y que se puedan citar en
+«Lo que me dijiste» («por eso te llevo al horno y no a la parrilla»).
+Depende de cuántas cocinas y qué platos tenga el menú oficial, así que
+también se diseña con la carta en la mano.
+
+Cada punto suma su verificación al autotest, como el punto de la carne:
+que no se pregunte por el vino sin recomendar vino, que la entrada sea la
+definida para ese principal, y que la preferencia horno/parrilla se note en
+el resultado.
+
 ## docs — lo que se le manda al cliente
 
 `docs/cambios-reunion-bo-fomento.pdf` es el documento que se entrega
