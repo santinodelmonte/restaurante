@@ -1,8 +1,8 @@
 # Pendientes — Bo Fomento
 
-El material del local ya llegó: carta, menú de niños, alérgenos, nombres y
-platos a empujar. Todo lo que sigue es trabajo nuestro, en el orden en que
-conviene hacerlo.
+La carta oficial y el menú de peques ya están cargados. La planilla de
+alérgenos la mandamos nosotros para que el local la complete. Todo lo que
+sigue es trabajo nuestro, en el orden en que conviene hacerlo.
 
 Lo acordado con el local (propuesta de setiembre 2026 y documento de la
 reunión de cambios), en pesos uruguayos con IVA incluido:
@@ -15,29 +15,37 @@ reunión de cambios), en pesos uruguayos con IVA incluido:
 
 ## 1. Cargar el material recibido
 
-- [ ] Subir los archivos al repo: carta, menú de niños, planilla, nombres y
-      platos a empujar.
-- [ ] **Carta oficial:** reemplazar el `MENU` de muestra con los nombres,
-      descripciones, precios y categorías reales.
-- [ ] **Milanesas/burgers:** cargar la sección, que hoy no existe.
-- [ ] **Vinos:** comparar contra los 49 cargados y actualizar precios, altas
-      y bajas.
-- [ ] **Menú de niños:** reemplazar los 11 platos inventados y sacar el aviso
-      de «datos inventados» del código.
-- [ ] **Alérgenos:** pasar la planilla al `MENU` (vegetariano, vegano, sin
-      gluten, para compartir y las cinco alergias). Si la completaron sobre
-      la planilla vieja, cruzarla con la carta nueva.
-- [ ] Regenerar `docs/planilla-clasificacion-bo-fomento.xlsx` con la carta
-      final, para que les quede de referencia.
+- [x] **Carta oficial:** cargada desde la carta impresa, sin descripciones
+      inventadas (sólo las que trae la carta). 186 ítems y 65 vinos.
+- [x] **Milanesas, burgers, chivitos, pastas, risottos, ensaladas y
+      guarniciones:** cargadas como categorías propias.
+- [x] **Vinos:** actualizados a la carta nueva (65 etiquetas, precios nuevos,
+      altas de Bo Fomento, Cerro del Toro, Fin del Mundo, Trumpeter, Rutini).
+- [x] **Menú de peques:** los 3 platos que decidió el local. Tito recomienda
+      sólo el plato; las preguntas de bebida y postre no entran mientras el
+      menú de peques no tenga bebida ni postre.
+- [x] **Planilla de alérgenos para completar:**
+      `docs/planilla-alergenos-bo-fomento.xlsx`, con nuestra lectura
+      preliminar y las salsas de las pastas aparte.
+- [ ] Mandar la planilla de alérgenos al local.
+- [ ] Cargar en el `MENU` lo que devuelvan en la planilla.
+- [ ] **Massini:** la descripción no se lee en la carta impresa. Pedirla al
+      local; hoy va sin descripción.
+- [ ] **Limonada con menta repetida:** la carta trae «Limonada natural con
+      menta» ($ 340, en Refrescos) y «Jarra limonada con menta 1L» ($ 340, en
+      Licuados). Confirmar con el local si son dos productos distintos.
 - [ ] **Nombres:** reemplazar «El Vasco» y «Tito» en textos, frases, la
       tarjeta para compartir, la voz de Tito y el README.
 - [ ] **Platos a empujar:** cargar el campo `margen`.
 
 ## 2. Ajustar el motor contra la carta oficial
 
-- [ ] **Ejes de cada plato:** cargar los seis ejes, la `proteina` y el campo
-      `empieza` en cada plato nuevo, y revisar los existentes. Los sándwiches
-      primero: hoy el caliente tiene `untuosidad:10`.
+- [ ] **Ejes de cada plato:** ya están cargados con una primera pasada
+      nuestra (los seis ejes, `proteina` y `empieza`). Falta revisarlos
+      probando el chef, sobre todo las categorías nuevas: milanesas,
+      burgers, chivitos, pastas, risottos y ensaladas.
+- [ ] **Guarniciones:** hoy el chef no las recomienda. Evaluar sugerir una
+      guarnición junto a los platos de parrilla, que en la carta van solos.
 - [ ] **Vino después del plato:**
   - Sacar `bebida-pref` de la tanda de preguntas.
   - Preguntar por el vino sólo si el plato lo pide, según `meritaVino`.
@@ -57,8 +65,9 @@ reunión de cambios), en pesos uruguayos con IVA incluido:
   - Decidir si se llega a las 35 que promete la propuesta (hoy son 29
     rotativas).
   - Revisar las frases con la voz y el nombre definitivos.
-- [ ] **Tito:** revisar que sus preguntas y respuestas calcen con el menú de
-      niños real.
+- [x] **Tito:** las opciones de «lo que más te gusta» ahora apuntan a los
+      tres platos reales (papas fritas, puré, fideos, pollito, salsa de
+      tomate, carne).
 - [ ] **Autotest:** sumar una verificación por cada cambio de este grupo:
   - que no se pregunte por el vino si no se recomienda vino;
   - que la entrada sea la definida para ese principal;

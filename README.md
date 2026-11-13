@@ -9,9 +9,16 @@ tipografías de sistema.
 
 ## Qué hay adentro
 
-**La carta.** Categorías reales del local, búsqueda por texto y filtros
+**La carta.** La carta oficial del local, temporada 2026-27, transcripta de
+la carta impresa: 251 ítems en 18 categorías —186 de cocina, barra y
+cafetería, 65 vinos— y el menú de peques. Búsqueda por texto y filtros
 rápidos (vegetariano, sin TACC, para compartir). Cada plato con nombre,
-descripción, precio en pesos uruguayos, sus etiquetas y su foto.
+precio en pesos uruguayos, sus etiquetas y su foto. La descripción va
+sólo donde la trae la carta impresa: no inventamos ninguna.
+
+Las guarniciones están en la carta pero el chef no las recomienda como
+plato: son de tipo `guarnicion`. La ensalada de 2 gustos tampoco, porque
+se arma a gusto y no hay nada que acertar (`recomendable:false`).
 
 **El Chef.** Una experiencia de chat que termina armando la mesa entera:
 entrada, plato principal, alternativas, algo para tomar y el postre.
@@ -66,7 +73,7 @@ reelige el vino —bien cocida la carne pierde el jugo que ablanda el tanino—
 y, si el corte sufre en ese punto, lo dice antes y ofrece el cambio. No lo
 cambia solo: el que decide qué come es el que se lo va a comer.
 
-**El vino.** La carta real del local: 49 etiquetas, de $260 la copa de la
+**El vino.** La carta real del local: 65 etiquetas, de $260 la copa de la
 casa a $8.400 el Cru d'Exception. Marida de verdad: mira cuerpo, tanino y
 acidez del vino contra lo que pide el plato según su proteína y lo graso
 que sea. Por eso resuelve los casos que "carne tinto, pescado blanco" no
@@ -109,6 +116,14 @@ a alguien como plato propio.
 chicos de 5 a 10. Recomienda **sólo** del menú de niños, y el Vasco no ve
 ese menú nunca: las dos reglas están verificadas en el autotest.
 
+El menú de peques que decidió el local son tres platos —nuggets con
+fritas, spaghettis con fileto y churrasquito de lomo— sin bebida ni postre
+propios. Así que Tito recomienda el plato y nada más, y las preguntas de
+la mesada (bebida y postre) no entran en la tanda: preguntarle a un chico
+qué postre quiere y después no darle ninguno es peor que no preguntar. Si
+el local suma bebida o postre para chicos, se cargan con `rol:"bebida"` o
+`rol:"postre"` y las preguntas vuelven solas.
+
 No hay juegos para la espera: el juego es pedir. El chico **cocina con
 Tito**, y cada respuesta es algo que hace en la cocina:
 
@@ -117,7 +132,8 @@ Tito**, y cada respuesta es algo que hace en la cocina:
 - crocante o blandita sube o baja el fuego; "¿probás cosas nuevas?" le
   echa polvo mágico; el hambre agranda o achica la olla; el color pinta la
   salsa;
-- la bebida y el postre van a la mesada, al lado;
+- la bebida y el postre van a la mesada, al lado (sólo si el menú de
+  peques trae bebida o postre);
 - "¿hay algo que no podés comer?" no va a la olla: es una lista que se
   marca, porque es un contrato y no un ingrediente. Recién al cerrarla se
   prende el fuego.
@@ -149,7 +165,7 @@ hueco se quedaba para siempre.
 
 En la carta la foto es una miniatura al costado y nada más: el que lee una
 carta está comparando platos y precios, y una foto por plato a todo el
-ancho convierte 137 renglones en un scroll de media hora. La que quiera
+ancho convierte 186 renglones en un scroll de media hora. La que quiera
 verla la toca y se abre en grande, con el nombre y el precio abajo —el que
 abre la foto de un plato está a un paso de pedirlo y no hay que mandarlo de
 vuelta a buscar cuánto sale—. La lupa aparece sólo sobre las fotos que
@@ -367,34 +383,31 @@ existe porque un monocromo no puede dar jerarquía a un botón.
 
 ## Pendiente
 
-Dos cosas están cargadas con **datos inventados**, marcadas como tales en
-el código y en el documento que se le manda al local. No son trabajo
-pendiente nuestro: es material que sólo tiene el local. Los vinos ya
-llegaron y están cargados de verdad.
+La lista completa de lo que falta para salir está en `PENDIENTES.md`. Lo
+que toca a los datos:
 
-- **Menú de niños.** Once platos inventados con precios inventados.
+- **Alérgenos.** La clasificación de cada plato (vegetariano, sin gluten,
+  alérgenos) es **nuestra lectura** de la carta impresa. La confirma el
+  local con la planilla de `docs/`.
+- **Massini.** La descripción no se lee en la carta impresa; está vacía
+  hasta tenerla.
 - **Fotos.** Hay **una sola y es de muestra**: `img/platos/ojo-bife.jpg`,
   de banco de imágenes, puesta para que se vea el mecanismo andando de
   punta a punta. No es una foto del local y no debería sobrevivir a la
-  primera tanda de fotos reales. Las otras 136 salen de una sesión nuestra
-  en el local —quedaron de nuestro lado, no del de ellos— y
-  `img/platos/LEEME.txt` es el instructivo para cargarlas.
-
-Falta además cargar la sección de **milanesas / burgers**, que nunca vino en
-las imágenes de la carta.
+  primera tanda de fotos reales. Las demás salen de una sesión nuestra en
+  el local y `img/platos/LEEME.txt` es el instructivo para cargarlas.
 
 El desempate por margen está implementado y **vacío a propósito**: cuando el
 local diga qué platos quiere empujar, se cargan en el campo `margen` de cada
 plato. Es una decisión comercial de ellos, no nuestra.
 
-## Cuando llegue el menú oficial
+## Ajustes del motor contra el menú oficial
 
-Estos cambios quedan para cuando tengamos el menú oficial, y no antes. El
+El menú oficial ya está cargado. Estos cambios se hacen ahora contra él. El
 menú va a ser el mismo toda la temporada: no vamos a tocar el sitio
 mientras se usa. Así que el motor no necesita adivinar una carta que
 cambia: se puede ajustar a mano contra la carta que va a estar, plato por
-plato, y hacerlo una sola vez. Afinar esto contra la carta de muestra es
-trabajo que se tira.
+plato, y hacerlo una sola vez.
 
 **1. Cada pregunta, cuando hace falta.** El chef pregunta algo sólo cuando
 la respuesta va a cambiar lo que recomienda.
@@ -435,9 +448,11 @@ copa de tinto de la casa.
 - La copa de tinto pasa, pero con un caliente va más natural una cerveza o
   algo más liviano. Si salió porque la persona contestó «vino tinto» al
   principio, es el mismo problema del punto 1.
-- El caliente tiene `untuosidad:10`, igual que el provolone con jamón
-  crudo. Hay que revisar los ejes de todos los platos contra la carta
-  oficial, empezando por los sándwiches.
+- El caliente tenía `untuosidad:10`, igual que el provolone con jamón
+  crudo. Con la carga de la carta oficial bajó a 7, y los ejes de los
+  platos nuevos (milanesas, burgers, chivitos, pastas, risottos,
+  ensaladas) son una primera pasada nuestra: falta revisarlos uno por uno
+  probando el chef.
 
 **3. Horno de barro o parrilla, sin preguntarlo.** El chef tiene que
 averiguar para qué lado va la persona (horno de barro, parrilla o lo que
@@ -475,10 +490,11 @@ node docs/imprimir.js                          # todos
 node docs/imprimir.js cambios-reunion-bo-fomento   # uno solo
 ```
 
-`docs/planilla-clasificacion-bo-fomento.xlsx` es la planilla que se adjunta:
-los 137 platos ya cargados, con nuestra lectura preliminar de la carta
-impresa, para que el local corrija vegetariano, vegano, sin gluten, para
-compartir, alérgenos y precios. Se regenera desde el `MENU` de `index.html`
+`docs/planilla-alergenos-bo-fomento.xlsx` es la planilla de alérgenos que
+se le manda al local para completar: los 186 ítems de la carta (los vinos
+no, que no tienen nada que clasificar) más las seis salsas de las pastas,
+con nuestra lectura preliminar, para que corrijan vegetariano, vegano, sin
+gluten, para compartir, alérgenos y precios. Se regenera desde el `MENU` de `index.html`
 con:
 
 ```
