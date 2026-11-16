@@ -895,6 +895,10 @@ html.visor-abierto{ overflow:hidden; }
 }
 .punto__aviso b{ color:var(--papel); }
 .punto__cambiar{ margin-top:10px; }
+/* «¿Qué tomás con esto?» usa la misma caja que el punto, adentro del
+   bloque de la bebida y arriba de lo que el chef propone. */
+.tomas{ margin:0 0 12px; }
+.tomas__pie{ margin:12px 0 0; font-size:.85rem; color:var(--papel); opacity:.8; }
 
 /* ── EL VINO ──────────────────────────────────────────────────────── */
 .mini--vino{ border-color:rgba(224,169,74,.45); background:rgba(224,169,74,.09); }
@@ -2252,7 +2256,9 @@ const MENU = [
    ║             sin sacar nada del pool. Es lo que hace que decir    ║
    ║             "carne roja" de verdad se note en el resultado.      ║
    ║  prefBebida tinto · blanco · cerveza · sin-alcohol · maridaje.   ║
-   ║             Decide si el chef va a vino y de qué color.          ║
+   ║             Ya no sale de una pregunta de la tanda: se pregunta  ║
+   ║             después del veredicto y sólo si el plato pide vino   ║
+   ║             (ver PREF_BEBIDA y `aplicarBebida`).                 ║
    ║                                                                  ║
    ║  formato "opciones"  botones (por defecto)                       ║
    ║          "grilla"    grilla de emojis                            ║
@@ -2466,21 +2472,6 @@ const PREGUNTAS = [
         eco:"que el pan lo guardabas para mojar", chiste:"Ese es el uso correcto del pan. Sin discusión." },
       { texto:"Casi no lo toco", emo:"🙅", pesos:{ untuosidad:-2, acidez:+1 },
         eco:"que casi no comías pan", chiste:"Entonces vamos a cuidar que el plato llene por sí solo." }
-    ] },
-
-  { id:"bebida-pref", tipo:"sabor", peso:"alto", grupo:"bebida", modos:["express","completo"],
-    texto:"Para tomar, ¿con qué te sentís cómodo?",
-    opciones:[
-      { texto:"Vino tinto", emo:"🍷", prefBebida:"tinto", pesos:{ intensidad:+2, untuosidad:+1 },
-        eco:"que ibas por un tinto", lleva:"y el plato lo elegí pensando también en la copa", chiste:"Entonces el plato lo voy a elegir pensando también en la copa." },
-      { texto:"Vino blanco", emo:"🥂", prefBebida:"blanco", pesos:{ acidez:+3, untuosidad:-1 },
-        eco:"que ibas por un blanco", lleva:"y con el calor de acá afuera es la decisión correcta", chiste:"Buena decisión con el calor que hace acá afuera." },
-      { texto:"Cerveza", emo:"🍺", prefBebida:"cerveza", pesos:{ social:+2, acidez:+1 },
-        eco:"que ibas por la cerveza", lleva:"que es la que no se pelea con nada de esta carta", chiste:"La que nunca se pelea con nada de esta carta." },
-      { texto:"Algo sin alcohol", emo:"🧃", prefBebida:"sin-alcohol", pesos:{ acidez:+1 },
-        eco:"que ibas sin alcohol", lleva:"y para acompañar tengo bastante más que agua", chiste:"Hay con qué. No te voy a dar agua y listo." },
-      { texto:"Lo que vaya con el plato", emo:"🙇", prefBebida:"maridaje", pesos:{ aventura:+2 },
-        eco:"que te dejabas llevar con la bebida", lleva:"así que elegí lo que de verdad va con el plato", chiste:"Esa es la respuesta que me deja hacer mi trabajo." }
     ] },
 
   { id:"postre-si-no", tipo:"sabor", peso:"bajo", grupo:"dulce", modos:["completo"],
@@ -3353,12 +3344,18 @@ function objetivoVino(plato, punto, colorForzado){
             : "tinto";
   }
 
+  o.colorPlato = o.color;
   if (colorForzado) o.color = colorForzado;
   return o;
 }
 
 function elegirVino(plato, f, rnd, punto, colorForzado, vector){
   let pool = MENU.filter(p => esVino(p) && pasaFiltrosDuros(p, f));
+  // Si la persona pidió un color con todas las letras, es un pedido y no
+  // una preferencia: se elige adentro de ese color. Antes sólo movía el
+  // puntaje, y a quien pedía blanco con un provolone le salía un Malbec.
+  if (colorForzado && pool.some(p => p.vino.color === colorForzado))
+    pool = pool.filter(p => p.vino.color === colorForzado);
   if (!pool.length) return null;
   const o = objetivoVino(plato, punto, colorForzado);
   const techo = techoDeVino(plato);
@@ -3367,8 +3364,17 @@ function elegirVino(plato, f, rnd, punto, colorForzado, vector){
   // El vino de la casa por copa existe justamente para el primer caso, y
   // sin esto no ganaba nunca: el motor sólo sabía pensar en botellas.
   const social = vector && typeof vector.social === "number" ? vector.social : 6;
+  // El desempate al azar depende sólo de la semilla y del vino, no de
+  // cuántos vinos quedaron en el pool: si no, filtrar por el color que
+  // pidió la persona reordenaba los empates y «tinto» le cambiaba el
+  // tinto que el chef ya le había propuesto.
+  const base = Math.floor(rnd() * 0x7fffffff);
   const ruido = {};
-  pool.slice().sort((a,b) => a.id < b.id ? -1 : 1).forEach(p => { ruido[p.id] = rnd(); });
+  pool.forEach(p => {
+    let h = base;
+    for (let i = 0; i < p.id.length; i++) h = Math.imul(h ^ p.id.charCodeAt(i), 16777619) >>> 0;
+    ruido[p.id] = h;
+  });
   const rank = pool
     .map(p => ({ plato:p,
                  score: puntuarVino(p, o, techo) + (p.porCopa ? (social < 4.5 ? 3 : -4) : 0) }))
@@ -3378,7 +3384,13 @@ function elegirVino(plato, f, rnd, punto, colorForzado, vector){
       if (va !== vb) return va - vb;
       return ruido[a.plato.id] - ruido[b.plato.id];
     });
-  return { plato: rank[0].plato, razon: (PERFIL_VINO[plato.proteina] || PERFIL_VINO.vegetal).razon };
+  const perfil = PERFIL_VINO[plato.proteina] || PERFIL_VINO.vegetal;
+  // La razón del perfil habla del color que pide el plato; si la persona
+  // pidió el otro, esa razón contradice lo que se le sirve.
+  const razon = colorForzado && colorForzado !== o.colorPlato
+    ? `pediste ${colorForzado}, y de los ${colorForzado}s de la carta éste es el que mejor se banca este plato`
+    : perfil.razon;
+  return { plato: rank[0].plato, razon };
 }
 
 /* ── 6. LA ENTRADA ────────────────────────────────────────────────────
@@ -3529,34 +3541,107 @@ function recomendar(respuestas, preguntas, opciones){
             || resto.find(sirve);
   if (otra) alternativas.push(otra.plato);
 
-  // ── LA BEBIDA ──────────────────────────────────────────────────────
-  // Deja de ser "algo frío para bajar la comida" y pasa a ser una
-  // decisión: si el plato lo merece y la persona toma, va vino elegido
-  // por maridaje, con la razón dicha en una línea. Si no, va lo de
-  // siempre — y el vino queda como sugerencia al costado, sin imponerse.
-  const tomaAlcohol = f.excluyeContiene.indexOf("alcohol") === -1 &&
-                      f.prefBebida !== "sin-alcohol";
+  // El postre se elige antes que la bebida porque el vino de postre se
+  // calcula contra él.
+  // ── EL POSTRE ──────────────────────────────────────────────────────
+  // Sigue estando, porque sigue siendo plata, pero ya no es el remate del
+  // veredicto: es una línea al final. El énfasis se mudó a la entrada.
+  let poolPostre = permitidos.filter(p => tipoDe(p) === "postre");
+  if (poolPostre.length === 0)
+    poolPostre = MENU.filter(p => tipoDe(p) === "postre" && pasaFiltrosDuros(p, f));
+  if (poolPostre.length === 0) poolPostre = MENU.filter(p => tipoDe(p) === "postre");
+  const objPostre = Object.assign({}, v, {
+    dulce: clamp(5.5 + 0.45 * v.dulce, 0, 10),
+    intensidad: clamp(v.intensidad * 0.6, 0, 10)    // algo ya comiste
+  });
+  const postre = ordenar(poolPostre, objPostre, f, rnd,
+    { pesosEje:{ intensidad:0.5, untuosidad:0.7, aventura:0.6, social:0.4, acidez:0.9, dulce:1.6 },
+      sinHambre:true, sinAfin:true })[0].plato;
+
+  // ¿Corresponde preguntar el punto? Sólo si lo que sale es un corte de
+  // carne de la parrilla. Preguntarle el punto a una pizza es ridículo.
+  const pidePunto = principal.categoria === "parrilla" &&
+                    ["carne","achuras"].indexOf(principal.proteina) !== -1;
+
+  const r = {
+    entrada, entradaRazon: ent ? ent.razon : null,
+    principal, alternativas,
+    bebida: null, razonBebida: null, esVino: false, vinoSugerido: null,
+    postre, vinoPostre: null,
+    vector: v, filtros: f, aviso,
+    pidePunto, punto: null, cambioSugerido: null,
+    // El vino se pregunta después del plato y sólo si el plato lo pide.
+    pideBebida: tomaAlcohol(f) && meritaVino(principal),
+    pool: rankPrincipal.map(x => x.plato),
+    ecos: recolectarEcos(respuestas, preguntas),
+    total: 0,
+    // La bebida se elige siempre con la misma semilla: así contestar
+    // «tinto» cuando el chef ya había propuesto un tinto no lo cambia
+    // por otro, que se leería como que eligió al azar.
+    semillaBebida: semillaDe(respuestas) ^ 0xB0DE6A
+  };
+  resolverBebida(r);
+  return r;
+}
+
+/* ── 7b. LA BEBIDA ────────────────────────────────────────────────────
+   Antes el chef preguntaba «para tomar, ¿con qué te sentís cómodo?» en
+   la tanda, sin saber todavía qué plato iba a recomendar: le preguntaba
+   por el vino a alguien que después recibía una ensalada. Ahora la
+   bebida se pregunta como el punto de la carne: después de recomendar, y
+   sólo si el plato pide vino. Si no lo pide, va la bebida de siempre sin
+   preguntar, y el vino queda al costado como sugerencia.
+
+   Mientras la persona no contesta, la bebida es la del maridaje: es lo
+   que el chef propone, y la pregunta es para cambiarlo.               */
+const tomaAlcohol = f => f.excluyeContiene.indexOf("alcohol") === -1 &&
+                         f.prefBebida !== "sin-alcohol";
+
+// El vino pasa al frente sólo cuando el plato de verdad lo pide. Con un
+// umbral más bajo terminaba siendo la bebida de casi todo el mundo, y una
+// botella encima de cada plato se lee como que le estás vendiendo de más a
+// alguien que quería una cerveza.
+function meritaVino(principal){
+  return ["carne","achuras","cerdo","pescado","mariscos","pollo","queso"]
+           .indexOf(principal.proteina) !== -1 &&
+         (principal.ejes.untuosidad >= 7 || principal.ejes.intensidad >= 8);
+}
+
+const PREF_BEBIDA = [
+  { id:"maridaje",    texto:"Lo que vaya con el plato", emo:"🙇",
+    dice:"Esa es la respuesta que me deja hacer mi trabajo." },
+  { id:"tinto",       texto:"Vino tinto",  emo:"🍷",
+    dice:"Entonces te busco el tinto que mejor le queda a este plato." },
+  { id:"blanco",      texto:"Vino blanco", emo:"🥂",
+    dice:"Con el calor de acá afuera, es buena decisión. Te busco el que va." },
+  { id:"cerveza",     texto:"Cerveza",     emo:"🍺",
+    dice:"La que no se pelea con nada de esta carta." },
+  { id:"sin-alcohol", texto:"Algo sin alcohol", emo:"🧃",
+    dice:"Hay con qué. No te voy a dar agua y listo." }
+];
+
+function sumarCuenta(r){
+  r.total = (r.entrada ? r.entrada.precio : 0) + r.principal.precio +
+            r.bebida.precio + r.postre.precio;
+}
+
+function resolverBebida(r){
+  const rnd = mulberry32(r.semillaBebida);
+  const f = r.filtros, v = r.vector, principal = r.principal;
+  const toma = tomaAlcohol(f);
   const colorForzado = f.prefBebida === "tinto" ? "tinto"
                      : f.prefBebida === "blanco" ? "blanco" : null;
-
-  // El vino pasa al frente sólo cuando el plato de verdad lo pide. Con un
-  // umbral más bajo terminaba siendo la bebida de casi todo el mundo, y
-  // una botella encima de cada plato se lee como que le estás vendiendo
-  // de más a alguien que quería una cerveza. En el resto de los casos el
-  // vino igual aparece, al costado y sin imponerse.
-  const meritaVino = ["carne","achuras","cerdo","pescado","mariscos","pollo","queso"]
-                       .indexOf(principal.proteina) !== -1 &&
-                     (principal.ejes.untuosidad >= 7 || principal.ejes.intensidad >= 8);
-  const quiereVino = tomaAlcohol && (
+  const quiereVino = toma && (
       colorForzado !== null || f.prefBebida === "maridaje" ||
-      (f.prefBebida !== "cerveza" && meritaVino));
+      (f.prefBebida !== "cerveza" && meritaVino(principal)));
 
-  const maridaje = tomaAlcohol ? elegirVino(principal, f, rnd, null, colorForzado, v) : null;
+  const maridaje = toma ? elegirVino(principal, f, rnd, r.punto, colorForzado, v) : null;
 
   // La bebida que no es vino: se mide contra el plato, no contra la
   // persona. Cuanto más graso lo que vas a comer, más filo necesita lo
   // que lo baja.
-  let poolBebida = permitidos.filter(p => tipoDe(p) === "bebida" && !esVino(p));
+  let poolBebida = MENU.filter(p => !esNino(p) && tipoDe(p) === "bebida" && !esVino(p) &&
+                                    pasaFiltrosDuros(p, f));
   if (f.prefBebida === "sin-alcohol")
     poolBebida = poolBebida.filter(p => p.contiene.indexOf("alcohol") === -1);
   if (f.prefBebida === "cerveza" && poolBebida.some(p => p.categoria === "cervezas"))
@@ -3574,50 +3659,31 @@ function recomendar(respuestas, preguntas, opciones){
     { pesosEje:{ intensidad:0.2, untuosidad:0.8, dulce:0.15, aventura:1, social:1.1, acidez:1.3 },
       sinHambre:true, sinAfin:true })[0].plato;
 
-  const bebida = (quiereVino && maridaje) ? maridaje.plato : otraBebida;
-  const razonBebida = (quiereVino && maridaje) ? maridaje.razon : null;
-  const vinoSugerido = (!quiereVino && maridaje) ? maridaje : null;
-
-  // ── EL POSTRE ──────────────────────────────────────────────────────
-  // Sigue estando, porque sigue siendo plata, pero ya no es el remate del
-  // veredicto: es una línea al final. El énfasis se mudó a la entrada.
-  let poolPostre = permitidos.filter(p => tipoDe(p) === "postre");
-  if (poolPostre.length === 0)
-    poolPostre = MENU.filter(p => tipoDe(p) === "postre" && pasaFiltrosDuros(p, f));
-  if (poolPostre.length === 0) poolPostre = MENU.filter(p => tipoDe(p) === "postre");
-  const objPostre = Object.assign({}, v, {
-    dulce: clamp(5.5 + 0.45 * v.dulce, 0, 10),
-    intensidad: clamp(v.intensidad * 0.6, 0, 10)    // algo ya comiste
-  });
-  const postre = ordenar(poolPostre, objPostre, f, rnd,
-    { pesosEje:{ intensidad:0.5, untuosidad:0.7, aventura:0.6, social:0.4, acidez:0.9, dulce:1.6 },
-      sinHambre:true, sinAfin:true })[0].plato;
+  r.bebida = (quiereVino && maridaje) ? maridaje.plato : otraBebida;
+  r.razonBebida = (quiereVino && maridaje) ? maridaje.razon : null;
+  r.esVino = esVino(r.bebida);
+  // Si la persona ya dijo qué quería tomar, no se le insiste con el vino.
+  r.vinoSugerido = (!quiereVino && maridaje && !f.prefBebida) ? maridaje : null;
 
   // La carta trae cuatro vinos de cosecha tardía y un demi sec, que con
-  // el motor anterior no los recomendaba nadie: el maridaje se calculaba
-  // contra el plato fuerte y ahí un vino dulce nunca gana. Se calculan
-  // aparte, contra el postre, y sólo se ofrecen a quien ya está tomando
-  // vino — proponerle una botella dulce a alguien que pidió una limonada
-  // es vender, no recomendar.
-  const vinoPostre = (quiereVino && maridaje && postre)
-    ? elegirVino(postre, f, rnd, null, null, v) : null;
+  // el maridaje contra el plato fuerte no los recomendaba nadie. Se
+  // calculan aparte, contra el postre, y sólo se ofrecen a quien ya está
+  // tomando vino: proponerle una botella dulce a alguien que pidió una
+  // limonada es vender, no recomendar.
+  const vp = (r.esVino && r.postre) ? elegirVino(r.postre, f, rnd, null, null, v) : null;
+  r.vinoPostre = vp && vp.plato.id !== r.bebida.id ? vp : null;
+  sumarCuenta(r);
+  return r;
+}
 
-  // ¿Corresponde preguntar el punto? Sólo si lo que sale es un corte de
-  // carne de la parrilla. Preguntarle el punto a una pizza es ridículo.
-  const pidePunto = principal.categoria === "parrilla" &&
-                    ["carne","achuras"].indexOf(principal.proteina) !== -1;
-
-  return {
-    entrada, entradaRazon: ent ? ent.razon : null,
-    principal, alternativas,
-    bebida, razonBebida, esVino: bebida ? esVino(bebida) : false, vinoSugerido,
-    postre, vinoPostre,
-    vector: v, filtros: f, aviso,
-    pidePunto, punto: null, cambioSugerido: null,
-    pool: rankPrincipal.map(x => x.plato),
-    ecos: recolectarEcos(respuestas, preguntas),
-    total: (entrada ? entrada.precio : 0) + principal.precio + bebida.precio + postre.precio
-  };
+/* La respuesta a «¿qué tomás con esto?». Cambia la bebida y nada más: el
+   plato ya está elegido y no se toca. */
+function aplicarBebida(r, pref){
+  r.filtros = Object.assign({}, r.filtros, { prefBebida: pref });
+  resolverBebida(r);
+  if (r.esVino && r.punto === "cocido")
+    r.razonBebida = "bien cocida la carne pierde el jugo que ablanda el tanino, así que te bajo a un tinto más amable";
+  return r;
 }
 
 /* ── 8. EL PUNTO DE LA CARNE ──────────────────────────────────────────
@@ -3640,17 +3706,9 @@ function aplicarPunto(r, punto){
 
   // el vino se vuelve a elegir con el punto puesto
   if (r.esVino){
-    const rnd = mulberry32(semillaDe(r.vector) ^ 0x5EED);
-    const colorForzado = r.filtros.prefBebida === "tinto" ? "tinto"
-                       : r.filtros.prefBebida === "blanco" ? "blanco" : null;
-    const m = elegirVino(r.principal, r.filtros, rnd, punto, colorForzado, r.vector);
-    if (m){
-      r.total = r.total - r.bebida.precio + m.plato.precio;
-      r.bebida = m.plato;
-      r.razonBebida = punto === "cocido"
-        ? "bien cocida la carne pierde el jugo que ablanda el tanino, así que te bajo a un tinto más amable"
-        : m.razon;
-    }
+    resolverBebida(r);
+    if (r.esVino && punto === "cocido")
+      r.razonBebida = "bien cocida la carne pierde el jugo que ablanda el tanino, así que te bajo a un tinto más amable";
   }
 
   // ¿el corte sufre en ese punto? se avisa y se ofrece, no se impone
@@ -3715,7 +3773,7 @@ function prioridadEco(e){
   // saber que alguien no come gluten no cuenta nada sobre cómo come.
   const orden = ["proteina","olor","coccion","queso-hasta-donde","entrada-como",
                  "salsa","textura","lugar-nuevo","plato-vacio","ruido",
-                 "bebida-pref","con-quien","hora","guarnicion","limon",
+                 "con-quien","hora","guarnicion","limon",
                  "picante","pan","sobremesa","restricciones","hambre","presupuesto"];
   const i = orden.indexOf(e.id);
   return i === -1 ? 50 : i;
@@ -6376,6 +6434,7 @@ function dibujarVeredicto(r, conReveal){
 
     <div class="bloque">
       ${titulo(r.esVino ? "Para tomar, y por qué" : "Para tomar")}
+      ${bloqueQueTomas(r)}
       ${mini(r.bebida, vozBebida(r), r.esVino ? "mini--vino" : "")}
       ${r.vinoSugerido ? mini(r.vinoSugerido.plato,
           "Si preferís vino: " + r.vinoSugerido.razon + ".", "mini--vino") : ""}
@@ -6384,7 +6443,7 @@ function dibujarVeredicto(r, conReveal){
     <div class="bloque bloque--tenue">
       ${titulo("Y si llegás con lugar")}
       ${mini(r.postre, vozPostre(r))}
-      ${r.vinoPostre && r.vinoPostre.plato.id !== r.bebida.id
+      ${r.vinoPostre
         ? mini(r.vinoPostre.plato,
                "Y si seguís con vino: éste es más dulce que el postre, que es la única manera de que no sepa a vinagre.",
                "mini--vino")
@@ -6416,6 +6475,12 @@ function dibujarVeredicto(r, conReveal){
     aplicarPunto(r, b.dataset.punto);
     dibujarVeredicto(r, false);
     const foco = $(".punto", panel());
+    if (foco){ foco.setAttribute("tabindex","-1"); foco.focus({ preventScroll:true }); }
+  }));
+  $$(".tomas__op", panel()).forEach(b => b.addEventListener("click", () => {
+    aplicarBebida(r, b.dataset.pref);
+    dibujarVeredicto(r, false);
+    const foco = $(".tomas", panel());
     if (foco){ foco.setAttribute("tabindex","-1"); foco.focus({ preventScroll:true }); }
   }));
   const cambiar = $("#b-cambiar-corte");
@@ -6539,6 +6604,27 @@ function bloquePunto(r){
   </div>`;
 }
 
+/* «¿Qué tomás con esto?» Se pregunta sólo si el plato pide vino, y
+   después de recomendarlo. Mientras no conteste, abajo queda lo que
+   propone el chef; la respuesta es para cambiarlo. Reusa el estilo del
+   punto de la carne: son la misma clase de pregunta. */
+function bloqueQueTomas(r){
+  if (!r.pideBebida) return "";
+  const dicha = r.filtros.prefBebida && PREF_BEBIDA.find(p => p.id === r.filtros.prefBebida);
+  if (dicha)
+    return `<div class="punto tomas"><p class="punto__dicho"><b>${esc(dicha.texto)}.</b> ${esc(dicha.dice)}</p></div>`;
+  return `<div class="punto tomas">
+    <p class="punto__pre">¿Qué tomás con esto?</p>
+    <div class="punto__ops" role="group" aria-label="Qué tomás">
+      ${PREF_BEBIDA.map(p => `<button class="punto__op tomas__op" data-pref="${p.id}">
+          <span class="punto__emo" aria-hidden="true">${p.emo}</span>
+          <span class="punto__txt">${esc(p.texto)}</span>
+        </button>`).join("")}
+    </div>
+    <p class="tomas__pie">Si no me decís nada, va esto:</p>
+  </div>`;
+}
+
 /* Cambiar el corte no es cambiar una palabra en la pantalla: cambia la
    entrada que lo acompaña y cambia el vino. Se recalcula todo. */
 function cambiarPrincipal(r, plato){
@@ -6550,12 +6636,10 @@ function cambiarPrincipal(r, plato){
   r.entradaRazon = ent ? ent.razon : null;
   r.cambioSugerido = null;
   r.alternativas = r.alternativas.filter(p => p.id !== plato.id);
-  if (r.esVino){
-    const m = elegirVino(plato, r.filtros, rnd, r.punto, null, r.vector);
-    if (m){ r.bebida = m.plato; r.razonBebida = m.razon; }
-  }
-  r.total = (r.entrada ? r.entrada.precio : 0) + r.principal.precio +
-            r.bebida.precio + r.postre.precio;
+  // Si la persona todavía no contestó qué toma, la pregunta depende del
+  // plato nuevo; si ya contestó, se respeta lo que dijo.
+  if (!r.filtros.prefBebida) r.pideBebida = tomaAlcohol(r.filtros) && meritaVino(plato);
+  resolverBebida(r);
   Memoria.guardarUltimo(plato);
 }
 /* Para las que no traen descripción propia: una frase distinta cada vez,
@@ -7162,7 +7246,7 @@ function bofoTest(){
 
   function correr(modo, vueltas){
     const principales = new Set(), entradas = new Set();
-    let corridas = 0, conVino = 0, conPunto = 0;
+    let corridas = 0, conVino = 0, conPunto = 0, conPregBebida = 0;
 
     setsRestriccion.forEach(sr => {
       for (let v = 0; v < vueltas; v++){
@@ -7312,13 +7396,61 @@ function bofoTest(){
           });
         }
 
+        // ── LA BEBIDA, DESPUÉS DEL PLATO ──────────────────────────────
+        // El vino no se pregunta en la tanda: el chef no sabe todavía qué
+        // plato va a dar. Se pregunta después, y sólo si el plato lo pide.
+        chequear(!preguntas.some(p => p.opciones && p.opciones.some(o => o.prefBebida)),
+          `[${modo}] la tanda pregunta por la bebida antes de saber el plato`);
+        chequear(r.pideBebida === (tomaAlcohol(r.filtros) && meritaVino(r.principal)),
+          `[${modo}] a "${r.principal.nombre}" se le ${r.pideBebida ? "pregunta" : "dejó de preguntar"} el vino sin que corresponda`);
+        chequear(r.pideBebida || !r.esVino,
+          `[${modo}] le puso vino a "${r.principal.nombre}" sin que el plato lo pida`);
+        if (r.pideBebida){
+          conPregBebida++;
+          const hayCerveza = MENU.some(x => x.categoria === "cervezas" && pasaFiltrosDuros(x, r.filtros));
+          PREF_BEBIDA.forEach(pb => {
+            const c = aplicarBebida(recomendar(resp, preguntas), pb.id);
+            const B = `[${modo}] «${pb.texto}» con "${c.principal.nombre}"`;
+            chequear(c.principal.id === r.principal.id, `${B}: cambió el plato`);
+            // Contestar lo que el chef ya proponía no puede cambiar la botella.
+            if (pb.id === "maridaje" || (r.esVino && pb.id === r.bebida.vino.color))
+              chequear(c.bebida.id === r.bebida.id,
+                `${B}: el chef proponía ${r.bebida.nombre} y al confirmarlo le cambió a ${c.bebida.nombre}`);
+            if (pb.id === "tinto" || pb.id === "blanco")
+              chequear(c.esVino && c.bebida.vino.color === pb.id, `${B}: le tocó ${c.bebida.nombre}`);
+            if (pb.id === "maridaje"){
+              chequear(c.esVino, `${B}: no le tocó vino`);
+              const esp = COLOR_ESPERADO[c.principal.proteina];
+              if (esp && c.esVino) chequear(c.bebida.vino.color === esp,
+                `${B}: le tocó un ${c.bebida.vino.color}`);
+            }
+            if (pb.id === "cerveza" && hayCerveza)
+              chequear(c.bebida.categoria === "cervezas", `${B}: le tocó ${c.bebida.nombre}`);
+            if (pb.id === "sin-alcohol"){
+              chequear(c.bebida.contiene.indexOf("alcohol") === -1, `${B}: le tocó ${c.bebida.nombre}`);
+              chequear(!c.vinoPostre, `${B}: le ofrecieron vino de postre`);
+            }
+            if (pb.id === "cerveza" || pb.id === "sin-alcohol")
+              chequear(!c.vinoSugerido, `${B}: ya dijo qué toma y le insisten con el vino`);
+            // el punto después de la bebida no le cambia el color que pidió
+            if (c.pidePunto && (pb.id === "tinto" || pb.id === "blanco")){
+              aplicarPunto(c, "cocido");
+              chequear(c.esVino && c.bebida.vino.color === pb.id,
+                `${B}: el punto le cambió el color del vino`);
+            }
+            const s = (c.entrada ? c.entrada.precio : 0) + c.principal.precio +
+                      c.bebida.precio + c.postre.precio;
+            chequear(c.total === s, `${B}: la cuenta no cierra`);
+          });
+        }
+
         // la cuenta es la suma de lo que se muestra, sin sorpresas
         const suma = (r.entrada ? r.entrada.precio : 0) + r.principal.precio +
                      r.bebida.precio + r.postre.precio;
         chequear(r.total === suma, `[${modo}] la cuenta no cierra: ${r.total} vs ${suma}`);
       }
     });
-    return { corridas, distintos: principales.size, entradas: entradas.size, conVino, conPunto };
+    return { corridas, distintos: principales.size, entradas: entradas.size, conVino, conPunto, conPregBebida };
   }
 
   // Con las alergias, los subconjuntos de restricciones pasaron de 32 a
@@ -7541,7 +7673,7 @@ function bofoTest(){
     `carta: ${MENU.length} platos · ${MENU.filter(esVino).length} vinos · ${MENU.filter(esNino).length} del menú de niños`,
     `rápido:   ${ex.corridas} tandas, ${ex.distintos} platos y ${ex.entradas} entradas distintas`,
     `completo: ${co.corridas} tandas, ${co.distintos} platos y ${co.entradas} entradas distintas`,
-    `veredictos con vino: ${ex.conVino + co.conVino} · con punto de carne: ${ex.conPunto + co.conPunto}`,
+    `veredictos con vino: ${ex.conVino + co.conVino} · con punto de carne: ${ex.conPunto + co.conPunto} · preguntan qué toma: ${ex.conPregBebida + co.conPregBebida}`,
     `chef kid: ${corridasKid} corridas, ${platosKid.size} platos distintos`,
     `repetidas entre corridas seguidas: ${repetidas}`,
     `mesas armadas: ${mesasProbadas} (${mesasConNinos} con chicos)`,

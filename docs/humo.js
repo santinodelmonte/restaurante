@@ -82,21 +82,49 @@ const esArchivo = BASE.indexOf("file://") === 0;
   if (!esArchivo && typeof png.conFoto !== "number") fallas.push("servida por http, la tarjeta tendría que salir con la foto");
   if (esArchivo && png.conFoto !== "ERROR SecurityError") console.log("  (desde file:// se esperaba el canvas manchado)");
 
-  // 5 · una corrida entera del chef, hasta el veredicto
-  await pag.evaluate(() => { ir("chef"); arrancar("express"); });
-  for (let i = 0; i < 90; i++){
-    if (await pag.evaluate(() => !!document.querySelector("#tarjeta"))) break;
-    await pag.evaluate(() => {
-      const campo = document.querySelector("#v-chef input[type=text], #v-chef textarea");
-      if (campo) campo.value = "la milanesa de mi abuela";
-      const seguir = document.querySelector("#b-seguir");
-      if (seguir && document.querySelector('[aria-pressed="true"], .opcion.activo')) return seguir.click();
-      const b = document.querySelector('.opcion, .grilla__item, .duplas__op, #b-desliz, #b-texto, #b-saltear, #b-sin-nombre');
-      if (b) b.click();
-    });
-    await new Promise(r => setTimeout(r, 320));
+  // 5 · corridas enteras del chef, hasta el veredicto. Se repite hasta
+  //     que salga un plato que pida vino, para probar «¿Qué tomás con
+  //     esto?» en pantalla: es una pregunta que aparece después del
+  //     veredicto y el autotest del motor no la ve.
+  let probóBebida = false;
+  for (let vuelta = 0; vuelta < 8 && !probóBebida; vuelta++){
+    await pag.evaluate(() => { ir("chef"); arrancar("express"); });
+    for (let i = 0; i < 90; i++){
+      if (await pag.evaluate(() => !!document.querySelector("#tarjeta"))) break;
+      await pag.evaluate(() => {
+        const campo = document.querySelector("#v-chef input[type=text], #v-chef textarea");
+        if (campo) campo.value = "la milanesa de mi abuela";
+        const seguir = document.querySelector("#b-seguir");
+        if (seguir && document.querySelector('[aria-pressed="true"], .opcion.activo')) return seguir.click();
+        const ops = document.querySelectorAll('.opcion, .grilla__item, .duplas__op');
+        const b = ops.length ? ops[Math.floor(Math.random() * ops.length)]
+                : document.querySelector('#b-desliz, #b-texto, #b-saltear, #b-sin-nombre');
+        if (b) b.click();
+      });
+      await new Promise(r => setTimeout(r, 320));
+    }
+    if (!await pag.evaluate(() => !!document.querySelector("#tarjeta"))){
+      fallas.push("no se llegó al veredicto");
+      break;
+    }
+    const conVino = await pag.evaluate(() => window.__ultimo.pideBebida);
+    const hayPregunta = await pag.evaluate(() => !!document.querySelector(".tomas__op"));
+    if (conVino !== hayPregunta)
+      fallas.push(`el plato ${conVino ? "pide" : "no pide"} vino y la pregunta ${hayPregunta ? "está" : "no está"}`);
+    if (!hayPregunta) continue;
+
+    await pag.click('.tomas__op[data-pref="blanco"]');
+    const res = await pag.evaluate(() => ({
+      dicho: !!document.querySelector(".tomas .punto__dicho"),
+      color: window.__ultimo.esVino && window.__ultimo.bebida.vino.color,
+      cepa: (document.querySelector(".tomas ~ .mini .mini__cepa") || {}).textContent || ""
+    }));
+    if (!res.dicho) fallas.push("después de contestar qué toma, la pregunta no se cierra");
+    if (res.color !== "blanco") fallas.push("pidió vino blanco y le tocó " + res.color);
+    if (!/blanco/.test(res.cepa)) fallas.push("la pantalla no muestra el blanco que pidió: " + res.cepa);
+    probóBebida = true;
   }
-  if (!await pag.evaluate(() => !!document.querySelector("#tarjeta"))) fallas.push("no se llegó al veredicto");
+  if (!probóBebida) console.log("  (en 8 corridas no salió ningún plato que pida vino; no se probó la pregunta)");
 
   await navegador.close();
   console.log(fallas.length ? "\nFALLAS:\n" + fallas.join("\n") : "\nTodo verde.");
