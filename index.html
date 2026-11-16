@@ -3437,7 +3437,171 @@ function esVariante(a, b){
   return x[1] === y[1];
 }
 
+/* ── 6b. LA ENTRADA DE CADA PLATO, DEFINIDA A MANO ────────────────────
+   La regla general («antes de una carne va queso») servía para una carta
+   que no conocíamos. Con la carta oficial se define plato por plato, que
+   es como lo haría un mozo: qué se pide antes de cada cosa, en qué orden
+   de preferencia, y qué platos no llevan entrada.
+
+   Los que no llevan: sándwiches, burgers, chivitos y ensaladas. Son un
+   plato que se pide solo —un chivito al plato ya trae medio menú arriba—
+   y ponerle una entrada al lado es vender de más.
+
+   Cada grupo dice además por qué, y el porqué tiene que ser cierto para
+   cualquiera de sus entradas: si el chef dice «antes de una carne va
+   queso», la entrada tiene que ser de queso. Por eso la razón se elige
+   según la proteína de la entrada que salió.
+
+   El orden de `entradas` es la preferencia de la cocina. La persona
+   todavía puede correrlo —quien dijo que el queso no es lo suyo no
+   recibe un provolone—, pero sólo adentro de la lista: si los filtros
+   la vacían, no hay entrada, en vez de inventar una fuera de la tabla. */
+const R_BRASA = {
+  queso:   "en una parrilla se arranca por el provolone: abre el apetito y te aguanta los veinte minutos que tarda el corte",
+  achuras: "en una parrilla se arranca por las achuras, que salen primero de la brasa mientras se hace el corte",
+  cerdo:   "en una parrilla se arranca por lo que sale primero de la brasa, y el chorizo es lo primero que sale",
+  carne:   "mientras se hace el corte, unas empanadas para picar: es lo que aguanta la espera sin llenarte",
+  otro:    "es lo que aguanta la espera de la parrilla sin llenarte"
+};
+const R_MAR = {
+  otro: "antes de un pescado va algo del mar, liviano y con filo, para no taparte el plato que sigue"
+};
+const R_SIN_QUESO = {
+  queso:   "el plato ya trae su queso, así que para empezar vamos para otro lado",
+  otro:    "el plato ya trae su queso, así que para empezar vamos para otro lado",
+};
+const R_PIZZA = {
+  vegetal: "pizza y fainá: es la que se pide en cualquier pizzería de acá, y por algo",
+  otro:    "algo para picar mientras sale del horno de barro, que no le compita a la pizza"
+};
+const R_PASTA = {
+  queso:   "algo fresco y con queso para abrir, que una pasta pide entrar con hambre y no llena",
+  otro:    "algo liviano para abrir, que una pasta pide entrar con hambre y no llena"
+};
+const R_HORNO = {
+  otro:    "mientras sale del horno de barro, algo para picar que no le compita al plato"
+};
+
+const GRUPOS_ENTRADA = [
+  { para:["sand-jq","sand-muzza","sand-faina","sand-faina-espinaca",
+          "burger-completa","burger-bofomento",
+          "chivito-pan","chivito-plato","chivito-plato-dos",
+          "ensalada-capresse","ensalada-salmon","ensalada-cesar","ensalada-alemana","ensalada-2gustos"],
+    sin:true },
+
+  // la parrilla
+  { para:["asado-ternera","asado-premium","ojo-bife","entrecot","picana-angus","picana-cordero","entrana"],
+    entradas:["provolone","chorizo","molleja","morcilla-salada","provolone-caprese","mollejas-verdeo",
+              "empanadas-asado","rinoncitos-cordero","morcilla-dulce","tripa-farina","rinon"],
+    razon:R_BRASA },
+  { para:["entrana-napo","entrana-caballo"],
+    entradas:["chorizo","molleja","morcilla-salada","mollejas-verdeo","empanadas-asado",
+              "rinoncitos-cordero","morcilla-dulce"],
+    razon:{ achuras:"el corte ya viene con queso arriba, así que adelante van las achuras", otro:"el corte ya viene con queso arriba, así que adelante va algo de la brasa sin queso" } },
+  { para:["matambrito-cerdo","kassler"],
+    entradas:["provolone","molleja","morcilla-salada","provolone-caprese","mollejas-verdeo","empanadas-asado"],
+    razon:R_BRASA },
+  { para:["matambrito-pizza","muslo-pollo-pizza"],
+    entradas:["chorizo","molleja","morcilla-salada","empanadas-asado","mollejas-verdeo"],
+    razon:{ achuras:"el plato ya viene a la pizza, con queso, así que adelante van las achuras", otro:"el plato ya viene a la pizza, con queso, así que adelante va algo de la brasa sin queso" } },
+  { para:["muslo-pollo"],
+    entradas:["provolone","chorizo","empanadas-asado","burrata-crudo","molleja"],
+    razon:{ queso:"el pollo es suave, así que el sabor fuerte lo ponemos al principio", otro:"el pollo es suave, así que el sabor fuerte lo ponemos al principio" } },
+  { para:["salmon"],
+    entradas:["langostinos-panko","rabas","miniatura-pescado","bunuelos-algas"],
+    razon:R_MAR },
+
+  // el horno de barro
+  { para:["pizza-muzza","pizza-jamon","pizza-panceta","pizza-anana","pizza-capresse",
+          "pizza-4quesos","pizza-cebolla","pizza-rucula","pizza-rucula-crudo"],
+    entradas:["faina","empanadas-asado","bunuelos-algas"],
+    razon:R_PIZZA },
+  { para:["matambre-leche","pastel-carne","pastel-cordero"],
+    entradas:["empanadas-asado","chorizo","morcilla-salada","provolone"],
+    razon:R_HORNO },
+  { para:["lasagna"],
+    entradas:["empanadas-asado","bunuelos-algas","chorizo"],
+    razon:R_SIN_QUESO },
+  { para:["pescado-parmesana","boga-puerros"],
+    entradas:["rabas","langostinos-panko","miniatura-pescado","bunuelos-algas"],
+    razon:R_MAR },
+  { para:["pollo-mostaza"],
+    entradas:["empanadas-asado","provolone","burrata-crudo","bunuelos-algas"],
+    razon:R_HORNO },
+  { para:["berenjenas-parmeggiana","canelones-verdura"],
+    entradas:["bunuelos-algas","faina","empanadas-asado","rabas"],
+    razon:R_SIN_QUESO },
+
+  // las milanesas
+  { para:["mila-carne"],
+    entradas:["empanadas-asado","provolone","chorizo","morcilla-salada"],
+    razon:R_BRASA },
+  { para:["mila-mediterranea","mila-napolitana","mila-cheddar","mila-barbacoa"],
+    entradas:["empanadas-asado","chorizo","morcilla-salada","molleja"],
+    razon:R_SIN_QUESO },
+  { para:["mila-pollo"],
+    entradas:["empanadas-asado","provolone","chorizo"],
+    razon:{ queso:"el pollo es suave, así que el sabor fuerte lo ponemos al principio", otro:"el pollo es suave, así que el sabor fuerte lo ponemos al principio" } },
+  { para:["mila-merluza","mila-corvina"],
+    entradas:["langostinos-panko","rabas","bunuelos-algas","miniatura-pescado"],
+    razon:R_MAR },
+
+  // pastas y risottos
+  { para:["spaghettis","penne","noquis","raviolones-verdura","raviolones-calabaza","raviolones-veganos",
+          "risotto-vegetales"],
+    entradas:["burrata-crudo","bunuelos-algas","provolone-caprese","faina","empanadas-asado"],
+    razon:R_PASTA },
+  { para:["raviolones-capresse","sorrentinos-jq","sorrentinos-panceta","risotto-hongos","risotto-calabaza"],
+    entradas:["bunuelos-algas","faina","empanadas-asado","rabas"],
+    razon:R_SIN_QUESO },
+  { para:["sorrentinos-salmon","risotto-salmon"],
+    entradas:["miniatura-pescado","bunuelos-algas","rabas","langostinos-panko"],
+    razon:R_MAR }
+];
+
+// Índice por plato. Un plato en dos grupos es un error de carga.
+const ENTRADA_DE = {};
+GRUPOS_ENTRADA.forEach(g => g.para.forEach(id => {
+  if (ENTRADA_DE[id]) console.error("ENTRADA_DE: " + id + " está en dos grupos");
+  ENTRADA_DE[id] = g;
+}));
+
+function razonEntrada(grupo, entrada){
+  const r = grupo.razon || {};
+  return r[entrada.proteina] || r.otro || "";
+}
+
 function elegirEntrada(principal, permitidos, v, f, rnd){
+  const grupo = ENTRADA_DE[principal.id];
+  if (grupo) return elegirEntradaDefinida(principal, grupo, permitidos, v, f, rnd);
+  return elegirEntradaGeneral(principal, permitidos, v, f, rnd);
+}
+
+function entradasPosibles(principal, grupo, permitidos){
+  if (!grupo || grupo.sin) return [];
+  return grupo.entradas
+    .map(id => permitidos.find(p => p.id === id))
+    .filter(p => p && p.id !== principal.id && !esVariante(p, principal));
+}
+
+function elegirEntradaDefinida(principal, grupo, permitidos, v, f, rnd){
+  const pool = entradasPosibles(principal, grupo, permitidos);
+  if (!pool.length) return null;
+  const objetivo = Object.assign({}, v, { social: clamp(Math.max(v.social, 6), 0, 10) });
+  const rank = ordenar(pool, objetivo, f, rnd, { sinHambre:true, sinAfin:true });
+  // El orden de la tabla es la preferencia de la cocina: el primero lleva
+  // casi media vuelta de ventaja sobre el último. La persona lo corre,
+  // pero no lo da vuelta por un detalle.
+  const n = grupo.entradas.length;
+  rank.forEach(x => { x.score += 0.4 * (n - grupo.entradas.indexOf(x.plato.id)) / n; });
+  rank.sort((a,b) => b.score - a.score);
+  return { plato: rank[0].plato, razon: razonEntrada(grupo, rank[0].plato) };
+}
+
+/* La regla general queda para lo que no está en la tabla: un plato que
+   se cargue mañana sin que nadie decida su entrada. El autotest avisa
+   si eso pasa. */
+function elegirEntradaGeneral(principal, permitidos, v, f, rnd){
   const perfil = PERFIL_ENTRADA[principal.proteina] || PERFIL_ENTRADA.vegetal;
   const pool = permitidos.filter(p => empieza(p) && p.id !== principal.id);
   if (!pool.length) return null;
@@ -3484,7 +3648,10 @@ function recomendar(respuestas, preguntas, opciones){
     !esNino(p) && fuera.indexOf(p.id) === -1 && pasaFiltrosDuros(p, f));
   const porTipo = t => permitidos.filter(p => tipoDe(p) === t);
 
-  const principales = porTipo("principal");
+  // Lo que empieza la comida no es el plato fuerte, aunque la carta lo
+  // imprima bajo parrilla: un provolone o una morcilla se piden antes.
+  // Sólo pasan a plato si los filtros no dejaron otra cosa.
+  const principales = porTipo("principal").filter(p => !empieza(p));
   const paraEmpezar = permitidos.filter(empieza);
 
   // El plato fuerte sale de los principales. Si los filtros duros los
@@ -3493,7 +3660,7 @@ function recomendar(respuestas, preguntas, opciones){
   let poolPrincipal = principales, aviso = null;
   if (poolPrincipal.length === 0){
     poolPrincipal = paraEmpezar;
-    aviso = "De la parrilla no te sirve nada de lo que me pediste. Te armo desde las entradas, que salen igual de bien.";
+    aviso = "De los platos fuertes no te sirve nada de lo que me pediste. Te armo desde las entradas, que salen igual de bien.";
   }
   if (poolPrincipal.length === 0){
     poolPrincipal = permitidos.filter(p => tipoDe(p) !== "bebida" && tipoDe(p) !== "postre");
@@ -7244,6 +7411,20 @@ function bofoTest(){
     pescado:"blanco", mariscos:"blanco", pollo:"blanco"
   };
 
+  // La tabla de entradas, contra la carta: cada plato fuerte tiene la
+  // suya, cada id de la tabla existe, y lo que figura como entrada es
+  // algo con que se empieza.
+  MENU.filter(p => !esNino(p) && tipoDe(p) === "principal" && !empieza(p))
+    .forEach(p => chequear(!!ENTRADA_DE[p.id], `"${p.nombre}" no tiene la entrada definida en la tabla`));
+  GRUPOS_ENTRADA.forEach(g => {
+    g.para.forEach(id => chequear(MENU.some(p => p.id === id), `la tabla de entradas nombra "${id}", que no está en la carta`));
+    (g.entradas || []).forEach(id => {
+      const p = MENU.find(x => x.id === id);
+      chequear(!!p, `la tabla de entradas ofrece "${id}", que no está en la carta`);
+      if (p) chequear(empieza(p), `la tabla de entradas ofrece "${p.nombre}", que no es para empezar`);
+    });
+  });
+
   function correr(modo, vueltas){
     const principales = new Set(), entradas = new Set();
     let corridas = 0, conVino = 0, conPunto = 0, conPregBebida = 0;
@@ -7274,12 +7455,34 @@ function bofoTest(){
         // dejaron nada con qué empezar.
         // El plato fuerte no puede ser además su propia entrada: cuando los
         // filtros dejan una sola cosa comestible, no hay entrada y está bien.
-        const hayConQue = MENU.some(p => !esNino(p) && empieza(p) &&
-          p.id !== r.principal.id && pasaFiltrosDuros(p, r.filtros));
-        chequear(!!r.entrada || !hayConQue, `[${modo}] no hay entrada y sí había con qué`);
+        // La entrada sale de la tabla de ese plato, y sólo de ahí. Si la
+        // tabla dice que el plato no lleva, no lleva; si los filtros le
+        // dejaron alguna, tiene que estar.
+        const grupoEnt = ENTRADA_DE[r.principal.id];
+        chequear(!!grupoEnt || empieza(r.principal),
+          `[${modo}] "${r.principal.nombre}" no tiene la entrada definida`);
+        if (grupoEnt){
+          const posibles = entradasPosibles(r.principal, grupoEnt,
+            MENU.filter(x => !esNino(x) && pasaFiltrosDuros(x, r.filtros)));
+          if (grupoEnt.sin)
+            chequear(!r.entrada, `[${modo}] "${r.principal.nombre}" no lleva entrada y le pusieron ${r.entrada && r.entrada.nombre}`);
+          else
+            chequear(!!r.entrada === posibles.length > 0,
+              `[${modo}] "${r.principal.nombre}": ${r.entrada ? "entrada sin que haya ninguna posible" : "había entrada posible y no la puso"}`);
+          if (r.entrada)
+            chequear(grupoEnt.entradas.indexOf(r.entrada.id) !== -1,
+              `[${modo}] a "${r.principal.nombre}" le tocó "${r.entrada.nombre}", que no está en su tabla`);
+        }
+        // Lo que empieza la comida no sale de plato fuerte mientras haya
+        // otra cosa que sí lo sea.
+        if (empieza(r.principal))
+          chequear(!MENU.some(x => !esNino(x) && tipoDe(x) === "principal" && !empieza(x) &&
+                                   pasaFiltrosDuros(x, r.filtros)),
+            `[${modo}] "${r.principal.nombre}" salió de plato fuerte y había platos fuertes`);
         if (r.entrada){
           chequear(empieza(r.entrada), `[${modo}] "${r.entrada.nombre}" no es algo con que empezar`);
           chequear(r.entrada.id !== r.principal.id, `[${modo}] la entrada y el plato son el mismo`);
+          chequear(!!r.entradaRazon, `[${modo}] la entrada salió sin decir por qué`);
         }
 
         // El menú de niños no puede aparecer NUNCA en el veredicto de un
@@ -7293,7 +7496,7 @@ function bofoTest(){
         // ofrezca, ni que se ofrezcan tres.
         const otrosPlatos = MENU.filter(x =>
           !esNino(x) && pasaFiltrosDuros(x, r.filtros) &&
-          tipoDe(x) === tipoDe(r.principal) &&
+          tipoDe(x) === tipoDe(r.principal) && (empieza(r.principal) || !empieza(x)) &&
           x.id !== r.principal.id && (!r.entrada || x.id !== r.entrada.id) &&
           !esVariante(x, r.principal));
         chequear(r.alternativas.length <= 2,
@@ -7618,7 +7821,7 @@ function bofoTest(){
   chequear(rA.principal.id !== rB.principal.id,
     "dos personas opuestas recibieron el mismo plato");
 
-  // ── el que pide carne recibe carne, y con queso adelante ──
+  // ── el que pide carne recibe carne, con la entrada de su tabla ──
   const pProt = PREGUNTAS.find(p => p.id === "proteina");
   const iCarne = pProt.opciones.findIndex(o => o.afin && o.afin.proteina === "carne");
   const iPescado = pProt.opciones.findIndex(o => o.afin && o.afin.proteina === "pescado");
@@ -7628,8 +7831,8 @@ function bofoTest(){
   const rPescado = recomendar(Object.assign({}, base, { proteina:iPescado }), soloProt);
   chequear(rCarne.principal.proteina === "carne",
     `el que dijo carne recibió ${rCarne.principal.proteina}`);
-  chequear(!rCarne.entrada || rCarne.entrada.proteina === "queso",
-    `antes de la carne no fue queso sino ${rCarne.entrada && rCarne.entrada.proteina}`);
+  chequear(!rCarne.entrada || (ENTRADA_DE[rCarne.principal.id].entradas || []).indexOf(rCarne.entrada.id) !== -1,
+    `antes de la carne fue ${rCarne.entrada && rCarne.entrada.nombre}, que no está en su tabla`);
   chequear(!rCarne.esVino || rCarne.bebida.vino.color === "tinto",
     "con carne el vino no salió tinto");
   chequear(["pescado","mariscos"].indexOf(rPescado.principal.proteina) !== -1,
