@@ -440,7 +440,10 @@ que toca a los datos:
   de banco de imágenes, puesta para que se vea el mecanismo andando de
   punta a punta. No es una foto del local y no debería sobrevivir a la
   primera tanda de fotos reales. Las demás salen de una sesión nuestra en
-  el local y `img/platos/LEEME.txt` es el instructivo para cargarlas.
+  el local. `docs/fotos.py` las carga tal como salen de la cámara
+  (endereza, recorta las verticales, lleva a 1.200 px, comprime a menos de
+  200 KB, nombra con el id y borra la de muestra), y `img/platos/LEEME.txt`
+  es el instructivo.
 
 El desempate por margen está implementado y **vacío a propósito**: cuando el
 local diga qué platos quiere empujar, se cargan en el campo `margen` de cada

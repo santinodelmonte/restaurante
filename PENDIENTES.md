@@ -71,15 +71,26 @@ reunión de cambios), en pesos uruguayos con IVA incluido:
 
 ## 3. Fotos (sólo si contrataron las fotos, $ 5.000)
 
-- [ ] Cargar las 136 fotos de la sesión en el local en
-      `img/platos/<id>.jpg`, siguiendo `img/platos/LEEME.txt`.
-- [ ] Hacer coincidir el nombre de cada foto con el id de su plato en la
-      carta nueva.
-- [ ] Optimizar el peso de las fotos para que la carta cargue rápido con mala
-      señal.
-- [ ] Borrar `img/platos/ojo-bife.jpg`, que es de banco de imágenes.
+- [x] **Herramienta de carga** (`docs/fotos.py`): toma las fotos como
+      salen de la cámara, las endereza, recorta las verticales, las lleva a
+      1.200 px, las comprime a menos de 200 KB y las nombra con el id. Los
+      ids viejos de platos que siguen en la carta se renombran solos; los de
+      platos que salieron se avisan y no se cargan.
+- [x] **Planilla de fotos** (`docs/fotos-bo-fomento.xlsx`) para anotar qué
+      archivo de la cámara es cada plato, si las fotos no vienen nombradas.
+- [x] **Instructivo** (`img/platos/LEEME.txt`) al día con la carta oficial.
+- [ ] **Conseguir las fotos de la sesión** (hoy no están en el repo).
+- [ ] Cargarlas con `python3 docs/fotos.py cargar` (borra sola
+      `ojo-bife.jpg`, la de banco de imágenes).
+- [ ] Mirar las que la herramienta marque: verticales recortadas y las de
+      menos de 1.000 px.
 - [ ] Revisar que se vean bien en la carta, en el visor, en el veredicto, en
-      la tarjeta para compartir y en modo sol.
+      la tarjeta para compartir y en modo sol (prueba de humo servida por
+      http incluida).
+- [ ] Faltan fotos de los platos nuevos que no estaban en la sesión
+      (milanesas, burgers, chivitos, pastas, risottos, ensaladas,
+      guarniciones, menú de peques y los postres de Lavazza): `estado` dice
+      cuáles. Ver con Aura si se hace otra sesión.
 
 ## 4. Identidad y genio
 
