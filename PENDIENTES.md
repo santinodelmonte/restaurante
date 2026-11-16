@@ -40,40 +40,34 @@ reunión de cambios), en pesos uruguayos con IVA incluido:
 
 ## 2. Ajustar el motor contra la carta oficial
 
-- [ ] **Ejes de cada plato:** ya están cargados con una primera pasada
-      nuestra (los seis ejes, `proteina` y `empieza`). Falta revisarlos
-      probando el chef, sobre todo las categorías nuevas: milanesas,
-      burgers, chivitos, pastas, risottos y ensaladas.
+- [x] **Vino después del plato:** «¿Qué tomás con esto?» aparece en el
+      veredicto sólo si el plato pide vino. El color pedido se respeta.
+- [x] **Entradas definidas a mano:** tabla por plato (`GRUPOS_ENTRADA`).
+      Sándwiches, burgers, chivitos y ensaladas no llevan entrada. Lo que
+      empieza la comida (provolone, achuras, fainá) ya no sale de plato
+      fuerte.
+- [x] **Horno, parrilla, olla o sartén sin preguntarlo:** señales en las
+      preguntas sensoriales y dos preguntas nuevas («domingo» y «pelea»).
+- [x] **Punto de la carne:** cortes que sufren bien cocidos revisados contra
+      la carta (`SUFRE_COCIDO`); el cambio sugerido es otro corte de la
+      misma carne.
+- [x] **Ejes:** primera calibración (parrilla a intensidad 8, dulce a un
+      tercio para el plato fuerte, salmón, pasteles, raviolones veganos,
+      pizza con ananá). Detalle en el README, «Calibración de los ejes».
+- [x] **Autotest y prueba de humo** con verificaciones para todo lo
+      anterior, en verde.
+- [x] **Tito:** las opciones de «lo que más te gusta» apuntan a los tres
+      platos reales.
+- [ ] **Probar el chef con respuestas reales** (nosotros y el local) y
+      ajustar los ejes con lo que salga. Ya visto: el cordero sale un poco de
+      más entre los que piden carne, y las burgers casi nunca salen.
+- [ ] **Revisar la tabla de entradas con el local:** es nuestra lectura de
+      qué se pide antes de cada plato.
+- [ ] **Banco de preguntas:** hoy son 30 rotativas más los 2 filtros (32);
+      la propuesta prometía 35. Decidir si se suman 3 o se aclara.
+- [ ] **Frases** con la voz y el nombre definitivos del genio.
 - [ ] **Guarniciones:** hoy el chef no las recomienda. Evaluar sugerir una
       guarnición junto a los platos de parrilla, que en la carta van solos.
-- [ ] **Vino después del plato:**
-  - Sacar `bebida-pref` de la tanda de preguntas.
-  - Preguntar por el vino sólo si el plato lo pide, según `meritaVino`.
-  - Repartir los pesos que esa pregunta daba a intensidad, untuosidad y
-    acidez.
-- [ ] **Entradas definidas a mano:**
-  - Decidir qué entrada va con cada principal y qué platos no llevan entrada.
-  - Ajustar el autotest, que hoy exige entrada siempre.
-  - Que no salga más queso antes de un plato con queso, como el provolone
-    antes del caliente.
-- [ ] **Punto de la carne:** revisar qué platos cuentan como corte de
-      parrilla y en qué punto sufre cada uno.
-- [ ] **Horno de barro o parrilla sin preguntarlo:**
-  - Diseñar preguntas sensoriales que sumen afinidad a esa cocina.
-  - Que se citen en «Lo que me dijiste».
-- [ ] **Banco de preguntas:**
-  - Decidir si se llega a las 35 que promete la propuesta (hoy son 29
-    rotativas).
-  - Revisar las frases con la voz y el nombre definitivos.
-- [x] **Tito:** las opciones de «lo que más te gusta» ahora apuntan a los
-      tres platos reales (papas fritas, puré, fideos, pollito, salsa de
-      tomate, carne).
-- [ ] **Autotest:** sumar una verificación por cada cambio de este grupo:
-  - que no se pregunte por el vino si no se recomienda vino;
-  - que la entrada sea la definida para ese principal;
-  - que la preferencia horno/parrilla se note en el resultado.
-- [ ] Correr el autotest (`index.html?test=1`) y la prueba de humo
-      (`docs/humo.js`) hasta que todo dé verde.
 
 ## 3. Fotos (sólo si contrataron las fotos, $ 5.000)
 
