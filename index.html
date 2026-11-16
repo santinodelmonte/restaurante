@@ -2516,9 +2516,9 @@ const PREGUNTAS = [
   { id:"olor", tipo:"sabor", peso:"alto", grupo:"olfato", formato:"grilla", modos:["express","completo"],
     texto:"¿Qué olor te da hambre de golpe? El primero que te tire.",
     opciones:[
-      { emo:"🔥", texto:"Brasa encendida",  pesos:{ intensidad:+3, untuosidad:+1 }, eco:"que el olor a brasa te desarma", lleva:"por eso te llevo a la parrilla y no al horno", si:{ categoria:"parrilla" },
+      { emo:"🔥", texto:"Brasa encendida",  fuego:"parrilla", pesos:{ intensidad:+3, untuosidad:+1 }, eco:"que el olor a brasa te desarma", lleva:"por eso te llevo a la parrilla y no al horno", si:{ categoria:"parrilla" },
         chiste:"Ese olor vende más que cualquier carta." },
-      { emo:"🥖", texto:"Pan recién hecho", pesos:{ untuosidad:+2, intensidad:-1 }, eco:"que te gana el pan recién hecho", lleva:"entonces lo tuyo es masa y horno de barro",
+      { emo:"🥖", texto:"Pan recién hecho", fuego:"horno", pesos:{ untuosidad:+2, intensidad:-1 }, eco:"que te gana el pan recién hecho", lleva:"entonces lo tuyo es el horno de barro", si:{ categoria:"horno" },
         chiste:"No conozco a nadie que le diga que no a eso." },
       { emo:"🧄", texto:"Ajo en la sartén", pesos:{ intensidad:+3, aventura:+1 }, eco:"que el ajo en la sartén te llama", lleva:"así que te doy algo con carácter y no tibio",
         chiste:"Eso es olor a que alguien está cocinando de verdad." },
@@ -2557,6 +2557,44 @@ const PREGUNTAS = [
         b:{ texto:"Con cuchara",  emo:"🥄", pesos:{ untuosidad:+2, intensidad:-2 } } }
     ] },
 
+  /* Las dos del fuego. Ninguna pregunta «¿horno o parrilla?»: preguntan
+     dónde te parás en un almuerzo largo y qué te peleás en la mesa, que
+     es lo mismo dicho de una manera que no se contesta para quedar bien.
+     Son del mismo grupo, así que nunca entran las dos en una tanda. */
+  { id:"domingo", tipo:"sabor", peso:"alto", grupo:"fuego", modos:["express","completo"],
+    texto:"Un almuerzo largo de domingo. ¿Dónde te encontramos?",
+    opciones:[
+      { texto:"Al lado del fuego, con la pinza", emo:"🔥", fuego:"parrilla", pesos:{ intensidad:+2, untuosidad:+1 },
+        eco:"que en un almuerzo largo estás al lado del fuego", lleva:"así que lo tuyo sale de la parrilla", si:{ categoria:"parrilla" },
+        chiste:"El que está al lado del fuego come primero. Y mejor." },
+      { texto:"Abriendo el horno a ver cómo va", emo:"🫓", fuego:"horno", pesos:{ untuosidad:+2, aventura:+1 },
+        eco:"que en un almuerzo largo estás abriendo el horno", lleva:"así que te llevo al horno de barro y no a la parrilla", si:{ categoria:"horno" },
+        chiste:"Paciencia de horno. Eso se nota en lo que te gusta." },
+      { texto:"Revolviendo la olla", emo:"🥘", fuego:"olla", pesos:{ untuosidad:+2, intensidad:-1 },
+        eco:"que en un almuerzo largo estás revolviendo la olla", lleva:"así que fui a la olla y no a la brasa", si:{ categoria:["pastas","risottos"] },
+        chiste:"Comida de cuchara. La que no falla nunca." },
+      { texto:"En la mesa, picando lo que salga", emo:"🫒", pesos:{ social:+3, aventura:+1 },
+        eco:"que en un almuerzo largo estás en la mesa picando", lleva:"por eso la mesa arranca con algo para compartir", si:{ hayEntrada:true },
+        chiste:"El mejor lugar. Llega todo y no hay que hacer nada." }
+    ] },
+
+  { id:"pelea", tipo:"sabor", peso:"alto", grupo:"fuego", modos:["express","completo"],
+    texto:"En la mesa, ¿qué es lo que siempre te peleás?",
+    opciones:[
+      { texto:"La puntita dorada del asado", emo:"🥩", fuego:"parrilla", pesos:{ intensidad:+3, untuosidad:+1 },
+        eco:"que la puntita dorada del asado te la peleás", lleva:"así que lo tuyo sale de la parrilla", si:{ categoria:"parrilla" },
+        chiste:"Es la mejor parte y todos lo saben. Por eso hay pelea." },
+      { texto:"El borde crocante de la pizza", emo:"🍕", fuego:"horno", pesos:{ intensidad:+1, untuosidad:+1 },
+        eco:"que el borde crocante de la pizza te lo peleás", lleva:"y ese borde sólo lo da el horno de barro", si:{ categoria:"horno" },
+        chiste:"El que deja el borde no sabe lo que se pierde." },
+      { texto:"La costra gratinada de arriba", emo:"🧀", fuego:"horno", pesos:{ untuosidad:+3 },
+        eco:"que la costra gratinada te la peleás", lleva:"así que te llevo al horno de barro y no a la parrilla", si:{ categoria:"horno" },
+        chiste:"Esa costra es lo único que se raspa de la fuente con los dedos." },
+      { texto:"La última milanesa de la fuente", emo:"🍽️", fuego:"sarten", pesos:{ untuosidad:+2, aventura:-1 },
+        eco:"que la última milanesa de la fuente es tuya", lleva:"así que fui a la sartén y no a la brasa", si:{ categoria:["milanesas","burgers","chivitos"] },
+        chiste:"Siempre hay una de más. Y siempre tiene dueño." }
+    ] },
+
   { id:"primer-bocado", tipo:"sabor", peso:"bajo", grupo:"ritmo", modos:["completo"],
     texto:"¿Con qué bocado te quedás: el primero o el último?",
     opciones:[
@@ -2573,27 +2611,29 @@ const PREGUNTAS = [
   { id:"frito-parrilla", tipo:"sabor", peso:"bajo", grupo:"coccion", modos:["express","completo"],
     texto:"Entre frito y a la parrilla, ¿cuál preferís?",
     opciones:[
-      { texto:"Frito", emo:"🍟", pesos:{ untuosidad:+3, intensidad:+1 },
+      { texto:"Frito", emo:"🍟", fuego:"sarten", pesos:{ untuosidad:+3, intensidad:+1 },
         eco:"que preferís lo frito",
         lleva:"y eso pide algo que corte la grasa al lado",
         chiste:"Sin vueltas. Con eso sé por dónde ir." },
-      { texto:"A la parrilla", emo:"🔥", pesos:{ intensidad:+3, untuosidad:-1 },
+      { texto:"A la parrilla", emo:"🔥", fuego:"parrilla", pesos:{ intensidad:+3, untuosidad:-1 },
         eco:"que preferís la parrilla",
-        lleva:"que es donde esta cocina hace su mejor trabajo",
+        lleva:"que es donde esta cocina hace su mejor trabajo", si:{ categoria:"parrilla" },
         chiste:"Es la casa. No te voy a contradecir." }
     ] },
 
   { id:"ruido", tipo:"sabor", peso:"bajo", grupo:"sensorial", modos:["completo"],
     texto:"El ruido de una cocina que más te gusta:",
     opciones:[
-      { texto:"La carne cayendo a la parrilla", emo:"🔥", pesos:{ intensidad:+3, untuosidad:+1 },
-        eco:"que te gusta el ruido de la carne en la parrilla", chiste:"Ese sonido es media cocina." },
+      { texto:"La carne cayendo a la parrilla", emo:"🔥", fuego:"parrilla", pesos:{ intensidad:+3, untuosidad:+1 },
+        eco:"que te gusta el ruido de la carne en la parrilla", lleva:"y eso es la parrilla hablando", si:{ categoria:"parrilla" },
+        chiste:"Ese sonido es media cocina." },
       { texto:"El cuchillo sobre la tabla", emo:"🔪", pesos:{ aventura:+2, acidez:+1 },
         eco:"que te gusta el cuchillo sobre la tabla", chiste:"Te fijás en cómo se hacen las cosas. Poca gente." },
       { texto:"El corcho saliendo", emo:"🍾", pesos:{ social:+3, aventura:+1 },
         eco:"que te gusta el ruido del corcho", chiste:"Entonces la bebida no va a ser un detalle hoy." },
-      { texto:"La cuchara raspando la olla", emo:"🥘", pesos:{ untuosidad:+3, dulce:+1 },
-        eco:"que te gusta la cuchara raspando la olla", chiste:"Comida de olla. Eso habla de casa, no de restaurante." }
+      { texto:"La cuchara raspando la olla", emo:"🥘", fuego:"olla", pesos:{ untuosidad:+3, dulce:+1 },
+        eco:"que te gusta la cuchara raspando la olla", lleva:"así que fui a la olla y no a la brasa", si:{ categoria:["pastas","risottos"] },
+        chiste:"Comida de olla. Eso habla de casa, no de restaurante." }
     ] },
 
   { id:"plato-vacio", tipo:"sabor", peso:"bajo", grupo:"habito", modos:["completo"],
@@ -2638,8 +2678,8 @@ const PREGUNTAS = [
     opciones:[
       { texto:"Lo que no probé nunca", emo:"🎲", pesos:{ aventura:+3, intensidad:+1 },
         eco:"que en un lugar nuevo pedís lo que no conocés", lleva:"con vos me puedo dar el gusto de mandar lo bueno de verdad", chiste:"Con vos me puedo dar el gusto de mandarte lo bueno de verdad." },
-      { texto:"Lo que hace famoso al lugar", emo:"⭐", pesos:{ aventura:+1, intensidad:+2 },
-        eco:"que pedís lo que hace famoso al lugar", lleva:"acá eso es la parrilla, para que sepas", chiste:"Criterio. Acá eso es la parrilla, para que sepas." },
+      { texto:"Lo que hace famoso al lugar", emo:"⭐", fuego:"parrilla", pesos:{ aventura:+1, intensidad:+2 },
+        eco:"que pedís lo que hace famoso al lugar", lleva:"y acá eso es la parrilla", si:{ categoria:"parrilla" }, chiste:"Criterio. Acá eso es la parrilla, para que sepas." },
       { texto:"Lo que sé que me gusta", emo:"🔁", pesos:{ aventura:-3 },
         eco:"que pedís lo que ya sabés que te gusta", lleva:"así que te di algo que no falla", chiste:"Nada que objetar. Te voy a dar algo que no falle." },
       { texto:"Lo que está comiendo el de al lado", emo:"👀", pesos:{ aventura:+2, social:+2 },
@@ -2664,8 +2704,8 @@ const PREGUNTAS = [
         eco:"que comés mejor al mediodía", lleva:"con sol la comida tiene que ser otra, y lo tuve en cuenta", chiste:"Con sol la comida tiene que ser otra. Eso lo tengo en cuenta." },
       { texto:"Media tarde, sin horario", emo:"🌤️", pesos:{ social:+2, acidez:+1 },
         eco:"que comés a media tarde", lleva:"la mejor hora de este lugar, dicho sea de paso", chiste:"La mejor hora de este lugar, dicho sea de paso." },
-      { texto:"Cuando cae el sol", emo:"🌅", pesos:{ intensidad:+2, untuosidad:+1 },
-        eco:"que comés cuando cae el sol", lleva:"ahí la parrilla ya está en su punto", chiste:"Ahí la parrilla ya está en su punto." },
+      { texto:"Cuando cae el sol", emo:"🌅", fuego:"parrilla", pesos:{ intensidad:+2, untuosidad:+1 },
+        eco:"que comés cuando cae el sol", lleva:"que es cuando la parrilla está en su punto", si:{ categoria:"parrilla" }, chiste:"Ahí la parrilla ya está en su punto." },
       { texto:"De noche, tarde", emo:"🌙", pesos:{ intensidad:+3, untuosidad:+2, acidez:-1 },
         eco:"que comés de noche y tarde", lleva:"de noche se come más fuerte, y eso pesó", chiste:"De noche se come más fuerte. Es así y no lo discuto." }
     ] },
@@ -3008,7 +3048,7 @@ function perfilDe(p){
    Blandos: no sacan a nadie, penalizan fuerte.                       */
 function leerFiltros(respuestas, preguntas){
   const f = { requiere: [], excluyeContiene: [], blandos: [],
-              ecos: [], afin: [], evita: [], alergias: [], prefBebida: null };
+              ecos: [], afin: [], evita: [], alergias: [], prefBebida: null, fuego: {} };
 
   /* Las afinidades no son filtros: no sacan un solo plato del pool. Son lo
      que hace que decir "carne roja" se note de verdad en el resultado sin
@@ -3019,6 +3059,7 @@ function leerFiltros(respuestas, preguntas){
     if (el === undefined || el === null || el === "") return;
     opcionesElegidas(p, el).forEach(o => {
       if (o.afin && o.afin.proteina) f.afin.push(o.afin.proteina);
+      if (o.fuego) f.fuego[o.fuego] = (f.fuego[o.fuego] || 0) + 1;
       if (o.evita && o.evita.proteina) f.evita.push(o.evita.proteina);
       if (o.prefBebida) f.prefBebida = o.prefBebida;
     });
@@ -3159,6 +3200,21 @@ function vectorUsuario(respuestas, preguntas){
   return v;
 }
 
+/* ── HORNO O PARRILLA, SIN PREGUNTARLO ────────────────────────────────
+   Esta carta tiene dos cocinas de fuego —la parrilla y el horno de
+   barro— y además la sartén (milanesas, burgers, chivitos) y la olla
+   (pastas y risottos). La persona no suele saber de qué lado está, y si
+   se lo preguntás de frente contesta lo que cree que tiene que contestar.
+   Por eso no hay una pregunta «¿horno o parrilla?»: hay opciones de
+   preguntas sensoriales que, además de mover los ejes, dicen para qué
+   fuego va (`fuego:"parrilla"`, `fuego:"horno"`, …). El motor junta esas
+   señales y empuja a los platos de esa cocina.                       */
+const FUEGO_DE = {
+  parrilla:"parrilla", horno:"horno",
+  milanesas:"sarten", burgers:"sarten", chivitos:"sarten",
+  pastas:"olla", risottos:"olla"
+};
+
 /* ── 3. PUNTAJE: distancia euclidiana invertida + castigos blandos ── */
 function puntuar(plato, v, f, opts){
   opts = opts || {};
@@ -3184,6 +3240,16 @@ function puntuar(plato, v, f, opts){
   // lo que evita que alguien conteste "carne roja" y reciba una fainá.
   if (!opts.sinAfin && f.afin && f.afin.length && plato.proteina){
     if (f.afin.indexOf(plato.proteina) !== -1) s += 0.22;
+  }
+
+  // Para qué cocina va la persona, sin habérselo preguntado de frente: el
+  // olor que le da hambre, el ruido de cocina que le gusta, dónde se para
+  // en un almuerzo largo. Cada señal suma un poco a los platos de esa
+  // cocina; dos o tres señales para el mismo lado ya se notan en el
+  // veredicto, una sola suelta no da vuelta nada.
+  if (!opts.sinAfin && f.fuego){
+    const k = FUEGO_DE[plato.categoria];
+    if (k && f.fuego[k]) s += Math.min(0.30, 0.13 * f.fuego[k]);
   }
 
   // Lo que la persona pidió esquivar. No es un filtro duro —"prefiero que
@@ -3938,7 +4004,7 @@ function prioridadEco(e){
   // Lo que más dice de un paladar va primero. Lo que la persona escribió
   // con sus palabras va antes que todo, y los filtros al final porque
   // saber que alguien no come gluten no cuenta nada sobre cómo come.
-  const orden = ["proteina","olor","coccion","queso-hasta-donde","entrada-como",
+  const orden = ["proteina","olor","domingo","pelea","coccion","queso-hasta-donde","entrada-como",
                  "salsa","textura","lugar-nuevo","plato-vacio","ruido",
                  "con-quien","hora","guarnicion","limon",
                  "picante","pan","sobremesa","restricciones","hambre","presupuesto"];
@@ -4570,7 +4636,7 @@ function recomendarMesa(comensales, ninos){
     vectorMesa[e] = comensales.reduce((a,c) => a + c.vector[e], 0) / comensales.length;
   });
   const filtrosMesa = { requiere:[], excluyeContiene:[], blandos:[],
-                        ecos:[], afin:[], evita:[], alergias:[], prefBebida:null };
+                        ecos:[], afin:[], evita:[], alergias:[], prefBebida:null, fuego:{} };
 
   // 3. el principal es de cada uno, con sus propios filtros. Va en dos
   // pasadas: la primera es para saber qué está comiendo la mesa —de eso
@@ -6720,7 +6786,7 @@ function bloqueAlergias(alergias, contexto){
 function llevaVale(e, r){
   const g = e.si;
   if (!g) return true;
-  if (g.categoria && r.principal.categoria !== g.categoria) return false;
+  if (g.categoria && [].concat(g.categoria).indexOf(r.principal.categoria) === -1) return false;
   if (g.hayEntrada && !r.entrada) return false;
   if (g.entradaProteina && (!r.entrada || r.entrada.proteina !== g.entradaProteina)) return false;
   if (g.entradaProteinaNo && r.entrada && r.entrada.proteina === g.entradaProteinaNo) return false;
@@ -7534,9 +7600,18 @@ function bofoTest(){
         if (/queso adelante|entrada quedó decidida/.test(dicho))
           chequear(!!r.entrada && r.entrada.proteina === "queso",
             `[${modo}] promete queso de entrada y la entrada es ${r.entrada && r.entrada.proteina}`);
-        if (/la parrilla y no al horno|fui a la parrilla/.test(dicho))
+        if (/la parrilla y no al horno|fui a la parrilla|sale de la parrilla|la parrilla hablando|eso es la parrilla|la parrilla está en su punto/.test(dicho))
           chequear(r.principal.categoria === "parrilla",
             `[${modo}] dice parrilla y el plato salió de ${r.principal.categoria}`);
+        if (/horno de barro/.test(dicho))
+          chequear(r.principal.categoria === "horno",
+            `[${modo}] dice horno de barro y el plato salió de ${r.principal.categoria}`);
+        if (/a la olla/.test(dicho))
+          chequear(["pastas","risottos"].indexOf(r.principal.categoria) !== -1,
+            `[${modo}] dice olla y el plato salió de ${r.principal.categoria}`);
+        if (/a la sartén/.test(dicho))
+          chequear(["milanesas","burgers","chivitos"].indexOf(r.principal.categoria) !== -1,
+            `[${modo}] dice sartén y el plato salió de ${r.principal.categoria}`);
         if (/lo saqué de la mesa/.test(dicho))
           chequear(!r.entrada || r.entrada.proteina !== "queso",
             `[${modo}] dice que sacó el queso y la entrada es de queso`);
@@ -7820,6 +7895,36 @@ function bofoTest(){
   const rA = recomendar(A, tandaFija), rB = recomendar(B, tandaFija);
   chequear(rA.principal.id !== rB.principal.id,
     "dos personas opuestas recibieron el mismo plato");
+
+  // ── horno o parrilla, sin preguntarlo: tiene que notarse ──
+  // La misma gente, contestando al azar, salvo que donde hay una opción
+  // que dice para qué fuego va, elige ésa. Comparado con no forzar nada,
+  // la cocina de esas señales tiene que ganar terreno de verdad.
+  const reparto = fuego => {
+    const cuenta = {}; const N = 240;
+    for (let i = 0; i < N; i++){
+      const t = armarTanda(i % 2 ? "express" : "completo");
+      const resp = {};
+      t.forEach(q => {
+        resp[q.id] = q.id === pReq.id ? [iTodo] : respuestaAlAzar(q);
+        if (fuego && q.opciones && !q.multiple){
+          const k = q.opciones.findIndex(o => o.fuego === fuego);
+          if (k !== -1) resp[q.id] = k;
+        }
+      });
+      const x = recomendar(resp, t);
+      cuenta[x.principal.categoria] = (cuenta[x.principal.categoria] || 0) + 1 / N;
+    }
+    return cuenta;
+  };
+  const rNadie = reparto(null), rParrilla = reparto("parrilla"), rHorno = reparto("horno");
+  chequear((rParrilla.parrilla || 0) >= (rNadie.parrilla || 0) + 0.25,
+    `las señales de parrilla casi no se notan: ${Math.round(100 * (rNadie.parrilla || 0))}% → ${Math.round(100 * (rParrilla.parrilla || 0))}%`);
+  chequear((rHorno.horno || 0) >= (rNadie.horno || 0) + 0.20,
+    `las señales de horno casi no se notan: ${Math.round(100 * (rNadie.horno || 0))}% → ${Math.round(100 * (rHorno.horno || 0))}%`);
+  // y ninguna pregunta del banco pregunta «¿horno o parrilla?» de frente
+  chequear(!PREGUNTAS.some(q => /horno/i.test(q.texto) && /parrilla/i.test(q.texto)),
+    "hay una pregunta que pregunta horno o parrilla de frente");
 
   // ── el que pide carne recibe carne, con la entrada de su tabla ──
   const pProt = PREGUNTAS.find(p => p.id === "proteina");
