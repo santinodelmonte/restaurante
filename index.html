@@ -3871,6 +3871,14 @@ function nombrar(){ return S.nombre ? S.nombre : ""; }
 function vocativo(){ return S.nombre ? S.nombre + ", " : ""; }
 
 function ir(vista){
+  // El dictado de la carta arranca siempre apagado: si quedó leyendo y te
+  // vas a otra pantalla (el Chef, el modo niño), se corta acá. Así nunca
+  // sigue sonando de fondo ni queda "prendido" para la próxima vez.
+  if (vista !== "carta" && "speechSynthesis" in window && (speechSynthesis.speaking || speechSynthesis.pending)){
+    speechSynthesis.cancel();
+    const b = $("#b-voz");
+    if (b) b.setAttribute("aria-pressed", "false");
+  }
   S.vista = vista;
   $$(".vista").forEach(v => v.classList.toggle("activa", v.id === "v-" + vista));
   document.documentElement.style.background = vista === "chef" ? "#10263B" : "#F6F9FB";
