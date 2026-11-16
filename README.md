@@ -385,6 +385,7 @@ abrirlo en el celular. Entre lo que verifica:
 - que nadie reciba como plato propio algo que ya está al medio de su mesa;
 - que de las respuestas citadas, al menos una diga qué hizo el chef con ella;
 - que la cuenta cierre con lo que se muestra en pantalla;
+- que Tito no le muestre a un chico un plato que no puede comer;
 - que dos corridas seguidas no repitan ni una sola pregunta rotativa.
 
 Para correrlo fuera del navegador —el motor no toca el DOM, así que se
@@ -404,6 +405,46 @@ es exactamente lo que pasa cuando la demo se abre con doble clic. Además del
 autotest del motor verifica que la foto que está aparezca, que la que no está
 no deje hueco, que el visor tome el foco y que el Escape cierre la foto sin
 llevarse la carta puesta.
+
+### Las pruebas del motor
+
+Una batería aparte del autotest, en `docs/pruebas-motor.js`. No se publica
+con el sitio: `docs/pruebas.js` la inyecta en la página y la corre.
+
+```
+npm install puppeteer-core
+node docs/pruebas.js        # una vuelta, unos 10 segundos
+node docs/pruebas.js 3      # más corridas al azar
+```
+
+La semilla del azar es fija, así que una falla se repite igual la próxima
+vez (`SEMILLA=123` para probar con otra). Mira lo que el autotest no ve:
+
+- **datos:** ids, precios, ejes, que «vegetariano» y «sin TACC» se
+  sostengan con lo que el plato contiene, que las etiquetas no prometan de
+  más, el perfil de cada vino; del banco, pesos de ±3 como máximo, que lo
+  que afirma un resultado lleve condición, y que cada gesto que usan el
+  Vasco y Tito esté dibujado;
+- **robustez:** sin respuestas, índices fuera de rango, deslizadores con
+  basura, texto con HTML y las 512 combinaciones de restricciones;
+- **determinismo:** las mismas respuestas, en cualquier orden, dan lo mismo;
+- **alcance:** cada plato fuerte sale para la persona hecha a su medida, y
+  qué platos, entradas, vinos y postres no salen nunca con gente al azar;
+- **personas:** el parrillero, el del horno de barro, el del mar, la
+  vegetariana, el celíaco, el que no toma, el que come solo, el que come con
+  la mano…, cada una con lo que tiene que pasar;
+- **secuencias:** punto, bebida y cambio de corte en cualquier orden, y que
+  la cuenta, el vino y la entrada sigan siendo coherentes;
+- **textos:** que ninguna frase quede rota y que ninguna afirme algo falso
+  («sale de esa parrilla» de una pizza, «te bajo a un tinto» con un blanco);
+- **mesa:** mesas de 1 a 8 con chicos y restricciones cruzadas;
+- **chicos:** todas las combinaciones de restricciones de Tito. Si nada del
+  menú de peques pasa, Tito no muestra ningún plato;
+- **reparto:** que lo que sale se parezca a este local (ningún plato arriba
+  del 15%, quien pide carne recibe parrilla, quien elige el pan recibe
+  horno);
+- **rendimiento:** un veredicto en menos de 8 ms, una mesa de 8 en menos
+  de 80.
 
 ## Clonarlo a otro restaurante
 

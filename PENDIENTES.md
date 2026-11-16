@@ -58,6 +58,19 @@ reunión de cambios), en pesos uruguayos con IVA incluido:
       anterior, en verde.
 - [x] **Tito:** las opciones de «lo que más te gusta» apuntan a los tres
       platos reales.
+- [x] **Batería de pruebas del motor** (`docs/pruebas.js`): datos,
+      robustez, determinismo, alcance, personas, secuencias, textos, mesa,
+      chicos, reparto y rendimiento. Encontró y quedaron arreglados:
+      Tito mostraba platos con alérgenos a chicos con alergias combinadas;
+      «sale de esa parrilla» con pizzas y milanesas; la razón de la mesa
+      hablaba de queso con fainá al medio; «te bajo a un tinto» con un
+      blanco; la botella entera para el que come solo; el orden de las
+      respuestas cambiaba el veredicto; 43 de 65 vinos no salían nunca
+      (ahora 20, ver abajo).
+- [ ] **Vinos que no salen nunca** (20 de 65): la batería los lista. Revisar
+      sus perfiles con alguien que conozca la carta de vinos.
+- [ ] **Burger Bo Fomento:** no sale nunca con gente al azar (es la más
+      extrema de las dos burgers). Si el local la quiere empujar, `margen`.
 - [ ] **Probar el chef con respuestas reales** (nosotros y el local) y
       ajustar los ejes con lo que salga. Ya visto: el cordero sale un poco de
       más entre los que piden carne, y las burgers casi nunca salen.

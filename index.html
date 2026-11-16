@@ -2689,8 +2689,10 @@ const PREGUNTAS = [
   { id:"mano", tipo:"sabor", peso:"bajo", grupo:"social", modos:["completo"],
     texto:"Comer con la mano, ¿qué opinás?",
     opciones:[
-      { texto:"Es la mejor manera", emo:"🤚", pesos:{ social:+3, aventura:+2, untuosidad:+1 },
-        eco:"que comés con la mano sin culpa", chiste:"Hay cosas que con cubiertos pierden la gracia." },
+      { texto:"Es la mejor manera", emo:"🤚", fuego:"mano", pesos:{ social:+3, aventura:+2, untuosidad:+1 },
+        eco:"que comés con la mano sin culpa", lleva:"y lo que te doy se agarra con las dos manos",
+        si:{ categoria:["burgers","chivitos"] },
+        chiste:"Hay cosas que con cubiertos pierden la gracia." },
       { texto:"Si nadie me mira", emo:"👀", pesos:{ social:+1, aventura:+1 },
         eco:"que comés con la mano cuando nadie mira", chiste:"Acá eso no es un problema. Estamos en la playa." },
       { texto:"Nunca", emo:"🍴", pesos:{ social:-2, aventura:-2 },
@@ -2833,8 +2835,16 @@ function mulberry32(a){
     return ((t ^ t >>> 14) >>> 0) / 4294967296;
   };
 }
+/* La semilla sale de las respuestas, no del orden en que se guardaron:
+   las mismas respuestas dadas en otro orden tienen que dar lo mismo. */
+function estable(x){
+  if (Array.isArray(x)) return "[" + x.map(estable).join(",") + "]";
+  if (x && typeof x === "object")
+    return "{" + Object.keys(x).sort().map(k => JSON.stringify(k) + ":" + estable(x[k])).join(",") + "}";
+  return JSON.stringify(x);
+}
 function semillaDe(respuestas){
-  const s = JSON.stringify(respuestas);
+  const s = estable(respuestas);
   let h = 2166136261;
   for (let i = 0; i < s.length; i++){ h ^= s.charCodeAt(i); h = Math.imul(h, 16777619); }
   return h >>> 0;
@@ -3208,11 +3218,16 @@ function vectorUsuario(respuestas, preguntas){
    Por eso no hay una pregunta «¿horno o parrilla?»: hay opciones de
    preguntas sensoriales que, además de mover los ejes, dicen para qué
    fuego va (`fuego:"parrilla"`, `fuego:"horno"`, …). El motor junta esas
-   señales y empuja a los platos de esa cocina.                       */
+   señales y empuja a los platos de esa cocina.
+
+   «mano» no es un fuego, pero funciona igual: lo que se come con la
+   mano. Sin esa señal las burgers y el chivito no salían casi nunca —en
+   el banco no había nada que los distinguiera de una milanesa—, y la
+   burger de la casa no le salía a nadie.                             */
 const FUEGO_DE = {
-  parrilla:"parrilla", horno:"horno",
-  milanesas:"sarten", burgers:"sarten", chivitos:"sarten",
-  pastas:"olla", risottos:"olla"
+  parrilla:["parrilla"], horno:["horno"],
+  milanesas:["sarten"], burgers:["sarten","mano"], chivitos:["sarten","mano"],
+  pastas:["olla"], risottos:["olla"]
 };
 
 /* ── 3. PUNTAJE: distancia euclidiana invertida + castigos blandos ── */
@@ -3248,8 +3263,8 @@ function puntuar(plato, v, f, opts){
   // cocina; dos o tres señales para el mismo lado ya se notan en el
   // veredicto, una sola suelta no da vuelta nada.
   if (!opts.sinAfin && f.fuego){
-    const k = FUEGO_DE[plato.categoria];
-    if (k && f.fuego[k]) s += Math.min(0.30, 0.13 * f.fuego[k]);
+    const senales = (FUEGO_DE[plato.categoria] || []).reduce((a, k) => a + (f.fuego[k] || 0), 0);
+    if (senales) s += Math.min(0.30, 0.13 * senales);
   }
 
   // Lo que la persona pidió esquivar. No es un filtro duro —"prefiero que
@@ -3441,11 +3456,30 @@ function elegirVino(plato, f, rnd, punto, colorForzado, vector){
     for (let i = 0; i < p.id.length; i++) h = Math.imul(h ^ p.id.charCodeAt(i), 16777619) >>> 0;
     ruido[p.id] = h;
   });
-  const rank = pool
-    .map(p => ({ plato:p,
-                 score: puntuarVino(p, o, techo) + (p.porCopa ? (social < 4.5 ? 3 : -4) : 0) }))
+  // Solo y sin compartir, la copa: si hay copa del color que va, es ésa.
+  // Antes era un empujón de +3 en el puntaje, y con un plato pesado no
+  // alcanzaba: a quien comía solo un chivito le iba una botella entera.
+  if (social < 4.5){
+    const copas = pool.filter(p => p.porCopa && p.vino.color === o.color);
+    if (copas.length) pool = copas;
+  } else if (pool.some(p => !p.porCopa)) {
+    pool = pool.filter(p => !p.porCopa);
+  }
+  const puntuados = pool.map(p => ({ plato:p, score: puntuarVino(p, o, techo) }));
+  // Los vinos son pocos perfiles para muchas etiquetas: con el mejor
+  // puntaje y nada más, ganaban siempre las mismas cinco botellas y 43 de
+  // 65 no salían nunca —las tres de la casa entre ellas—. Un vino a menos
+  // de un punto del mejor (un punto de cuerpo, menos de uno de tanino) es
+  // igual de bueno para ese plato, así que entra en la franja y adentro
+  // rota el que menos salió. El precio pesa adentro del puntaje, así que
+  // la botella cara no se cuela por la franja.
+  const mejor = Math.max.apply(null, puntuados.map(x => x.score));
+  const BANDA_VINO = 1.0;
+  const rank = puntuados
+    .map(x => Object.assign(x, { franja: x.score >= mejor - BANDA_VINO }))
     .sort((a,b) => {
-      if (Math.abs(a.score - b.score) > 0.01) return b.score - a.score;
+      if (a.franja !== b.franja) return a.franja ? -1 : 1;
+      if (!a.franja && Math.abs(a.score - b.score) > 0.01) return b.score - a.score;
       const va = Memoria.veces(a.plato.id), vb = Memoria.veces(b.plato.id);
       if (va !== vb) return va - vb;
       return ruido[a.plato.id] - ruido[b.plato.id];
@@ -3920,7 +3954,7 @@ function resolverBebida(r){
 function aplicarBebida(r, pref){
   r.filtros = Object.assign({}, r.filtros, { prefBebida: pref });
   resolverBebida(r);
-  if (r.esVino && r.punto === "cocido")
+  if (r.esVino && r.punto === "cocido" && r.bebida.vino.color === "tinto")
     r.razonBebida = "bien cocida la carne pierde el jugo que ablanda el tanino, así que te bajo a un tinto más amable";
   return r;
 }
@@ -3946,7 +3980,7 @@ function aplicarPunto(r, punto){
   // el vino se vuelve a elegir con el punto puesto
   if (r.esVino){
     resolverBebida(r);
-    if (r.esVino && punto === "cocido")
+    if (r.esVino && punto === "cocido" && r.bebida.vino.color === "tinto")
       r.razonBebida = "bien cocida la carne pierde el jugo que ablanda el tanino, así que te bajo a un tinto más amable";
   }
 
@@ -4116,7 +4150,9 @@ function vozPrincipal(r, rnd){
    explica a quién le habla pero nunca qué le está dando. */
 function razonDelPlato(r){
   const e = r.principal.ejes;
-  if (e.intensidad >= 9)  return "Es de lo más sabroso que sale de esa parrilla.";
+  if (e.intensidad >= 9)  return r.principal.categoria === "parrilla"
+                                   ? "Es de lo más sabroso que sale de esa parrilla."
+                                   : "Es de lo más sabroso que sale de esta cocina.";
   if (e.untuosidad >= 9)  return "Es graso en el buen sentido, y por eso lo que va al lado tiene que cortar.";
   if (e.aventura >= 8)    return "No lo pide casi nadie, y ahí está la gracia.";
   if (e.acidez >= 7)      return "Limpio y fresco, que con el sol de afuera se agradece.";
@@ -4781,7 +4817,14 @@ function recomendarMesa(comensales, ninos){
     }));
 
   const bocas = comensales.length + ninos.length;
-  return { entradas, entradaRazon: perfilMedio.razon, platos, platosNinos, alergias,
+  // La razón de la regla habla de una proteína («antes de una carne va
+  // queso»). Si lo que quedó al medio no es de esa proteína —porque los
+  // filtros de alguien la sacaron, o porque con chicos se prefirió otra
+  // cosa— la frase sería mentira, y va la que es cierta para cualquiera.
+  const entradaRazon = entradas.some(p => p.proteina === perfilMedio.proteina)
+    ? perfilMedio.razon
+    : "al medio va lo que la mesa entera puede comer, para que nadie espere con el plato vacío";
+  return { entradas, entradaRazon, platos, platosNinos, alergias,
            bebida, cuantasBebidas, vino, cuantosVinos, postres, total,
            porCabeza: Math.round(total / Math.max(1, bocas)),
            vector: vectorMesa, compartir };
@@ -4959,13 +5002,14 @@ function recomendarNino(respuestas, preguntas){
 
   const delMenu = rol => MENU.filter(p => esNino(p) && p.rol === rol && pasaFiltrosDuros(p, f));
 
-  let principales = delMenu("principal");
-  let aviso = null;
-  if (!principales.length){
-    // nunca una pantalla vacía delante de un chico
-    principales = MENU.filter(p => esNino(p) && p.rol === "principal");
-    aviso = "De lo que me dijiste no tengo nada en el menú de los chicos. Preguntale al mozo, que algo te inventamos.";
-  }
+  // Si nada del menú de los chicos pasa lo que el chico no puede comer,
+  // no se le muestra ningún plato. Antes se le mostraba uno igual, con un
+  // aviso abajo: a un chico celíaco y alérgico a la leche le salían unos
+  // spaghettis. Con tres platos en el menú esa combinación existe, y un
+  // aviso no alcanza para algo que le hace mal. La pantalla le dice que
+  // lo hable un grande con el mozo.
+  const principales = delMenu("principal");
+  const aviso = null;
   if (!principales.length) return null;
 
   const principal = ordenar(principales, v, f, rnd)[0].plato;
@@ -6179,7 +6223,7 @@ function confeti(){
 
 /* ── LO QUE SALIÓ DEL HORNO ───────────────────────────────────────── */
 function veredictoKid(r){
-  if (!r){ pintarSinSalida(); return; }
+  if (!r){ pintarSinSalidaKid(); return; }
   Memoria.sumar([r.principal, r.bebida, r.postre].filter(Boolean).map(p => p.id));
 
   const mini = (p, linea) => `<div class="mini">
@@ -7008,6 +7052,31 @@ async function pintarVeredictoMesa(){
 }
 /* Último recurso: ni una sola cosa de la carta pasa los filtros duros.
    No se rompe ni se muestra vacío: se invita a hacer algo.          */
+/* La misma salida, para un chico: corta, sin culpa, y con algo para
+   hacer. Lo que tiene que pasar es que un grande hable con el mozo. */
+function pintarSinSalidaKid(){
+  $("#chef-volver").onclick = () => { modoKid(false); pantallaModo(); };
+  panel().innerHTML = `<div class="veredicto reveal">
+    <div class="presenta">
+      ${titoHTML("tito--grande", "piensa")}
+      <div class="presenta__globo">
+        <span class="presenta__nombre">${esc(KID.nombre)}</span>
+        Con lo que no podés comer, en el menú de los chicos no me queda nada.
+        Pedile a un grande que hable con el mozo: la cocina te prepara algo.
+      </div>
+    </div>
+    <div class="veredicto__acciones">
+      <button class="btn btn--sol" id="b-kid-carta">Ver la carta de los chicos</button>
+      <button class="btn btn--linea" id="b-kid-salir">Devolver el celular</button>
+    </div>
+  </div>`;
+  $("#b-kid-carta").addEventListener("click", () => ir("carta"));
+  $("#b-kid-salir").addEventListener("click", () => { modoKid(false); pantallaModo(); });
+  const dicho = "Con lo que no podés comer no me queda nada en el menú de los chicos. Pedile a un grande que hable con el mozo.";
+  decir(dicho);
+  Tito.hablar(dicho, true);
+}
+
 function pintarSinSalida(){
   panel().innerHTML = `<div class="veredicto reveal">
     <div class="vacio" style="background:transparent;border-color:rgba(255,255,255,.35)">
@@ -7773,7 +7842,12 @@ function bofoTest(){
       preguntas.filter(p => !p.fija).forEach(p => { resp[p.id] = azar(p.opciones.length); });
       const rk = recomendarNino(resp, preguntas);
       corridasKid++;
-      chequear(!!rk, "[kid] el Chef Kid no devolvió nada");
+      // Si nada del menú de los chicos pasa sus restricciones, no hay
+      // plato: un aviso no alcanza para algo que le hace mal.
+      const fK = leerFiltros(resp, preguntas);
+      const puede = MENU.some(p => esNino(p) && p.rol === "principal" && pasaFiltrosDuros(p, fK));
+      chequear(!!rk === puede, puede ? "[kid] había plato posible y el Chef Kid no devolvió nada"
+                                     : "[kid] el Chef Kid dio un plato que el chico no puede comer");
       if (!rk) return;
       platosKid.add(rk.principal.id);
 
@@ -7892,7 +7966,9 @@ function bofoTest(){
         `[mesa ${n}] "${x.nombre}" es del menú de niños y está al medio`));
       // y a cada chico, lo suyo y sólo lo suyo
       m.platosNinos.forEach((x, k) => {
-        chequear(!!x.pedido, `[mesa ${n}] el chico ${k} se quedó sin plato`);
+        const fN = leerFiltros(x.nino.respuestas, x.nino.preguntas || PREGUNTAS_NINOS);
+        const puede = MENU.some(p => esNino(p) && p.rol === "principal" && pasaFiltrosDuros(p, fN));
+        chequear(!!x.pedido === puede, `[mesa ${n}] el chico ${k} ${puede ? "se quedó sin plato" : "recibió un plato que no puede comer"}`);
         if (x.pedido) chequear(esNino(x.pedido.principal),
           `[mesa ${n}] al chico ${k} le tocó "${x.pedido.principal.nombre}", que no es del menú de niños`);
       });
