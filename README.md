@@ -446,7 +446,7 @@ vez (`SEMILLA=123` para probar con otra). Mira lo que el autotest no ve:
 - **datos:** ids, precios, ejes, que «vegetariano» y «sin TACC» se
   sostengan con lo que el plato contiene, que las etiquetas no prometan de
   más, el perfil de cada vino; del banco, pesos de ±3 como máximo, que lo
-  que afirma un resultado lleve condición, y que cada gesto que usan el
+  que afirma un resultado lleve condición, y que cada gesto que usan
   Don Bo y Bofito esté dibujado;
 - **robustez:** sin respuestas, índices fuera de rango, deslizadores con
   basura, texto con HTML y las 512 combinaciones de restricciones;
