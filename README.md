@@ -18,7 +18,30 @@ sólo donde la trae la carta impresa: no inventamos ninguna.
 
 Las guarniciones están en la carta pero el chef no las recomienda como
 plato: son de tipo `guarnicion`. La ensalada de 2 gustos tampoco, porque
-se arma a gusto y no hay nada que acertar (`recomendable:false`).
+se arma a gusto y no hay nada que acertar, ni el Monster, que es un
+energizante y no acompaña una comida (`recomendable:false`).
+
+**Los nombres.** Los eligió el local: **Don Bo** para los grandes y
+**Bofito** para los chicos. Adentro del código los personajes conservan
+sus nombres de trabajo (`vascoHTML`, `.vasco`, `Tito.hablar`, `.tito`);
+lo que se ve y se escucha sale de las constantes `CHEF` y `KID`, así que un
+cambio de nombre se hace ahí.
+
+**Los destacados, que rotan.** Pedido del local: que el chef empuje una
+cocina por vez y la vaya cambiando. `DESTACADOS` dice el orden (risottos,
+parrilla, pastas), cuántas semanas dura cada turno (2) y desde qué lunes
+arranca. La cocina del turno gana un empujón chico al elegir el plato
+fuerte —medido con gente al azar, duplica lo que sale de esa cocina: los
+risottos pasan del 6% al 18%, la parrilla del 22% al 43%— sin pasar por
+arriba de un filtro ni de quien pidió otra cosa con todas las letras.
+Cuando el plato que sale es del destacado, el chef dice «esta semana es el
+destacado de la casa» y la carta lo marca con una etiqueta.
+
+**La limonada.** La carta impresa la trae dos veces, en Refrescos y en
+Licuados, al mismo precio; el local confirmó que es la misma, así que va
+una sola: «Limonada natural con menta (1 litro)». Pidieron que el chef la
+recomiende como la bebida rica, fresca y natural: lleva `margen` y una
+línea propia del chef. Sale en el 30% de los veredictos sin vino.
 
 **El Chef.** Una experiencia de chat que termina armando la mesa entera:
 entrada, plato principal, alternativas, algo para tomar y el postre.
@@ -35,7 +58,7 @@ Hay cinco formatos: botones, grilla de opciones, deslizador con el chef
 comentando mientras arrastrás, una ronda de pares, y campos para escribir.
 Ninguno es un juego: el reloj de tres segundos se fue, y con él la regla
 que forzaba a que entrara un juego por tanda. Lo lúdico quedó del lado de
-Tito, que es donde corresponde.
+Bofito, que es donde corresponde.
 
 **Todas las preguntas son sobre comida.** La mitad son directas —con qué
 te quedás si tenés que elegir una sola cosa, cómo te gusta que llegue la
@@ -50,7 +73,7 @@ menos puede fallar.
 
 El nombre es opcional, se pide una sola vez y no sale del celular.
 
-**El Vasco.** El chef tiene cara. Es un parrillero dibujado en SVG con la
+**Don Bo.** El chef tiene cara. Es un parrillero dibujado en SVG con la
 misma línea del sello —gorra, bigote, delantal, pinzas— y seis gestos que
 cambian solos según lo que está pasando. Respira y parpadea; con
 `prefers-reduced-motion` se queda quieto. Va inline y no con `<use>`,
@@ -142,27 +165,27 @@ tinto, las frutas piden blanco o rosado, y lo que va al medio de la mesa
 pide burbuja. Sólo se ofrece a quien ya está tomando vino.
 
 **Armá la mesa.** Decís cuántos grandes son, si vienen chicos, y el celular
-da la vuelta. Al final El Vasco arma el pedido de todos con el total y
+da la vuelta. Al final Don Bo arma el pedido de todos con el total y
 cuánto sale por cabeza. Lo que va al medio se filtra contra la intersección
 de las restricciones de la mesa entera: si hay un celíaco, nadie comparte
 gluten. Y se elige contra la proteína dominante de la mesa: si la mayoría
 pidió carne, al medio va queso. Lo que está al medio no se le sirve además
 a alguien como plato propio.
 
-**Tito, el Chef Kid.** Un personaje aparte, ayudante del Vasco, para los
-chicos de 5 a 10. Recomienda **sólo** del menú de niños, y el Vasco no ve
+**Bofito, el Chef Kid.** Un personaje aparte, ayudante dDon Bo, para los
+chicos de 5 a 10. Recomienda **sólo** del menú de niños, y Don Bo no ve
 ese menú nunca: las dos reglas están verificadas en el autotest.
 
 El menú de peques que decidió el local son tres platos —nuggets con
 fritas, spaghettis con fileto y churrasquito de lomo— sin bebida ni postre
-propios. Así que Tito recomienda el plato y nada más, y las preguntas de
+propios. Así que Bofito recomienda el plato y nada más, y las preguntas de
 la mesada (bebida y postre) no entran en la tanda: preguntarle a un chico
 qué postre quiere y después no darle ninguno es peor que no preguntar. Si
 el local suma bebida o postre para chicos, se cargan con `rol:"bebida"` o
 `rol:"postre"` y las preguntas vuelven solas.
 
 No hay juegos para la espera: el juego es pedir. El chico **cocina con
-Tito**, y cada respuesta es algo que hace en la cocina:
+Bofito**, y cada respuesta es algo que hace en la cocina:
 
 - lo que más le gusta lo tira a la olla, tocándolo o arrastrándolo, y queda
   flotando;
@@ -181,11 +204,11 @@ eligió. Con todo adentro, revuelve tocando la olla, entra al horno, cuenta
 pesos son los mismos de antes: sólo cambió cómo se contestan.
 
 Tiene sonido —sintetizado en el navegador, sin archivos—, vibración suave
-y Tito lee en voz alta cada pregunta, para el que todavía no lee bien. Un
+y Bofito lee en voz alta cada pregunta, para el que todavía no lee bien. Un
 botón arriba lo apaga todo, y queda apagado para la próxima visita. Con
 `prefers-reduced-motion` no hay vuelos, temblores ni confeti.
 
-Mientras atiende Tito, **la carta muestra sólo la de los chicos**, con un
+Mientras atiende Bofito, **la carta muestra sólo la de los chicos**, con un
 aviso y un botón para que un grande vea la carta entera.
 
 En la mesa, a cada chico se le pasa el celular y cocina lo mismo, con tres
@@ -250,7 +273,7 @@ el eco se muestra igual, sin la segunda mitad.
 
 **La tarjeta.** El veredicto termina en una tarjeta con la foto del plato,
 el sello, el nombre —con el punto de la carne, si lo hubo— y una frase
-corta del Vasco.
+corta dDon Bo.
 
 El botón no comparte texto: **arma una imagen**. La tarjeta se vuelve a
 dibujar en un `canvas` de 1080 × 1350 —el vertical que Instagram no
@@ -360,7 +383,7 @@ vueltas cada uno, para que siga tardando dos segundos y alguien pueda
 abrirlo en el celular. Entre lo que verifica:
 
 - que un vegetariano nunca reciba carne **ni se la vean ofrecer**;
-- que el Vasco nunca recomiende del menú de niños, y Tito nunca salga de él;
+- que Don Bo nunca recomiende del menú de niños, y Bofito nunca salga de él;
 - que la entrada salga de la tabla de ese plato, que los platos que no
   llevan entrada no la lleven, y que cada plato fuerte de la carta tenga su
   tabla;
@@ -385,7 +408,7 @@ abrirlo en el celular. Entre lo que verifica:
 - que nadie reciba como plato propio algo que ya está al medio de su mesa;
 - que de las respuestas citadas, al menos una diga qué hizo el chef con ella;
 - que la cuenta cierre con lo que se muestra en pantalla;
-- que Tito no le muestre a un chico un plato que no puede comer;
+- que Bofito no le muestre a un chico un plato que no puede comer;
 - que dos corridas seguidas no repitan ni una sola pregunta rotativa.
 
 Para correrlo fuera del navegador —el motor no toca el DOM, así que se
@@ -424,7 +447,7 @@ vez (`SEMILLA=123` para probar con otra). Mira lo que el autotest no ve:
   sostengan con lo que el plato contiene, que las etiquetas no prometan de
   más, el perfil de cada vino; del banco, pesos de ±3 como máximo, que lo
   que afirma un resultado lleve condición, y que cada gesto que usan el
-  Vasco y Tito esté dibujado;
+  Vasco y Bofito esté dibujado;
 - **robustez:** sin respuestas, índices fuera de rango, deslizadores con
   basura, texto con HTML y las 512 combinaciones de restricciones;
 - **determinismo:** las mismas respuestas, en cualquier orden, dan lo mismo;
@@ -438,8 +461,8 @@ vez (`SEMILLA=123` para probar con otra). Mira lo que el autotest no ve:
 - **textos:** que ninguna frase quede rota y que ninguna afirme algo falso
   («sale de esa parrilla» de una pizza, «te bajo a un tinto» con un blanco);
 - **mesa:** mesas de 1 a 8 con chicos y restricciones cruzadas;
-- **chicos:** todas las combinaciones de restricciones de Tito. Si nada del
-  menú de peques pasa, Tito no muestra ningún plato;
+- **chicos:** todas las combinaciones de restricciones de Bofito. Si nada del
+  menú de peques pasa, Bofito no muestra ningún plato;
 - **reparto:** que lo que sale se parezca a este local (ningún plato arriba
   del 15%, quien pide carne recibe parrilla, quien elige el pan recibe
   horno);
@@ -461,7 +484,7 @@ brush en mayúscula para las secciones, script para los remates, y una sans
 limpia para los platos y los precios.
 
 El Chef es la misma carta de noche: el mismo azul, invertido. El mundo de
-Tito es el mismo azul con un acento propio, turquesa, y todo un punto más
+Bofito es el mismo azul con un acento propio, turquesa, y todo un punto más
 grande.
 
 El único color que no está en la carta impresa es el arena del acento, que
@@ -475,8 +498,6 @@ que toca a los datos:
 - **Alérgenos.** La clasificación de cada plato (vegetariano, sin gluten,
   alérgenos) es **nuestra lectura** de la carta impresa. La confirma el
   local con la planilla de `docs/`.
-- **Massini.** La descripción no se lee en la carta impresa; está vacía
-  hasta tenerla.
 - **Fotos.** Hay **una sola y es de muestra**: `img/platos/ojo-bife.jpg`,
   de banco de imágenes, puesta para que se vea el mecanismo andando de
   punta a punta. No es una foto del local y no debería sobrevivir a la

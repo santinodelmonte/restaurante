@@ -35,6 +35,11 @@ function pruebasMotor(opciones){
   const aviso = msj => actual.avisos.push(msj);
   const dato = msj => actual.datos.push(msj);
 
+  // Lo que se mide no depende del día: el destacado se apaga, y se prueba
+  // en su propia sección.
+  const forzadoAntes = DESTACADOS.forzado;
+  DESTACADOS.forzado = "ninguno";
+
   // Nada de lo que se prueba toca lo que la persona tiene guardado.
   Memoria.cache = {}; MemoriaPreg.cache = {};
   const memoriaSumar = Memoria.sumar, memoriaUlt = Memoria.guardarUltimo;
@@ -197,7 +202,7 @@ function pruebasMotor(opciones){
   };
   const gestos = { tito: dibujados("k"), vasco: dibujados("v") };
   const usados = (re, quien) => { let m; while ((m = re.exec(codigo))) ok(gestos[quien].has(m[1]),
-    `${quien === "tito" ? "Tito" : "El Vasco"} usa el gesto «${m[1]}», que no está dibujado`); };
+    `${quien === "tito" ? KID.nombre : CHEF.nombre} usa el gesto «${m[1]}», que no está dibujado`); };
   ok(gestos.tito.size > 0 && gestos.vasco.size > 0, "no se encontraron los gestos en el CSS");
   usados(/titoHTML\("[^"]*",\s*"([a-z]+)"\)/g, "tito");
   usados(/gestoKid\("([a-z]+)"\)/g, "tito");
@@ -623,6 +628,34 @@ function pruebasMotor(opciones){
   ok((brasa.cat.parrilla || 0) >= 0.40, `quien elige el olor a brasa recibe parrilla el ${pct(brasa.cat.parrilla)}`);
   ok((pan.cat.horno || 0) >= 0.55, `quien elige el pan recién hecho recibe horno el ${pct(pan.cat.horno)}`);
 
+  /* ══ 10b. DESTACADOS ═════════════════════════════════════════════ */
+  seccion("destacados");
+  DESTACADOS.orden.forEach(cat => {
+    DESTACADOS.forzado = "ninguno";
+    const sin = repartir(800 * VUELTAS).cat[cat] || 0;
+    DESTACADOS.forzado = cat;
+    const con = repartir(800 * VUELTAS).cat[cat] || 0;
+    dato(`${cat}: ${pct(sin)} → ${pct(con)} con el destacado`);
+    ok(con >= sin + 0.08, `el destacado ${cat} casi no se nota (${pct(sin)} → ${pct(con)})`);
+    ok(con <= 0.70, `el destacado ${cat} se come la carta (${pct(con)})`);
+    // y no da vuelta a quien pidió otra cosa con todas las letras
+    const carne = repartir(400 * VUELTAS, forzar("proteina", "carne"));
+    ok((carne.cat.parrilla || 0) + (carne.cat.milanesas || 0) + (carne.cat.horno || 0) + (carne.cat.chivitos || 0) + (carne.cat.burgers || 0) >= 0.6 || cat === "parrilla",
+      `con el destacado ${cat}, quien pide carne deja de recibir carne`);
+    // el chef lo dice sólo si es cierto, y la carta lo marca sólo en ésos
+    for (let i = 0; i < 80; i++){
+      const { t, resp } = tandaAlAzar();
+      const r = recomendar(resp, t);
+      const dice = /destacado de la casa/.test(vozPrincipal(r, mulberry32(i)));
+      ok(dice === (r.principal.categoria === cat), `el chef ${dice ? "dice" : "no dice"} destacado con ${r.principal.nombre}`);
+    }
+    MENU.forEach(p => {
+      const marca = /Destacado de la semana/.test(tarjetaPlato(p));
+      ok(marca === (p.categoria === cat && tipoDe(p) === "principal"), `la carta ${marca ? "marca" : "no marca"} "${p.nombre}"`);
+    });
+  });
+  DESTACADOS.forzado = "ninguno";
+
   /* ══ 11. RENDIMIENTO ══════════════════════════════════════════════ */
   seccion("rendimiento");
   const tandas = []; for (let i = 0; i < 200; i++) tandas.push(tandaAlAzar());
@@ -638,6 +671,7 @@ function pruebasMotor(opciones){
   dato(`una mesa de 8: ${tMesa.toFixed(1)} ms`);
   ok(tMesa < 80, `una mesa de 8 tarda ${tMesa.toFixed(0)} ms`);
 
+  DESTACADOS.forzado = forzadoAntes;
   Memoria.sumar = memoriaSumar; Memoria.guardarUltimo = memoriaUlt;
   Memoria.cache = null; MemoriaPreg.cache = null;
 

@@ -27,16 +27,20 @@ reunión de cambios), en pesos uruguayos con IVA incluido:
 - [x] **Planilla de alérgenos para completar:**
       `docs/planilla-alergenos-bo-fomento.xlsx`, con nuestra lectura
       preliminar y las salsas de las pastas aparte.
-- [ ] Mandar la planilla de alérgenos al local.
+- [x] Mandar la planilla de alérgenos al local (la piden para revisarla).
 - [ ] Cargar en el `MENU` lo que devuelvan en la planilla.
-- [ ] **Massini:** la descripción no se lee en la carta impresa. Pedirla al
-      local; hoy va sin descripción.
-- [ ] **Limonada con menta repetida:** la carta trae «Limonada natural con
-      menta» ($ 340, en Refrescos) y «Jarra limonada con menta 1L» ($ 340, en
-      Licuados). Confirmar con el local si son dos productos distintos.
-- [ ] **Nombres:** reemplazar «El Vasco» y «Tito» en textos, frases, la
-      tarjeta para compartir, la voz de Tito y el README.
-- [ ] **Platos a empujar:** cargar el campo `margen`.
+- [x] **Massini:** «Bizcocho suave de vainilla, crema y yema mola
+      caramelizada», como lo mandó el local.
+- [x] **Limonada con menta:** era la misma. Queda una sola, «Limonada
+      natural con menta (1 litro)», y el chef la recomienda como la bebida
+      rica, fresca y natural.
+- [x] **Nombres:** «Don Bo» para los grandes y «Bofito» para los chicos.
+- [x] **Platos a empujar:** el local pidió rotar: unas semanas risottos,
+      después parrilla, después pastas. `DESTACADOS`, turnos de 2 semanas
+      desde el lunes 23/11/2026.
+- [ ] **Entradas:** el local pidió recomendar entradas. Ya van en cada
+      veredicto, salvo con sándwiches, burgers, chivitos y ensaladas.
+      Confirmar si las quieren también ahí.
 
 ## 2. Ajustar el motor contra la carta oficial
 
@@ -69,8 +73,6 @@ reunión de cambios), en pesos uruguayos con IVA incluido:
       (ahora 20, ver abajo).
 - [ ] **Vinos que no salen nunca** (20 de 65): la batería los lista. Revisar
       sus perfiles con alguien que conozca la carta de vinos.
-- [ ] **Burger Bo Fomento:** no sale nunca con gente al azar (es la más
-      extrema de las dos burgers). Si el local la quiere empujar, `margen`.
 - [ ] **Probar el chef con respuestas reales** (nosotros y el local) y
       ajustar los ejes con lo que salga. Ya visto: el cordero sale un poco de
       más entre los que piden carne, y las burgers casi nunca salen.

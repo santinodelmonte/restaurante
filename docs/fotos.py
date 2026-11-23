@@ -60,6 +60,7 @@ RENOMBRES = {
     "brownie-helado": "brownie",
     "mousse-sin": "mousse-chocolate",
     "cafe": "expreso",
+    "limonada-jarra": "limonada-menta",   # era la misma limonada, cargada dos veces
 }
 
 # Los de la carta de prueba que no están en la oficial. Sus fotos, si

@@ -275,6 +275,8 @@ button{ font:inherit; color:inherit; }
 .tag--veg{ background:#DDECDC; color:#2C5228; }
 .tag--stacc{ background:#E5E3F2; color:#3B3670; }
 .tag--comp{ background:#F7E7CB; color:#7A5418; }
+/* el destacado del turno: el marino de la casa con el arena del acento */
+.tag--destacado{ background:var(--marino, #1B3A57); color:var(--arena, #E0A94A); }
 
 .vacio{
   text-align:center; padding:44px 18px 54px;
@@ -579,7 +581,7 @@ button{ font:inherit; color:inherit; }
   100%{ transform:translateY(0) scale(1); }
 }
 
-/* el Vasco presentándose, arriba de la pantalla de modo */
+/* Don Bo presentándose, arriba de la pantalla de modo */
 .presenta{ display:flex; align-items:flex-end; gap:14px; margin:0 0 6px; }
 .presenta__globo{
   flex:1; min-width:0; background:rgba(255,255,255,.07); border:1px solid rgba(255,255,255,.16);
@@ -943,7 +945,7 @@ html.visor-abierto{ overflow:hidden; }
 .kid .ficha__voz{ background:#E9FBF8; border-left-color:var(--acento); font-size:1.08rem; }
 .kid .tarjeta-modo:hover{ border-color:var(--acento); }
 
-/* Tito. Mismo trazo que el Vasco —es de la misma casa— pero redondo,
+/* Bofito. Mismo trazo que Don Bo —es de la misma casa— pero redondo,
    chico y con gorro. Tres gestos alcanzan: saluda, piensa y festeja. */
 .tito{ color:var(--papel); display:block; flex:none; aspect-ratio:210/240; }
 .tito--grande{ width:min(150px, 36vw); height:auto; }
@@ -967,7 +969,7 @@ html.visor-abierto{ overflow:hidden; }
 
 /* ── LA COCINA DE TITO ────────────────────────────────────────────────
    No hay juegos para la espera: el juego es pedir. El chico cocina con
-   Tito y cada cosa que tira a la olla es una respuesta. La olla guarda
+   Bofito y cada cosa que tira a la olla es una respuesta. La olla guarda
    todo lo que eligió —lo que flota, el color de la salsa, el fuego, el
    tamaño— así que al final ve su receta entera antes de que entre al
    horno. Todo se toca: a los cinco años no se arrastra con precisión,
@@ -1160,12 +1162,12 @@ html.visor-abierto{ overflow:hidden; }
 @keyframes k-sale{ from{ transform:translateY(50px) scale(.6); opacity:0; } to{ transform:none; opacity:1; } }
 .kid .ficha__cat{ color:#23907F; }
 
-/* el botón de sonido: sólo existe en la cocina de Tito */
+/* el botón de sonido: sólo existe en la cocina de Bofito */
 .noche .icono{ background:transparent; border-color:rgba(255,255,255,.3); color:var(--papel); }
 .noche .icono:hover{ background:rgba(255,255,255,.12); }
 .noche .icono[aria-pressed="false"]{ opacity:.7; }
 
-/* la carta de los chicos: mientras Tito atiende, la carta es sólo eso */
+/* la carta de los chicos: mientras Bofito atiende, la carta es sólo eso */
 .solo-ninos{
   display:flex; align-items:center; gap:8px 12px; flex-wrap:wrap;
   margin:0 0 12px; padding:12px 14px; border-radius:var(--r-md);
@@ -1330,7 +1332,7 @@ html.visor-abierto{ overflow:hidden; }
           <button class="volver" id="chef-volver" aria-label="Volver">&larr; Volver</button>
           <h2 class="barra-top__titulo" id="h-chef">El Chef</h2>
           <button class="icono" id="b-sonido" hidden aria-pressed="true"
-                  aria-label="Sonido de la cocina de Tito" title="Sonido">&#128266;</button>
+                  aria-label="Sonido de la cocina de Bofito" title="Sonido">&#128266;</button>
           <button class="btn btn--chico btn--linea" data-ir="carta">Ver carta</button>
         </div>
         <div class="progreso" id="progreso" hidden>
@@ -1843,9 +1845,14 @@ const MENU = [
   { id:"salus-agua", nombre:"Salus agua 500cc", precio:150, categoria:"refrescos", sub:"Refrescos",
     descripcion:"", tags:["vegetariano","sin alcohol","sin TACC"], apto:{vegetariano:true,singluten:true,compartir:false}, proteina:"bebida", contiene:[],
     ejes:{intensidad:0,untuosidad:1,acidez:9,aventura:0,social:3,dulce:0} },
-  { id:"limonada-menta", nombre:"Limonada natural con menta", precio:340, categoria:"refrescos", sub:"Refrescos",
-    descripcion:"", tags:["vegetariano","sin alcohol","fresco","sin TACC"], apto:{vegetariano:true,singluten:true,compartir:false}, proteina:"bebida", contiene:[],
-    ejes:{intensidad:0,untuosidad:1,acidez:10,aventura:3,social:4,dulce:4} },
+  /* La carta impresa la tiene dos veces —«Limonada natural con menta» en
+     Refrescos y «Jarra limonada con menta 1L» en Licuados, las dos a
+     $340—. El local confirmó que es la misma, y pidió que el chef la
+     recomiende como la bebida rica, fresca y natural: de ahí el margen. */
+  { id:"limonada-menta", nombre:"Limonada natural con menta (1 litro)", precio:340, categoria:"refrescos", sub:"Refrescos",
+    descripcion:"", tags:["vegetariano","sin alcohol","fresco","natural","sin TACC","para la mesa"], apto:{vegetariano:true,singluten:true,compartir:true}, proteina:"bebida", contiene:[],
+    margen:3,
+    ejes:{intensidad:0,untuosidad:1,acidez:10,aventura:3,social:7,dulce:4} },
   { id:"licuado-frutilla", nombre:"Licuado de frutilla", precio:290, categoria:"refrescos", sub:"Licuados de frutas sin alcohol",
     descripcion:"", tags:["vegetariano","sin alcohol","fresco","sin TACC"], apto:{vegetariano:true,singluten:true,compartir:false}, proteina:"bebida", contiene:[],
     ejes:{intensidad:2,untuosidad:4,acidez:10,aventura:3,social:3,dulce:7} },
@@ -1861,14 +1868,12 @@ const MENU = [
   { id:"jugo-pomelo", nombre:"Jugo de pomelo natural", precio:250, categoria:"refrescos", sub:"Licuados de frutas sin alcohol",
     descripcion:"", tags:["vegetariano","sin alcohol","fresco","sin TACC"], apto:{vegetariano:true,singluten:true,compartir:false}, proteina:"bebida", contiene:[],
     ejes:{intensidad:1,untuosidad:1,acidez:10,aventura:4,social:3,dulce:3} },
-  { id:"limonada-jarra", nombre:"Jarra de limonada con menta 1 litro", precio:340, categoria:"refrescos", sub:"Licuados de frutas sin alcohol",
-    descripcion:"", tags:["vegetariano","sin alcohol","sin TACC","para la mesa"], apto:{vegetariano:true,singluten:true,compartir:true}, proteina:"bebida", contiene:[],
-    ejes:{intensidad:0,untuosidad:1,acidez:10,aventura:3,social:9,dulce:4} },
   { id:"limonada-frutos-rojos", nombre:"Limonada con frutos rojos 1 litro", precio:420, categoria:"refrescos", sub:"Licuados de frutas sin alcohol",
     descripcion:"", tags:["vegetariano","sin alcohol","sin TACC","para la mesa"], apto:{vegetariano:true,singluten:true,compartir:true}, proteina:"bebida", contiene:[],
     ejes:{intensidad:0,untuosidad:1,acidez:10,aventura:5,social:9,dulce:5} },
   { id:"monster", nombre:"Monster 473cc", precio:250, categoria:"refrescos", sub:"Energizante",
     descripcion:"", tags:["vegetariano","sin alcohol","sin TACC"], apto:{vegetariano:true,singluten:true,compartir:false}, proteina:"bebida", contiene:[],
+    recomendable:false,   // un energizante no acompaña una comida: está en la carta, pero el chef no lo ofrece
     ejes:{intensidad:2,untuosidad:1,acidez:8,aventura:6,social:3,dulce:6} },
 
   /* ── BEBIDAS Y WHISKYS ───────────────────────────────────────────── */
@@ -1935,7 +1940,7 @@ const MENU = [
     descripcion:"Brownie de puro chocolate con nueces, dulce de leche y merengue flameado. Acompañado con helado de crema.", tags:["vegetariano","contundente"], apto:{vegetariano:true,singluten:false,compartir:false}, proteina:"dulce", contiene:["lacteos","gluten","huevo","frutos-secos"],
     ejes:{intensidad:8,untuosidad:8,acidez:3,aventura:3,social:5,dulce:10} },
   { id:"massini", nombre:"Massini", precio:360, categoria:"postres",
-    descripcion:"", tags:["vegetariano","clásico"], apto:{vegetariano:true,singluten:false,compartir:false}, proteina:"dulce", contiene:["lacteos","gluten","huevo"],
+    descripcion:"Bizcocho suave de vainilla, crema y yema mola caramelizada.", tags:["vegetariano","clásico"], apto:{vegetariano:true,singluten:false,compartir:false}, proteina:"dulce", contiene:["lacteos","gluten","huevo"],
     ejes:{intensidad:5,untuosidad:8,acidez:2,aventura:2,social:3,dulce:9} },
   { id:"tarta-frutal", nombre:"Tarta frutal", precio:360, categoria:"postres",
     descripcion:"Sablée de almendras, suave crema pastelera y frutas de estación.", tags:["vegetariano","fresco"], apto:{vegetariano:true,singluten:false,compartir:false}, proteina:"dulce", contiene:["lacteos","gluten","huevo","frutos-secos"],
@@ -2208,14 +2213,14 @@ const MENU = [
 
   /* ── MENÚ DE PEQUES ─────────────────────────────────────────────────
      El menú de niños que decidió el local: tres platos y nada más. No
-     trae bebida ni postre propios, así que Tito recomienda sólo el plato
+     trae bebida ni postre propios, así que Bofito recomienda sólo el plato
      y en su cocina no aparecen las preguntas de la mesada (ver
      `tandaNino`). Si algún día suman bebida o postre para chicos, se
      cargan acá con `rol:"bebida"` o `rol:"postre"` y las preguntas
      vuelven solas.
 
      `rol` divide el menú de niños en sí mismo. Y como la categoría es de
-     tipo "nino", el Vasco no los ve nunca: un adulto no recibe un
+     tipo "nino", Don Bo no los ve nunca: un adulto no recibe un
      churrasquito de niños como recomendación.                       */
   { id:"n-nuggets", nombre:"Nuggets de pollo con fritas", precio:440, categoria:"ninos", rol:"principal",
     descripcion:"", tags:["clásico"], apto:{vegetariano:false,singluten:false,compartir:false}, proteina:"pollo", contiene:["pollo","gluten","huevo"],
@@ -3230,6 +3235,39 @@ const FUEGO_DE = {
   pastas:["olla"], risottos:["olla"]
 };
 
+/* ── LOS DESTACADOS, QUE ROTAN ────────────────────────────────────────
+   Pedido del local: que el chef empuje una cocina por vez y que vaya
+   cambiando —unas semanas los risottos, después la parrilla, después las
+   pastas—. Cada turno dura `semanas` semanas, y al terminar el último
+   vuelve a empezar. Cambiar el orden, sumar una cocina o alargar los
+   turnos se hace acá y en ningún otro lado.
+
+   El empujón es un empate a favor, no una imposición: los filtros duros
+   no se tocan, y quien dijo con todas las letras que quiere carne sigue
+   recibiendo carne aunque la semana sea de pastas. Cuando el plato que
+   sale es del destacado, el chef lo dice y la carta lo marca.
+
+   `forzado` es para las pruebas: con un id de categoría fija el turno, y
+   con "ninguno" lo apaga, así lo que se mide no depende del día.       */
+const DESTACADOS = {
+  inicio: "2026-11-23",                       // lunes en que arranca el primer turno
+  semanas: 2,                                  // cuánto dura cada turno
+  orden: ["risottos", "parrilla", "pastas"],
+  empuje: 0.08,
+  forzado: null
+};
+
+function destacadoDe(fecha){
+  if (DESTACADOS.forzado === "ninguno") return null;
+  if (DESTACADOS.forzado) return DESTACADOS.forzado;
+  const dia = 24 * 60 * 60 * 1000;
+  const desde = Date.parse(DESTACADOS.inicio + "T00:00:00");
+  const semana = Math.max(0, Math.floor(((fecha || new Date()).getTime() - desde) / (7 * dia)));
+  return DESTACADOS.orden[Math.floor(semana / DESTACADOS.semanas) % DESTACADOS.orden.length];
+}
+
+const esDestacado = p => !!p && p.categoria === destacadoDe();
+
 /* ── 3. PUNTAJE: distancia euclidiana invertida + castigos blandos ── */
 function puntuar(plato, v, f, opts){
   opts = opts || {};
@@ -3279,6 +3317,8 @@ function puntuar(plato, v, f, opts){
   // la aguja entre platos que ya empataron por afinidad. Hoy va vacío a
   // propósito — es una decisión del local, no nuestra.
   if (plato.margen) s += 0.03 * plato.margen;
+  // el destacado del turno, sólo cuando se elige el plato fuerte
+  if (opts.destacado && plato.categoria === opts.destacado) s += DESTACADOS.empuje;
   return s;
 }
 
@@ -3781,7 +3821,8 @@ function recomendar(respuestas, preguntas, opciones){
   // promedio sale cerca del 5, cualquier plato con un poco de dulce
   // —boniato, miel, ananá— quedaba más cerca de todo el mundo y ganaba
   // de más. El dulce de una persona habla del postre, no del plato fuerte.
-  const rankPrincipal = ordenar(poolPrincipal, v, f, rnd, { pesosEje:{ acidez:0.5, dulce:0.3 } });
+  const rankPrincipal = ordenar(poolPrincipal, v, f, rnd,
+    { pesosEje:{ acidez:0.5, dulce:0.3 }, destacado: destacadoDe() });
   const principal     = rankPrincipal[0].plato;
 
   // La entrada, elegida contra el principal y no contra la persona.
@@ -4142,6 +4183,7 @@ function vozPrincipal(r, rnd){
     aperturas[Math.floor(rnd() * aperturas.length)],
     cierres[Math.floor(rnd() * cierres.length)],
     razonDelPlato(r),
+    esDestacado(r.principal) ? "Y esta semana es el destacado de la casa." : "",
     lineaDeEje(r.vector)
   ].filter(Boolean).join(" ");
 }
@@ -4172,6 +4214,8 @@ function vozEntrada(r){
 }
 
 function vozBebida(r){
+  if (r.bebida && r.bebida.id === "limonada-menta")
+    return "Limonada natural con menta: rica, fresca y hecha acá. Con este sol, no hay nada mejor.";
   if (r.razonBebida){
     const t = r.razonBebida;
     return t.charAt(0).toUpperCase() + t.slice(1) + ".";
@@ -4245,7 +4289,7 @@ function chipsCarta(){
 function platosVisibles(){
   const q = S.q.trim().toLowerCase();
   return MENU.filter(p => {
-    // Mientras atiende Tito, la carta es la de los chicos y nada más: sin
+    // Mientras atiende Bofito, la carta es la de los chicos y nada más: sin
     // categorías ni filtros de grandes, que en esa pantalla ni se ven.
     if (S.soloNinos){ if (!esNino(p)) return false; }
     else if (S.cat !== "todas" && p.categoria !== S.cat) return false;
@@ -4367,6 +4411,8 @@ function tarjetaPlato(p){
   // Un vino no necesita que le aclaren que es vegetariano y sin TACC: lo
   // son los cuarenta y nueve. Repetir cinco etiquetas por botella es ruido
   // que tapa lo único que importa, que es la cepa y el color.
+  if (esDestacado(p) && tipoDe(p) === "principal")
+    chips.push('<span class="tag tag--destacado">Destacado de la semana</span>');
   if (!p.vino){
     if (p.apto.vegetariano) chips.push('<span class="tag tag--veg">Vegetariano</span>');
     if (p.apto.singluten)   chips.push('<span class="tag tag--stacc">Sin TACC</span>');
@@ -4460,7 +4506,13 @@ function pintarCarta(){
    hereda, así que desde afuera no se pueden prender y apagar los gestos.
    La cabeza es una sola; ojos, cejas y boca son capas que se cambian.
    ═══════════════════════════════════════════════════════════════════ */
-const CHEF = { nombre: "El Vasco", corto: "Vasco" };
+/* Los nombres los eligió el local: «Don Bo» para los grandes y «Bofito»
+   para los chicos. Adentro del código los personajes conservan sus
+   nombres de trabajo (vascoHTML, .vasco, Tito.hablar, .tito): cambiarlos
+   no cambia nada de lo que se ve. Lo que se ve y se escucha sale de
+   CHEF y KID, así que un cambio de nombre se hace acá y en ningún otro
+   lado. */
+const CHEF = { nombre: "Don Bo", corto: "Don Bo" };
 
 const VASCO_CUERPO = `
   <g class="v-brazo">
@@ -4562,12 +4614,12 @@ function vascoHTML(clase, gesto){
       <g class="v-cabeza">${VASCO_CARA}${VASCO_GESTOS}</g>
     </svg>`;
 }
-/* Le cambia la cara a todos los Vascos que haya en pantalla. */
+/* Le cambia la cara a todas las caras de Don Bo que haya en pantalla. */
 function gesto(g){ $$(".vasco").forEach(v => v.setAttribute("data-gesto", g)); }
 
 /* ═══════════════════════════════════════════════════════════════════
    TITO — el ayudante
-   Mismo trazo y misma paleta que el Vasco, porque es de la misma casa:
+   Mismo trazo y misma paleta que Don Bo, porque es de la misma casa:
    redondo, chico, con gorro de cocinero y una cuchara de madera en vez
    de las pinzas. Tres gestos alcanzan para lo que tiene que hacer.
    ═══════════════════════════════════════════════════════════════════ */
@@ -4662,7 +4714,7 @@ function bromaMesa(nombres){
 /* ═══════════════════════════════════════════════════════════════════
    ARMÁ LA MESA
    El celular da la vuelta: cada uno pone su nombre, dice qué no come y
-   contesta dos preguntas. Al final El Vasco arma el pedido de todos.
+   contesta dos preguntas. Al final Don Bo arma el pedido de todos.
 
    No es correr el motor N veces y listo: una mesa pide distinto que N
    personas sueltas. Lo que va al medio tiene que servirle a TODOS, así
@@ -4782,7 +4834,7 @@ function recomendarMesa(comensales, ninos){
   const cuantosVinos = vino ? Math.max(1, Math.round(comensales.length / 3)) : 0;
 
   // 5. LOS CHICOS: cada uno con lo suyo, del menú de niños y de ningún
-  // otro lado. El Vasco no elige acá: pide la recomendación al Chef Kid.
+  // otro lado. Don Bo no elige acá: pide la recomendación al Chef Kid.
   const platosNinos = ninos.map(n => ({
     nino: n,
     pedido: recomendarNino(n.respuestas, n.preguntas || PREGUNTAS_NINOS)
@@ -4844,19 +4896,19 @@ function tandaComensal(indice){
 
 /* ═══════════════════════════════════════════════════════════════════
    EL CHEF KID
-   Un ayudante del Vasco, más chico, que atiende a los que todavía no
-   llegan a la mesa alta. Es un personaje propio y no el Vasco hablando
-   raro: el Vasco cambió de tono para hablarle a un adulto que sabe de
+   Un ayudante dDon Bo, más chico, que atiende a los que todavía no
+   llegan a la mesa alta. Es un personaje propio y no Don Bo hablando
+   raro: Don Bo cambió de tono para hablarle a un adulto que sabe de
    comida, y meterle además un registro infantil lo partiría al medio.
 
    Reglas de la casa, y no son adorno:
      · El Chef Kid recomienda SÓLO del menú de niños. Nada más.
-     · El Vasco no ve el menú de niños ni por accidente: la categoría es
+     · Don Bo no ve el menú de niños ni por accidente: la categoría es
        de tipo "nino" y el motor de adultos filtra por tipo.
      · Está pensado para 5 a 10 años: texto corto, ícono grande, y todo
        se puede escuchar con el botón de voz que ya tiene la carta.
    ═══════════════════════════════════════════════════════════════════ */
-const KID = { nombre: "Tito", corto: "Tito", oficio: "el ayudante del Vasco" };
+const KID = { nombre: "Bofito", corto: "Bofito", oficio: "el ayudante de Don Bo" };
 
 /* Cinco preguntas: la primera siempre, y cuatro del banco. Van con emoji
    grande porque a los cinco años se elige con el dedo, no leyendo. */
@@ -4905,7 +4957,7 @@ const PREGUNTAS_NINOS = [
 
   { id:"n-textura", tipo:"sabor", grupo:"como",
     texto:"¿Cómo te gusta más la comida?",
-    cocina:{ pide:"Elegí y Tito le sube o le baja el fuego" },
+    cocina:{ pide:"Elegí y " + KID.nombre + " le sube o le baja el fuego" },
     opciones:[
       { texto:"Crocante, que haga ¡crac!", emo:"🥨", pesos:{ intensidad:+2, untuosidad:+2 }, olla:{ fuego:3 },
         eco:"que te gusta que haga crac", chiste:"¡El mejor ruido de la cocina!" },
@@ -5035,7 +5087,7 @@ function recomendarNino(respuestas, preguntas){
   };
 }
 
-/* La voz de Tito: frases cortas, sin ironía y sin diminutivos falsos.
+/* La voz de Bofito: frases cortas, sin ironía y sin diminutivos falsos.
    A un chico de ocho años se le habla bien, no en bebé. */
 const VOZ_KID = {
   cierres:[
@@ -5067,12 +5119,12 @@ function pantallaModo(){
   modoKid(false);
   $("#chef-volver").onclick = () => ir("landing");
 
-  // Lo primero que ve la persona es la cara del Vasco, no un título.
+  // Lo primero que ve la persona es la cara dDon Bo, no un título.
   const dice = S.nombre
     ? bromaNombre(S.nombre)
     : (Memoria.ultimoPlato()
         ? "Vos ya estuviste acá. Me acuerdo."
-        : "Sentate. Soy El Vasco y hace veinte años que estoy atrás de esta parrilla.");
+        : "Sentate. Soy " + CHEF.nombre + " y hace veinte años que estoy atrás de esta parrilla.");
 
   panel().innerHTML = `<div class="modo">
     <div class="presenta">
@@ -5123,7 +5175,7 @@ function pantallaModo(){
     <button class="tarjeta-modo" data-modo="kid">
       <span class="tarjeta-modo__top">
         <h3>Para los más chicos</h3>
-        <span class="tarjeta-modo__meta">Con Tito</span>
+        <span class="tarjeta-modo__meta">Con ${esc(KID.nombre)}</span>
       </span>
       <p>Pasale el celular al más chico de la mesa. Cocina su plato con ${esc(KID.nombre)}, mi ayudante: a la olla, al horno, y sale algo del menú de niños.</p>
     </button>
@@ -5160,7 +5212,7 @@ function pantallaModo(){
   }));
   decir("Elegí el modo del chef.");
 }
-/* Lo que El Vasco se acuerda de la última vez. Vive en el celular. */
+/* Lo que Don Bo se acuerda de la última vez. Vive en el celular. */
 function recuerdoHTML(){
   const u = Memoria.ultimoPlato();
   if (!u) return "";
@@ -5489,7 +5541,7 @@ function atras(){
 /* ═══════════════════════════════════════════════════════════════════
    LAS PANTALLAS DEL CHEF KID — LA COCINA DE TITO
    Mismas preguntas y mismo motor que antes; lo que cambió es cómo se
-   contestan. El chico no llena un cuestionario: cocina con Tito. Cada
+   contestan. El chico no llena un cuestionario: cocina con Bofito. Cada
    respuesta es algo que tira a la olla o deja en la mesada, la olla se
    va pareciendo a lo que eligió, y al final la revuelve, va al horno y
    de adentro sale su plato. No hay juegos para la espera porque el
@@ -5497,8 +5549,8 @@ function atras(){
    ═══════════════════════════════════════════════════════════════════ */
 const K = { nombre:"", respuestas:{}, preguntas:[], vuelta:0 };
 
-/* Entrar al mundo de Tito cambia tres cosas a la vez: el color, el botón
-   de sonido y la carta, que mientras atiende Tito muestra sólo la de los
+/* Entrar al mundo de Bofito cambia tres cosas a la vez: el color, el botón
+   de sonido y la carta, que mientras atiende Bofito muestra sólo la de los
    chicos. Salir las devuelve juntas. */
 function modoKid(on){
   $("#v-chef").classList.toggle("kid", !!on);
@@ -5593,7 +5645,7 @@ function vibrar(patron){
   try { navigator.vibrate(patron); } catch (e) {}
 }
 
-/* Tito lee en voz alta lo que pregunta: a los cinco años no todos leen,
+/* Bofito lee en voz alta lo que pregunta: a los cinco años no todos leen,
    y así el chico no depende de que un grande le lea la pantalla. Usa la
    voz en español del celular, un poco más aguda. Si no hay, no pasa
    nada: el texto está igual en la burbuja. */
@@ -5638,7 +5690,7 @@ function pantallaKid(){
       ${titoHTML("tito--grande", "saludo")}
       <div class="presenta__globo">
         <span class="presenta__nombre">${esc(KID.nombre)}</span>
-        ¡Hola! Soy ${esc(KID.nombre)} y ayudo al Vasco en la cocina. ¿Me ayudás a cocinar tu comida?
+        ¡Hola! Soy ${esc(KID.nombre)} y ayudo a ${esc(CHEF.nombre)} en la cocina. ¿Me ayudás a cocinar tu comida?
       </div>
     </div>
 
@@ -6412,7 +6464,7 @@ function pintarPasa(i){
 
 /* ── EL TURNO DE LOS CHICOS ───────────────────────────────────────────
    El momento que vende la funcionalidad: el celular le llega al nene y
-   lo atiende otro personaje, con otra cara y otro tono. Cocina con Tito
+   lo atiende otro personaje, con otra cara y otro tono. Cocina con Bofito
    igual que en el modo niños, con menos preguntas y menos vueltas de
    cuchara para no tener a los grandes esperando. Siempre con "saltear"
    a mano, porque un chico de cuatro no va a contestar y el padre no
@@ -6460,7 +6512,7 @@ function turnoNino(k){
   };
   $("#b-nino-nombre").addEventListener("click", seguir);
   inp.addEventListener("keydown", e => { if (e.key === "Enter"){ e.preventDefault(); seguir(); } });
-  // Saltear no deja al chico sin plato: deja que Tito elija con lo que hay.
+  // Saltear no deja al chico sin plato: deja que Bofito elija con lo que hay.
   $("#b-nino-saltear").addEventListener("click", () => {
     c.salteado = true;
     c.respuestas = {};
@@ -6492,7 +6544,7 @@ function listoNino(r, k){
         <p class="ficha__cat">Para vos</p>
         <h2 class="ficha__nombre">${esc(r.principal.nombre)}</h2>
         ${r.postre ? `<p class="ficha__desc">Y de postre, ${esc(r.postre.nombre.toLowerCase())}.</p>` : ""}
-        <p class="ficha__voz">Ya se lo paso al Vasco para el pedido de la mesa.</p>
+        <p class="ficha__voz">Ya se lo paso a ${esc(CHEF.nombre)} para el pedido de la mesa.</p>
       </div>
     </article>` : ""}
     <div class="veredicto__acciones">
@@ -7111,7 +7163,7 @@ function lineaAlternativa(p, r, usadas){
 /* ── LA TARJETA ───────────────────────────────────────────────────────
    Pensada para que le saquen captura, o para compartirla como imagen. La
    gente sube lo que come igual: esto es la foto del plato con la marca
-   puesta, el nombre y una frase del Vasco —lo mismo que iba a subir, pero
+   puesta, el nombre y una frase dDon Bo —lo mismo que iba a subir, pero
    que además dice de dónde salió—.                                    */
 function nombreTarjeta(r){
   return r.principal.nombre + (r.punto ? " · " + nombrePunto(r.punto).toLowerCase() : "");
@@ -7124,7 +7176,7 @@ function tarjetaHTML(r){
     ${fotoHTML(r.principal, "tarjeta")}
     <div class="tarjeta__cuerpo">
       <svg class="sello sello--chico" style="color:var(--marino)" aria-hidden="true"><use href="#sello"/></svg>
-      <p class="tarjeta__sobre">${quien}, según El Vasco</p>
+      <p class="tarjeta__sobre">${quien}, según ${esc(CHEF.nombre)}</p>
       <h3 class="tarjeta__plato">${esc(nombreTarjeta(r))}</h3>
       <p class="tarjeta__frase">${esc(frasePostal(r))}</p>
       <p class="tarjeta__pie">BO · FOMENTO — Estamos en la playa</p>
@@ -7246,7 +7298,7 @@ async function tarjetaImagen(r, conFoto){
      ocupar una línea o dos, y de eso depende si la foto entra entera o
      hay que recortarle altura. Dibujar de arriba para abajo a ojo es lo
      que hace que un título largo se monte sobre la línea de arriba. */
-  const sobre = ((S.nombre ? S.nombre : "Alguien") + ", según El Vasco").toUpperCase();
+  const sobre = ((S.nombre ? S.nombre : "Alguien") + ", según " + CHEF.nombre).toUpperCase();
   espaciar("5px"); ctx.font = F_SOBRE;
   const hSobre = 34 + 26;
 
@@ -7519,6 +7571,10 @@ function conectar(){
    Verifica los criterios de aceptación sobre miles de combinaciones.
    ═══════════════════════════════════════════════════════════════════ */
 function bofoTest(){
+  // Lo que se mide no puede depender del día en que se corre: el destacado
+  // se apaga para todo, y se prueba aparte, al final.
+  const forzadoAntes = DESTACADOS.forzado;
+  DESTACADOS.forzado = "ninguno";
   const R = { ok:0, fallas:[] };
   const chequear = (cond, msg) => { if (cond) R.ok++; else R.fallas.push(msg); };
   const rnd = mulberry32(20260918);
@@ -8067,6 +8123,43 @@ function bofoTest(){
   chequear(opcionesPosibles(pProt, fVeg).every(x =>
       !x.o.afin || IMPOSIBLE_SIN_CARNE.indexOf(x.o.afin.proteina) === -1),
     "a un vegetariano se le sigue ofreciendo carne");
+
+  // ── los destacados: que roten, y que se noten ──
+  DESTACADOS.forzado = null;
+  const lunes = Date.parse(DESTACADOS.inicio + "T12:00:00");
+  const semana = 7 * 24 * 60 * 60 * 1000;
+  const turnos = DESTACADOS.orden.length * DESTACADOS.semanas;
+  for (let s = 0; s < turnos * 2; s++){
+    const esperado = DESTACADOS.orden[Math.floor(s / DESTACADOS.semanas) % DESTACADOS.orden.length];
+    chequear(destacadoDe(new Date(lunes + s * semana)) === esperado,
+      `la semana ${s} el destacado tendría que ser ${esperado}`);
+  }
+  chequear(destacadoDe(new Date(lunes - 30 * semana)) === DESTACADOS.orden[0],
+    "antes del inicio tiene que regir el primer turno");
+  DESTACADOS.orden.forEach(cat => chequear(CATEGORIAS.some(c => c.id === cat && c.tipo === "principal"),
+    `el destacado ${cat} no es una categoría de platos fuertes`));
+  const cuota = cat => {
+    let n = 0, N = 300;
+    for (let i = 0; i < N; i++){
+      const t = armarTanda(i % 2 ? "express" : "completo");
+      const resp = {};
+      t.forEach(q => { resp[q.id] = q.id === pReq.id ? [iTodo] : respuestaAlAzar(q); });
+      if (recomendar(resp, t).principal.categoria === cat) n++;
+    }
+    return n / N;
+  };
+  DESTACADOS.orden.forEach(cat => {
+    DESTACADOS.forzado = "ninguno"; const sin = cuota(cat);
+    DESTACADOS.forzado = cat;       const con = cuota(cat);
+    chequear(con >= sin + 0.08,
+      `el destacado ${cat} casi no se nota: ${Math.round(100 * sin)}% → ${Math.round(100 * con)}%`);
+  });
+  // el destacado no pasa por arriba de un filtro duro
+  DESTACADOS.forzado = "parrilla";
+  const iVegD = pReq.opciones.findIndex(o => o.excluye && o.excluye.requiere === "vegetariano");
+  const rVeg = recomendar({ restricciones:[iVegD] }, PREGUNTAS);
+  chequear(rVeg.principal.apto.vegetariano, "el destacado de la parrilla le sirvió carne a un vegetariano");
+  DESTACADOS.forzado = forzadoAntes;
 
   const linea = [
     `banco: ${PREGUNTAS.length} preguntas (${PREGUNTAS.filter(p => p.tipo !== "filtro").length} rotativas)`,
