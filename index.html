@@ -3583,11 +3583,9 @@ function esVariante(a, b){
    es como lo haría un mozo: qué se pide antes de cada cosa, en qué orden
    de preferencia, y qué platos no llevan entrada.
 
-   Los que no llevan: chivitos y ensaladas. Un chivito ya trae medio menú
-   arriba, y una ensalada se pide para comer liviano: ponerles una entrada
-   al lado es vender de más. Las burgers y los sándwiches sí llevan, a
-   pedido del local, con entradas que no le dupliquen el queso ni las
-   papas que ya traen.
+   Los que no llevan: las ensaladas, que se piden para comer liviano.
+   Burgers, sándwiches y chivitos sí llevan, a pedido del local, con
+   entradas que no les dupliquen el queso ni las papas que ya traen.
 
    Cada grupo dice además por qué, y el porqué tiene que ser cierto para
    cualquiera de sus entradas: si el chef dice «antes de una carne va
@@ -3623,13 +3621,15 @@ const R_PASTA = {
 const R_PLANCHA = {
   otro:    "para picar mientras sale de la plancha: nada de queso ni papas, que la burger ya los trae"
 };
+const R_CHIVITO = {
+  otro:    "para picar mientras sale de la plancha: nada de queso ni papas, que el chivito ya los trae"
+};
 const R_HORNO = {
   otro:    "mientras sale del horno de barro, algo para picar que no le compita al plato"
 };
 
 const GRUPOS_ENTRADA = [
-  { para:["chivito-pan","chivito-plato","chivito-plato-dos",
-          "ensalada-capresse","ensalada-salmon","ensalada-cesar","ensalada-alemana","ensalada-2gustos"],
+  { para:["ensalada-capresse","ensalada-salmon","ensalada-cesar","ensalada-alemana","ensalada-2gustos"],
     sin:true },
 
   // burgers y sándwiches: algo para picar que no repita el queso ni las
@@ -3637,6 +3637,9 @@ const GRUPOS_ENTRADA = [
   { para:["burger-completa","burger-bofomento"],
     entradas:["empanadas-asado","rabas","bunuelos-algas","chorizo"],
     razon:R_PLANCHA },
+  { para:["chivito-pan","chivito-plato","chivito-plato-dos"],
+    entradas:["empanadas-asado","rabas","bunuelos-algas","chorizo"],
+    razon:R_CHIVITO },
   { para:["sand-jq","sand-muzza","sand-faina","sand-faina-espinaca"],
     entradas:["bunuelos-algas","empanadas-asado","rabas","chorizo"],
     razon:R_SIN_QUESO },

@@ -38,15 +38,16 @@ reunión de cambios), en pesos uruguayos con IVA incluido:
 - [x] **Platos a empujar:** el local pidió rotar: unas semanas risottos,
       después parrilla, después pastas. `DESTACADOS`, turnos de 2 semanas
       desde el lunes 23/11/2026.
-- [x] **Entradas:** van en cada recomendación, también con burgers y
-      sándwiches (pedido del local). Chivitos y ensaladas siguen sin entrada.
+- [x] **Entradas:** van en cada recomendación, también con burgers,
+      sándwiches y chivitos (pedido del local). Sólo las ensaladas siguen
+      sin entrada.
 
 ## 2. Ajustar el motor contra la carta oficial
 
 - [x] **Vino después del plato:** «¿Qué tomás con esto?» aparece en el
       veredicto sólo si el plato pide vino. El color pedido se respeta.
 - [x] **Entradas definidas a mano:** tabla por plato (`GRUPOS_ENTRADA`).
-      Sándwiches, burgers, chivitos y ensaladas no llevan entrada. Lo que
+      Sólo las ensaladas no llevan entrada. Lo que
       empieza la comida (provolone, achuras, fainá) ya no sale de plato
       fuerte.
 - [x] **Horno, parrilla, olla o sartén sin preguntarlo:** señales en las
