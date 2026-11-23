@@ -447,7 +447,7 @@ vez (`SEMILLA=123` para probar con otra). Mira lo que el autotest no ve:
   sostengan con lo que el plato contiene, que las etiquetas no prometan de
   más, el perfil de cada vino; del banco, pesos de ±3 como máximo, que lo
   que afirma un resultado lleve condición, y que cada gesto que usan el
-  Vasco y Bofito esté dibujado;
+  Don Bo y Bofito esté dibujado;
 - **robustez:** sin respuestas, índices fuera de rango, deslizadores con
   basura, texto con HTML y las 512 combinaciones de restricciones;
 - **determinismo:** las mismas respuestas, en cualquier orden, dan lo mismo;
