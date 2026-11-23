@@ -3583,9 +3583,11 @@ function esVariante(a, b){
    es como lo haría un mozo: qué se pide antes de cada cosa, en qué orden
    de preferencia, y qué platos no llevan entrada.
 
-   Los que no llevan: sándwiches, burgers, chivitos y ensaladas. Son un
-   plato que se pide solo —un chivito al plato ya trae medio menú arriba—
-   y ponerle una entrada al lado es vender de más.
+   Los que no llevan: chivitos y ensaladas. Un chivito ya trae medio menú
+   arriba, y una ensalada se pide para comer liviano: ponerles una entrada
+   al lado es vender de más. Las burgers y los sándwiches sí llevan, a
+   pedido del local, con entradas que no le dupliquen el queso ni las
+   papas que ya traen.
 
    Cada grupo dice además por qué, y el porqué tiene que ser cierto para
    cualquiera de sus entradas: si el chef dice «antes de una carne va
@@ -3618,16 +3620,26 @@ const R_PASTA = {
   queso:   "algo fresco y con queso para abrir, que una pasta pide entrar con hambre y no llena",
   otro:    "algo liviano para abrir, que una pasta pide entrar con hambre y no llena"
 };
+const R_PLANCHA = {
+  otro:    "para picar mientras sale de la plancha: nada de queso ni papas, que la burger ya los trae"
+};
 const R_HORNO = {
   otro:    "mientras sale del horno de barro, algo para picar que no le compita al plato"
 };
 
 const GRUPOS_ENTRADA = [
-  { para:["sand-jq","sand-muzza","sand-faina","sand-faina-espinaca",
-          "burger-completa","burger-bofomento",
-          "chivito-pan","chivito-plato","chivito-plato-dos",
+  { para:["chivito-pan","chivito-plato","chivito-plato-dos",
           "ensalada-capresse","ensalada-salmon","ensalada-cesar","ensalada-alemana","ensalada-2gustos"],
     sin:true },
+
+  // burgers y sándwiches: algo para picar que no repita el queso ni las
+  // papas que ya vienen en el plato
+  { para:["burger-completa","burger-bofomento"],
+    entradas:["empanadas-asado","rabas","bunuelos-algas","chorizo"],
+    razon:R_PLANCHA },
+  { para:["sand-jq","sand-muzza","sand-faina","sand-faina-espinaca"],
+    entradas:["bunuelos-algas","empanadas-asado","rabas","chorizo"],
+    razon:R_SIN_QUESO },
 
   // la parrilla
   { para:["asado-ternera","asado-premium","ojo-bife","entrecot","picana-angus","picana-cordero","entrana"],

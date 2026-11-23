@@ -90,9 +90,10 @@ tabla (`GRUPOS_ENTRADA`) dice, para cada plato fuerte de la carta oficial,
 qué entradas van y en qué orden de preferencia: antes de un corte de
 parrilla, provolone o achuras; antes de un pescado, algo del mar y
 liviano; antes de una pizza, fainá; antes de algo que ya trae queso,
-cualquier cosa menos queso. Sándwiches, burgers, chivitos y ensaladas no
-llevan entrada: son un plato que se pide solo, y ponerle algo al lado es
-vender de más.
+cualquier cosa menos queso; antes de una burger o un sándwich, algo para
+picar que no repita el queso ni las papas que ya traen. Chivitos y
+ensaladas no llevan entrada: un chivito ya trae medio menú, y una ensalada
+se pide para comer liviano.
 
 La persona todavía corre el orden —a quien dijo que el queso no es lo suyo
 no le toca un provolone— pero sólo adentro de la lista. Si los filtros la

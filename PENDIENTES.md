@@ -38,9 +38,8 @@ reunión de cambios), en pesos uruguayos con IVA incluido:
 - [x] **Platos a empujar:** el local pidió rotar: unas semanas risottos,
       después parrilla, después pastas. `DESTACADOS`, turnos de 2 semanas
       desde el lunes 23/11/2026.
-- [ ] **Entradas:** el local pidió recomendar entradas. Ya van en cada
-      veredicto, salvo con sándwiches, burgers, chivitos y ensaladas.
-      Confirmar si las quieren también ahí.
+- [x] **Entradas:** van en cada recomendación, también con burgers y
+      sándwiches (pedido del local). Chivitos y ensaladas siguen sin entrada.
 
 ## 2. Ajustar el motor contra la carta oficial
 
