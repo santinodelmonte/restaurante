@@ -19,7 +19,7 @@ El orden de la pantalla es el orden en que las cosas llegan a la mesa, y
 no es casualidad: una entrada que aparece abajo, al lado del postre, no se
 pide.
 
-No es un test que se hace una vez. El banco tiene 29 preguntas rotativas y
+No es un test que se hace una vez. El banco tiene 28 preguntas rotativas y
 cada corrida arma su propia tanda con las que la persona vio menos veces,
 así que dos corridas seguidas sólo comparten los dos filtros. La rotación
 se guarda en el celular.
@@ -54,11 +54,18 @@ Su voz es la de alguien que sabe de comida, no la de un comediante: tutea,
 usa tu nombre y es cálido, pero no carga a nadie. El criterio va adelante
 y el chiste, si cae, cae solo.
 
-**La entrada, elegida contra el plato.** No se elige contra la persona: se
-elige contra lo que viene después, que es como se arma una comida. Antes
-de una carne va queso —abre el apetito y aguanta los veinte minutos de
-parrilla—; antes de un pescado va algo del mar y con acidez, para no
-taparlo. El chef lo explica en una línea, que es lo que hace que se pida.
+**La entrada, definida a mano contra el plato.** No se elige contra la
+persona: se elige contra lo que viene después, que es como se arma una
+comida. Con la carta oficial en la mano lo definimos grupo por grupo en
+`ENTRADA_PARA`: antes de un corte, lo que sale primero de la parrilla
+(provolone, chorizo, morcilla); con la pizza, fainá; antes de un pescado,
+algo del mar y con filo; antes de una milanesa, nada frito. Cada grupo
+tiene su lista en orden de preferencia y el gusto de la persona sólo
+desempata entre vecinos. Sándwiches, burgers y chivitos no llevan entrada:
+ya son la comida entera. Y nunca queso antes de un plato que ya viene
+cargado de queso. La regla general por proteína queda sólo para lo que la
+tabla no cubre o los filtros vaciaron. El chef lo explica en una línea,
+que es lo que hace que se pida.
 
 **El punto de la carne.** Cuando el principal es un corte de la parrilla,
 el chef pregunta el punto *después* de recomendarlo. Con la respuesta
@@ -70,8 +77,13 @@ cambia solo: el que decide qué come es el que se lo va a comer.
 casa a $8.400 el Cru d'Exception. Marida de verdad: mira cuerpo, tanino y
 acidez del vino contra lo que pide el plato según su proteína y lo graso
 que sea. Por eso resuelve los casos que "carne tinto, pescado blanco" no
-cubre. Pasa al frente sólo cuando el plato lo pide; si no, va la bebida de
-siempre y el vino queda al costado como sugerencia.
+cubre. Se pregunta igual que el punto: *después* de recomendar el plato y
+sólo si el plato pide vino («Esto pide vino. ¿Cómo venís?»: tinto, blanco,
+elegilo vos, cerveza o sin alcohol). Mientras no contesta, abajo ya está
+el vino que elegiría el chef y la cuenta cierra; contestar lo cambia en el
+lugar. Si el plato no pide vino, va la bebida de siempre sin preguntar y
+el vino queda al costado como sugerencia. Un color pedido es una orden: a
+quien pide blanco con un asado le toca un blanco, el de más cuerpo.
 
 Tres cosas que la carta real obligó a agregar y la inventada no:
 
@@ -395,74 +407,45 @@ El desempate por margen está implementado y **vacío a propósito**: cuando el
 local diga qué platos quiere empujar, se cargan en el campo `margen` de cada
 plato. Es una decisión comercial de ellos, no nuestra.
 
-## Cuando llegue el menú oficial
+## Lo que se ajustó con el menú oficial
 
-Estos cambios quedan para cuando tengamos el menú oficial, y no antes. El
-menú va a ser el mismo toda la temporada: no vamos a tocar el sitio
-mientras se usa. Así que el motor no necesita adivinar una carta que
-cambia: se puede ajustar a mano contra la carta que va a estar, plato por
-plato, y hacerlo una sola vez. Afinar esto contra la carta de muestra es
-trabajo que se tira.
+Tres cosas quedaron esperando la carta oficial para hacerse una sola vez,
+a mano, contra la carta que va a estar toda la temporada. Las tres están
+hechas y verificadas en el autotest.
 
-**1. Cada pregunta, cuando hace falta.** El chef pregunta algo sólo cuando
-la respuesta va a cambiar lo que recomienda.
+**1. El vino, cuando hace falta.** `bebida-pref` salió de la tanda. El
+vino se pregunta después de elegir el plato y sólo si `meritaVino` lo
+pide (`pideVinoPara`), con `resolverBebida`, que también corre al elegir
+el punto y al cambiar el corte. El autotest verifica que no se pregunte
+por el vino sin recomendar vino, que cada respuesta deje la bebida que
+corresponde (tinto da tinto, cerveza da cerveza y no insiste con vino, sin
+alcohol no da alcohol), que el punto no borre lo que se contestó y que la
+cuenta cierre en todos los casos. Los pesos que sumaba esa pregunta a
+`intensidad`, `untuosidad` y `acidez` se perdieron; el centrado por datos
+se recalcula solo.
 
-- *El punto de la carne:* ya funciona así. Se pregunta después de
-  recomendar y sólo si el principal es un corte de parrilla. Con el menú
-  oficial hay que revisar qué platos cuentan como corte (hoy decide la
-  `categoria`/`proteina`) y en qué punto sufre cada uno.
-- *El vino:* hoy **no** funciona así. `bebida-pref` («Para tomar, ¿con
-  qué te sentís cómodo?») entra en la tanda, en express y en completo,
-  antes de que el chef sepa qué plato va a recomendar. Hay que sacarla de
-  la tanda y preguntar por el vino igual que por el punto: después de
-  elegir el plato y sólo si el plato pide vino (lo que hoy decide
-  `meritaVino`). Si el plato no lo pide, va la bebida de siempre sin
-  preguntar. Hay que tener en cuenta que esa pregunta también suma a
-  `intensidad`, `untuosidad` y `acidez`. Al sacarla, esos pesos se pierden
-  o pasan a otra pregunta, y el centrado por datos se recalcula solo.
+**2. Entradas definidas a mano.** `ENTRADA_PARA` dice qué entrada va con
+qué principal y qué platos no llevan. Resuelve el caso que motivó el
+cambio —un caliente de jamón y queso con provolone adelante—: el sándwich
+ya no lleva entrada, y `repiteQueso` impide queso antes de un plato con
+queso. El autotest verifica que la entrada salga de la lista del plato
+cuando la lista tiene con qué, que los platos sin entrada no la lleven,
+que nunca haya queso antes de queso y que la tabla sólo nombre entradas
+que existen.
 
-**2. Entradas inteligentes.** Hoy la entrada se elige contra el plato: se
-mira la `proteina` y la `untuosidad` del principal y el campo `empieza`.
-Con el menú oficial la idea es analizar la carta real y definir a mano qué
-entrada va con qué principal, en lugar de dejarlo a la regla general. Eso
-también incluye decidir qué cuenta como entrada, qué se comparte y qué
-pasa en la mesa. Lo vamos a definir cuando tengamos la carta.
-
-Un caso real que muestra por qué la regla general no alcanza: el chef
-recomendó *Caliente de jamón y queso* con *Queso provolone* de entrada y
-copa de tinto de la casa.
-
-- Es queso antes de queso. El caliente está cargado con `proteina:"cerdo"`
-  por el jamón, así que recibe la regla del cerdo («queso adelante, que
-  acompaña en vez de duplicar»). El motor no ve que el plato ya trae queso,
-  y la entrada termina duplicando.
-- Un sándwich no pide entrada. El provolone cuesta casi lo mismo que el
-  caliente y es para compartir. Hoy el motor pone entrada siempre que haya
-  con qué, y el autotest lo exige. Con la carta oficial hay que decidir qué
-  platos llevan entrada y cuáles no, en vez de ponerla siempre.
-- La copa de tinto pasa, pero con un caliente va más natural una cerveza o
-  algo más liviano. Si salió porque la persona contestó «vino tinto» al
-  principio, es el mismo problema del punto 1.
-- El caliente tiene `untuosidad:10`, igual que el provolone con jamón
-  crudo. Hay que revisar los ejes de todos los platos contra la carta
-  oficial, empezando por los sándwiches.
-
-**3. Horno de barro o parrilla, sin preguntarlo.** El chef tiene que
-averiguar para qué lado va la persona (horno de barro, parrilla o lo que
-traiga la carta oficial) sin preguntarlo de frente, y recomendar en base a
-eso. Hoy hay señales sueltas que empujan para un lado o el otro, pero
-ninguna está pensada para esto: el olor a brasa o a pan recién hecho, frito
-o a la parrilla, el ruido de la carne cayendo. Hay que diseñar preguntas
-sensoriales que midan esa preferencia sin que se note, que sumen afinidad
-a la categoría con el mismo mecanismo que `afin`, y que se puedan citar en
-«Lo que me dijiste» («por eso te llevo al horno y no a la parrilla»).
-Depende de cuántas cocinas y qué platos tenga el menú oficial, así que
-también se diseña con la carta en la mano.
-
-Cada punto suma su verificación al autotest, como el punto de la carne:
-que no se pregunte por el vino sin recomendar vino, que la entrada sea la
-definida para ese principal, y que la preferencia horno/parrilla se note en
-el resultado.
+**3. Horno de barro o parrilla, sin preguntarlo.** Cada principal tiene
+una cocina (`cocinaDe`: brasa, horno, plancha, olla o fresco). Dos
+preguntas sensoriales suman afinidad a una cocina con el mismo mecanismo
+que `afin`: el olor (brasa, pan recién hecho, ajo en la sartén, cebolla
+dorándose, hierbas) y el ruido de la cocina, que es nueva y reemplaza a
+la vieja de los ruidos (la grasa en la brasa, la pala en el horno de
+barro, la milanesa en el aceite, la olla hirviendo, el cuchillo en la
+tabla). Cada señal suma poco y con tope, para que lo diga el resto de las
+respuestas también. «Lo que me dijiste» lo cita («por eso te llevo a la
+parrilla y no al horno») sólo si el plato salió de esa cocina, y una sola
+vez aunque dos respuestas digan lo mismo. El autotest mide el reparto: con
+las dos señales hacia una cocina, la persona come de ahí bastante más
+seguido que sin decir nada (por ejemplo brasa ~10% → ~85%), y lo exige.
 
 ## docs — lo que se le manda al cliente
 

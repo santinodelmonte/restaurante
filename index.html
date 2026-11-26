@@ -887,6 +887,8 @@ html.visor-abierto{ overflow:hidden; }
 .punto__emo{ font-size:1.5rem; line-height:1; }
 .punto__txt{ font-size:.82rem; font-weight:700; text-align:center; line-height:1.15; }
 .punto__dicho{ margin:0; font-size:.95rem; color:var(--papel); }
+.vinopref{ margin:0 0 12px; }
+.vinopref__nota{ margin:12px 0 0; font-size:.85rem; color:var(--tinta-clara); }
 .punto__dicho b{ color:var(--arena); }
 .punto__aviso{
   margin:12px 0 0; padding:13px 14px; border-radius:var(--r-md);
@@ -2570,7 +2572,6 @@ const MENU = [
    ║  afin       en una opción de sabor: empuja una proteína concreta ║
    ║             sin sacar nada del pool. Es lo que hace que decir    ║
    ║             "carne roja" de verdad se note en el resultado.      ║
-   ║  prefBebida tinto · blanco · cerveza · sin-alcohol · maridaje.   ║
    ║             Decide si el chef va a vino y de qué color.          ║
    ║                                                                  ║
    ║  formato "opciones"  botones (por defecto)                       ║
@@ -2787,21 +2788,6 @@ const PREGUNTAS = [
         eco:"que casi no comías pan", chiste:"Entonces vamos a cuidar que el plato llene por sí solo." }
     ] },
 
-  { id:"bebida-pref", tipo:"sabor", peso:"alto", grupo:"bebida", modos:["express","completo"],
-    texto:"Para tomar, ¿con qué te sentís cómodo?",
-    opciones:[
-      { texto:"Vino tinto", emo:"🍷", prefBebida:"tinto", pesos:{ intensidad:+2, untuosidad:+1 },
-        eco:"que ibas por un tinto", lleva:"y el plato lo elegí pensando también en la copa", chiste:"Entonces el plato lo voy a elegir pensando también en la copa." },
-      { texto:"Vino blanco", emo:"🥂", prefBebida:"blanco", pesos:{ acidez:+3, untuosidad:-1 },
-        eco:"que ibas por un blanco", lleva:"y con el calor de acá afuera es la decisión correcta", chiste:"Buena decisión con el calor que hace acá afuera." },
-      { texto:"Cerveza", emo:"🍺", prefBebida:"cerveza", pesos:{ social:+2, acidez:+1 },
-        eco:"que ibas por la cerveza", lleva:"que es la que no se pelea con nada de esta carta", chiste:"La que nunca se pelea con nada de esta carta." },
-      { texto:"Algo sin alcohol", emo:"🧃", prefBebida:"sin-alcohol", pesos:{ acidez:+1 },
-        eco:"que ibas sin alcohol", lleva:"y para acompañar tengo bastante más que agua", chiste:"Hay con qué. No te voy a dar agua y listo." },
-      { texto:"Lo que vaya con el plato", emo:"🙇", prefBebida:"maridaje", pesos:{ aventura:+2 },
-        eco:"que te dejabas llevar con la bebida", lleva:"así que elegí lo que de verdad va con el plato", chiste:"Esa es la respuesta que me deja hacer mi trabajo." }
-    ] },
-
   { id:"postre-si-no", tipo:"sabor", peso:"bajo", grupo:"dulce", modos:["completo"],
     texto:"¿Y el final dulce?",
     opciones:[
@@ -2844,11 +2830,11 @@ const PREGUNTAS = [
   { id:"olor", tipo:"sabor", peso:"alto", grupo:"olfato", formato:"grilla", modos:["express","completo"],
     texto:"¿Qué olor te da hambre de golpe? El primero que te tire.",
     opciones:[
-      { emo:"🔥", texto:"Brasa encendida",  pesos:{ intensidad:+3, untuosidad:+1 }, eco:"que el olor a brasa te desarma", lleva:"por eso te llevo a la parrilla y no al horno", si:{ categoria:"parrilla" },
+      { emo:"🔥", texto:"Brasa encendida",  cocina:"brasa", pesos:{ intensidad:+3, untuosidad:+1 }, eco:"que el olor a brasa te desarma", lleva:"por eso te llevo a la parrilla y no al horno", si:{ cocina:"brasa" },
         chiste:"Ese olor vende más que cualquier carta." },
-      { emo:"🥖", texto:"Pan recién hecho", pesos:{ untuosidad:+2, intensidad:-1 }, eco:"que te gana el pan recién hecho", lleva:"entonces lo tuyo es masa y horno de barro",
+      { emo:"🥖", texto:"Pan recién hecho", cocina:"horno", pesos:{ untuosidad:+2, intensidad:-1 }, eco:"que te gana el pan recién hecho", lleva:"entonces lo tuyo es masa y horno de barro", si:{ cocina:"horno" },
         chiste:"No conozco a nadie que le diga que no a eso." },
-      { emo:"🧄", texto:"Ajo en la sartén", pesos:{ intensidad:+3, aventura:+1 }, eco:"que el ajo en la sartén te llama", lleva:"así que te doy algo con carácter y no tibio",
+      { emo:"🧄", texto:"Ajo en la sartén", cocina:"olla", pesos:{ intensidad:+3, aventura:+1 }, eco:"que el ajo en la sartén te llama", lleva:"así que te doy algo con carácter y no tibio",
         chiste:"Eso es olor a que alguien está cocinando de verdad." },
       { emo:"🌊", texto:"El mar",           pesos:{ acidez:+3, untuosidad:-2 }, eco:"que te tira el olor del mar", lleva:"de ahí sale medio veredicto",
         chiste:"Estás en el lugar indicado, entonces." },
@@ -2858,10 +2844,39 @@ const PREGUNTAS = [
         chiste:"Sos de los que se quedan en la sobremesa. Eso cambia cómo cierro la comida." },
       { emo:"🍋", texto:"Cítrico recién cortado", pesos:{ acidez:+3 }, eco:"que te despierta un cítrico recién cortado", lleva:"así que busqué algo que limpie la boca",
         chiste:"Nariz fina. Eso me sirve." },
-      { emo:"🧅", texto:"Cebolla dorándose", pesos:{ intensidad:+2, untuosidad:+2 }, eco:"que la cebolla dorándose te gana", lleva:"es olor a cocina de verdad, y para ahí fui",
+      { emo:"🧅", texto:"Cebolla dorándose", cocina:"plancha", pesos:{ intensidad:+2, untuosidad:+2 }, eco:"que la cebolla dorándose te gana", lleva:"es olor a cocina de verdad, y para ahí fui",
         chiste:"El olor que hace que uno entre a un lugar sin haber leído la carta." },
-      { emo:"🌿", texto:"Hierbas frescas",   pesos:{ acidez:+2, aventura:+2 }, eco:"que te llevan las hierbas frescas", lleva:"tenés mejor paladar del que aparentás",
+      { emo:"🌿", texto:"Hierbas frescas",   cocina:"fresco", pesos:{ acidez:+2, aventura:+2 }, eco:"que te llevan las hierbas frescas", lleva:"tenés mejor paladar del que aparentás",
         chiste:"Buen detalle. Eso me orienta bastante." }
+    ] },
+
+  /* El ruido de la cocina. Es la pregunta que averigua para qué lado de
+     la cocina va la persona —brasa, horno de barro, plancha, olla o algo
+     fresco— sin preguntárselo de frente: nadie contesta «parrilla» porque
+     se lo preguntaron, pero el chisporroteo de la grasa en la brasa lo
+     elige el que quiere parrilla. Suma afinidad a la cocina, igual que la
+     proteína, y la consecuencia sólo se dice si el plato salió de ahí. */
+  { id:"ruido", tipo:"sabor", peso:"alto", grupo:"oido", formato:"grilla", modos:["express","completo"],
+    texto:"Cerrá los ojos. ¿Qué ruido de cocina te hace agua la boca?",
+    opciones:[
+      { emo:"🔥", texto:"La grasa chispeando en la brasa", cocina:"brasa", pesos:{ intensidad:+2, untuosidad:+2 },
+        eco:"que el chisporroteo de la brasa te abre el hambre", lleva:"por eso fui a la parrilla", si:{ cocina:"brasa" },
+        chiste:"Ese ruido es la mitad del asado. La otra mitad la pongo yo." },
+      { emo:"🍕", texto:"La pala entrando al horno de barro", cocina:"horno", pesos:{ social:+2, untuosidad:+1 },
+        eco:"que te gana el ruido de la pala en el horno de barro", lleva:"así que te lo saqué del horno de barro", si:{ cocina:"horno" },
+        chiste:"Ese horno tiene más años que yo. Y mejor carácter." },
+      { emo:"🍳", texto:"La milanesa cayendo en el aceite", cocina:"plancha", pesos:{ untuosidad:+3, intensidad:+1 },
+        eco:"que te llama la milanesa cayendo en el aceite", lleva:"y fui a lo de la plancha y la sartén", si:{ cocina:"plancha" },
+        chiste:"Ese ruido no falla nunca. Es el mismo en todas las cocinas del país." },
+      { emo:"🍝", texto:"La olla hirviendo, con la tapa saltando", cocina:"olla", pesos:{ untuosidad:+1, intensidad:-1, social:+1 },
+        eco:"que la olla hirviendo te da hambre", lleva:"así que te di un plato de olla", si:{ cocina:"olla" },
+        chiste:"Comida de domingo. Te entiendo perfectamente." },
+      { emo:"🔪", texto:"El cuchillo picando verdura fresca", cocina:"fresco", pesos:{ acidez:+3, untuosidad:-2 },
+        eco:"que el cuchillo en la tabla te abre el apetito", lleva:"por eso fui por algo fresco", si:{ cocina:"fresco" },
+        chiste:"Paladar de mediodía de playa. Anotado." },
+      { emo:"🧊", texto:"El hielo en el vaso", pesos:{ acidez:+2, social:+1 },
+        eco:"que el hielo en el vaso te despierta", lleva:"así que lo de tomar lo elegí con filo, para que limpie la boca", si:{ sinVino:true },
+        chiste:"Primero lo de tomar, después vemos. Sos de los míos." }
     ] },
 
   { id:"textura", tipo:"sabor", peso:"alto", grupo:"preferencias", formato:"duplas",
@@ -2909,19 +2924,6 @@ const PREGUNTAS = [
         eco:"que preferís la parrilla",
         lleva:"que es donde esta cocina hace su mejor trabajo",
         chiste:"Es la casa. No te voy a contradecir." }
-    ] },
-
-  { id:"ruido", tipo:"sabor", peso:"bajo", grupo:"sensorial", modos:["completo"],
-    texto:"El ruido de una cocina que más te gusta:",
-    opciones:[
-      { texto:"La carne cayendo a la parrilla", emo:"🔥", pesos:{ intensidad:+3, untuosidad:+1 },
-        eco:"que te gusta el ruido de la carne en la parrilla", chiste:"Ese sonido es media cocina." },
-      { texto:"El cuchillo sobre la tabla", emo:"🔪", pesos:{ aventura:+2, acidez:+1 },
-        eco:"que te gusta el cuchillo sobre la tabla", chiste:"Te fijás en cómo se hacen las cosas. Poca gente." },
-      { texto:"El corcho saliendo", emo:"🍾", pesos:{ social:+3, aventura:+1 },
-        eco:"que te gusta el ruido del corcho", chiste:"Entonces la bebida no va a ser un detalle hoy." },
-      { texto:"La cuchara raspando la olla", emo:"🥘", pesos:{ untuosidad:+3, dulce:+1 },
-        eco:"que te gusta la cuchara raspando la olla", chiste:"Comida de olla. Eso habla de casa, no de restaurante." }
     ] },
 
   { id:"plato-vacio", tipo:"sabor", peso:"bajo", grupo:"habito", modos:["completo"],
@@ -3095,6 +3097,16 @@ const tipoDe = p  => p.tipo || catDe(p.categoria).tipo;
    y no en una lista de excepciones desparramada por el motor. */
 const esNino = p => tipoDe(p) === "nino";
 const esVino = p => p.categoria === "vinos";
+
+/* De qué lado de la cocina sale cada plato. Lo usan las preguntas
+   sensoriales —el ruido, el olor— para empujar hacia la parrilla o el
+   horno de barro sin preguntarlo de frente. */
+const COCINA_DE = {
+  parrilla:"brasa", horno:"horno",
+  milanesas:"plancha", burgers:"plancha", chivitos:"plancha",
+  pastas:"olla", risottos:"olla", ensaladas:"fresco"
+};
+const cocinaDe = p => p.cocina || COCINA_DE[p.categoria] || null;
 /* Lo que llega primero a la mesa, esté en la categoría que esté. */
 const empieza = p => p.empieza === true || tipoDe(p) === "entrada";
 
@@ -3339,7 +3351,7 @@ function perfilDe(p){
    Blandos: no sacan a nadie, penalizan fuerte.                       */
 function leerFiltros(respuestas, preguntas){
   const f = { requiere: [], excluyeContiene: [], blandos: [],
-              ecos: [], afin: [], evita: [], alergias: [], prefBebida: null };
+              ecos: [], afin: [], evita: [], alergias: [], cocina: {} };
 
   /* Las afinidades no son filtros: no sacan un solo plato del pool. Son lo
      que hace que decir "carne roja" se note de verdad en el resultado sin
@@ -3350,8 +3362,8 @@ function leerFiltros(respuestas, preguntas){
     if (el === undefined || el === null || el === "") return;
     opcionesElegidas(p, el).forEach(o => {
       if (o.afin && o.afin.proteina) f.afin.push(o.afin.proteina);
+      if (o.cocina) f.cocina[o.cocina] = (f.cocina[o.cocina] || 0) + 1;
       if (o.evita && o.evita.proteina) f.evita.push(o.evita.proteina);
-      if (o.prefBebida) f.prefBebida = o.prefBebida;
     });
   });
 
@@ -3405,8 +3417,6 @@ function opcionImposible(o, f){
     if (f.requiere.indexOf("vegetariano") !== -1 && IMPOSIBLE_SIN_CARNE.indexOf(p) !== -1) return true;
     if ((PROTEINA_NECESITA[p] || [p]).some(ing => f.excluyeContiene.indexOf(ing) !== -1)) return true;
   }
-  if (o.prefBebida && f.excluyeContiene.indexOf("alcohol") !== -1 &&
-      ["tinto","blanco","cerveza"].indexOf(o.prefBebida) !== -1) return true;
   return false;
 }
 
@@ -3512,6 +3522,13 @@ function puntuar(plato, v, f, opts){
   // lo que evita que alguien conteste "carne roja" y reciba una fainá.
   if (!opts.sinAfin && f.afin && f.afin.length && plato.proteina){
     if (f.afin.indexOf(plato.proteina) !== -1) s += 0.22;
+  }
+  // Lo mismo con la cocina: el que eligió el ruido de la brasa y el olor a
+  // brasa no lo dijo con todas las letras, pero lo dijo dos veces. Cada
+  // señal suma, con tope, para que no le gane a una proteína pedida.
+  if (!opts.sinAfin && f.cocina){
+    const n = f.cocina[cocinaDe(plato)] || 0;
+    if (n) s += Math.min(0.16, 0.09 * n);
   }
 
   // Lo que la persona pidió esquivar. No es un filtro duro —"prefiero que
@@ -3679,6 +3696,12 @@ function objetivoVino(plato, punto, colorForzado){
 function elegirVino(plato, f, rnd, punto, colorForzado, vector){
   let pool = MENU.filter(p => esVino(p) && pasaFiltrosDuros(p, f));
   if (!pool.length) return null;
+  // Un color pedido con todas las letras no es una preferencia que se
+  // pesa contra el tanino: es una orden. Sin esto, a quien pedía blanco
+  // con un asado le volvía un tinto, porque la carne pide tanino y el
+  // tanino pesaba más que el color.
+  if (colorForzado && pool.some(p => p.vino.color === colorForzado))
+    pool = pool.filter(p => p.vino.color === colorForzado);
   const o = objetivoVino(plato, punto, colorForzado);
   const techo = techoDeVino(plato);
   // Una botella entera para alguien que vino solo y no comparte es mucha
@@ -3744,20 +3767,118 @@ function esVariante(a, b){
   return x[1] === y[1];
 }
 
+/* ── LA ENTRADA, DEFINIDA A MANO ──────────────────────────────────────
+   Con la carta oficial en la mano, qué entrada va con qué plato no lo
+   decide una regla general: lo decidimos nosotros, grupo por grupo, como
+   lo haría el que atiende. La regla general queda sólo para lo que no
+   está en la tabla y para cuando los filtros barrieron toda la lista.
+
+   La primera regla que calza gana. `ids` va en orden de preferencia: el
+   primero es el que pediríamos nosotros; el gusto de la persona puede
+   mover el orden, pero no salir de la lista. `sin:true` es un plato que no
+   lleva entrada: un sándwich, una burger o un chivito ya son la comida
+   entera, y una entrada que cuesta casi lo mismo que el plato no es una
+   recomendación, es inflar la cuenta.
+
+   Además, nunca queso antes de queso: si el plato ya viene cargado de
+   queso, las entradas de queso quedan afuera aunque estén en la lista.  */
+const ENTRADA_PARA = [
+  { cuando: p => p.categoria === "horno" && p.sub === "Sándwiches", sin: true },
+  { cuando: p => p.categoria === "burgers", sin: true },
+  { cuando: p => p.categoria === "chivitos", sin: true },
+
+  // Pizza y fainá: no es una entrada, es la manera de comer pizza acá.
+  { cuando: p => p.categoria === "horno" && p.sub === "Pizzas",
+    ids: ["faina","faina-muzza","empanadas-asado"],
+    razon: "pizza sin fainá acá no se pide. Que llegue primero, que se come caliente" },
+
+  // Del mar: algo del mar y con filo antes, sin repetir lo que viene.
+  { cuando: p => p.proteina === "pescado" || p.proteina === "mariscos",
+    ids: ["rabas","langostinos-panko","miniatura-pescado","bunuelos-algas","croquetas-salmon"],
+    razon: "antes de un pescado va algo del mar y con filo, para no taparte el plato que sigue" },
+
+  // La parrilla: lo que sale primero de la parrilla es la entrada.
+  { cuando: p => p.categoria === "parrilla" && p.proteina === "queso",
+    ids: ["chorizo","morcilla-salada","empanadas-asado","molleja"],
+    razon: "el provolone pide algo de la parrilla al lado, y el chorizo es lo primero que sale" },
+  { cuando: p => p.categoria === "parrilla" && p.proteina === "achuras",
+    ids: ["provolone","empanadas-asado","chorizo","provolone-caprese"],
+    razon: "con achuras de plato, un provolone adelante sostiene la mesa sin competirle" },
+  { cuando: p => p.categoria === "parrilla" && p.proteina === "pollo",
+    ids: ["provolone-caprese","empanadas-asado","burrata-crudo","bunuelos-algas"],
+    razon: "el pollo es suave, así que el sabor fuerte lo ponemos al principio" },
+  { cuando: p => p.categoria === "parrilla",
+    ids: ["provolone","chorizo","morcilla-salada","molleja","provolone-caprese","empanadas-asado"],
+    razon: "antes de un corte va lo que sale primero de la parrilla. Te abre el apetito y te aguanta los veinte minutos que tarda la carne" },
+
+  // Milanesas: ya son fritas, así que adelante nada frito.
+  { cuando: p => p.categoria === "milanesas",
+    ids: ["burrata-crudo","provolone-caprese","empanadas-asado"],
+    razon: "la milanesa ya es frita, así que adelante algo que no lo sea" },
+
+  // Pastas y risottos: la entrada es italiana o del mar, liviana.
+  { cuando: p => p.categoria === "pastas" || p.categoria === "risottos",
+    ids: ["burrata-crudo","provolone-caprese","bunuelos-algas","langostinos-panko","empanadas-asado"],
+    razon: "antes de un plato de olla va algo fresco y corto, que lo que llena viene después" },
+
+  // Ensaladas: el plato es frío y liviano, la entrada aporta lo caliente.
+  { cuando: p => p.categoria === "ensaladas",
+    ids: ["empanadas-asado","croquetas-salmon","bunuelos-algas","langostinos-panko"],
+    razon: "el plato es fresco y liviano, así que lo caliente va adelante" },
+
+  // Los especiales del horno: comida de casa, entrada de bodegón.
+  { cuando: p => p.categoria === "horno" && p.proteina === "vegetal",
+    ids: ["bunuelos-algas","provolone-caprese","burrata-crudo","faina"],
+    razon: "algo con cuerpo al principio para una comida de verduras" },
+  { cuando: p => p.categoria === "horno",
+    ids: ["empanadas-asado","provolone","burrata-crudo","revuelto-gramajo"],
+    razon: "plato de horno de barro, entrada de bodegón: algo para picar mientras sale" }
+];
+
+const reglaEntrada = p => ENTRADA_PARA.find(x => x.cuando(p)) || null;
+
+/* Un plato «quesoso» es el que ya trae queso como protagonista: los que
+   son de queso, y los que llevan lácteos y son bien untuosos (napolitana,
+   a la pizza, gratinados). Antes de esos, queso no. */
+const quesoso = p => p.proteina === "queso" ||
+  (p.contiene.indexOf("lacteos") !== -1 && p.ejes.untuosidad >= 8);
+const repiteQueso = (entrada, principal) => entrada.proteina === "queso" && quesoso(principal);
+
 function elegirEntrada(principal, permitidos, v, f, rnd){
-  const perfil = PERFIL_ENTRADA[principal.proteina] || PERFIL_ENTRADA.vegetal;
-  const pool = permitidos.filter(p => empieza(p) && p.id !== principal.id);
+  const regla = reglaEntrada(principal);
+  if (regla && regla.sin) return null;
+
+  const sirve = p => empieza(p) && p.id !== principal.id &&
+                     !esVariante(p, principal) && !repiteQueso(p, principal);
+  const pool = permitidos.filter(sirve);
   if (!pool.length) return null;
 
-  // El objetivo mezcla lo que la persona es con lo que el plato pide: si
+  // El objetivo mezcla lo que la persona es con lo que la entrada pide: si
   // alguien odia el queso no se lo vamos a meter igual porque la tabla lo
   // diga, pero si le da lo mismo, manda la cocina.
+  const perfil = PERFIL_ENTRADA[principal.proteina] || PERFIL_ENTRADA.vegetal;
   const objetivo = Object.assign({}, v, {
     untuosidad: clamp((v.untuosidad + perfil.untuosidad * 2) / 3, 0, 10),
     acidez:     clamp((v.acidez + perfil.acidez) / 2, 0, 10),
     social:     clamp(Math.max(v.social, 6), 0, 10)   // la entrada casi siempre va al medio
   });
 
+  // 1. La tabla: se elige dentro de la lista, y el orden de la lista pesa
+  //    más que el gusto, que sólo desempata entre vecinos.
+  if (regla && regla.ids){
+    const lista = regla.ids.map(id => pool.find(p => p.id === id)).filter(Boolean);
+    if (lista.length){
+      const rank = ordenar(lista, objetivo, f, rnd, { sinHambre:true, sinAfin:true });
+      rank.forEach(x => {
+        const k = regla.ids.indexOf(x.plato.id);
+        x.score += 0.70 * (regla.ids.length - k) / regla.ids.length;
+      });
+      rank.sort((a,b) => b.score - a.score);
+      return { plato: rank[0].plato, razon: regla.razon, deTabla: true };
+    }
+  }
+
+  // 2. La regla general, para lo que la tabla no cubre o los filtros vaciaron.
   const rank = ordenar(pool, objetivo, f, rnd, { sinHambre:true, sinAfin:true });
   // El empujón de la cocina: la proteína que pide el perfil gana medio
   // cuerpo de ventaja, y repetir la proteína del principal lo pierde.
@@ -3765,10 +3886,9 @@ function elegirEntrada(principal, permitidos, v, f, rnd){
     if (x.plato.proteina === perfil.proteina) x.score += 0.30;
     if (x.plato.proteina === principal.proteina && principal.proteina !== "queso") x.score -= 0.25;
     if (x.plato.categoria === principal.categoria) x.score -= 0.10;
-    if (esVariante(x.plato, principal)) x.score -= 0.60;   // no es una entrada, es el mismo plato
   });
   rank.sort((a,b) => b.score - a.score);
-  return { plato: rank[0].plato, razon: perfil.razon };
+  return { plato: rank[0].plato, razon: perfil.razon, deTabla: false };
 }
 
 /* ── 7. RECOMENDACIÓN COMPLETA ───────────────────────────────────────
@@ -3848,55 +3968,6 @@ function recomendar(respuestas, preguntas, opciones){
             || resto.find(sirve);
   if (otra) alternativas.push(otra.plato);
 
-  // ── LA BEBIDA ──────────────────────────────────────────────────────
-  // Deja de ser "algo frío para bajar la comida" y pasa a ser una
-  // decisión: si el plato lo merece y la persona toma, va vino elegido
-  // por maridaje, con la razón dicha en una línea. Si no, va lo de
-  // siempre — y el vino queda como sugerencia al costado, sin imponerse.
-  const tomaAlcohol = f.excluyeContiene.indexOf("alcohol") === -1 &&
-                      f.prefBebida !== "sin-alcohol";
-  const colorForzado = f.prefBebida === "tinto" ? "tinto"
-                     : f.prefBebida === "blanco" ? "blanco" : null;
-
-  // El vino pasa al frente sólo cuando el plato de verdad lo pide. Con un
-  // umbral más bajo terminaba siendo la bebida de casi todo el mundo, y
-  // una botella encima de cada plato se lee como que le estás vendiendo
-  // de más a alguien que quería una cerveza. En el resto de los casos el
-  // vino igual aparece, al costado y sin imponerse.
-  const meritaVino = ["carne","achuras","cerdo","pescado","mariscos","pollo","queso"]
-                       .indexOf(principal.proteina) !== -1 &&
-                     (principal.ejes.untuosidad >= 7 || principal.ejes.intensidad >= 8);
-  const quiereVino = tomaAlcohol && (
-      colorForzado !== null || f.prefBebida === "maridaje" ||
-      (f.prefBebida !== "cerveza" && meritaVino));
-
-  const maridaje = tomaAlcohol ? elegirVino(principal, f, rnd, null, colorForzado, v) : null;
-
-  // La bebida que no es vino: se mide contra el plato, no contra la
-  // persona. Cuanto más graso lo que vas a comer, más filo necesita lo
-  // que lo baja.
-  let poolBebida = permitidos.filter(p => tipoDe(p) === "bebida" && !esVino(p));
-  if (f.prefBebida === "sin-alcohol")
-    poolBebida = poolBebida.filter(p => p.contiene.indexOf("alcohol") === -1);
-  if (f.prefBebida === "cerveza" && poolBebida.some(p => p.categoria === "cervezas"))
-    poolBebida = poolBebida.filter(p => p.categoria === "cervezas");
-  if (poolBebida.length === 0)
-    poolBebida = MENU.filter(p => tipoDe(p) === "bebida" && !esVino(p) && pasaFiltrosDuros(p, f));
-  if (poolBebida.length === 0)
-    poolBebida = MENU.filter(p => tipoDe(p) === "bebida" && !esVino(p));
-
-  const objBebida = Object.assign({}, v, {
-    acidez: clamp(Math.max(v.acidez, 4 + principal.ejes.untuosidad * 0.5), 0, 10),
-    untuosidad: clamp(10 - principal.ejes.untuosidad, 0, 10)
-  });
-  const otraBebida = ordenar(poolBebida, objBebida, f, rnd,
-    { pesosEje:{ intensidad:0.2, untuosidad:0.8, dulce:0.15, aventura:1, social:1.1, acidez:1.3 },
-      sinHambre:true, sinAfin:true })[0].plato;
-
-  const bebida = (quiereVino && maridaje) ? maridaje.plato : otraBebida;
-  const razonBebida = (quiereVino && maridaje) ? maridaje.razon : null;
-  const vinoSugerido = (!quiereVino && maridaje) ? maridaje : null;
-
   // ── EL POSTRE ──────────────────────────────────────────────────────
   // Sigue estando, porque sigue siendo plata, pero ya no es el remate del
   // veredicto: es una línea al final. El énfasis se mudó a la entrada.
@@ -3912,31 +3983,123 @@ function recomendar(respuestas, preguntas, opciones){
     { pesosEje:{ intensidad:0.5, untuosidad:0.7, aventura:0.6, social:0.4, acidez:0.9, dulce:1.6 },
       sinHambre:true, sinAfin:true })[0].plato;
 
+  // ¿Corresponde preguntar el punto? Sólo si lo que sale es un corte de
+  // carne de la parrilla. Preguntarle el punto a una pizza es ridículo.
+  const pidePunto = principal.categoria === "parrilla" &&
+                    ["carne","achuras"].indexOf(principal.proteina) !== -1;
+
+  const r = {
+    entrada, entradaRazon: ent ? ent.razon : null,
+    principal, alternativas,
+    postre,
+    vector: v, filtros: f, aviso,
+    pidePunto, punto: null, cambioSugerido: null,
+    pideVino: pideVinoPara(principal, f), prefBebida: null,
+    pool: rankPrincipal.map(x => x.plato),
+    ecos: recolectarEcos(respuestas, preguntas)
+  };
+  return resolverBebida(r, null);
+}
+
+/* ── LA BEBIDA ────────────────────────────────────────────────────────
+   Antes se preguntaba «¿con qué te sentís cómodo para tomar?» en la
+   tanda, cuando el chef todavía no sabía qué plato iba a recomendar. Ahora
+   se pregunta igual que el punto: después del plato, y sólo si el plato
+   pide vino. Si no lo pide, va la bebida de siempre sin preguntar nada.
+
+   Mientras la persona no contesta, la bebida es el vino que elige el chef,
+   así el veredicto ya está completo y la cuenta cierra. Contestar la
+   cambia en el lugar.
+
+   El vino pasa al frente sólo cuando el plato de verdad lo pide. Con un
+   umbral más bajo terminaba siendo la bebida de casi todo el mundo, y
+   una botella encima de cada plato se lee como que le estás vendiendo de
+   más a alguien que quería una cerveza.                                */
+const PROTEINAS_CON_VINO = ["carne","achuras","cerdo","pescado","mariscos","pollo","queso"];
+const meritaVino = p => PROTEINAS_CON_VINO.indexOf(p.proteina) !== -1 &&
+                        (p.ejes.untuosidad >= 7 || p.ejes.intensidad >= 8);
+const pideVinoPara = (p, f) => meritaVino(p) && f.excluyeContiene.indexOf("alcohol") === -1 &&
+  MENU.some(x => esVino(x) && pasaFiltrosDuros(x, f));
+
+const PREF_VINO = [
+  { id:"tinto",       texto:"Tinto",        emo:"🍷", dice:"Tinto, entonces. Te elegí uno que se lleve con el plato." },
+  { id:"blanco",      texto:"Blanco",       emo:"🥂", dice:"Blanco, y con el calor de acá afuera es la decisión correcta." },
+  { id:"maridaje",    texto:"Elegilo vos",  emo:"🙇", dice:"Esa es la respuesta que me deja hacer mi trabajo." },
+  { id:"cerveza",     texto:"Cerveza",      emo:"🍺", dice:"La que no se pelea con nada de esta carta. El vino te lo dejo al costado." },
+  { id:"sin-alcohol", texto:"Sin alcohol",  emo:"🧃", dice:"Hay con qué. No te voy a dar agua y listo." }
+];
+/* Cuando la persona pide un color que no es el que pide el plato, la
+   razón del maridaje no sirve —«la carne pide tanino» arriba de un blanco
+   se contradice sola—. Se dice qué se buscó dentro del color pedido. */
+const RAZON_COLOR_PEDIDO = {
+  tinto:  "dentro de los tintos, uno que acompañe el plato sin pasarle por arriba",
+  blanco: "dentro de los blancos, el de más cuerpo que tengo, para que aguante el plato"
+};
+const nombrePrefVino = id => (PREF_VINO.find(x => x.id === id) || { texto:"" }).texto;
+
+function sumarCuenta(r){
+  r.total = (r.entrada ? r.entrada.precio : 0) + r.principal.precio +
+            r.bebida.precio + r.postre.precio;
+  return r;
+}
+
+/* Decide la bebida (y el vino al costado, y el del postre) para lo que ya
+   está elegido en `r`, según lo que la persona contestó del vino: null
+   mientras no contestó. Se vuelve a llamar cuando contesta, cuando elige
+   el punto y cuando cambia el plato. */
+function resolverBebida(r, pref){
+  const f = r.filtros, v = r.vector, principal = r.principal;
+  const rnd = mulberry32(semillaDe(v) ^ 0xB0DE6A);
+  r.prefBebida = pref;
+
+  const tomaAlcohol = f.excluyeContiene.indexOf("alcohol") === -1 && pref !== "sin-alcohol";
+  const colorForzado = pref === "tinto" || pref === "blanco" ? pref : null;
+  const quiereVino = tomaAlcohol && (colorForzado !== null || pref === "maridaje" ||
+                                     (pref === null && r.pideVino));
+  const maridaje = tomaAlcohol ? elegirVino(principal, f, rnd, r.punto, colorForzado, v) : null;
+
+  // La bebida que no es vino: se mide contra el plato, no contra la
+  // persona. Cuanto más graso lo que vas a comer, más filo necesita lo
+  // que lo baja.
+  const deTomar = p => tipoDe(p) === "bebida" && !esVino(p) && !esNino(p);
+  let poolBebida = MENU.filter(p => deTomar(p) && pasaFiltrosDuros(p, f));
+  if (pref === "sin-alcohol")
+    poolBebida = poolBebida.filter(p => p.contiene.indexOf("alcohol") === -1);
+  if (pref === "cerveza" && poolBebida.some(p => p.categoria === "cervezas"))
+    poolBebida = poolBebida.filter(p => p.categoria === "cervezas");
+  if (poolBebida.length === 0) poolBebida = MENU.filter(deTomar);
+
+  const objBebida = Object.assign({}, v, {
+    acidez: clamp(Math.max(v.acidez, 4 + principal.ejes.untuosidad * 0.5), 0, 10),
+    untuosidad: clamp(10 - principal.ejes.untuosidad, 0, 10)
+  });
+  const otraBebida = ordenar(poolBebida, objBebida, f, rnd,
+    { pesosEje:{ intensidad:0.2, untuosidad:0.8, dulce:0.15, aventura:1, social:1.1, acidez:1.3 },
+      sinHambre:true, sinAfin:true })[0].plato;
+
+  const conVino = quiereVino && !!maridaje;
+  r.bebida = conVino ? maridaje.plato : otraBebida;
+  r.razonBebida = conVino
+    ? (r.punto === "cocido" && colorForzado !== "blanco" && maridaje.plato.vino.color === "tinto"
+        ? "bien cocida la carne pierde el jugo que ablanda el tanino, así que te bajo a un tinto más amable"
+        : colorForzado && colorForzado !== objetivoVino(principal, r.punto, null).color
+          ? RAZON_COLOR_PEDIDO[colorForzado]
+          : maridaje.razon)
+    : null;
+  r.esVino = esVino(r.bebida);
+  // El vino queda al costado, sin imponerse, sólo si la persona toma y no
+  // acaba de decir que quiere cerveza o nada con alcohol: ofrecérselo
+  // igual sería no haberla escuchado.
+  r.vinoSugerido = (!conVino && maridaje && pref === null) ? maridaje : null;
+
   // La carta trae cuatro vinos de cosecha tardía y un demi sec, que con
   // el motor anterior no los recomendaba nadie: el maridaje se calculaba
   // contra el plato fuerte y ahí un vino dulce nunca gana. Se calculan
   // aparte, contra el postre, y sólo se ofrecen a quien ya está tomando
   // vino — proponerle una botella dulce a alguien que pidió una limonada
   // es vender, no recomendar.
-  const vinoPostre = (quiereVino && maridaje && postre)
-    ? elegirVino(postre, f, rnd, null, null, v) : null;
-
-  // ¿Corresponde preguntar el punto? Sólo si lo que sale es un corte de
-  // carne de la parrilla. Preguntarle el punto a una pizza es ridículo.
-  const pidePunto = principal.categoria === "parrilla" &&
-                    ["carne","achuras"].indexOf(principal.proteina) !== -1;
-
-  return {
-    entrada, entradaRazon: ent ? ent.razon : null,
-    principal, alternativas,
-    bebida, razonBebida, esVino: bebida ? esVino(bebida) : false, vinoSugerido,
-    postre, vinoPostre,
-    vector: v, filtros: f, aviso,
-    pidePunto, punto: null, cambioSugerido: null,
-    pool: rankPrincipal.map(x => x.plato),
-    ecos: recolectarEcos(respuestas, preguntas),
-    total: (entrada ? entrada.precio : 0) + principal.precio + bebida.precio + postre.precio
-  };
+  r.vinoPostre = (conVino && r.postre) ? elegirVino(r.postre, f, rnd, null, null, v) : null;
+  return sumarCuenta(r);
 }
 
 /* ── 8. EL PUNTO DE LA CARNE ──────────────────────────────────────────
@@ -3958,19 +4121,7 @@ function aplicarPunto(r, punto){
   r.cambioSugerido = null;
 
   // el vino se vuelve a elegir con el punto puesto
-  if (r.esVino){
-    const rnd = mulberry32(semillaDe(r.vector) ^ 0x5EED);
-    const colorForzado = r.filtros.prefBebida === "tinto" ? "tinto"
-                       : r.filtros.prefBebida === "blanco" ? "blanco" : null;
-    const m = elegirVino(r.principal, r.filtros, rnd, punto, colorForzado, r.vector);
-    if (m){
-      r.total = r.total - r.bebida.precio + m.plato.precio;
-      r.bebida = m.plato;
-      r.razonBebida = punto === "cocido"
-        ? "bien cocida la carne pierde el jugo que ablanda el tanino, así que te bajo a un tinto más amable"
-        : m.razon;
-    }
-  }
+  if (r.esVino) resolverBebida(r, r.prefBebida);
 
   // ¿el corte sufre en ese punto? se avisa y se ofrece, no se impone
   if (punto === "cocido" && SUFRE_COCIDO.indexOf(r.principal.id) !== -1){
@@ -4032,9 +4183,9 @@ function prioridadEco(e){
   // Lo que más dice de un paladar va primero. Lo que la persona escribió
   // con sus palabras va antes que todo, y los filtros al final porque
   // saber que alguien no come gluten no cuenta nada sobre cómo come.
-  const orden = ["proteina","olor","coccion","queso-hasta-donde","entrada-como",
-                 "salsa","textura","lugar-nuevo","plato-vacio","ruido",
-                 "bebida-pref","con-quien","hora","guarnicion","limon",
+  const orden = ["proteina","olor","ruido","coccion","queso-hasta-donde","entrada-como",
+                 "salsa","textura","lugar-nuevo","plato-vacio",
+                 "con-quien","hora","guarnicion","limon",
                  "picante","pan","sobremesa","restricciones","hambre","presupuesto"];
   const i = orden.indexOf(e.id);
   return i === -1 ? 50 : i;
@@ -4656,7 +4807,7 @@ function recomendarMesa(comensales, ninos){
     vectorMesa[e] = comensales.reduce((a,c) => a + c.vector[e], 0) / comensales.length;
   });
   const filtrosMesa = { requiere:[], excluyeContiene:[], blandos:[],
-                        ecos:[], afin:[], evita:[], alergias:[], prefBebida:null };
+                        ecos:[], afin:[], evita:[], alergias:[] };
 
   // 3. el principal es de cada uno, con sus propios filtros. Va en dos
   // pasadas: la primera es para saber qué está comiendo la mesa —de eso
@@ -6682,6 +6833,7 @@ function dibujarVeredicto(r, conReveal){
 
     <div class="bloque">
       ${titulo(r.esVino ? "Para tomar, y por qué" : "Para tomar")}
+      ${bloqueVino(r)}
       ${mini(r.bebida, vozBebida(r), r.esVino ? "mini--vino" : "")}
       ${r.vinoSugerido ? mini(r.vinoSugerido.plato,
           "Si preferís vino: " + r.vinoSugerido.razon + ".", "mini--vino") : ""}
@@ -6722,6 +6874,12 @@ function dibujarVeredicto(r, conReveal){
     aplicarPunto(r, b.dataset.punto);
     dibujarVeredicto(r, false);
     const foco = $(".punto", panel());
+    if (foco){ foco.setAttribute("tabindex","-1"); foco.focus({ preventScroll:true }); }
+  }));
+  $$(".vinopref__op", panel()).forEach(b => b.addEventListener("click", () => {
+    resolverBebida(r, b.dataset.pref);
+    dibujarVeredicto(r, false);
+    const foco = $(".vinopref", panel());
     if (foco){ foco.setAttribute("tabindex","-1"); foco.focus({ preventScroll:true }); }
   }));
   const cambiar = $("#b-cambiar-corte");
@@ -6795,6 +6953,8 @@ function llevaVale(e, r){
   const g = e.si;
   if (!g) return true;
   if (g.categoria && r.principal.categoria !== g.categoria) return false;
+  if (g.cocina && cocinaDe(r.principal) !== g.cocina) return false;
+  if (g.sinVino && r.esVino) return false;   // el vino se elige contra el plato, no contra vos
   if (g.hayEntrada && !r.entrada) return false;
   if (g.entradaProteina && (!r.entrada || r.entrada.proteina !== g.entradaProteina)) return false;
   if (g.entradaProteinaNo && r.entrada && r.entrada.proteina === g.entradaProteinaNo) return false;
@@ -6806,6 +6966,16 @@ function bloqueLeido(r, titulo){
   if (ecos.length < 2) return "";
   const arranca = t => t.charAt(0).toUpperCase() + t.slice(1);
   ecos.forEach(e => { if (e.lleva && !llevaVale(e, r)) e.lleva = null; });
+  // Dos respuestas que justifican lo mismo no se explican dos veces: «por
+  // eso fui a la parrilla» tres renglones seguidos suena a plantilla. La
+  // segunda se cita igual, sin la consecuencia.
+  const dichas = new Set();
+  ecos.forEach(e => {
+    if (!e.lleva || !e.si) return;
+    const clave = e.si.cocina === "brasa" ? "parrilla" : (e.si.cocina || e.si.categoria);
+    if (!clave) return;
+    if (dichas.has(clave)) e.lleva = null; else dichas.add(clave);
+  });
   return `<div class="bloque leido">
     ${titulo("Lo que me dijiste")}
     <ul class="leido__lista">
@@ -6845,6 +7015,29 @@ function bloquePunto(r){
   </div>`;
 }
 
+/* El vino se pregunta como el punto: sólo si el plato lo pide, y después
+   de recomendarlo. Mientras no contesta, abajo ya está el vino que elegiría
+   el chef; contestar lo cambia en el lugar, con la cuenta incluida. */
+function bloqueVino(r){
+  if (!r.pideVino) return "";
+  if (!r.prefBebida){
+    return `<div class="punto vinopref">
+      <p class="punto__pre">Esto pide vino. ¿Cómo venís?</p>
+      <div class="punto__ops" role="group" aria-label="Qué querés tomar">
+        ${PREF_VINO.map(x => `<button class="punto__op vinopref__op" data-pref="${x.id}">
+            <span class="punto__emo" aria-hidden="true">${x.emo}</span>
+            <span class="punto__txt">${esc(x.texto)}</span>
+          </button>`).join("")}
+      </div>
+      <p class="vinopref__nota">Si no me decís nada, te dejo éste:</p>
+    </div>`;
+  }
+  const el = PREF_VINO.find(x => x.id === r.prefBebida);
+  return `<div class="punto vinopref">
+    <p class="punto__dicho"><b>${esc(el.texto)}.</b> ${esc(el.dice)}</p>
+  </div>`;
+}
+
 /* Cambiar el corte no es cambiar una palabra en la pantalla: cambia la
    entrada que lo acompaña y cambia el vino. Se recalcula todo. */
 function cambiarPrincipal(r, plato){
@@ -6856,12 +7049,9 @@ function cambiarPrincipal(r, plato){
   r.entradaRazon = ent ? ent.razon : null;
   r.cambioSugerido = null;
   r.alternativas = r.alternativas.filter(p => p.id !== plato.id);
-  if (r.esVino){
-    const m = elegirVino(plato, r.filtros, rnd, r.punto, null, r.vector);
-    if (m){ r.bebida = m.plato; r.razonBebida = m.razon; }
-  }
-  r.total = (r.entrada ? r.entrada.precio : 0) + r.principal.precio +
-            r.bebida.precio + r.postre.precio;
+  // el plato nuevo puede pedir vino o no: si no lo pide, la pregunta se va
+  r.pideVino = pideVinoPara(plato, r.filtros);
+  resolverBebida(r, r.pideVino ? r.prefBebida : null);
   Memoria.guardarUltimo(plato);
 }
 /* Para las que no traen descripción propia: una frase distinta cada vez,
@@ -7468,7 +7658,7 @@ function bofoTest(){
 
   function correr(modo, vueltas){
     const principales = new Set(), entradas = new Set();
-    let corridas = 0, conVino = 0, conPunto = 0;
+    let corridas = 0, conVino = 0, conPunto = 0, conPreguntaVino = 0;
 
     setsRestriccion.forEach(sr => {
       for (let v = 0; v < vueltas; v++){
@@ -7496,12 +7686,27 @@ function bofoTest(){
         // dejaron nada con qué empezar.
         // El plato fuerte no puede ser además su propia entrada: cuando los
         // filtros dejan una sola cosa comestible, no hay entrada y está bien.
+        const regla = reglaEntrada(r.principal);
+        const sinEntrada = !!(regla && regla.sin);
         const hayConQue = MENU.some(p => !esNino(p) && empieza(p) &&
-          p.id !== r.principal.id && pasaFiltrosDuros(p, r.filtros));
-        chequear(!!r.entrada || !hayConQue, `[${modo}] no hay entrada y sí había con qué`);
+          p.id !== r.principal.id && !esVariante(p, r.principal) &&
+          !repiteQueso(p, r.principal) && pasaFiltrosDuros(p, r.filtros));
+        chequear(!!r.entrada || !hayConQue || sinEntrada, `[${modo}] no hay entrada y sí había con qué`);
+        chequear(!r.entrada || !sinEntrada,
+          `[${modo}] "${r.principal.nombre}" no lleva entrada y le pusieron "${r.entrada && r.entrada.nombre}"`);
         if (r.entrada){
           chequear(empieza(r.entrada), `[${modo}] "${r.entrada.nombre}" no es algo con que empezar`);
           chequear(r.entrada.id !== r.principal.id, `[${modo}] la entrada y el plato son el mismo`);
+          // queso antes de queso, nunca
+          chequear(!repiteQueso(r.entrada, r.principal),
+            `[${modo}] "${r.entrada.nombre}" es queso antes de "${r.principal.nombre}", que ya trae queso`);
+          // si la tabla tiene con qué, la entrada sale de la tabla
+          if (regla && regla.ids){
+            const deLaTabla = regla.ids.some(id => MENU.some(p => p.id === id && p.id !== r.principal.id &&
+              !esVariante(p, r.principal) && !repiteQueso(p, r.principal) && pasaFiltrosDuros(p, r.filtros)));
+            if (deLaTabla) chequear(regla.ids.indexOf(r.entrada.id) !== -1,
+              `[${modo}] a "${r.principal.nombre}" le tocó "${r.entrada.nombre}", que no es de su lista`);
+          }
         }
 
         // El menú de niños no puede aparecer NUNCA en el veredicto de un
@@ -7556,6 +7761,9 @@ function bofoTest(){
         if (/la parrilla y no al horno|fui a la parrilla/.test(dicho))
           chequear(r.principal.categoria === "parrilla",
             `[${modo}] dice parrilla y el plato salió de ${r.principal.categoria}`);
+        if (/horno de barro/.test(dicho))
+          chequear(r.principal.categoria === "horno",
+            `[${modo}] dice horno de barro y el plato salió de ${r.principal.categoria}`);
         if (/lo saqué de la mesa/.test(dicho))
           chequear(!r.entrada || r.entrada.proteina !== "queso",
             `[${modo}] dice que sacó el queso y la entrada es de queso`);
@@ -7578,7 +7786,7 @@ function bofoTest(){
           chequear(!!r.bebida.vino, `[${modo}] el vino recomendado no tiene ficha de vino`);
           chequear(!!r.razonBebida, `[${modo}] el vino salió sin explicar por qué`);
           // salvo que la persona haya pedido un color con todas las letras
-          const forzado = r.filtros.prefBebida === "tinto" || r.filtros.prefBebida === "blanco";
+          const forzado = r.prefBebida === "tinto" || r.prefBebida === "blanco";
           const esperado = COLOR_ESPERADO[r.principal.proteina];
           if (!forzado && esperado)
             chequear(r.bebida.vino.color === esperado,
@@ -7598,6 +7806,55 @@ function bofoTest(){
             `[${modo}] le dieron alcohol a alguien que dijo que no toma`);
           chequear(!r.vinoSugerido, `[${modo}] le sugirieron vino a alguien que no toma`);
         }
+
+        // ── LA PREGUNTA DEL VINO ──────────────────────────────────────
+        // Se pregunta después del plato y sólo si el plato lo pide. Si no
+        // lo pide, va la bebida de siempre y no se pregunta nada.
+        chequear(r.prefBebida === null, `[${modo}] el vino llegó contestado antes de preguntarlo`);
+        chequear(r.pideVino === pideVinoPara(r.principal, r.filtros),
+          `[${modo}] pregunta por el vino sin que "${r.principal.nombre}" lo pida`);
+        chequear(r.pideVino || !r.esVino,
+          `[${modo}] puso vino adelante con un plato que no lo pide`);
+        if (r.pideVino){
+          chequear(r.esVino, `[${modo}] el plato pide vino y la propuesta no es un vino`);
+          conPreguntaVino++;
+          PREF_VINO.forEach(pv => {
+            const c = resolverBebida(recomendar(resp, preguntas), pv.id);
+            const cierra = (c.entrada ? c.entrada.precio : 0) + c.principal.precio +
+                           c.bebida.precio + c.postre.precio;
+            chequear(c.total === cierra, `[${modo}] la cuenta no cierra después de elegir ${pv.id}`);
+            const hay = color => MENU.some(x => esVino(x) && x.vino.color === color &&
+                                                pasaFiltrosDuros(x, c.filtros));
+            if (pv.id === "tinto" || pv.id === "blanco"){
+              chequear(c.esVino, `[${modo}] pidió ${pv.id} y no le dieron vino`);
+              if (hay(pv.id)) chequear(c.bebida.vino.color === pv.id,
+                `[${modo}] pidió ${pv.id} y le dieron ${c.bebida.vino.color}`);
+            }
+            if (pv.id === "maridaje") chequear(c.esVino, `[${modo}] «elegilo vos» y no eligió vino`);
+            if (pv.id === "cerveza"){
+              chequear(!c.esVino, `[${modo}] pidió cerveza y le dieron vino`);
+              if (MENU.some(x => x.categoria === "cervezas" && pasaFiltrosDuros(x, c.filtros)))
+                chequear(c.bebida.categoria === "cervezas", `[${modo}] pidió cerveza y le dieron ${c.bebida.nombre}`);
+              chequear(!c.vinoSugerido && !c.vinoPostre, `[${modo}] pidió cerveza y le insisten con vino`);
+            }
+            if (pv.id === "sin-alcohol"){
+              chequear(c.bebida.contiene.indexOf("alcohol") === -1,
+                `[${modo}] pidió sin alcohol y le dieron ${c.bebida.nombre}`);
+              chequear(!c.vinoSugerido && !c.vinoPostre, `[${modo}] pidió sin alcohol y le ofrecen vino`);
+            }
+            // el punto vuelve a elegir el vino sin perder lo que dijo
+            if (c.pidePunto && c.esVino){
+              aplicarPunto(c, "cocido");
+              chequear(c.prefBebida === pv.id && c.esVino,
+                `[${modo}] elegir el punto le borró lo que dijo del vino`);
+              if (pv.id === "tinto" || pv.id === "blanco")
+                if (hay(pv.id)) chequear(c.bebida.vino.color === pv.id,
+                  `[${modo}] con el punto el ${pv.id} pasó a ${c.bebida.vino.color}`);
+            }
+          });
+        }
+        chequear(!preguntas.some(q => (q.opciones || []).some(o => o.prefBebida)),
+          `[${modo}] volvió a la tanda una pregunta de qué tomar`);
 
         // ── EL PUNTO DE LA CARNE ──────────────────────────────────────
         chequear(!r.pidePunto || r.principal.categoria === "parrilla",
@@ -7624,7 +7881,7 @@ function bofoTest(){
         chequear(r.total === suma, `[${modo}] la cuenta no cierra: ${r.total} vs ${suma}`);
       }
     });
-    return { corridas, distintos: principales.size, entradas: entradas.size, conVino, conPunto };
+    return { corridas, distintos: principales.size, entradas: entradas.size, conVino, conPunto, conPreguntaVino };
   }
 
   // Con las alergias, los subconjuntos de restricciones pasaron de 32 a
@@ -7779,6 +8036,46 @@ function bofoTest(){
     }
   });
 
+  // ── horno, parrilla o lo que sea, sin preguntarlo de frente ──
+  // El que eligió el olor y el ruido de una cocina tiene que terminar
+  // comiendo de esa cocina bastante más seguido que el que no dijo nada.
+  // No siempre: el resto de lo que contestó también cuenta.
+  const pOlor = PREGUNTAS.find(q => q.id === "olor"), pRuido = PREGUNTAS.find(q => q.id === "ruido");
+  const tandaCocina = () => armarTanda("completo").filter(q => q !== pOlor && q !== pRuido).concat([pOlor, pRuido]);
+  const reparto = (iOlor, iRuido, vueltas) => {
+    const n = {};
+    for (let k = 0; k < vueltas; k++){
+      const pre = tandaCocina(), resp = {};
+      pre.forEach(q => { resp[q.id] = q === pReq ? [iTodo] : respuestaAlAzar(q); });
+      resp.olor = iOlor; resp.ruido = iRuido;
+      const r = recomendar(resp, pre);
+      const c = cocinaDe(r.principal);
+      n[c] = (n[c] || 0) + 1 / vueltas;
+      // y la consecuencia que se cita tiene que ser verdad
+      elegirEcosObj(r.ecos, 4).forEach(e => {
+        if (e.lleva && e.si && e.si.cocina && llevaVale(e, r))
+          chequear(cocinaDe(r.principal) === e.si.cocina,
+            `dice que fue a ${e.si.cocina} y el plato es de ${cocinaDe(r.principal)}`);
+      });
+    }
+    return n;
+  };
+  const iOlorNeutro  = pOlor.opciones.findIndex(o => !o.cocina);
+  const iRuidoNeutro = pRuido.opciones.findIndex(o => !o.cocina);
+  const neutro = reparto(iOlorNeutro, iRuidoNeutro, 80);
+  const lecturaCocina = [];
+  ["brasa","horno","plancha","olla","fresco"].forEach(c => {
+    const iO = pOlor.opciones.findIndex(o => o.cocina === c);
+    const iR = pRuido.opciones.findIndex(o => o.cocina === c);
+    chequear(iR !== -1, `no hay ruido que lleve a ${c}`);
+    if (iR === -1) return;
+    const con = reparto(iO !== -1 ? iO : iOlorNeutro, iR, 80);
+    const a = con[c] || 0, b0 = neutro[c] || 0;
+    lecturaCocina.push(`${c} ${Math.round(b0 * 100)}→${Math.round(a * 100)}%`);
+    chequear(a >= b0 + 0.25 && a >= 0.5,
+      `el que eligió ${c} dos veces comió de ahí ${Math.round(a * 100)}% (sin decir nada, ${Math.round(b0 * 100)}%)`);
+  });
+
   // ── dos personas muy distintas comen distinto ──
   const tandaFija = PREGUNTAS.filter(p => p.modos && p.modos.indexOf("completo") !== -1);
   const A = {}, B = {};
@@ -7802,8 +8099,19 @@ function bofoTest(){
   const rPescado = recomendar(Object.assign({}, base, { proteina:iPescado }), soloProt);
   chequear(rCarne.principal.proteina === "carne",
     `el que dijo carne recibió ${rCarne.principal.proteina}`);
-  chequear(!rCarne.entrada || rCarne.entrada.proteina === "queso",
-    `antes de la carne no fue queso sino ${rCarne.entrada && rCarne.entrada.proteina}`);
+  // la entrada ya no es «queso antes de carne» para todo: sale de la lista
+  // que definimos para ese plato, y nunca es queso antes de un plato con queso
+  const reglaCarne = reglaEntrada(rCarne.principal);
+  chequear(!rCarne.entrada || !reglaCarne || !reglaCarne.ids ||
+           reglaCarne.ids.indexOf(rCarne.entrada.id) !== -1,
+    `antes de "${rCarne.principal.nombre}" fue "${rCarne.entrada && rCarne.entrada.nombre}", que no es de su lista`);
+  chequear(!rCarne.entrada || !repiteQueso(rCarne.entrada, rCarne.principal),
+    `antes de "${rCarne.principal.nombre}" fue queso, y el plato ya trae queso`);
+  // la tabla habla de platos que existen y que son para empezar
+  ENTRADA_PARA.forEach(x => (x.ids || []).forEach(id => {
+    const e = MENU.find(p => p.id === id);
+    chequear(!!e && empieza(e), `la tabla de entradas nombra "${id}", que no es una entrada de la carta`);
+  }));
   chequear(!rCarne.esVino || rCarne.bebida.vino.color === "tinto",
     "con carne el vino no salió tinto");
   chequear(["pescado","mariscos"].indexOf(rPescado.principal.proteina) !== -1,
@@ -7847,7 +8155,8 @@ function bofoTest(){
     `carta: ${MENU.length} platos · ${MENU.filter(esVino).length} vinos · ${MENU.filter(esNino).length} del menú de niños`,
     `rápido:   ${ex.corridas} tandas, ${ex.distintos} platos y ${ex.entradas} entradas distintas`,
     `completo: ${co.corridas} tandas, ${co.distintos} platos y ${co.entradas} entradas distintas`,
-    `veredictos con vino: ${ex.conVino + co.conVino} · con punto de carne: ${ex.conPunto + co.conPunto}`,
+    `veredictos con vino: ${ex.conVino + co.conVino} · preguntan el vino: ${ex.conPreguntaVino + co.conPreguntaVino} · con punto de carne: ${ex.conPunto + co.conPunto}`,
+    `cocina sin preguntarla (nada → dos señales): ${lecturaCocina.join(" · ")}`,
     `chef kid: ${corridasKid} corridas, ${platosKid.size} platos distintos`,
     `repetidas entre corridas seguidas: ${repetidas}`,
     `mesas armadas: ${mesasProbadas} (${mesasConNinos} con chicos)`,
