@@ -66,7 +66,7 @@ reelige el vino —bien cocida la carne pierde el jugo que ablanda el tanino—
 y, si el corte sufre en ese punto, lo dice antes y ofrece el cambio. No lo
 cambia solo: el que decide qué come es el que se lo va a comer.
 
-**El vino.** La carta real del local: 49 etiquetas, de $260 la copa de la
+**El vino.** La carta real del local: 65 etiquetas, de $260 la copa de la
 casa a $8.400 el Cru d'Exception. Marida de verdad: mira cuerpo, tanino y
 acidez del vino contra lo que pide el plato según su proteína y lo graso
 que sea. Por eso resuelve los casos que "carne tinto, pescado blanco" no
@@ -367,21 +367,29 @@ existe porque un monocromo no puede dar jerarquía a un botón.
 
 ## Pendiente
 
-Dos cosas están cargadas con **datos inventados**, marcadas como tales en
-el código y en el documento que se le manda al local. No son trabajo
-pendiente nuestro: es material que sólo tiene el local. Los vinos ya
-llegaron y están cargados de verdad.
+La carta ya es la **oficial del local** (fotos de la carta impresa,
+noviembre de 2026): 251 ítems, con milanesas, burgers, chivitos, pastas,
+risottos, guarniciones, ensaladas y el menú de peques reales, y los precios
+de temporada. Los platos que ya estaban conservan sus ejes y alérgenos; los
+nuevos los cargamos nosotros con la misma lectura preliminar. Lo que el
+local corrija en vegetariano, sin gluten y alérgenos vuelve al array `MENU`.
 
-- **Menú de niños.** Once platos inventados con precios inventados.
+La ensalada de dos gustos está impresa entre las ensaladas pero es un
+acompañamiento: lleva `tipo:"guarnicion"` para que el chef no la dé como
+plato fuerte. Las guarniciones tienen su propio tipo por lo mismo.
+
 - **Fotos.** Hay **una sola y es de muestra**: `img/platos/ojo-bife.jpg`,
   de banco de imágenes, puesta para que se vea el mecanismo andando de
   punta a punta. No es una foto del local y no debería sobrevivir a la
-  primera tanda de fotos reales. Las otras 136 salen de una sesión nuestra
+  primera tanda de fotos reales. Las demás salen de una sesión nuestra
   en el local —quedaron de nuestro lado, no del de ellos— y
   `img/platos/LEEME.txt` es el instructivo para cargarlas.
-
-Falta además cargar la sección de **milanesas / burgers**, que nunca vino en
-las imágenes de la carta.
+- **Menú de peques sin bebida ni postre propios.** La carta oficial trae
+  tres platos y nada más, así que Tito recomienda sólo el plato.
+- **La planilla de clasificación** (`docs/planilla-clasificacion-bo-fomento.xlsx`)
+  sigue siendo la versión que se le mandó al local, con la carta anterior.
+  Si hay que mandar otra, se regenera con `docs/planilla.py`, quitando
+  antes la hoja «Faltan», que ya no corresponde.
 
 El desempate por margen está implementado y **vacío a propósito**: cuando el
 local diga qué platos quiere empujar, se cargan en el campo `margen` de cada
