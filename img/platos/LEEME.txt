@@ -40,10 +40,8 @@ oficial se renombran solas (molleja-verdeo → mollejas-verdeo, flan-ddl
 → flan-casero, cafe → expreso…). Las de platos que salieron de la carta
 (calzones, vacío, rack de cordero, lemon pie…) se avisan y no se cargan.
 
-OJO — ojo-bife.jpg es una foto de banco de imágenes, puesta de muestra
-para ver el mecanismo andando. «cargar» la borra sola con la primera
-tanda de fotos reales: es de las cosas que el documento del cliente
-promete que salen.
+La foto de muestra de banco de imágenes (ojo-bife.jpg) ya se borró con la
+primera tanda real. Todas las que hay acá son del local.
 
 DÓNDE SE USA CADA FOTO
 ----------------------

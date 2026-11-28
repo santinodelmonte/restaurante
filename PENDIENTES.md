@@ -21,9 +21,18 @@ reunión de cambios), en pesos uruguayos con IVA incluido:
       guarniciones:** cargadas como categorías propias.
 - [x] **Vinos:** actualizados a la carta nueva (65 etiquetas, precios nuevos,
       altas de Bo Fomento, Cerro del Toro, Fin del Mundo, Trumpeter, Rutini).
-- [x] **Menú de peques:** los 3 platos que decidió el local. Tito recomienda
-      sólo el plato; las preguntas de bebida y postre no entran mientras el
-      menú de peques no tenga bebida ni postre.
+- [x] **Menú de peques:** los 3 platos que decidió el local. Como no trae
+      bebida ni postre, Tito los saca de la carta general, de lo marcado
+      con `paraChicos`: licuados, jugos naturales, Salus Frutté y agua; y
+      brownie, massini, tarta frutal, flan, chajá, cheesecake, intenso y
+      mousse de chocolate (sin café ni licor: ópera y selva negra no). La
+      carta de los chicos muestra esos también. Revisar la lista con el local.
+- [x] **Fotos, primera tanda:** las 31 fotos marcadas ✅ en el Drive de Aura,
+      cargadas con `docs/fotos.py`. Eran verticales: se recortaron a 4:3
+      (los postres y la ensalada de salmón centrados a mano en el plato).
+- [ ] **Fotos en RAW:** Massini, Tarta frutal, Risotto de hongos y Cheesecake
+      están en `.cr2` de 25 MB y no se pueden bajar por el conector de Drive.
+      Pedir a Aura que las exporte en JPG.
 - [x] **Planilla de alérgenos para completar:**
       `docs/planilla-alergenos-bo-fomento.xlsx`, con nuestra lectura
       preliminar y las salsas de las pastas aparte.

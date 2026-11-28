@@ -1839,10 +1839,10 @@ const MENU = [
   { id:"coca-1l", nombre:"Línea Coca Cola 1 litro", precio:290, categoria:"refrescos", sub:"Refrescos",
     descripcion:"", tags:["vegetariano","sin alcohol","sin TACC","para la mesa"], apto:{vegetariano:true,singluten:true,compartir:true}, proteina:"bebida", contiene:[],
     ejes:{intensidad:1,untuosidad:1,acidez:8,aventura:0,social:7,dulce:5} },
-  { id:"salus-frutte", nombre:"Salus Frutté 500cc", precio:160, categoria:"refrescos", sub:"Refrescos",
+  { id:"salus-frutte", paraChicos:"bebida", nombre:"Salus Frutté 500cc", precio:160, categoria:"refrescos", sub:"Refrescos",
     descripcion:"", tags:["vegetariano","sin alcohol","sin TACC"], apto:{vegetariano:true,singluten:true,compartir:false}, proteina:"bebida", contiene:[],
     ejes:{intensidad:0,untuosidad:1,acidez:10,aventura:1,social:3,dulce:4} },
-  { id:"salus-agua", nombre:"Salus agua 500cc", precio:150, categoria:"refrescos", sub:"Refrescos",
+  { id:"salus-agua", paraChicos:"bebida", nombre:"Salus agua 500cc", precio:150, categoria:"refrescos", sub:"Refrescos",
     descripcion:"", tags:["vegetariano","sin alcohol","sin TACC"], apto:{vegetariano:true,singluten:true,compartir:false}, proteina:"bebida", contiene:[],
     ejes:{intensidad:0,untuosidad:1,acidez:9,aventura:0,social:3,dulce:0} },
   /* La carta impresa la tiene dos veces —«Limonada natural con menta» en
@@ -1853,19 +1853,19 @@ const MENU = [
     descripcion:"", tags:["vegetariano","sin alcohol","fresco","natural","sin TACC","para la mesa"], apto:{vegetariano:true,singluten:true,compartir:true}, proteina:"bebida", contiene:[],
     margen:3,
     ejes:{intensidad:0,untuosidad:1,acidez:10,aventura:3,social:7,dulce:4} },
-  { id:"licuado-frutilla", nombre:"Licuado de frutilla", precio:290, categoria:"refrescos", sub:"Licuados de frutas sin alcohol",
+  { id:"licuado-frutilla", paraChicos:"bebida", nombre:"Licuado de frutilla", precio:290, categoria:"refrescos", sub:"Licuados de frutas sin alcohol",
     descripcion:"", tags:["vegetariano","sin alcohol","fresco","sin TACC"], apto:{vegetariano:true,singluten:true,compartir:false}, proteina:"bebida", contiene:[],
     ejes:{intensidad:2,untuosidad:4,acidez:10,aventura:3,social:3,dulce:7} },
-  { id:"licuado-durazno", nombre:"Licuado de durazno y naranja", precio:290, categoria:"refrescos", sub:"Licuados de frutas sin alcohol",
+  { id:"licuado-durazno", paraChicos:"bebida", nombre:"Licuado de durazno y naranja", precio:290, categoria:"refrescos", sub:"Licuados de frutas sin alcohol",
     descripcion:"", tags:["vegetariano","sin alcohol","fresco","sin TACC"], apto:{vegetariano:true,singluten:true,compartir:false}, proteina:"bebida", contiene:[],
     ejes:{intensidad:2,untuosidad:4,acidez:10,aventura:3,social:3,dulce:7} },
-  { id:"licuado-banana", nombre:"Licuado de banana y leche", precio:290, categoria:"refrescos", sub:"Licuados de frutas sin alcohol",
+  { id:"licuado-banana", paraChicos:"bebida", nombre:"Licuado de banana y leche", precio:290, categoria:"refrescos", sub:"Licuados de frutas sin alcohol",
     descripcion:"", tags:["vegetariano","sin alcohol","sin TACC"], apto:{vegetariano:true,singluten:true,compartir:false}, proteina:"bebida", contiene:["lacteos"],
     ejes:{intensidad:4,untuosidad:4,acidez:6,aventura:2,social:3,dulce:7} },
-  { id:"jugo-naranja", nombre:"Jugo de naranja natural", precio:250, categoria:"refrescos", sub:"Licuados de frutas sin alcohol",
+  { id:"jugo-naranja", paraChicos:"bebida", nombre:"Jugo de naranja natural", precio:250, categoria:"refrescos", sub:"Licuados de frutas sin alcohol",
     descripcion:"", tags:["vegetariano","sin alcohol","fresco","sin TACC"], apto:{vegetariano:true,singluten:true,compartir:false}, proteina:"bebida", contiene:[],
     ejes:{intensidad:1,untuosidad:1,acidez:10,aventura:1,social:3,dulce:5} },
-  { id:"jugo-pomelo", nombre:"Jugo de pomelo natural", precio:250, categoria:"refrescos", sub:"Licuados de frutas sin alcohol",
+  { id:"jugo-pomelo", paraChicos:"bebida", nombre:"Jugo de pomelo natural", precio:250, categoria:"refrescos", sub:"Licuados de frutas sin alcohol",
     descripcion:"", tags:["vegetariano","sin alcohol","fresco","sin TACC"], apto:{vegetariano:true,singluten:true,compartir:false}, proteina:"bebida", contiene:[],
     ejes:{intensidad:1,untuosidad:1,acidez:10,aventura:4,social:3,dulce:3} },
   { id:"limonada-frutos-rojos", nombre:"Limonada con frutos rojos 1 litro", precio:420, categoria:"refrescos", sub:"Licuados de frutas sin alcohol",
@@ -1936,16 +1936,16 @@ const MENU = [
     ejes:{intensidad:7,untuosidad:1,acidez:1,aventura:10,social:3,dulce:2} },
 
   /* ── POSTRES ─────────────────────────────────────────────────────── */
-  { id:"brownie", nombre:"Brownie", precio:380, categoria:"postres",
+  { id:"brownie", paraChicos:"postre", nombre:"Brownie", precio:380, categoria:"postres",
     descripcion:"Brownie de puro chocolate con nueces, dulce de leche y merengue flameado. Acompañado con helado de crema.", tags:["vegetariano","contundente"], apto:{vegetariano:true,singluten:false,compartir:false}, proteina:"dulce", contiene:["lacteos","gluten","huevo","frutos-secos"],
     ejes:{intensidad:8,untuosidad:8,acidez:3,aventura:3,social:5,dulce:10} },
-  { id:"massini", nombre:"Massini", precio:360, categoria:"postres",
+  { id:"massini", paraChicos:"postre", nombre:"Massini", precio:360, categoria:"postres",
     descripcion:"Bizcocho suave de vainilla, crema y yema mola caramelizada.", tags:["vegetariano","clásico"], apto:{vegetariano:true,singluten:false,compartir:false}, proteina:"dulce", contiene:["lacteos","gluten","huevo"],
     ejes:{intensidad:5,untuosidad:8,acidez:2,aventura:2,social:3,dulce:9} },
-  { id:"tarta-frutal", nombre:"Tarta frutal", precio:360, categoria:"postres",
+  { id:"tarta-frutal", paraChicos:"postre", nombre:"Tarta frutal", precio:360, categoria:"postres",
     descripcion:"Sablée de almendras, suave crema pastelera y frutas de estación.", tags:["vegetariano","fresco"], apto:{vegetariano:true,singluten:false,compartir:false}, proteina:"dulce", contiene:["lacteos","gluten","huevo","frutos-secos"],
     ejes:{intensidad:4,untuosidad:4,acidez:7,aventura:3,social:3,dulce:8} },
-  { id:"flan-casero", nombre:"Flan casero", precio:290, categoria:"postres",
+  { id:"flan-casero", paraChicos:"postre", nombre:"Flan casero", precio:290, categoria:"postres",
     descripcion:"Con dulce de leche y crema.", tags:["vegetariano","clásico","sin TACC"], apto:{vegetariano:true,singluten:true,compartir:false}, proteina:"dulce", contiene:["lacteos","huevo"],
     ejes:{intensidad:5,untuosidad:8,acidez:2,aventura:1,social:2,dulce:10} },
   { id:"opera", nombre:"Ópera", precio:380, categoria:"postres",
@@ -1957,16 +1957,16 @@ const MENU = [
   { id:"tarta-pistachos", nombre:"Tarta de pistachos", precio:440, categoria:"postres",
     descripcion:"Base crocante, coulis de frambuesa y ganache de pistachos.", tags:["vegetariano","distinto"], apto:{vegetariano:true,singluten:false,compartir:false}, proteina:"dulce", contiene:["lacteos","gluten","huevo","frutos-secos"],
     ejes:{intensidad:6,untuosidad:7,acidez:6,aventura:8,social:3,dulce:8} },
-  { id:"chaja", nombre:"Chajá", precio:360, categoria:"postres",
+  { id:"chaja", paraChicos:"postre", nombre:"Chajá", precio:360, categoria:"postres",
     descripcion:"Clásico bizcocho de vainilla, crema chantilly y duraznos o frutillas.", tags:["vegetariano","clásico","de acá"], apto:{vegetariano:true,singluten:false,compartir:false}, proteina:"dulce", contiene:["lacteos","gluten","huevo"],
     ejes:{intensidad:5,untuosidad:4,acidez:7,aventura:2,social:5,dulce:10} },
-  { id:"cheesecake", nombre:"Cheesecake", precio:380, categoria:"postres",
+  { id:"cheesecake", paraChicos:"postre", nombre:"Cheesecake", precio:380, categoria:"postres",
     descripcion:"Base crocante, crema de queso y vainilla, con cobertura de frutos rojos.", tags:["vegetariano","clásico"], apto:{vegetariano:true,singluten:false,compartir:false}, proteina:"dulce", contiene:["lacteos","gluten","huevo"],
     ejes:{intensidad:6,untuosidad:8,acidez:7,aventura:3,social:3,dulce:9} },
   { id:"crumble", nombre:"Crumble de peras y manzanas", precio:380, categoria:"postres",
     descripcion:"Sablée de almendras, peras y manzanas tiernas, con una cubierta de crumble dorado y crocante.", tags:["vegetariano"], apto:{vegetariano:true,singluten:false,compartir:false}, proteina:"dulce", contiene:["lacteos","gluten","huevo","frutos-secos"],
     ejes:{intensidad:5,untuosidad:6,acidez:6,aventura:5,social:4,dulce:8} },
-  { id:"intenso-chocolate", nombre:"Intenso de chocolate", precio:380, categoria:"postres",
+  { id:"intenso-chocolate", paraChicos:"postre", nombre:"Intenso de chocolate", precio:380, categoria:"postres",
     descripcion:"Lingote de bizcocho húmedo, mousse de chocolate, praliné de almendras y un toque de sal rosa.", tags:["vegetariano","contundente"], apto:{vegetariano:true,singluten:false,compartir:false}, proteina:"dulce", contiene:["lacteos","gluten","huevo","frutos-secos"],
     ejes:{intensidad:9,untuosidad:9,acidez:2,aventura:6,social:3,dulce:9} },
   { id:"key-lima", nombre:"Key de lima", precio:380, categoria:"postres",
@@ -1975,7 +1975,7 @@ const MENU = [
   { id:"tartaleta-limon", nombre:"Tartaleta de limón y frutos rojos", precio:390, categoria:"postres",
     descripcion:"", tags:["vegetariano","sin azúcar","fresco"], apto:{vegetariano:true,singluten:false,compartir:false}, proteina:"dulce", contiene:["lacteos","gluten","huevo"],
     ejes:{intensidad:4,untuosidad:4,acidez:9,aventura:5,social:3,dulce:5} },
-  { id:"mousse-chocolate", nombre:"Mousse de chocolate", precio:360, categoria:"postres",
+  { id:"mousse-chocolate", paraChicos:"postre", nombre:"Mousse de chocolate", precio:360, categoria:"postres",
     descripcion:"Sobre base de galletas y crocante de frutos secos.", tags:["vegetariano","sin azúcar"], apto:{vegetariano:true,singluten:false,compartir:false}, proteina:"dulce", contiene:["lacteos","huevo","gluten","frutos-secos"],
     ejes:{intensidad:6,untuosidad:8,acidez:3,aventura:4,social:3,dulce:6} },
 
@@ -2213,11 +2213,11 @@ const MENU = [
 
   /* ── MENÚ DE PEQUES ─────────────────────────────────────────────────
      El menú de niños que decidió el local: tres platos y nada más. No
-     trae bebida ni postre propios, así que Bofito recomienda sólo el plato
-     y en su cocina no aparecen las preguntas de la mesada (ver
-     `tandaNino`). Si algún día suman bebida o postre para chicos, se
-     cargan acá con `rol:"bebida"` o `rol:"postre"` y las preguntas
-     vuelven solas.
+     trae bebida ni postre propios, así que Bofito los saca de la carta
+     general: de las bebidas y postres marcados con `paraChicos` (licuados,
+     jugos, Salus, y los postres sin café ni licor). Si algún día suman
+     bebida o postre para chicos, se cargan acá con `rol:"bebida"` o
+     `rol:"postre"` y entran solos.
 
      `rol` divide el menú de niños en sí mismo. Y como la categoría es de
      tipo "nino", Don Bo no los ve nunca: un adulto no recibe un
@@ -2810,6 +2810,12 @@ const tipoDe = p  => catDe(p.categoria).tipo;
    niño no puede recibir una entraña. Se resuelve en el tipo de categoría
    y no en una lista de excepciones desparramada por el motor. */
 const esNino = p => tipoDe(p) === "nino";
+/* Lo que Bofito puede poner en la mesa de un chico, y en qué lugar: los
+   platos del menú de peques por su `rol`, y la bebida y el postre de la
+   carta general que el local tiene marcados con `paraChicos` (el menú de
+   peques no trae ni bebida ni postre propios). Nada con alcohol ni café. */
+const rolChico = p => esNino(p) ? p.rol : (p.paraChicos || null);
+const paraChico = p => rolChico(p) !== null;
 const esVino = p => p.categoria === "vinos";
 /* Lo que llega primero a la mesa, esté en la categoría que esté. */
 const empieza = p => p.empieza === true || tipoDe(p) === "entrada";
@@ -4306,7 +4312,7 @@ function platosVisibles(){
   return MENU.filter(p => {
     // Mientras atiende Bofito, la carta es la de los chicos y nada más: sin
     // categorías ni filtros de grandes, que en esa pantalla ni se ven.
-    if (S.soloNinos){ if (!esNino(p)) return false; }
+    if (S.soloNinos){ if (!paraChico(p)) return false; }
     else if (S.cat !== "todas" && p.categoria !== S.cat) return false;
     for (const id of (S.soloNinos ? [] : S.filtros)){
       const f = FILTROS_CARTA.find(x => x.id === id);
@@ -4494,7 +4500,7 @@ function pintarCarta(){
     return;
   }
 
-  const orden = S.soloNinos ? CATEGORIAS.filter(c => c.tipo === "nino")
+  const orden = S.soloNinos ? CATEGORIAS.filter(c => vis.some(p => p.categoria === c.id))
     : S.cat === "todas" ? CATEGORIAS : CATEGORIAS.filter(c => c.id === S.cat);
   cont.innerHTML = orden.map(c => {
     const items = vis.filter(p => p.categoria === c.id);
@@ -4848,15 +4854,19 @@ function recomendarMesa(comensales, ninos){
   // se toma de verdad en una mesa.
   const cuantosVinos = vino ? Math.max(1, Math.round(comensales.length / 3)) : 0;
 
-  // 5. LOS CHICOS: cada uno con lo suyo, del menú de niños y de ningún
-  // otro lado. Don Bo no elige acá: pide la recomendación al Chef Kid.
+  // 5. LOS CHICOS: cada uno con lo suyo, del menú de niños (y la bebida y
+  // el postre de lo marcado para chicos). Don Bo no elige acá: pide la
+  // recomendación al Chef Kid.
   const platosNinos = ninos.map(n => ({
     nino: n,
     pedido: recomendarNino(n.respuestas, n.preguntas || PREGUNTAS_NINOS)
   }));
 
   // 6. el postre al medio, que es el que nadie pide solo y todos comen
-  const poolPostre = MENU.filter(p => !esNino(p) && tipoDe(p) === "postre" && pasaTodos(p));
+  // El postre que Bofito ya le dio a un chico es suyo: no se repite al medio.
+  const postresChicos = platosNinos.map(x => x.pedido && x.pedido.postre && x.pedido.postre.id).filter(Boolean);
+  const poolPostre = MENU.filter(p => !esNino(p) && tipoDe(p) === "postre" && pasaTodos(p) &&
+    postresChicos.indexOf(p.id) === -1);
   const objPostre = Object.assign({}, vectorMesa, {
     dulce: clamp(5.5 + 0.45 * vectorMesa.dulce, 0, 10),
     intensidad: clamp(vectorMesa.intensidad * 0.6, 0, 10)
@@ -5008,8 +5018,10 @@ const PREGUNTAS_NINOS = [
     texto:"Y de postre, ¿qué querés?",
     cocina:{ pide:"Va a la mesada, que es para el final", destino:"postre" },
     opciones:[
-      { texto:"Helado", emo:"🍦", pesos:{ dulce:+3, untuosidad:+2 },
-        eco:"que el postre era helado", chiste:"La respuesta correcta." },
+      { texto:"Algo de chocolate", emo:"🍫", pesos:{ dulce:+3, untuosidad:+2, intensidad:+2 },
+        eco:"que el postre era de chocolate", chiste:"La respuesta correcta." },
+      { texto:"Algo con frutas", emo:"🍓", pesos:{ dulce:+1, acidez:+3, untuosidad:-1 },
+        eco:"que querías un postre con frutas", chiste:"Fresquito y rico. Buena idea." },
       { texto:"Algo con dulce de leche", emo:"🍮", pesos:{ dulce:+3 },
         eco:"que querías dulce de leche", chiste:"Con dulce de leche todo mejora." },
       { texto:"No sé, sorprendeme", emo:"🎁", pesos:{ aventura:+2, dulce:+1 },
@@ -5022,8 +5034,10 @@ const PREGUNTAS_NINOS = [
     opciones:[
       { texto:"Jugo", emo:"🧃", pesos:{ acidez:+3, dulce:+1 },
         eco:"que ibas por el jugo", chiste:"Fresquito. Buena idea con este calor." },
-      { texto:"Chocolatada", emo:"🥛", pesos:{ untuosidad:+3, dulce:+3 },
-        eco:"que ibas por la chocolatada", chiste:"Un clásico que no se discute." }
+      { texto:"Licuado", emo:"🥤", pesos:{ untuosidad:+3, dulce:+3 },
+        eco:"que ibas por un licuado", chiste:"Con frutas de verdad. Un clásico." },
+      { texto:"Agüita", emo:"💧", pesos:{ acidez:-1, dulce:-3, untuosidad:-2 },
+        eco:"que ibas por agua", chiste:"Lo más sano de la mesa. Bien ahí." }
     ] },
 
   { id:"n-color", tipo:"sabor", grupo:"juego",
@@ -5045,10 +5059,10 @@ const LARGO_NINO = 5;
    rotando, para que dos hermanos no contesten exactamente lo mismo. */
 function tandaNino(semilla){
   const fija = PREGUNTAS_NINOS.filter(p => p.fija);
-  // Lo que va a la mesada (bebida, postre) se pregunta sólo si el menú de
-  // los chicos trae algo de eso: preguntarle a un chico qué postre quiere
-  // y después no darle ninguno es peor que no preguntar.
-  const hayRol = rol => MENU.some(p => esNino(p) && p.rol === rol);
+  // Lo que va a la mesada (bebida, postre) se pregunta sólo si hay algo
+  // para chicos de eso: preguntarle a un chico qué postre quiere y después
+  // no darle ninguno es peor que no preguntar.
+  const hayRol = rol => MENU.some(p => rolChico(p) === rol);
   const banco = PREGUNTAS_NINOS.filter(p => !p.fija &&
     !(p.cocina && p.cocina.destino && !hayRol(p.cocina.destino)));
   const orden = banco.slice();
@@ -5067,7 +5081,7 @@ function recomendarNino(respuestas, preguntas){
   const v   = vectorUsuario(respuestas, preguntas);
   const rnd = mulberry32(semillaDe(respuestas) ^ 0x1D05);
 
-  const delMenu = rol => MENU.filter(p => esNino(p) && p.rol === rol && pasaFiltrosDuros(p, f));
+  const delMenu = rol => MENU.filter(p => rolChico(p) === rol && pasaFiltrosDuros(p, f));
 
   // Si nada del menú de los chicos pasa lo que el chico no puede comer,
   // no se le muestra ningún plato. Antes se le mostraba uno igual, con un
@@ -7923,7 +7937,7 @@ function bofoTest(){
       platosKid.add(rk.principal.id);
 
       [rk.principal, rk.bebida, rk.postre].filter(Boolean).forEach(x => {
-        chequear(esNino(x), `[kid] "${x.nombre}" no es del menú de niños`);
+        chequear(paraChico(x), `[kid] "${x.nombre}" no es para chicos`);
         chequear(x.contiene.indexOf("alcohol") === -1, `[kid] "${x.nombre}" tiene alcohol`);
       });
       chequear(rk.principal.rol === "principal", "[kid] el plato principal no es un principal");

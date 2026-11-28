@@ -42,7 +42,7 @@ const esArchivo = BASE.indexOf("file://") === 0;
   if (test.fallas.length) fallas.push("el autotest del motor trae fallas");
 
   // 2 · la carta: la foto que está aparece, la que no está no deja hueco
-  await pag.evaluate(() => { ir("carta"); S.q = "ojo de bife"; $("#q").value = S.q; pintarCarta(); });
+  await pag.evaluate(() => { ir("carta"); S.q = "asado de ternera"; $("#q").value = S.q; pintarCarta(); });
   await pag.waitForSelector(".foto--thumb.foto--ok", { timeout: 5000 });
   const mini = await pag.evaluate(() => {
     const b = document.querySelector(".foto--thumb.foto--ok");
@@ -59,7 +59,7 @@ const esArchivo = BASE.indexOf("file://") === 0;
   if (huecos) fallas.push(huecos + " platos sin foto dejan un hueco en la carta");
 
   // 3 · el visor: abre, toma el foco y el Escape no se lleva la carta puesta
-  await pag.evaluate(() => { S.q = "ojo de bife"; $("#q").value = S.q; pintarCarta(); });
+  await pag.evaluate(() => { S.q = "asado de ternera"; $("#q").value = S.q; pintarCarta(); });
   await pag.waitForSelector(".foto--thumb.foto--ok");
   await pag.click(".foto--thumb.foto--ok");
   await pag.waitForSelector("#visor .visor__img", { timeout: 3000 });
@@ -71,7 +71,7 @@ const esArchivo = BASE.indexOf("file://") === 0;
 
   // 4 · la tarjeta como imagen, con foto y sin ella
   const png = await pag.evaluate(async () => {
-    const r = { principal: MENU.find(p => p.id === "ojo-bife"), entrada: null, ecos: [], punto: "jugoso" };
+    const r = { principal: MENU.find(p => p.id === "asado-ternera"), entrada: null, ecos: [], punto: "jugoso" };
     const medir = async con => {
       try { return (await tarjetaImagen(r, con)).size; } catch (e) { return "ERROR " + e.name; }
     };
