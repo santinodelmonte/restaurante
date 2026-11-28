@@ -9,9 +9,39 @@ tipografías de sistema.
 
 ## Qué hay adentro
 
-**La carta.** Categorías reales del local, búsqueda por texto y filtros
+**La carta.** La carta oficial del local, temporada 2026-27, transcripta de
+la carta impresa: 251 ítems en 18 categorías —186 de cocina, barra y
+cafetería, 65 vinos— y el menú de peques. Búsqueda por texto y filtros
 rápidos (vegetariano, sin TACC, para compartir). Cada plato con nombre,
-descripción, precio en pesos uruguayos, sus etiquetas y su foto.
+precio en pesos uruguayos, sus etiquetas y su foto. La descripción va
+sólo donde la trae la carta impresa: no inventamos ninguna.
+
+Las guarniciones están en la carta pero el chef no las recomienda como
+plato: son de tipo `guarnicion`. La ensalada de 2 gustos tampoco, porque
+se arma a gusto y no hay nada que acertar, ni el Monster, que es un
+energizante y no acompaña una comida (`recomendable:false`).
+
+**Los nombres.** Los eligió el local: **Don Bo** para los grandes y
+**Bofito** para los chicos. Adentro del código los personajes conservan
+sus nombres de trabajo (`vascoHTML`, `.vasco`, `Tito.hablar`, `.tito`);
+lo que se ve y se escucha sale de las constantes `CHEF` y `KID`, así que un
+cambio de nombre se hace ahí.
+
+**Los destacados, que rotan.** Pedido del local: que el chef empuje una
+cocina por vez y la vaya cambiando. `DESTACADOS` dice el orden (risottos,
+parrilla, pastas), cuántas semanas dura cada turno (2) y desde qué lunes
+arranca. La cocina del turno gana un empujón chico al elegir el plato
+fuerte —medido con gente al azar, duplica lo que sale de esa cocina: los
+risottos pasan del 6% al 18%, la parrilla del 22% al 43%— sin pasar por
+arriba de un filtro ni de quien pidió otra cosa con todas las letras.
+Cuando el plato que sale es del destacado, el chef dice «esta semana es el
+destacado de la casa» y la carta lo marca con una etiqueta.
+
+**La limonada.** La carta impresa la trae dos veces, en Refrescos y en
+Licuados, al mismo precio; el local confirmó que es la misma, así que va
+una sola: «Limonada natural con menta (1 litro)». Pidieron que el chef la
+recomiende como la bebida rica, fresca y natural: lleva `margen` y una
+línea propia del chef. Sale en el 30% de los veredictos sin vino.
 
 **El Chef.** Una experiencia de chat que termina armando la mesa entera:
 entrada, plato principal, alternativas, algo para tomar y el postre.
@@ -19,7 +49,7 @@ El orden de la pantalla es el orden en que las cosas llegan a la mesa, y
 no es casualidad: una entrada que aparece abajo, al lado del postre, no se
 pide.
 
-No es un test que se hace una vez. El banco tiene 29 preguntas rotativas y
+No es un test que se hace una vez. El banco tiene 30 preguntas rotativas y
 cada corrida arma su propia tanda con las que la persona vio menos veces,
 así que dos corridas seguidas sólo comparten los dos filtros. La rotación
 se guarda en el celular.
@@ -28,7 +58,7 @@ Hay cinco formatos: botones, grilla de opciones, deslizador con el chef
 comentando mientras arrastrás, una ronda de pares, y campos para escribir.
 Ninguno es un juego: el reloj de tres segundos se fue, y con él la regla
 que forzaba a que entrara un juego por tanda. Lo lúdico quedó del lado de
-Tito, que es donde corresponde.
+Bofito, que es donde corresponde.
 
 **Todas las preguntas son sobre comida.** La mitad son directas —con qué
 te quedás si tenés que elegir una sola cosa, cómo te gusta que llegue la
@@ -43,7 +73,7 @@ menos puede fallar.
 
 El nombre es opcional, se pide una sola vez y no sale del celular.
 
-**El Vasco.** El chef tiene cara. Es un parrillero dibujado en SVG con la
+**Don Bo.** El chef tiene cara. Es un parrillero dibujado en SVG con la
 misma línea del sello —gorra, bigote, delantal, pinzas— y seis gestos que
 cambian solos según lo que está pasando. Respira y parpadea; con
 `prefers-reduced-motion` se queda quieto. Va inline y no con `<use>`,
@@ -54,24 +84,61 @@ Su voz es la de alguien que sabe de comida, no la de un comediante: tutea,
 usa tu nombre y es cálido, pero no carga a nadie. El criterio va adelante
 y el chiste, si cae, cae solo.
 
-**La entrada, elegida contra el plato.** No se elige contra la persona: se
-elige contra lo que viene después, que es como se arma una comida. Antes
-de una carne va queso —abre el apetito y aguanta los veinte minutos de
-parrilla—; antes de un pescado va algo del mar y con acidez, para no
-taparlo. El chef lo explica en una línea, que es lo que hace que se pida.
+**La entrada, definida plato por plato.** No se elige contra la persona: se
+elige contra lo que viene después, que es como se arma una comida. Una
+tabla (`GRUPOS_ENTRADA`) dice, para cada plato fuerte de la carta oficial,
+qué entradas van y en qué orden de preferencia: antes de un corte de
+parrilla, provolone o achuras; antes de un pescado, algo del mar y
+liviano; antes de una pizza, fainá; antes de algo que ya trae queso,
+cualquier cosa menos queso; antes de una burger o un sándwich, algo para
+picar que no repita el queso ni las papas que ya traen; lo mismo con el
+chivito. Las ensaladas no llevan entrada: se piden para comer liviano.
+
+La persona todavía corre el orden —a quien dijo que el queso no es lo suyo
+no le toca un provolone— pero sólo adentro de la lista. Si los filtros la
+vacían, no hay entrada, en vez de inventar una que la cocina no pondría.
+El chef lo explica en una línea, y la línea depende de la entrada que
+salió, así que nunca dice «queso adelante» arriba de una morcilla.
+
+Lo que empieza la comida —provolone, achuras, chorizo, fainá— no sale como
+plato fuerte, aunque la carta lo imprima bajo parrilla, salvo que los
+filtros no hayan dejado otra cosa.
 
 **El punto de la carne.** Cuando el principal es un corte de la parrilla,
 el chef pregunta el punto *después* de recomendarlo. Con la respuesta
 reelige el vino —bien cocida la carne pierde el jugo que ablanda el tanino—
-y, si el corte sufre en ese punto, lo dice antes y ofrece el cambio. No lo
-cambia solo: el que decide qué come es el que se lo va a comer.
+y, si el corte sufre en ese punto, lo dice antes y ofrece el cambio —otro
+corte de la misma carne que aguante el punto, si lo hay—. No lo cambia
+solo: el que decide qué come es el que se lo va a comer.
 
-**El vino.** La carta real del local: 49 etiquetas, de $260 la copa de la
+**Horno, parrilla, olla o sartén, sin preguntarlo.** Nadie pregunta
+«¿horno o parrilla?»: se contesta lo que uno cree que tiene que contestar.
+Algunas opciones sensoriales dicen además para qué fuego va la persona
+(`fuego:"parrilla"`, `"horno"`, `"olla"`, `"sarten"`): el olor a brasa o a
+pan recién hecho, la carne cayendo a la parrilla, lo que hace famoso al
+lugar. Dos preguntas lo miden sin nombrarlo —dónde te encontramos en un
+almuerzo largo de domingo, y qué te peleás en la mesa— y son del mismo
+grupo, así que nunca entran juntas. Cada señal suma un poco a los platos
+de esa cocina (`FUEGO_DE`), y el veredicto lo cita sólo si el plato salió
+de ahí: «por eso te llevo al horno de barro y no a la parrilla».
+
+**El vino.** La carta real del local: 65 etiquetas, de $260 la copa de la
 casa a $8.400 el Cru d'Exception. Marida de verdad: mira cuerpo, tanino y
 acidez del vino contra lo que pide el plato según su proteína y lo graso
 que sea. Por eso resuelve los casos que "carne tinto, pescado blanco" no
-cubre. Pasa al frente sólo cuando el plato lo pide; si no, va la bebida de
-siempre y el vino queda al costado como sugerencia.
+cubre.
+
+**«¿Qué tomás con esto?»** La bebida se pregunta como el punto de la
+carne: después de recomendar el plato, y sólo si el plato pide vino
+(`meritaVino`). Antes se preguntaba en la tanda, sin saber qué plato iba a
+salir, y al que contestaba «vino tinto» después le tocaba una ensalada. Si
+el plato no pide vino, va la bebida de siempre sin preguntar y el vino
+queda al costado como sugerencia. Mientras la persona no contesta, abajo
+queda lo que propone el chef; contestar lo mismo que ya proponía no cambia
+la botella (la bebida usa una semilla fija y el desempate entre vinos no
+depende de cuántos quedaron en el pool). Si pide un color, el vino sale de
+ese color: antes el color pedido sólo movía el puntaje, y a quien pedía
+blanco con un provolone le salía un Malbec.
 
 Tres cosas que la carta real obligó a agregar y la inventada no:
 
@@ -98,26 +165,35 @@ tinto, las frutas piden blanco o rosado, y lo que va al medio de la mesa
 pide burbuja. Sólo se ofrece a quien ya está tomando vino.
 
 **Armá la mesa.** Decís cuántos grandes son, si vienen chicos, y el celular
-da la vuelta. Al final El Vasco arma el pedido de todos con el total y
+da la vuelta. Al final Don Bo arma el pedido de todos con el total y
 cuánto sale por cabeza. Lo que va al medio se filtra contra la intersección
 de las restricciones de la mesa entera: si hay un celíaco, nadie comparte
 gluten. Y se elige contra la proteína dominante de la mesa: si la mayoría
 pidió carne, al medio va queso. Lo que está al medio no se le sirve además
 a alguien como plato propio.
 
-**Tito, el Chef Kid.** Un personaje aparte, ayudante del Vasco, para los
-chicos de 5 a 10. Recomienda **sólo** del menú de niños, y el Vasco no ve
+**Bofito, el Chef Kid.** Un personaje aparte, ayudante dDon Bo, para los
+chicos de 5 a 10. Recomienda **sólo** del menú de niños, y Don Bo no ve
 ese menú nunca: las dos reglas están verificadas en el autotest.
 
+El menú de peques que decidió el local son tres platos —nuggets con
+fritas, spaghettis con fileto y churrasquito de lomo— sin bebida ni postre
+propios. Así que Bofito recomienda el plato y nada más, y las preguntas de
+la mesada (bebida y postre) no entran en la tanda: preguntarle a un chico
+qué postre quiere y después no darle ninguno es peor que no preguntar. Si
+el local suma bebida o postre para chicos, se cargan con `rol:"bebida"` o
+`rol:"postre"` y las preguntas vuelven solas.
+
 No hay juegos para la espera: el juego es pedir. El chico **cocina con
-Tito**, y cada respuesta es algo que hace en la cocina:
+Bofito**, y cada respuesta es algo que hace en la cocina:
 
 - lo que más le gusta lo tira a la olla, tocándolo o arrastrándolo, y queda
   flotando;
 - crocante o blandita sube o baja el fuego; "¿probás cosas nuevas?" le
   echa polvo mágico; el hambre agranda o achica la olla; el color pinta la
   salsa;
-- la bebida y el postre van a la mesada, al lado;
+- la bebida y el postre van a la mesada, al lado (sólo si el menú de
+  peques trae bebida o postre);
 - "¿hay algo que no podés comer?" no va a la olla: es una lista que se
   marca, porque es un contrato y no un ingrediente. Recién al cerrarla se
   prende el fuego.
@@ -128,11 +204,11 @@ eligió. Con todo adentro, revuelve tocando la olla, entra al horno, cuenta
 pesos son los mismos de antes: sólo cambió cómo se contestan.
 
 Tiene sonido —sintetizado en el navegador, sin archivos—, vibración suave
-y Tito lee en voz alta cada pregunta, para el que todavía no lee bien. Un
+y Bofito lee en voz alta cada pregunta, para el que todavía no lee bien. Un
 botón arriba lo apaga todo, y queda apagado para la próxima visita. Con
 `prefers-reduced-motion` no hay vuelos, temblores ni confeti.
 
-Mientras atiende Tito, **la carta muestra sólo la de los chicos**, con un
+Mientras atiende Bofito, **la carta muestra sólo la de los chicos**, con un
 aviso y un botón para que un grande vea la carta entera.
 
 En la mesa, a cada chico se le pasa el celular y cocina lo mismo, con tres
@@ -149,7 +225,7 @@ hueco se quedaba para siempre.
 
 En la carta la foto es una miniatura al costado y nada más: el que lee una
 carta está comparando platos y precios, y una foto por plato a todo el
-ancho convierte 137 renglones en un scroll de media hora. La que quiera
+ancho convierte 186 renglones en un scroll de media hora. La que quiera
 verla la toca y se abre en grande, con el nombre y el precio abajo —el que
 abre la foto de un plato está a un paso de pedirlo y no hay que mandarlo de
 vuelta a buscar cuánto sale—. La lupa aparece sólo sobre las fotos que
@@ -197,7 +273,7 @@ el eco se muestra igual, sin la segunda mitad.
 
 **La tarjeta.** El veredicto termina en una tarjeta con la foto del plato,
 el sello, el nombre —con el punto de la carne, si lo hubo— y una frase
-corta del Vasco.
+corta dDon Bo.
 
 El botón no comparte texto: **arma una imagen**. La tarjeta se vuelve a
 dibujar en un `canvas` de 1080 × 1350 —el vertical que Instagram no
@@ -307,8 +383,16 @@ vueltas cada uno, para que siga tardando dos segundos y alguien pueda
 abrirlo en el celular. Entre lo que verifica:
 
 - que un vegetariano nunca reciba carne **ni se la vean ofrecer**;
-- que el Vasco nunca recomiende del menú de niños, y Tito nunca salga de él;
-- que siempre haya entrada cuando hay con qué;
+- que Don Bo nunca recomiende del menú de niños, y Bofito nunca salga de él;
+- que la entrada salga de la tabla de ese plato, que los platos que no
+  llevan entrada no la lleven, y que cada plato fuerte de la carta tenga su
+  tabla;
+- que no se pregunte por la bebida en la tanda, que «¿qué tomás?» aparezca
+  sólo cuando el plato pide vino, y que cada respuesta se respete (el color
+  pedido, la cerveza, nada de alcohol) sin cambiar el plato ni romper la
+  cuenta;
+- que las señales de horno y de parrilla se noten en el resultado, y que
+  ninguna pregunta lo pregunte de frente;
 - que el vino maride con la proteína del plato, salvo que la persona haya
   pedido un color con todas las letras;
 - que el punto de la carne sólo se pregunte sobre cortes de parrilla, y que
@@ -324,6 +408,7 @@ abrirlo en el celular. Entre lo que verifica:
 - que nadie reciba como plato propio algo que ya está al medio de su mesa;
 - que de las respuestas citadas, al menos una diga qué hizo el chef con ella;
 - que la cuenta cierre con lo que se muestra en pantalla;
+- que Bofito no le muestre a un chico un plato que no puede comer;
 - que dos corridas seguidas no repitan ni una sola pregunta rotativa.
 
 Para correrlo fuera del navegador —el motor no toca el DOM, así que se
@@ -344,6 +429,46 @@ autotest del motor verifica que la foto que está aparezca, que la que no está
 no deje hueco, que el visor tome el foco y que el Escape cierre la foto sin
 llevarse la carta puesta.
 
+### Las pruebas del motor
+
+Una batería aparte del autotest, en `docs/pruebas-motor.js`. No se publica
+con el sitio: `docs/pruebas.js` la inyecta en la página y la corre.
+
+```
+npm install puppeteer-core
+node docs/pruebas.js        # una vuelta, unos 10 segundos
+node docs/pruebas.js 3      # más corridas al azar
+```
+
+La semilla del azar es fija, así que una falla se repite igual la próxima
+vez (`SEMILLA=123` para probar con otra). Mira lo que el autotest no ve:
+
+- **datos:** ids, precios, ejes, que «vegetariano» y «sin TACC» se
+  sostengan con lo que el plato contiene, que las etiquetas no prometan de
+  más, el perfil de cada vino; del banco, pesos de ±3 como máximo, que lo
+  que afirma un resultado lleve condición, y que cada gesto que usan
+  Don Bo y Bofito esté dibujado;
+- **robustez:** sin respuestas, índices fuera de rango, deslizadores con
+  basura, texto con HTML y las 512 combinaciones de restricciones;
+- **determinismo:** las mismas respuestas, en cualquier orden, dan lo mismo;
+- **alcance:** cada plato fuerte sale para la persona hecha a su medida, y
+  qué platos, entradas, vinos y postres no salen nunca con gente al azar;
+- **personas:** el parrillero, el del horno de barro, el del mar, la
+  vegetariana, el celíaco, el que no toma, el que come solo, el que come con
+  la mano…, cada una con lo que tiene que pasar;
+- **secuencias:** punto, bebida y cambio de corte en cualquier orden, y que
+  la cuenta, el vino y la entrada sigan siendo coherentes;
+- **textos:** que ninguna frase quede rota y que ninguna afirme algo falso
+  («sale de esa parrilla» de una pizza, «te bajo a un tinto» con un blanco);
+- **mesa:** mesas de 1 a 8 con chicos y restricciones cruzadas;
+- **chicos:** todas las combinaciones de restricciones de Bofito. Si nada del
+  menú de peques pasa, Bofito no muestra ningún plato;
+- **reparto:** que lo que sale se parezca a este local (ningún plato arriba
+  del 15%, quien pide carne recibe parrilla, quien elige el pan recibe
+  horno);
+- **rendimiento:** un veredicto en menos de 8 ms, una mesa de 8 en menos
+  de 80.
+
 ## Clonarlo a otro restaurante
 
 Se cambian sólo dos constantes al principio del `<script>`: `MENU` (con
@@ -359,7 +484,7 @@ brush en mayúscula para las secciones, script para los remates, y una sans
 limpia para los platos y los precios.
 
 El Chef es la misma carta de noche: el mismo azul, invertido. El mundo de
-Tito es el mismo azul con un acento propio, turquesa, y todo un punto más
+Bofito es el mismo azul con un acento propio, turquesa, y todo un punto más
 grande.
 
 El único color que no está en la carta impresa es el arena del acento, que
@@ -367,25 +492,53 @@ existe porque un monocromo no puede dar jerarquía a un botón.
 
 ## Pendiente
 
-Dos cosas están cargadas con **datos inventados**, marcadas como tales en
-el código y en el documento que se le manda al local. No son trabajo
-pendiente nuestro: es material que sólo tiene el local. Los vinos ya
-llegaron y están cargados de verdad.
+La lista completa de lo que falta para salir está en `PENDIENTES.md`. Lo
+que toca a los datos:
 
-- **Menú de niños.** Once platos inventados con precios inventados.
+- **Alérgenos.** La clasificación de cada plato (vegetariano, sin gluten,
+  alérgenos) es **nuestra lectura** de la carta impresa. La confirma el
+  local con la planilla de `docs/`.
 - **Fotos.** Hay **una sola y es de muestra**: `img/platos/ojo-bife.jpg`,
   de banco de imágenes, puesta para que se vea el mecanismo andando de
   punta a punta. No es una foto del local y no debería sobrevivir a la
-  primera tanda de fotos reales. Las otras 136 salen de una sesión nuestra
-  en el local —quedaron de nuestro lado, no del de ellos— y
-  `img/platos/LEEME.txt` es el instructivo para cargarlas.
-
-Falta además cargar la sección de **milanesas / burgers**, que nunca vino en
-las imágenes de la carta.
+  primera tanda de fotos reales. Las demás salen de una sesión nuestra en
+  el local. `docs/fotos.py` las carga tal como salen de la cámara
+  (endereza, recorta las verticales, lleva a 1.200 px, comprime a menos de
+  200 KB, nombra con el id y borra la de muestra), y `img/platos/LEEME.txt`
+  es el instructivo.
 
 El desempate por margen está implementado y **vacío a propósito**: cuando el
 local diga qué platos quiere empujar, se cargan en el campo `margen` de cada
 plato. Es una decisión comercial de ellos, no nuestra.
+
+## Calibración de los ejes
+
+Los ejes de los platos nuevos de la carta oficial son una primera pasada
+nuestra, y se ajustaron mirando qué recomienda el chef. Con respuestas al
+azar, lo que salía al principio no se parecía a este local: quien elegía
+«me quedo con la carne» recibía parrilla el 13% de las veces, y quien
+elegía el olor a brasa, el 8%. Ganaban los platos «del medio»
+—salmón, raviolones veganos— porque la persona promedio sale cerca del 5
+en todos los ejes.
+
+Tres correcciones:
+
+- **La parrilla sola no es un 10 de intensidad.** El 10 es para lo que te
+  pega en la cara (chivito, milanesa con cheddar, burger). Un corte a la
+  brasa es un 8; los grasos suben en untuosidad, no en intensidad.
+- **El dulce pesa un tercio para elegir el plato fuerte.** Casi todos los
+  platos fuertes valen 0 de dulce, así que el eje variaba mucho y pesaba
+  fuerte: cualquier plato con boniato, miel o ananá quedaba más cerca de
+  todo el mundo. El dulce de una persona habla del postre.
+- **Las señales de fuego**, de la sección de arriba.
+
+Con eso, quien pide carne recibe parrilla el 45% de las veces y quien
+elige el olor a brasa, el 59%. Las respuestas al azar no son gente real,
+así que el ajuste fino se hace probando el chef con respuestas de verdad.
+Lo que se vio y queda para esa revisión: el cordero (picaña y pastel) sale
+un poco de más entre los que piden carne, y las burgers casi nunca salen.
+La de la casa es candidata natural a `margen`, si el local quiere
+empujarla.
 
 ## docs — lo que se le manda al cliente
 
@@ -406,10 +559,11 @@ node docs/imprimir.js                          # todos
 node docs/imprimir.js cambios-reunion-bo-fomento   # uno solo
 ```
 
-`docs/planilla-clasificacion-bo-fomento.xlsx` es la planilla que se adjunta:
-los 137 platos ya cargados, con nuestra lectura preliminar de la carta
-impresa, para que el local corrija vegetariano, vegano, sin gluten, para
-compartir, alérgenos y precios. Se regenera desde el `MENU` de `index.html`
+`docs/planilla-alergenos-bo-fomento.xlsx` es la planilla de alérgenos que
+se le manda al local para completar: los 186 ítems de la carta (los vinos
+no, que no tienen nada que clasificar) más las seis salsas de las pastas,
+con nuestra lectura preliminar, para que corrijan vegetariano, vegano, sin
+gluten, para compartir, alérgenos y precios. Se regenera desde el `MENU` de `index.html`
 con:
 
 ```
