@@ -31,11 +31,15 @@ cambio de nombre se hace ahí.
 cocina por vez y la vaya cambiando. `DESTACADOS` dice el orden (risottos,
 parrilla, pastas), cuántas semanas dura cada turno (2) y desde qué lunes
 arranca. La cocina del turno gana un empujón chico al elegir el plato
-fuerte —medido con gente al azar, duplica lo que sale de esa cocina: los
-risottos pasan del 6% al 18%, la parrilla del 22% al 43%— sin pasar por
-arriba de un filtro ni de quien pidió otra cosa con todas las letras.
-Cuando el plato que sale es del destacado, el chef dice «esta semana es el
-destacado de la casa» y la carta lo marca con una etiqueta.
+fuerte, sin pasar por arriba de un filtro ni de quien pidió otra cosa con
+todas las letras. Desde que el chef pregunta el antojo, casi todo el mundo
+pide algo con todas las letras, así que el destacado se muestra donde un
+mozo lo diría: si no salió de plato fuerte, va de segunda alternativa,
+con «esta semana es el destacado de la casa». Medido con gente al azar,
+el destacado pasa a verse en el 100% de los veredictos (antes de ser
+destacado, los risottos se veían en el 17%). Nunca va algo que la persona
+pidió esquivar. Cuando el plato fuerte es del destacado, el chef lo dice
+y la carta lo marca con una etiqueta.
 
 **La limonada.** La carta impresa la trae dos veces, en Refrescos y en
 Licuados, al mismo precio; el local confirmó que es la misma, así que va
@@ -49,10 +53,25 @@ El orden de la pantalla es el orden en que las cosas llegan a la mesa, y
 no es casualidad: una entrada que aparece abajo, al lado del postre, no se
 pide.
 
-No es un test que se hace una vez. El banco tiene 30 preguntas rotativas y
-cada corrida arma su propia tanda con las que la persona vio menos veces,
-así que dos corridas seguidas sólo comparten los dos filtros. La rotación
-se guarda en el celular.
+No es un test que se hace una vez. Cada tanda abre con los dos filtros y
+las dos **anclas** —qué te está pidiendo el cuerpo y con qué te quedás si
+tenés que elegir una sola cosa—, y el resto sale de un banco de 20
+preguntas rotativas, priorizando las que la persona vio menos veces: dos
+corridas seguidas no repiten ninguna rotativa. El rápido son 6 preguntas
+(filtros, anclas y dos más); el completo, 12. La rotación se guarda en el
+celular.
+
+**Las anclas, y por qué.** Antes todo rotaba, también la pregunta de la
+proteína, y nada preguntaba qué tenía ganas de comer la persona hoy. Lo
+medimos con personas simuladas que quieren un plato concreto y contestan
+con coherencia (con algo de ruido, como la gente): en el rápido les tocaba
+la cocina que querían el 53% de las veces, y la proteína el 57%. Con las
+anclas, 96% y 92%. El antojo es una grilla de nueve: brasas, pizza, pasta,
+risotto, algo casero de horno, milanesa, burger/chivito/sándwich, algo
+fresco y liviano, o «sorprendeme». Si queda algún plato que lo cumpla, el
+plato fuerte sale de ahí (`poolAntojo`); lo único que le gana es lo que la
+persona pidió esquivar. Las opciones que los filtros dejan sin platos no
+se muestran: a un celíaco no se le ofrece pizza.
 
 Hay cinco formatos: botones, grilla de opciones, deslizador con el chef
 comentando mientras arrastrás, una ronda de pares, y campos para escribir.
@@ -60,16 +79,28 @@ Ninguno es un juego: el reloj de tres segundos se fue, y con él la regla
 que forzaba a que entrara un juego por tanda. Lo lúdico quedó del lado de
 Bofito, que es donde corresponde.
 
-**Todas las preguntas son sobre comida.** La mitad son directas —con qué
-te quedás si tenés que elegir una sola cosa, cómo te gusta que llegue la
-comida, hasta dónde llegás con el queso— y la otra mitad son sensoriales
-—qué olor te da hambre de golpe, el primer bocado o el último, cómo queda
-tu plato cuando terminás—. Las directas le dan al motor con qué acertar;
-las sensoriales son las que hacen que la persona se sienta leída.
+**Todas las preguntas son sobre comida.** La mitad son directas —qué te
+pide el cuerpo, cómo te gusta que llegue la comida, hasta dónde llegás con
+el queso— y la otra mitad son sensoriales —qué olor te da hambre de golpe,
+qué te peleás en la mesa—. Las directas le dan al motor con qué acertar;
+las sensoriales son las que hacen que la persona se sienta leída, y ahora
+deciden adentro de la cocina que eligió: qué corte, qué pasta, qué pizza.
 
-Quedan dos preguntas para escribir a mano. El chef las devuelve textual en
-el veredicto, sin interpretarlas: es lo que más impacto tiene y lo que
-menos puede fallar.
+Se sacaron nueve preguntas que no decían nada del plato o prometían algo
+que la carta no tiene: a qué hora comés mejor, qué hacés con las sobras,
+cuánto esperás por un plato, la temperatura de la bebida (la bebida se
+pregunta después), el picante (la carta no tiene nada picante), el primer
+bocado o el último, cómo queda tu plato, el ruido de la cocina y la
+sobremesa. Movían ejes por asociaciones flojas —«comés al mediodía» subía
+la acidez— y empujaban la recomendación sin razón.
+
+Quedan tres preguntas para escribir a mano, y el chef las devuelve textual
+en el veredicto. Dos además se leen (`leerTexto`): si lo escrito nombra
+algo de la carta, el motor lo usa. Lo que no volverías a comer nunca más
+pesa como un «prefiero que no» —antes el chef te citaba «el pescado» y te
+servía pescado—, y lo que comías a los ocho años da un empujón entre
+platos parejos. Lo que no nombra nada de la carta («lo de mi abuela») no
+mueve nada.
 
 El nombre es opcional, se pide una sola vez y no sale del celular.
 
@@ -111,16 +142,20 @@ y, si el corte sufre en ese punto, lo dice antes y ofrece el cambio —otro
 corte de la misma carne que aguante el punto, si lo hay—. No lo cambia
 solo: el que decide qué come es el que se lo va a comer.
 
-**Horno, parrilla, olla o sartén, sin preguntarlo.** Nadie pregunta
-«¿horno o parrilla?»: se contesta lo que uno cree que tiene que contestar.
-Algunas opciones sensoriales dicen además para qué fuego va la persona
+**Horno, parrilla, olla o sartén, también de costado.** La pregunta del
+antojo lo pregunta de frente, pero como un mozo —«¿qué te está pidiendo
+el cuerpo?»— y no como «¿horno o parrilla?», que se contesta para quedar
+bien. Además, algunas opciones sensoriales dicen para qué fuego va la persona
 (`fuego:"parrilla"`, `"horno"`, `"olla"`, `"sarten"`): el olor a brasa o a
 pan recién hecho, la carne cayendo a la parrilla, lo que hace famoso al
 lugar. Dos preguntas lo miden sin nombrarlo —dónde te encontramos en un
 almuerzo largo de domingo, y qué te peleás en la mesa— y son del mismo
 grupo, así que nunca entran juntas. Cada señal suma un poco a los platos
 de esa cocina (`FUEGO_DE`), y el veredicto lo cita sólo si el plato salió
-de ahí: «por eso te llevo al horno de barro y no a la parrilla».
+de ahí: «por eso te llevo al horno de barro y no a la parrilla». Con un
+antojo dicho de frente valen la mitad: son la misma pregunta hecha de
+costado y no le pueden ganar a la respuesta directa. Con «sorprendeme»
+valen enteras.
 
 **El vino.** La carta real del local: 65 etiquetas, de $260 la copa de la
 casa a $8.400 el Cru d'Exception. Marida de verdad: mira cuerpo, tanino y
@@ -296,10 +331,27 @@ la imagen compartida sale sin la foto del plato —sello, nombre y frase, que
 es la tarjeta de antes—. Servido desde una URL, que es como va a estar el
 día que salga, sale completa. El reintento sin foto es automático.
 
-**Modo sol y carta hablada.** Un botón sube el contraste a tope y agranda
-el texto para leer con el sol de frente —el problema número uno de una
-carta digital en un parador— y otro hace que el navegador lea la carta en
-voz alta. Los dos son locales: sin backend y sin costo.
+**Modo sol.** Un botón sube el contraste a tope y agranda el texto para
+leer con el sol de frente, el problema número uno de una carta digital en
+un parador. El dictado de la carta en voz alta se sacó a pedido del local.
+
+**«Lo que hay», en el celular.** La fila de categorías de la portada sigue
+más allá del borde y quien no desliza por su cuenta no se entera. Tiene
+tres pistas: el borde derecho se desvanece, un «Deslizá →» con la flecha
+que empuja, y una sola vez, cuando la fila entra en pantalla, los botones
+se asoman hacia la izquierda y vuelven. Todo se apaga en cuanto la persona
+desliza; en la compu, donde la fila entra entera, no aparece nada.
+
+**La letra del Chef.** Lo que dice Don Bo va en Fraunces itálica. Antes
+era la Yellowtail del lema, una cursiva de letras unidas que en párrafos de
+tres renglones se leía mal. La Yellowtail queda sólo para el lema de la
+portada.
+
+**El ícono de la pestaña.** El sello simplificado —el sol sobre las olas,
+sin el texto del aro, que a 16 px no se lee— va adentro de `index.html`,
+así anda también abierto con doble clic. El ícono para agregar al inicio
+del iPhone es `img/apple-touch-icon.png`, y `docs/empaquetar.sh` lo suma
+al paquete.
 
 ## El motor
 
@@ -334,18 +386,24 @@ aunque la carta lo imprima bajo parrilla.
    así que el precio no influye en la recomendación.
 3. Las respuestas de sabor arman el vector del usuario.
 4. Cada plato se puntúa por distancia euclidiana invertida contra ese vector.
-5. Las afinidades declaradas ("me quedo con la carne") suman sin sacar a
-   nadie del pool: es lo que hace que decirlo se note en el resultado. Su
-   espejo, `evita`, resta fuerte: "prefiero que no" no es una alergia, pero
-   el chef no puede citar esa respuesta y servir justo eso.
-6. Las variantes del mismo plato no compiten entre sí. "Queso provolone" y
+5. El antojo («una pizza», «algo a las brasas») decide la cocina: si queda
+   algún plato que lo cumpla y que la persona no pidió esquivar, el plato
+   fuerte sale de ahí (`ANTOJO_DE`, `poolAntojo`).
+6. Las afinidades declaradas ("me quedo con la carne") suman sin sacar a
+   nadie del pool: es lo que hace que decirlo se note en el resultado.
+   Pescado y mariscos cuentan como el mismo pedido. Su espejo, `evita`,
+   resta fuerte: "prefiero que no" no es una alergia, pero el chef no
+   puede citar esa respuesta y servir justo eso. Lo mismo con lo que la
+   persona escribió que no volvería a comer.
+7. Las variantes del mismo plato no compiten entre sí. "Queso provolone" y
    "Queso provolone caprese" son el mismo plato con un agregado; ofrecer
    los dos no es dar a elegir. Si al sacarlas no quedan dos alternativas
    distintas, se ofrece una sola.
-7. Empate → gana el plato que menos veces salió recomendado; si sigue
+8. Empate → gana el plato que menos veces salió recomendado; si sigue
    empatado, aleatorio con semilla.
 
-Las preguntas de tipo `chamuyo` no puntúan nada. Como la tanda cambia en
+Las preguntas de tipo `chamuyo` no mueven ejes (dos de ellas se leen: ver
+`leerTexto`). Como la tanda cambia en
 cada corrida, el vector se calcula contra el promedio y el tope de las
 preguntas que efectivamente se hicieron, así que tandas distintas siguen
 dando vectores comparables.
@@ -391,8 +449,10 @@ abrirlo en el celular. Entre lo que verifica:
   sólo cuando el plato pide vino, y que cada respuesta se respete (el color
   pedido, la cerveza, nada de alcohol) sin cambiar el plato ni romper la
   cuenta;
-- que las señales de horno y de parrilla se noten en el resultado, y que
-  ninguna pregunta lo pregunte de frente;
+- que el que dijo qué tenía ganas de comer lo reciba, cada una de las
+  ocho cocinas, contra respuestas al azar en todo lo demás;
+- que las señales de horno y de parrilla se noten en el resultado de quien
+  dijo «sorprendeme», y que ninguna pregunta pregunte «¿horno o parrilla?»;
 - que el vino maride con la proteína del plato, salvo que la persona haya
   pedido un color con todas las letras;
 - que el punto de la carne sólo se pregunte sobre cortes de parrilla, y que
@@ -455,7 +515,9 @@ vez (`SEMILLA=123` para probar con otra). Mira lo que el autotest no ve:
   qué platos, entradas, vinos y postres no salen nunca con gente al azar;
 - **personas:** el parrillero, el del horno de barro, el del mar, la
   vegetariana, el celíaco, el que no toma, el que come solo, el que come con
-  la mano…, cada una con lo que tiene que pasar;
+  la mano, el que tenía ganas de cada una de las ocho cocinas, el celíaco
+  al que no se le ofrece pizza, el que nunca más comería pescado, el que
+  la quiere cocida del todo…, cada una con lo que tiene que pasar;
 - **secuencias:** punto, bebida y cambio de corte en cualquier orden, y que
   la cuenta, el vino y la entrada sigan siendo coherentes;
 - **textos:** que ninguna frase quede rota y que ninguna afirme algo falso
@@ -464,8 +526,10 @@ vez (`SEMILLA=123` para probar con otra). Mira lo que el autotest no ve:
 - **chicos:** todas las combinaciones de restricciones de Bofito. Si nada del
   menú de peques pasa, Bofito no muestra ningún plato;
 - **reparto:** que lo que sale se parezca a este local (ningún plato arriba
-  del 15%, quien pide carne recibe parrilla, quien elige el pan recibe
-  horno);
+  del 15%; entre los que dicen «sorprendeme», quien pide carne recibe
+  parrilla y quien elige el pan recibe horno);
+- **destacados:** que el destacado se vea —de plato fuerte o de
+  alternativa— y que no se coma la carta;
 - **rendimiento:** un veredicto en menos de 8 ms, una mesa de 8 en menos
   de 80.
 
@@ -480,8 +544,9 @@ La dirección visual sale de la carta impresa, no de una idea propia: azul
 marino sobre blanco, la trama de olas de fondo, el sello circular
 «BO • FOMENTO / ESTAMOS EN LA PLAYA» y los zigzags que separan las
 subsecciones. Tres roles tipográficos, los mismos tres que usa el papel:
-brush en mayúscula para las secciones, script para los remates, y una sans
-limpia para los platos y los precios.
+brush en mayúscula para las secciones, script para el lema, y una sans
+limpia para los platos y los precios. La voz del Chef tiene la suya, una
+serif itálica (Fraunces): elegante y que se lee de un vistazo.
 
 El Chef es la misma carta de noche: el mismo azul, invertido. El mundo de
 Bofito es el mismo azul con un acento propio, turquesa, y todo un punto más

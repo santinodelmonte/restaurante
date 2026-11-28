@@ -69,6 +69,14 @@ reunión de cambios), en pesos uruguayos con IVA incluido:
       pizza con ananá). Detalle en el README, «Calibración de los ejes».
 - [x] **Autotest y prueba de humo** con verificaciones para todo lo
       anterior, en verde.
+- [x] **Lectura del chef revisada:** el antojo y la proteína van en todas
+      las tandas; nueve preguntas flojas afuera; «nunca más» y «a los ocho
+      años» se leen. Con personas simuladas coherentes, la cocina correcta
+      pasó del 53% al 96% en el rápido. El destacado, si no sale de plato
+      fuerte, va de alternativa.
+- [x] **Carta:** letra nueva del chef (Fraunces), sin dictado de audio,
+      pista de deslizar en «Lo que hay», ícono en la pestaña y el pie de
+      precios sin la frase del viento.
 - [x] **Tito:** las opciones de «lo que más te gusta» apuntan a los tres
       platos reales.
 - [x] **Batería de pruebas del motor** (`docs/pruebas.js`): datos,

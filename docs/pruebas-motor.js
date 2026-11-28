@@ -400,7 +400,7 @@ function pruebasMotor(opciones){
     c(!r.entrada || r.entrada.proteina !== "queso", "entrada de queso");
   });
   persona("el goloso", {
-    "postre-si-no": iDe("postre-si-no", "siempre"), sobremesa: iDe("sobremesa", "dulce")
+    "postre-si-no": iDe("postre-si-no", "siempre"), textura: [0, 0, 0, 0, 0, 0, 0]
   }, (r, c) => c(!/no sos de dulce/.test(vozPostre(r)), "le dicen que no es de dulce"));
   persona("el que no es de dulce", {
     "postre-si-no": iDe("postre-si-no", "no soy"), textura: [0, 0, 0, 0, 1, 0, 0]
@@ -428,8 +428,37 @@ function pruebasMotor(opciones){
     "frito-parrilla": iDe("frito-parrilla", "frito"), proteina: iDe("proteina", "carne"), hambre: 9
   }, (r, c) => c(["burgers","chivitos"].indexOf(r.principal.categoria) !== -1, "no le tocó algo que se coma con la mano"));
   persona("la de la olla", {
-    domingo: iDe("domingo", "olla"), ruido: iDe("ruido", "olla"), proteina: iDe("proteina", "verduras")
+    domingo: iDe("domingo", "olla"), salsa: iDe("salsa", "encima"), proteina: iDe("proteina", "verduras")
   }, (r, c) => c(["pastas","risottos"].indexOf(r.principal.categoria) !== -1, "no salió de la olla"));
+
+  // El antojo es lo único que la persona dijo con todas las letras: cada
+  // uno tiene que salir, también contra las señales de costado.
+  Object.keys(ANTOJO_DE).forEach(k => {
+    const q = PREGUNTAS.find(p => p.id === "antojo");
+    const i = q.opciones.findIndex(o => o.antojo === k);
+    persona(`el que tenía ganas de ${k}`, {
+      antojo: i, olor: iDe("olor", "brasa"), pelea: iDe("pelea", "asado")
+    }, (r, c) => c(antojoCumple(k, r.principal), `no le tocó ${k}`));
+  });
+  persona("el que tenía ganas de pizza y es celíaco", { restricciones: restr("celiaquía") }, (r, c) => {
+    const q = PREGUNTAS.find(p => p.id === "antojo");
+    const f = leerFiltros({ restricciones: restr("celiaquía") }, [pReq]);
+    const ofrecidas = opcionesPosibles(q, f).map(x => x.o.antojo);
+    c(ofrecidas.indexOf("pizza") === -1, "le ofrecen pizza a un celíaco");
+  });
+  persona("el que no vuelve a comer pescado", {
+    proteina: iDe("proteina", "pescado"), "nunca-mas": "el pescado, ni loco"
+  }, (r, c) => {
+    [r.principal, r.entrada, r.postre].concat(r.alternativas).filter(Boolean)
+      .forEach(p => c(p.proteina !== "pescado" && p.contiene.indexOf("pescado") === -1, `"${p.nombre}" es pescado`));
+  });
+  persona("el que nunca más comería ñoquis", {
+    antojo: PREGUNTAS.find(p => p.id === "antojo").opciones.findIndex(o => o.antojo === "pasta"),
+    "nunca-mas": "Ñoquis"
+  }, (r, c) => c(r.principal.id !== "noquis", "le dieron ñoquis"));
+  persona("el que la quiere cocida del todo", {
+    antojo: 0, proteina: iDe("proteina", "carne"), coccion: iDe("coccion", "cocida")
+  }, (r, c) => c(SUFRE_COCIDO.indexOf(r.principal.id) === -1, "le dieron un corte que se pone duro bien cocido"));
 
   /* ══ 6. SECUENCIAS ════════════════════════════════════════════════ */
   seccion("secuencias");
@@ -595,8 +624,8 @@ function pruebasMotor(opciones){
 
   /* ══ 10. REPARTO ══════════════════════════════════════════════════ */
   seccion("reparto");
-  const repartir = (n, forzar) => {
-    const cat = {}, pl = {};
+  const repartir = (n, forzar, conAlternativas) => {
+    const cat = {}, pl = {}, visto = {};
     for (let i = 0; i < n; i++){
       let { t, resp } = tandaAlAzar();
       // con una pregunta forzada, sólo cuentan las tandas donde aparece
@@ -604,8 +633,10 @@ function pruebasMotor(opciones){
       const r = recomendar(resp, t);
       cat[r.principal.categoria] = (cat[r.principal.categoria] || 0) + 1 / n;
       pl[r.principal.nombre] = (pl[r.principal.nombre] || 0) + 1 / n;
+      new Set([r.principal].concat(r.alternativas).map(p => p.categoria))
+        .forEach(c => { visto[c] = (visto[c] || 0) + 1 / n; });
     }
-    return { cat, pl };
+    return { cat, pl, visto };
   };
   const pct = x => Math.round(100 * (x || 0)) + "%";
   const gente = repartir(3000 * VUELTAS);
@@ -620,9 +651,14 @@ function pruebasMotor(opciones){
     if (!t.some(q => q.id === qid)) return false;
     resp[qid] = iDe(qid, texto); return true;
   };
-  const carne = repartir(1500 * VUELTAS, forzar("proteina", "carne"));
-  const brasa = repartir(1500 * VUELTAS, forzar("olor", "brasa"));
-  const pan = repartir(1500 * VUELTAS, forzar("olor", "pan"));
+  // Las señales de costado se miden en quien no dijo qué tenía ganas de
+  // comer («sorprendeme»): con un antojo dicho de frente manda el antojo,
+  // que se prueba en «personas».
+  const iSorpresa = PREGUNTAS.find(q => q.id === "antojo").opciones.findIndex(o => !o.antojo);
+  const sinAntojo = f => (t, resp) => { if (!f(t, resp)) return false; resp.antojo = iSorpresa; return true; };
+  const carne = repartir(1500 * VUELTAS, sinAntojo(forzar("proteina", "carne")));
+  const brasa = repartir(1500 * VUELTAS, sinAntojo(forzar("olor", "brasa")));
+  const pan = repartir(1500 * VUELTAS, sinAntojo(forzar("olor", "pan")));
   dato(`carne → parrilla ${pct(carne.cat.parrilla)} · brasa → parrilla ${pct(brasa.cat.parrilla)} · pan → horno ${pct(pan.cat.horno)}`);
   ok((carne.cat.parrilla || 0) >= 0.30, `quien pide carne recibe parrilla el ${pct(carne.cat.parrilla)}`);
   ok((brasa.cat.parrilla || 0) >= 0.40, `quien elige el olor a brasa recibe parrilla el ${pct(brasa.cat.parrilla)}`);
@@ -631,13 +667,16 @@ function pruebasMotor(opciones){
   /* ══ 10b. DESTACADOS ═════════════════════════════════════════════ */
   seccion("destacados");
   DESTACADOS.orden.forEach(cat => {
+    // Se nota en lo que la persona ve —el plato fuerte o la alternativa—,
+    // y en el plato fuerte sólo se come la carta si nadie pidió otra cosa.
     DESTACADOS.forzado = "ninguno";
-    const sin = repartir(800 * VUELTAS).cat[cat] || 0;
+    const rSin = repartir(800 * VUELTAS);
     DESTACADOS.forzado = cat;
-    const con = repartir(800 * VUELTAS).cat[cat] || 0;
-    dato(`${cat}: ${pct(sin)} → ${pct(con)} con el destacado`);
+    const rCon = repartir(800 * VUELTAS);
+    const sin = rSin.visto[cat] || 0, con = rCon.visto[cat] || 0;
+    dato(`${cat}: se ve en el ${pct(sin)} → ${pct(con)} con el destacado · de plato fuerte ${pct(rSin.cat[cat])} → ${pct(rCon.cat[cat])}`);
     ok(con >= sin + 0.08, `el destacado ${cat} casi no se nota (${pct(sin)} → ${pct(con)})`);
-    ok(con <= 0.70, `el destacado ${cat} se come la carta (${pct(con)})`);
+    ok((rCon.cat[cat] || 0) <= 0.70, `el destacado ${cat} se come la carta (${pct(rCon.cat[cat])})`);
     // y no da vuelta a quien pidió otra cosa con todas las letras
     const carne = repartir(400 * VUELTAS, forzar("proteina", "carne"));
     ok((carne.cat.parrilla || 0) + (carne.cat.milanesas || 0) + (carne.cat.horno || 0) + (carne.cat.chivitos || 0) + (carne.cat.burgers || 0) >= 0.6 || cat === "parrilla",
