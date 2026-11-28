@@ -30,9 +30,9 @@ reunión de cambios), en pesos uruguayos con IVA incluido:
 - [x] **Fotos, primera tanda:** las 31 fotos marcadas ✅ en el Drive de Aura,
       cargadas con `docs/fotos.py`. Eran verticales: se recortaron a 4:3
       (los postres y la ensalada de salmón centrados a mano en el plato).
-- [ ] **Fotos en RAW:** Massini, Tarta frutal, Risotto de hongos y Cheesecake
-      están en `.cr2` de 25 MB y no se pueden bajar por el conector de Drive.
-      Pedir a Aura que las exporte en JPG.
+- [x] **Fotos en RAW:** Massini, Tarta frutal, Risotto de hongos y Cheesecake
+      venían en `.cr2`; convertidas a JPG (balance de blancos de la cámara,
+      sin edición) y cargadas. Son 35 de 35.
 - [x] **Planilla de alérgenos para completar:**
       `docs/planilla-alergenos-bo-fomento.xlsx`, con nuestra lectura
       preliminar y las salsas de las pastas aparte.

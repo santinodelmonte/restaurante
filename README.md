@@ -498,9 +498,9 @@ que toca a los datos:
 - **Alérgenos.** La clasificación de cada plato (vegetariano, sin gluten,
   alérgenos) es **nuestra lectura** de la carta impresa. La confirma el
   local con la planilla de `docs/`.
-- **Fotos.** Ya está la primera tanda real: 31 fotos de la sesión en el
-  local (las marcadas ✅ en el Drive). La de muestra de banco de imágenes
-  ya se borró. Faltan las cuatro que quedaron en RAW (ver PENDIENTES). `docs/fotos.py` las carga tal como salen de la cámara
+- **Fotos.** Ya está la primera tanda real: las 35 fotos de la sesión en
+  el local marcadas ✅ en el Drive (cuatro venían en RAW y se convirtieron
+  a JPG). La de muestra de banco de imágenes ya se borró. `docs/fotos.py` las carga tal como salen de la cámara
   (endereza, recorta las verticales, lleva a 1.200 px, comprime a menos de
   200 KB, nombra con el id y borra la de muestra), y `img/platos/LEEME.txt`
   es el instructivo.
