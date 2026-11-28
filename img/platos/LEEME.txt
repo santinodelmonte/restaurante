@@ -10,20 +10,38 @@ Una foto por plato. El nombre del archivo es el id del plato más .jpg:
     img/platos/pizza-muzza.jpg
     img/platos/chaja.jpg
 
-Los ids salen de index.html, del campo `id:` de cada plato, y son los
-mismos que la planilla de clasificación trae en la primera columna. Para
-sacar la lista entera:
-
-    grep -o 'id:"[^"]*"' index.html
-
 No hay que tocar código. La foto que está aparece sola; la que no está no
 deja ningún hueco: la carta se ve exactamente igual que sin fotos. Se
 cargan de a poco, en el orden que convenga.
 
-OJO — ojo-bife.jpg es una foto de banco de imágenes, puesta de muestra
-para ver el mecanismo andando. Hay que borrarla apenas entre la primera
-tanda de fotos reales: es de las cosas que el documento del cliente
-promete que salen.
+LA HERRAMIENTA: docs/fotos.py
+-----------------------------
+No hace falta renombrar ni achicar nada a mano. Desde la raíz del repo:
+
+    python3 docs/fotos.py estado
+        Cuántos platos tienen foto, por categoría, y qué archivo de esta
+        carpeta no cumple el tamaño o no es de ningún plato.
+
+    python3 docs/fotos.py planilla
+        Escribe docs/fotos-bo-fomento.xlsx: los 251 ítems de la carta con su
+        id y una columna «archivo» para anotar qué archivo de la cámara es
+        cada plato (IMG_4021.JPG). Se guarda como CSV.
+
+    python3 docs/fotos.py cargar CARPETA_DE_LA_SESION --mapa fotos.csv
+        Toma las fotos tal como salen de la cámara, las endereza, recorta
+        al centro las verticales, las lleva a 1.200 px de ancho, las
+        comprime a menos de 200 KB y las guarda acá con el id. Sin --mapa
+        sirve igual si los archivos ya se llaman como el id.
+        Con --destino OTRA_CARPETA se prueba sin tocar esta.
+
+Las fotos de la sesión se planearon con la carta de prueba. Las que
+estén nombradas con un id viejo de un plato que sigue en la carta
+oficial se renombran solas (molleja-verdeo → mollejas-verdeo, flan-ddl
+→ flan-casero, cafe → expreso…). Las de platos que salieron de la carta
+(calzones, vacío, rack de cordero, lemon pie…) se avisan y no se cargan.
+
+La foto de muestra de banco de imágenes (ojo-bife.jpg) ya se borró con la
+primera tanda real. Todas las que hay acá son del local.
 
 DÓNDE SE USA CADA FOTO
 ----------------------
@@ -35,28 +53,25 @@ Una sola foto alimenta tres lugares, y el más exigente manda:
 · La imagen que se comparte, de 1080 × 1350: la foto ocupa la franja de
   arriba, 1080 px de ancho. Ésta es la que fija el mínimo.
 
-CÓMO SACARLAS Y CÓMO GUARDARLAS
--------------------------------
+CÓMO SACARLAS
+-------------
 · Horizontal, 4:3 o 16:10. El recorte de la app es al centro: lo que
   importa va al medio, no en un borde.
-· 1.200 px de ancho o más. Abajo de 1.000 se nota en la imagen que se
-  comparte, que es la más grande de las tres.
-· Menos de 200 KB por archivo, JPEG. Son 137 platos: con fotos de 2 MB la
-  carta no abre nunca con la señal que hay en la playa.
+· Lo más grande que dé la cámara. Abajo de 1.000 px de ancho se nota en
+  la imagen que se comparte; la herramienta avisa.
 · Luz de día y el plato de frente.
 
 POR DÓNDE EMPEZAR
 -----------------
-No hacen falta las 137 para que la carta se sienta completa. Conviene
-arrancar por las entradas, los cortes de la parrilla, los vinos y los
-postres: son los que más se piden y los que el chef muestra en el
-veredicto.
+No hacen falta las 251 para que la carta se sienta completa. Conviene
+arrancar por los platos fuertes (parrilla, horno de barro, milanesas,
+pastas) y las entradas: son los que el chef muestra grandes en el
+veredicto y en la tarjeta que se comparte. Las bebidas y los vinos sólo
+aparecen en miniatura.
 
 DESPUÉS DE CARGAR
 -----------------
-Correr la prueba de humo, que verifica que la foto cargada aparezca y que
-la que falta no deje hueco:
-
+    python3 docs/fotos.py estado
     node docs/humo.js                       # como el doble clic
     node docs/humo.js http://localhost:8000/index.html
 
